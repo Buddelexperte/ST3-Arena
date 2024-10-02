@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hallo_SFML", "Hallo_SFML\Hallo_SFML.vcxproj", "{0880BCD0-7F65-4E58-81DF-AF1E6BBA86D8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SFML_Playground", "SFML_Playground\SFML_Playground.vcxproj", "{0880BCD0-7F65-4E58-81DF-AF1E6BBA86D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
