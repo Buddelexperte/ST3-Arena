@@ -33,6 +33,8 @@ int main()
     // Vector for shape storage and access
     std::vector<sf::Drawable*> shapes;
 
+    std::vector<Button*> targetBoxes;
+
     // Creation of Shapes
     Button* startButton = new Button(MAIN_MENU[0]);
     shapes.push_back(startButton);
@@ -63,7 +65,7 @@ int main()
 
             if (bGameStarted)
             {
-                if (gameLoop(shapes, healthBar));
+                if (gameLoop(shapes, healthBar, targetBoxes));
                 else
                 {
                     bGameStarted = false;
@@ -127,7 +129,7 @@ void drawAll(sf::RenderWindow& window, const std::vector<sf::Drawable*>& shapes)
     }
 }
 
-bool gameLoop(std::vector<sf::Drawable*>& shapes, Timer* healthBar)
+bool gameLoop(std::vector<sf::Drawable*>& shapes, Timer* healthBar, std::vector<Button*>& targets)
 {
     static bool doInit = true;
     if (doInit)
@@ -135,7 +137,9 @@ bool gameLoop(std::vector<sf::Drawable*>& shapes, Timer* healthBar)
         shapes.push_back(healthBar);
         doInit = false;
     }
+
     healthBar->update(deltaTime);
+
     if (healthBar->isFinished())
     {
         healthBar->setCurrentTime(10.0f);
