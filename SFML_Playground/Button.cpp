@@ -6,7 +6,7 @@
 
 Button::Button(const sf::Vector2f& pos, const sf::Vector2f& b_size, const sf::Color& b_color, const unsigned int& t_size, const std::string& t_text, const sf::Color& t_color)
 {
-	if (!font.loadFromFile("../Content/coolvetica/coolvetica_rg.otf"))
+	if (!font.loadFromFile("../Content/fonts/coolvetica/coolvetica_rg.otf"))
 	{
 		std::cout << "Unable to load font!!" << std::endl;
 	}
