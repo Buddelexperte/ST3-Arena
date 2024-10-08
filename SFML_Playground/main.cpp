@@ -1,20 +1,24 @@
 #include <SFML/Graphics.hpp>
 #include "Button.h"
+#include "Timer.h"
 #include <iostream>
 #include <vector>
 #include <string>
 
 // Globals
-
+float fps = 0.0f;
+float deltaTime = 0.0f;
 
 void drawAll(sf::RenderWindow&, const std::vector<sf::Drawable*>&);
-void gameLoop();
+bool gameLoop(std::vector<sf::Drawable*>&, Timer*);
 
 int main()
 {
     bool bGameStarted = false;
 
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "SFML_Clicker", sf::Style::Fullscreen);
+    sf::Clock clock;
+
 
     sf::Vector2u windowSize = window.getSize();
     sf::Vector2f windowCenter = { windowSize.x / 2.0f, windowSize.y / 2.0f };
@@ -36,11 +40,12 @@ int main()
     shapes.push_back(optionsButton);
     Button* quitButton = new Button(MAIN_MENU[2]);
     shapes.push_back(quitButton);
+    Timer* healthBar = new Timer(10.0f, windowSize.x, 100.0f, sf::Vector2f(windowCenter.x, 0.0f));
 
 
     while (window.isOpen())
     {
-        if (bGameStarted) gameLoop;
+        
 
         sf::Event event;
         while (window.pollEvent(event))
@@ -55,6 +60,19 @@ int main()
 
             windowSize = window.getSize();
             windowCenter = { windowSize.x / 2.0f, windowSize.y / 2.0f };
+
+            if (bGameStarted)
+            {
+                if (gameLoop(shapes, healthBar));
+                else
+                {
+                    bGameStarted = false;
+                    shapes.clear();
+                    shapes.push_back(startButton);
+                    shapes.push_back(optionsButton);
+                    shapes.push_back(quitButton);
+                }
+            }
 
             // Event Handler
             switch (event.type)
@@ -82,6 +100,10 @@ int main()
             }
         }
 
+        //Calc fps for timer health bar
+        deltaTime = clock.restart().asSeconds();
+        fps = 1.0f / deltaTime;
+
         window.clear();
         // Draw Shapes
         drawAll(window, shapes);
@@ -105,7 +127,21 @@ void drawAll(sf::RenderWindow& window, const std::vector<sf::Drawable*>& shapes)
     }
 }
 
-void gameLoop()
+bool gameLoop(std::vector<sf::Drawable*>& shapes, Timer* healthBar)
 {
+    static bool doInit = true;
+    if (doInit)
+    {
+        shapes.push_back(healthBar);
+        doInit = false;
+    }
+    healthBar->update(deltaTime);
+    if (healthBar->isFinished())
+    {
+        healthBar->setCurrentTime(10.0f);
+        doInit = true;
+        return false;
+    }
 
+    return true;
 }

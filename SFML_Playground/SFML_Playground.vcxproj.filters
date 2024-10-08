@@ -21,9 +21,15 @@
     <ClCompile Include="Button.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
