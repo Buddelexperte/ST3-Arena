@@ -9,11 +9,11 @@ private:
     float barHeight;
     sf::RectangleShape timerBar;
 public:
-    Timer(float maxTime, float barWidth, float barHeight, const sf::Vector2f& position)
+    Timer(float maxTime, float barWidth, float barHeight, const sf::Vector2f& position, const sf::Color& fillColor = sf::Color::White)
         : maxTime(maxTime), currentTime(0.0f), barWidth(barWidth), barHeight(barHeight)
     {
         timerBar.setSize(sf::Vector2f(barWidth, barHeight));
-        timerBar.setFillColor(sf::Color::White);
+        timerBar.setFillColor(fillColor);
         timerBar.setPosition(position);
         timerBar.setOrigin(barWidth / 2.0f, barHeight / 2.0f);
     }
