@@ -27,9 +27,6 @@ public:
 	bool isClicked(const sf::Vector2f& mousePos) const;
 	bool isHovered(const sf::Vector2f& mousePos) const;
 
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
-		target.draw(B_Box, states);
-		target.draw(T_Text, states);
-	}
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 

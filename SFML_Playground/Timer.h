@@ -20,6 +20,8 @@ public:
 
     void update(const float&);
     void setCurrentTime(const float&);
+    float getMaxTime();
+    void setMaxTime(const float&);
     bool isFinished() const;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

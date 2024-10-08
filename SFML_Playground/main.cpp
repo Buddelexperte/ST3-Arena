@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "Button.h"
 #include "Timer.h"
+#include "TargetController.h"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -8,9 +9,10 @@
 // Globals
 float fps = 0.0f;
 float deltaTime = 0.0f;
+sf::Vector2f mousePos(0, 0);
 
 void drawAll(sf::RenderWindow&, const std::vector<sf::Drawable*>&);
-bool gameLoop(std::vector<sf::Drawable*>&, Timer*);
+bool gameLoop(std::vector<sf::Drawable*>&, Timer*, TargetController*);
 
 int main()
 {
@@ -19,10 +21,10 @@ int main()
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "SFML_Clicker", sf::Style::Fullscreen);
     sf::Clock clock;
 
+    TargetController* targetController = new TargetController();
 
     sf::Vector2u windowSize = window.getSize();
     sf::Vector2f windowCenter = { windowSize.x / 2.0f, windowSize.y / 2.0f };
-    sf::Vector2f mousePos(0, 0);
 
     const std::vector<ButtonConstruct> MAIN_MENU = {
         {windowCenter + sf::Vector2f{ 0, 0 }, sf::Vector2f{ 300, 100 }, sf::Color::White, 24, "START", sf::Color::Black},
@@ -33,9 +35,8 @@ int main()
     // Vector for shape storage and access
     std::vector<sf::Drawable*> shapes;
 
-    std::vector<Button*> targetBoxes;
-
     // Creation of Shapes
+
     Button* startButton = new Button(MAIN_MENU[0]);
     shapes.push_back(startButton);
     Button* optionsButton = new Button(MAIN_MENU[1]);
@@ -47,7 +48,24 @@ int main()
 
     while (window.isOpen())
     {
-        
+        windowSize = window.getSize();
+        windowCenter = { windowSize.x / 2.0f, windowSize.y / 2.0f };
+
+        deltaTime = clock.restart().asSeconds();
+        fps = 1.0f / deltaTime;
+
+
+        if (bGameStarted)
+        {
+            if (gameLoop(shapes, healthBar, targetController));
+            else
+            {
+                bGameStarted = false;
+                shapes.push_back(startButton);
+                shapes.push_back(optionsButton);
+                shapes.push_back(quitButton);
+            }
+        }
 
         sf::Event event;
         while (window.pollEvent(event))
@@ -57,24 +75,9 @@ int main()
                 window.close();
                 break;
             }
-            mousePos.x = (event.mouseButton.x); 
+
+            mousePos.x = (event.mouseButton.x);
             mousePos.y = (event.mouseButton.y);
-
-            windowSize = window.getSize();
-            windowCenter = { windowSize.x / 2.0f, windowSize.y / 2.0f };
-
-            if (bGameStarted)
-            {
-                if (gameLoop(shapes, healthBar, targetBoxes));
-                else
-                {
-                    bGameStarted = false;
-                    shapes.clear();
-                    shapes.push_back(startButton);
-                    shapes.push_back(optionsButton);
-                    shapes.push_back(quitButton);
-                }
-            }
 
             // Event Handler
             switch (event.type)
@@ -82,13 +85,16 @@ int main()
             case sf::Event::MouseButtonPressed:
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
-                    if (startButton->isClicked(mousePos))
+                    if (!bGameStarted)
                     {
-                        shapes.clear();
-                        bGameStarted = true;
+                        if (startButton->isClicked(mousePos))
+                        {
+                            shapes.clear();
+                            bGameStarted = true;
+                        }
+                        if (quitButton->isClicked(mousePos))
+                            window.close();
                     }
-                    if (quitButton->isClicked(mousePos))
-                        window.close();
                 }
                 break;
             case sf::Event::KeyPressed:
@@ -101,10 +107,6 @@ int main()
                 break;
             }
         }
-
-        //Calc fps for timer health bar
-        deltaTime = clock.restart().asSeconds();
-        fps = 1.0f / deltaTime;
 
         window.clear();
         // Draw Shapes
@@ -129,20 +131,30 @@ void drawAll(sf::RenderWindow& window, const std::vector<sf::Drawable*>& shapes)
     }
 }
 
-bool gameLoop(std::vector<sf::Drawable*>& shapes, Timer* healthBar, std::vector<Button*>& targets)
+bool gameLoop(std::vector<sf::Drawable*>& shapes, Timer* healthBar, TargetController* targetController)
 {
     static bool doInit = true;
+    static float deltaScale = 1.0f;
     if (doInit)
     {
+        shapes.push_back(targetController);
+        healthBar->setCurrentTime(10.0f);
         shapes.push_back(healthBar);
         doInit = false;
     }
 
+    targetController->update(deltaTime * deltaScale);
     healthBar->update(deltaTime);
+    if (targetController->clickedAny(mousePos))
+    {
+        healthBar->setCurrentTime(healthBar->getMaxTime());
+        deltaScale *= 1.001;
+    }
 
     if (healthBar->isFinished())
     {
-        healthBar->setCurrentTime(10.0f);
+        shapes.clear();
+        targetController->clear();
         doInit = true;
         return false;
     }

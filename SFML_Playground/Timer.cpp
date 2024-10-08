@@ -21,6 +21,16 @@ void Timer::setCurrentTime(const float& newTime)
 	currentTime = maxTime - newTime;
 }
 
+float Timer::getMaxTime()
+{
+	return (this->maxTime);
+}
+
+void Timer::setMaxTime(const float& n)
+{
+	maxTime = n;
+}
+
 bool Timer::isFinished() const
 {
 	return (currentTime >= maxTime);

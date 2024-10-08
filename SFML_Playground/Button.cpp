@@ -31,3 +31,8 @@ bool Button::isClicked(const sf::Vector2f& mousePos) const {
 bool Button::isHovered(const sf::Vector2f& mousePos) const {
 	return B_Box.getGlobalBounds().contains(mousePos);
 }
+
+void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+	target.draw(B_Box, states);
+	target.draw(T_Text, states);
+}
