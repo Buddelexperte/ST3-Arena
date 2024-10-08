@@ -1,26 +1,31 @@
 #include <SFML/Graphics.hpp>
+#include <functional>
 #pragma once
+
+struct ButtonConstruct
+{
+	sf::Vector2f pos;
+	sf::Vector2f size;
+	sf::Color color;
+	unsigned int fontSize;
+	std::string text;
+	sf::Color textColor;
+};
 
 class Button : public sf::Drawable
 {
 private:
 	sf::Font font;
-
+public:
 	sf::RectangleShape B_Box;
 	sf::Text T_Text;
 
-	sf::Vector2f size;
-	float xPos;
-	float yPos;
-	std::string text;
-	sf::Color color;
-public:
-	Button();
-	Button(const sf::Vector2f& size, const float& xPos, const float& yPos, const std::string& text, const sf::Color& color);
-	bool setPos(const float& NewX, const float& NewY);
-	bool setSize(const sf::Vector2f& newSize);
-	bool setText(const std::string& newT);
-	bool setColor(const sf::Color& newC);
+	Button() : Button({ 0, 0 }, { 0, 0 }, sf::Color::White, 24, "Text", sf::Color::Black) {};
+	Button(const ButtonConstruct& constr) : Button(constr.pos, constr.size, constr.color, constr.fontSize, constr.text, constr.textColor) {};
+	Button(const sf::Vector2f&, const sf::Vector2f&, const sf::Color&, const unsigned int&, const std::string&, const sf::Color&);
+
+	bool isClicked(const sf::Vector2f& mousePos) const;
+	bool isHovered(const sf::Vector2f& mousePos) const;
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
 		target.draw(B_Box, states);

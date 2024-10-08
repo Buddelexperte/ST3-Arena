@@ -1,35 +1,33 @@
 #include "Button.h"
+#include <iostream>
 #include <SFML/Graphics.hpp>
 
-Button::Button()
-{
+#include <filesystem> 
 
+Button::Button(const sf::Vector2f& pos, const sf::Vector2f& b_size, const sf::Color& b_color, const unsigned int& t_size, const std::string& t_text, const sf::Color& t_color)
+{
+	if (!font.loadFromFile("../Content/coolvetica/coolvetica_rg.otf"))
+	{
+		std::cout << "Unable to load font!!" << std::endl;
+	}
+
+	B_Box.setSize(b_size);
+	B_Box.setPosition(pos);
+	B_Box.setOrigin(b_size.x / 2.0f, b_size.y / 2.0f);
+	B_Box.setFillColor(b_color);
+
+	T_Text.setFont(font);
+	T_Text.setString(t_text);
+	T_Text.setCharacterSize(t_size);
+	T_Text.setFillColor(t_color);
+
+	T_Text.setOrigin(T_Text.getGlobalBounds().width / 2.0f, T_Text.getGlobalBounds().height / 2.0f);
+	T_Text.setPosition({pos.x, pos.y - 6});
 }
 
-Button::Button(const sf::Vector2f& size, const float& xPos, const float& yPos, const std::string& text, const sf::Color& color)
-{
-	setSize(size);
-	setPos(xPos, yPos);
-	setText(text);
-	setColor(color);
+bool Button::isClicked(const sf::Vector2f& mousePos) const {
+	return B_Box.getGlobalBounds().contains(mousePos);
 }
-bool Button::setPos(const float& NewX, const float& NewY)
-{
-	B_Box.setPosition(NewX, NewY);
-	return true;
-}
-bool Button::setSize(const sf::Vector2f& newSize)
-{
-	B_Box.setSize(newSize);
-	return true;
-}
-bool Button::setText(const std::string& newT)
-{
-	T_Text.setString(newT);
-	return true;
-}
-bool Button::setColor(const sf::Color& newC)
-{
-	B_Box.setFillColor(newC);
-	return true;
+bool Button::isHovered(const sf::Vector2f& mousePos) const {
+	return B_Box.getGlobalBounds().contains(mousePos);
 }
