@@ -8,9 +8,12 @@
 
 
 void drawAll(sf::RenderWindow&, const std::vector<sf::Drawable*>&);
+void gameLoop();
 
 int main()
 {
+    bool bGameStarted = false;
+
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "SFML_Clicker", sf::Style::Fullscreen);
 
     sf::Vector2u windowSize = window.getSize();
@@ -37,6 +40,8 @@ int main()
 
     while (window.isOpen())
     {
+        if (bGameStarted) gameLoop;
+
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -58,7 +63,10 @@ int main()
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
                     if (startButton->isClicked(mousePos))
+                    {
                         shapes.clear();
+                        bGameStarted = true;
+                    }
                     if (quitButton->isClicked(mousePos))
                         window.close();
                 }
@@ -95,4 +103,9 @@ void drawAll(sf::RenderWindow& window, const std::vector<sf::Drawable*>& shapes)
     for (const auto& shape : shapes) {
         window.draw(*shape);
     }
+}
+
+void gameLoop()
+{
+
 }
