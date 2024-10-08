@@ -100,7 +100,16 @@ int main()
             case sf::Event::KeyPressed:
                 if (event.key.code == sf::Keyboard::Escape)
                 {
-                    window.close();
+                    if (!bGameStarted)
+                    {
+                        window.close();
+                        break;
+                    }
+                    bGameStarted = false;
+                    shapes.clear();
+                    shapes.push_back(startButton);
+                    shapes.push_back(optionsButton);
+                    shapes.push_back(quitButton);
                 }
                 break;
             default:
