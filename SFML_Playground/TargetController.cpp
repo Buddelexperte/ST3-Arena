@@ -3,48 +3,43 @@
 
 void TargetController::newRandomConfig()
 {
-
-	std::uniform_real_distribution<float> distrX(200.0f, windowWidth-200.0f);
-	std::uniform_real_distribution<float> distrY(200.0f, windowHeight-200.0f);
-
-	std::random_device rd;
-	// Use the random device to seed a Mersenne Twister generator
-	std::mt19937 gen(rd());
-
+	const float margin = 200.0f; // margin, so the targets dont overlap with healthbar or window edges
+	std::random_device rd; // Get device random Number generator
+	std::mt19937 gen(rd()); // Seed random number generator
+	std::uniform_real_distribution<float> distrX(margin, windowWidth - margin); // Distr for X coordinates based on actual windowWidth
+	std::uniform_real_distribution<float> distrY(margin, windowHeight - margin); // Distr for Y coordinates based on actual windowHeight
+	// Set TARGET_CONFIG to generation of distrX and Y but mapped to a 100x100 grid
 	TARGET_CONFIG.pos = sf::Vector2f(int(distrX(gen) / 100) * 100.0f, int(distrY(gen) / 100) * 100.0f);
-}
-
-void TargetController::clear()
-{
-	targets.clear();
 }
 
 void TargetController::update(sf::RenderTarget& window)
 {
+	// Update window dimensions
 	windowWidth = window.getSize().x;
 	windowHeight = window.getSize().y;
 }
 
 void TargetController::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	for (const auto& button : targets)
+	for (const auto& button : targets) // Every target
 	{
-		button->draw(target, states);
+		button->draw(target, states); // Call the draw function for every button created
 	}
 }
 
 bool TargetController::clickedAny(const sf::Vector2f& mousePos)
 {
+	// Go through all targets with iterator pointing to each
 	for (auto it = targets.begin(); it != targets.end(); ++it)
 	{
 		if ((*it)->isClicked(mousePos))
 		{
-			targets.erase(it);
-			spawnTarget();
+			targets.erase(it); // If one is clicked, remove it from the target list
+			spawnTarget(); // Spawn a new target, using random distribution
 			return true;
 		}
 	}
-	return false;
+	return false; // No button was clicked
 }
 
 void TargetController::spawnTarget()
@@ -54,26 +49,25 @@ void TargetController::spawnTarget()
 	bool foundSpot = false;
 	while (!foundSpot) {
 		foundSpot = true; // Assume a valid spot is found until proven otherwise
-
+		// Check if any already exitsing target is overlapping with that position
 		for (const auto& button : targets)
 		{
 			if (newButton->B_Box.getGlobalBounds().intersects(button->B_Box.getGlobalBounds()))
 			{
 				foundSpot = false; // Collision found, try again
-				newRandomConfig();
-				newButton->move(TARGET_CONFIG.pos);
+				newRandomConfig(); // Make new position
+				newButton->move(TARGET_CONFIG.pos); // Moves newButton to new position
 				break; // Exit the for loop to check new position
 			}
 		}
 	}
-
-		
+	// Move uniquePointer to targets vector using std::move (required for unique_ptr)
 	targets.push_back(std::move(newButton));
 }
 
 void TargetController::initSpawner(sf::RenderTarget& window)
 {
-	update(window);
-	targets.clear();
-	for (int i = 0; i < 3; i++) spawnTarget();
+	targets.clear(); // Dereference old targets
+	update(window); // Set window dimensions before spawning, so spawn positions are correct
+	for (int i = 0; i < 3; i++) spawnTarget(); // Spawn 3 start targets
 }
