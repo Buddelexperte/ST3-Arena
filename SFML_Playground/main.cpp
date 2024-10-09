@@ -167,8 +167,9 @@ bool gameLoop(sf::RenderTarget& window, std::vector<sf::Drawable*>& shapes, Time
 
     if (targetController->clickedAny(mousePos))
     {
+        hitTargets++;
+        healthBar->setMaxTime(std::max(startTimer - (float(int(hitTargets) / 3) * 0.2f), minTimer));
         healthBar->setCurrentTime(healthBar->getCurrentTime() + (healthBar->getMaxTime() / 5.0f));
-        healthBar->setMaxTime(std::max(startTimer - (float(int(++hitTargets) / 3) * 0.2f), minTimer));
     }
 
     if (healthBar->isFinished())
