@@ -149,7 +149,7 @@ bool gameLoop(sf::RenderTarget& window, std::vector<sf::Drawable*>& shapes, Time
     if (doInit)
     {
         hitTargets = 0;
-        targetController->initSpawner();
+        targetController->initSpawner(window);
         shapes.push_back(targetController);
         healthBar->setMaxTime(10.0f, true);
         shapes.push_back(healthBar);

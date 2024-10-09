@@ -25,7 +25,7 @@ public:
 
 	TargetController() {};
 
-	void initSpawner();
+	void initSpawner(sf::RenderTarget&);
 	void update(sf::RenderTarget&);
 	bool clickedAny(const sf::Vector2f&);
 

@@ -3,12 +3,13 @@
 
 void TargetController::newRandomConfig()
 {
+
+	std::uniform_real_distribution<float> distrX(200.0f, windowWidth-200.0f);
+	std::uniform_real_distribution<float> distrY(200.0f, windowHeight-200.0f);
+
 	std::random_device rd;
 	// Use the random device to seed a Mersenne Twister generator
 	std::mt19937 gen(rd());
-
-	std::uniform_int_distribution<float> distrX(200.0f, windowWidth-200.0f);
-	std::uniform_int_distribution<float> distrY(200.0f, windowHeight-200.0f);
 
 	TARGET_CONFIG.pos = sf::Vector2f(distrX(gen), distrY(gen));
 }
@@ -52,8 +53,9 @@ void TargetController::spawnTarget()
 	targets.push_back(std::make_unique<Button>(TARGET_CONFIG));
 }
 
-void TargetController::initSpawner()
+void TargetController::initSpawner(sf::RenderTarget& window)
 {
+	update(window);
 	targets.clear();
 	for (int i = 0; i < 3; i++) spawnTarget();
 }
