@@ -9,7 +9,8 @@
 enum GameState {
     GAME_ENDED = -1,
     MENU_SCREEN = 0,
-    IN_GAME = 1
+    GAME_LAUNCHING,
+    IN_GAME
 } gameState;
 
 // Globals
@@ -61,7 +62,7 @@ int main()
         fps = 1.0f / deltaTime;
 
 
-        if (gameState == IN_GAME)
+        if (gameState >= GAME_LAUNCHING)
         {
             if (gameLoop(window, shapes, healthBar, targetController));
             else
@@ -95,7 +96,7 @@ int main()
                         if (startButton->isClicked(mousePos))
                         {
                             shapes.clear();
-                            gameState = IN_GAME;
+                            gameState = GAME_LAUNCHING;
                         }
                         if (quitButton->isClicked(mousePos))
                             window.close();
@@ -147,18 +148,17 @@ void drawAll(sf::RenderWindow& window, const std::vector<sf::Drawable*>& shapes)
 
 bool gameLoop(sf::RenderTarget& window, std::vector<sf::Drawable*>& shapes, Timer* healthBar, TargetController* targetController)
 {
-    static bool doInit = true;
     static int hitTargets = 0;
 
 
-    if (doInit)
+    if (gameState == GAME_LAUNCHING)
     {
         hitTargets = 0;
         targetController->initSpawner(window);
         shapes.push_back(targetController);
         healthBar->setMaxTime(10.0f, true);
         shapes.push_back(healthBar);
-        doInit = false;
+        gameState = IN_GAME;
     }
 
     targetController->update(window);
@@ -169,13 +169,11 @@ bool gameLoop(sf::RenderTarget& window, std::vector<sf::Drawable*>& shapes, Time
         hitTargets++;
         healthBar->setCurrentTime(healthBar->getCurrentTime() + (healthBar->getMaxTime() / 5.0f));
         healthBar->setMaxTime(healthBar->getMaxTime() - (float(int(hitTargets) / 3) * 0.2f), false);
-        std::cout << healthBar->getMaxTime() << std::endl;
     }
 
     if (healthBar->isFinished())
     {
         shapes.clear();
-        doInit = true;
         return false;
     }
 
