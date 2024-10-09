@@ -2,13 +2,13 @@
 
 void Timer::update(const float& deltaTime)
 {
-	currentTime -= deltaTime;
+	currentTime -= deltaTime; // Subtract deltaTime from time left
 	if (currentTime < 0.0f)
 	{
-		currentTime = 0.0f;
+		currentTime = 0.0f; // Keep currentTime positive
 	}
-	float timeRatio = (currentTime / maxTime);
-	timerBar.setSize(sf::Vector2f(barWidth * timeRatio, barHeight));
+	float timeRatio = (currentTime / maxTime); // Calculate ratio from timeLeft to maxTime for progress visuality
+	timerBar.setSize(sf::Vector2f(barWidth * timeRatio, barHeight)); //
 }
 
 void Timer::draw(sf::RenderTarget& target, sf::RenderStates states) const 
@@ -23,7 +23,7 @@ float Timer::getCurrentTime() const
 
 void Timer::setCurrentTime(const float& n)
 {
-	this->currentTime = std::min(n, maxTime);
+	this->currentTime = std::min(n, maxTime); // Keep currentTime in bounds of maxTime
 }
 
 float Timer::getMaxTime() const
@@ -34,10 +34,10 @@ float Timer::getMaxTime() const
 void Timer::setMaxTime(const float& n, const bool& reset)
 {
 	this->maxTime = n;
-	if (reset || n < currentTime) currentTime = maxTime;
+	if (reset || n < currentTime) currentTime = maxTime; // Sets currentTime to maxTime if requested
 }
 
 bool Timer::isFinished() const
 {
-	return (currentTime <= 0.0f);
+	return (currentTime <= 0.0f); // TimerBar isFinished if 0.0 time is left
 }
