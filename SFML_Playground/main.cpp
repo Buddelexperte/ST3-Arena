@@ -15,11 +15,11 @@ enum GameState {
     IN_GAME // gameLoop should start
 } gameState;
 
-// Globals
+// Paths and Data Manipulation
 const std::string SAVE_FILE = "../SaveGame.txt";
 void saveData(const std::string& = SAVE_FILE);
 int loadSavedData(const std::string& = SAVE_FILE);
-
+// Globals
 int highscore = loadSavedData();
 float fps = 0.0f;
 float deltaTime = 0.0f;
@@ -70,11 +70,15 @@ int main()
     const std::vector<sf::Drawable*> MAIN_MENU = { menu_title, menu_highscore, menu_startButton, menu_optionsButton, menu_quitButton };
     
     Timer* healthBar = new Timer(10.0f, windowSize.x, 100.0f, sf::Vector2f(windowCenter.x, 0.0f));
-     
+    const std::vector<sf::Drawable*> GAMEPLAY_UI = { healthBar };
+
+
     // Main Menu added to viewport and gameState changed accordingly (ready for interaction)
     addMenuToShapes(MAIN_MENU, shapes);
     gameState = MENU_SCREEN;
 
+
+    // Main Game Loop
     while (window.isOpen())
     {
         // Update viewport values
@@ -219,8 +223,8 @@ bool gameLoop(sf::RenderTarget& window, std::vector<sf::Drawable*>& shapes, Time
     {
         // Remove all shapes from vector for menu shapes
         shapes.clear();
-        if (hitTargets > highscore) highscore = hitTargets;
-        saveData(SAVE_FILE);
+        if (hitTargets > highscore) highscore = hitTargets; // Update highscore value if new value is bigger
+        saveData(SAVE_FILE); // Save highscore value (didn't change if no greater was achieved)
         return false;
     }
 
@@ -229,28 +233,28 @@ bool gameLoop(sf::RenderTarget& window, std::vector<sf::Drawable*>& shapes, Time
 
 void saveData(const std::string& path)
 {
-    std::ofstream outFile(path);
+    std::ofstream outFile(path); // Open file in output mode and write the highscore to it
     if (outFile.is_open()) {
         outFile << highscore;
         outFile.close();
         std::cout << "SaveData saved!\n";
     }
     else {
-        std::cerr << "Error opening save file for writing.\n";
+        std::cerr << "Error opening save file for writing.\n"; // Display file access error message
     }
 }
 
 int loadSavedData(const std::string& path)
 {
     int highscore = 0;
-    std::ifstream inFile(path);  // Open file in input mode
+    std::ifstream inFile(path);  // Open file in input mode and write the highscore to it
     if (inFile.is_open()) {
-        inFile >> highscore;  // Read the highscore from the file
-        inFile.close();       // Close the file
+        inFile >> highscore;
+        inFile.close();
         std::cout << "SaveData loaded!\n";
     }
     else {
-        std::cerr << "Error opening save file for reading. Defaulting to 0.\n";
+        std::cerr << "Error opening save file for reading. Defaulting to 0.\n"; // Display file access error message
     }
     return highscore;
 }
