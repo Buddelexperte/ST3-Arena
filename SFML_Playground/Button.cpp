@@ -36,6 +36,16 @@ void Button::setText(const std::string& text)
 	move(B_Box.getPosition());
 }
 
+void Button::setColor(const sf::Color& color, const bool& bTextColor)
+{
+	(bTextColor ? T_Text.setFillColor(color) : B_Box.setFillColor(color));
+}
+
+sf::Color Button::getColor(const bool& bTextColor) const
+{
+	return (bTextColor ? T_Text.getFillColor() : B_Box.getFillColor());
+}
+
 void Button::move(const sf::Vector2f& newPos = {0.0f, 0.0f})
 {
 	// Update Box position and origin

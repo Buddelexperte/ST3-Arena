@@ -8,6 +8,7 @@
 enum GameState {
     GAME_ENDED = -1, // Not started or interrupted
     MENU_SCREEN = 0, // A Menu with clickable buttons
+    GAME_OVER,
     GAME_LAUNCHING, // gameLoop should start and execute init functionality
     IN_GAME // gameLoop should start
 } gameState;
@@ -18,6 +19,10 @@ float fps = 0.0f;
 float deltaTime = 0.0f;
 sf::Vector2f mousePos(0, 0);
 
+void addMenuToShapes(const std::vector<sf::Drawable*>& vector, std::vector<sf::Drawable*>& shapes)
+{
+    for (const auto& elem : vector) shapes.push_back(elem);
+}
 void drawAll(sf::RenderWindow&, const std::vector<sf::Drawable*>&);
 bool gameLoop(sf::RenderTarget&, std::vector<sf::Drawable*>&, Timer*, TargetController*, int&);
 
@@ -34,27 +39,29 @@ int main()
     // Target Spawner and Handler
     TargetController* targetController = new TargetController();
     // MainMenu Button constructs as config variable
-    const std::vector<ButtonConstruct> MAIN_MENU = {
-        {windowCenter + sf::Vector2f{ 0, -300 }, sf::Vector2f{ 300, 300 }, sf::Color::Transparent, 100, "CLICKER GAME", sf::Color::White},
+    const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
+        {windowCenter + sf::Vector2f{ 0, -300 }, sf::Vector2f{ 650, 120 }, sf::Color::Transparent, 100, "CLICKER GAME", sf::Color::White},
+        {windowCenter + sf::Vector2f{ 0, -200 }, sf::Vector2f{ 100, 100 }, sf::Color::Transparent, 16, "Higscore: 0", sf::Color::White},
         {windowCenter + sf::Vector2f{ 0, 0 }, sf::Vector2f{ 300, 100 }, sf::Color::White, 24, "START", sf::Color::Black},
         {windowCenter + sf::Vector2f{ 0, 150 }, sf::Vector2f{ 300, 100 }, sf::Color::White, 24, "OPTIONS", sf::Color::Black},
         {windowCenter + sf::Vector2f{ 0, 300 }, sf::Vector2f{ 300, 100 }, sf::Color::White, 24, "QUIT", sf::Color::Black}
     };
 
-    // Vector for shape storage, access and handled drawing
+    // Master Vector for shape storage, access and handled drawing
     std::vector<sf::Drawable*> shapes;
 
-    // Creation of shapes
-    Button* menu_highscore = new Button(MAIN_MENU[0]);
-    Button* menu_startButton = new Button(MAIN_MENU[1]);
-    Button* menu_optionsButton = new Button(MAIN_MENU[2]);
-    Button* menu_quitButton = new Button(MAIN_MENU[3]);
+    // Creation of shapes and MenuVectors
+    Button* menu_title = new Button(MAIN_MENU_CONSTR[0]);
+    Button* menu_highscore = new Button(MAIN_MENU_CONSTR[1]);
+    Button* menu_startButton = new Button(MAIN_MENU_CONSTR[2]);
+    Button* menu_optionsButton = new Button(MAIN_MENU_CONSTR[3]);
+    Button* menu_quitButton = new Button(MAIN_MENU_CONSTR[4]);
+    const std::vector<sf::Drawable*> MAIN_MENU = { menu_title, menu_highscore, menu_startButton, menu_optionsButton, menu_quitButton };
+    
     Timer* healthBar = new Timer(10.0f, windowSize.x, 100.0f, sf::Vector2f(windowCenter.x, 0.0f));
+     
     // Main Menu added to viewport and gameState changed accordingly (ready for interaction)
-    shapes.push_back(menu_highscore);
-    shapes.push_back(menu_startButton);
-    shapes.push_back(menu_optionsButton);
-    shapes.push_back(menu_quitButton);
+    addMenuToShapes(MAIN_MENU, shapes);
     gameState = MENU_SCREEN;
 
     while (window.isOpen())
@@ -75,11 +82,9 @@ int main()
             {
                 // switch back to MainMenu
                 gameState = MENU_SCREEN;
-                menu_highscore->setText(std::to_string(highscore));
-                shapes.push_back(menu_highscore);
-                shapes.push_back(menu_startButton);
-                shapes.push_back(menu_optionsButton);
-                shapes.push_back(menu_quitButton);
+                menu_title->setColor(sf::Color::White, true);
+                menu_highscore->setText("Highscore: " + std::to_string(highscore));
+                for (const auto& elem : MAIN_MENU) shapes.push_back(elem);
             }
         }
         // Event listener
@@ -115,6 +120,11 @@ int main()
                         {
                             window.close();
                         }
+                        if (menu_title->isMouseOver(mousePos)) // Title Text clicked
+                        {
+                            bool alreadyChanged = (menu_title->getColor(true) == sf::Color::Red);
+                            menu_title->setColor((alreadyChanged ? sf::Color::White : sf::Color::Red), true);
+                        }
                     }
                 }
                 break;
@@ -130,10 +140,7 @@ int main()
                     // else, go to MainMenu
                     gameState = MENU_SCREEN;
                     shapes.clear();
-                    shapes.push_back(menu_highscore);
-                    shapes.push_back(menu_startButton);
-                    shapes.push_back(menu_optionsButton);
-                    shapes.push_back(menu_quitButton);
+                    for (const auto& elem : MAIN_MENU) shapes.push_back(elem);
                 }
                 break;
             default:

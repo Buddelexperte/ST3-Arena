@@ -25,6 +25,8 @@ public:
 	Button(const sf::Vector2f&, const sf::Vector2f&, const sf::Color&, const unsigned int&, const std::string&, const sf::Color&);
 
 	void setText(const std::string&); // Set the texts content
+	void setColor(const sf::Color&, const bool& = false); // Set the color of the text or the button fill
+	sf::Color getColor(const bool& = false) const;
 	void move(const sf::Vector2f&); // Move the whole button to a new position
 	bool isMouseOver(const sf::Vector2f& mousePos) const; // Check if mouse is over button
 
