@@ -12,7 +12,7 @@ float deltaTime = 0.0f;
 sf::Vector2f mousePos(0, 0);
 
 void drawAll(sf::RenderWindow&, const std::vector<sf::Drawable*>&);
-bool gameLoop(std::vector<sf::Drawable*>&, Timer*, TargetController*);
+bool gameLoop(sf::RenderTarget&, std::vector<sf::Drawable*>&, Timer*, TargetController*);
 
 int main()
 {
@@ -57,7 +57,7 @@ int main()
 
         if (bGameStarted)
         {
-            if (gameLoop(shapes, healthBar, targetController));
+            if (gameLoop(window, shapes, healthBar, targetController));
             else
             {
                 bGameStarted = false;
@@ -140,30 +140,36 @@ void drawAll(sf::RenderWindow& window, const std::vector<sf::Drawable*>& shapes)
     }
 }
 
-bool gameLoop(std::vector<sf::Drawable*>& shapes, Timer* healthBar, TargetController* targetController)
+bool gameLoop(sf::RenderTarget& window, std::vector<sf::Drawable*>& shapes, Timer* healthBar, TargetController* targetController)
 {
     static bool doInit = true;
-    static float deltaScale = 1.0f;
+    static int hitTargets = 0;
+
+
     if (doInit)
     {
+        hitTargets = 0;
+        targetController->initSpawner();
         shapes.push_back(targetController);
-        healthBar->setCurrentTime(10.0f);
+        healthBar->setMaxTime(10.0f, true);
         shapes.push_back(healthBar);
         doInit = false;
     }
 
-    targetController->update(deltaTime * deltaScale);
+    targetController->update(window);
     healthBar->update(deltaTime);
+
     if (targetController->clickedAny(mousePos))
     {
-        healthBar->setCurrentTime(healthBar->getMaxTime());
-        deltaScale *= 1.001;
+        hitTargets++;
+        healthBar->setCurrentTime(healthBar->getCurrentTime() + (healthBar->getMaxTime() / 5.0f));
+        healthBar->setMaxTime(healthBar->getMaxTime() - (float(int(hitTargets) / 3) * 0.2f), false);
+        std::cout << healthBar->getMaxTime() << std::endl;
     }
 
     if (healthBar->isFinished())
     {
         shapes.clear();
-        targetController->clear();
         doInit = true;
         return false;
     }
