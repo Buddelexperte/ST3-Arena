@@ -28,7 +28,7 @@ void Timer::setCurrentTime(const float& n)
 
 float Timer::getMaxTime() const
 {
-	return (this->maxTime);
+	return this->maxTime;
 }
 
 void Timer::setMaxTime(const float& n, const bool& reset)
