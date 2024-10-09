@@ -32,7 +32,7 @@ bool TargetController::clickedAny(const sf::Vector2f& mousePos)
 	// Go through all targets with iterator pointing to each
 	for (auto it = targets.begin(); it != targets.end(); ++it)
 	{
-		if ((*it)->isClicked(mousePos))
+		if ((*it)->isMouseOver(mousePos))
 		{
 			targets.erase(it); // If one is clicked, remove it from the target list
 			spawnTarget(); // Spawn a new target, using random distribution

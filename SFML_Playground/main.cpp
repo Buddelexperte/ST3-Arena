@@ -102,12 +102,12 @@ int main()
                     // Only when in MainMenu, check for button presses
                     if (gameState == MENU_SCREEN)
                     {
-                        if (menu_startButton->isClicked(mousePos)) // Start Button
+                        if (menu_startButton->isMouseOver(mousePos)) // Start Button clicked
                         {
                             shapes.clear();
                             gameState = GAME_LAUNCHING;
                         }
-                        if (menu_quitButton->isClicked(mousePos)) // Quit Button
+                        if (menu_quitButton->isMouseOver(mousePos)) // Quit Button clicked
                         {
                             window.close();
                         }
