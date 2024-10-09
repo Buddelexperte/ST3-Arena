@@ -13,12 +13,13 @@ enum GameState {
 } gameState;
 
 // Globals
+int highscore = 0;
 float fps = 0.0f;
 float deltaTime = 0.0f;
 sf::Vector2f mousePos(0, 0);
 
 void drawAll(sf::RenderWindow&, const std::vector<sf::Drawable*>&);
-bool gameLoop(sf::RenderTarget&, std::vector<sf::Drawable*>&, Timer*, TargetController*);
+bool gameLoop(sf::RenderTarget&, std::vector<sf::Drawable*>&, Timer*, TargetController*, int&);
 
 int main()
 {
@@ -34,6 +35,7 @@ int main()
     TargetController* targetController = new TargetController();
     // MainMenu Button constructs as config variable
     const std::vector<ButtonConstruct> MAIN_MENU = {
+        {windowCenter + sf::Vector2f{ 0, -300 }, sf::Vector2f{ 300, 300 }, sf::Color::Transparent, 100, "CLICKER GAME", sf::Color::White},
         {windowCenter + sf::Vector2f{ 0, 0 }, sf::Vector2f{ 300, 100 }, sf::Color::White, 24, "START", sf::Color::Black},
         {windowCenter + sf::Vector2f{ 0, 150 }, sf::Vector2f{ 300, 100 }, sf::Color::White, 24, "OPTIONS", sf::Color::Black},
         {windowCenter + sf::Vector2f{ 0, 300 }, sf::Vector2f{ 300, 100 }, sf::Color::White, 24, "QUIT", sf::Color::Black}
@@ -43,11 +45,13 @@ int main()
     std::vector<sf::Drawable*> shapes;
 
     // Creation of shapes
-    Button* menu_startButton = new Button(MAIN_MENU[0]);
-    Button* menu_optionsButton = new Button(MAIN_MENU[1]);
-    Button* menu_quitButton = new Button(MAIN_MENU[2]);
+    Button* menu_highscore = new Button(MAIN_MENU[0]);
+    Button* menu_startButton = new Button(MAIN_MENU[1]);
+    Button* menu_optionsButton = new Button(MAIN_MENU[2]);
+    Button* menu_quitButton = new Button(MAIN_MENU[3]);
     Timer* healthBar = new Timer(10.0f, windowSize.x, 100.0f, sf::Vector2f(windowCenter.x, 0.0f));
     // Main Menu added to viewport and gameState changed accordingly (ready for interaction)
+    shapes.push_back(menu_highscore);
     shapes.push_back(menu_startButton);
     shapes.push_back(menu_optionsButton);
     shapes.push_back(menu_quitButton);
@@ -66,11 +70,13 @@ int main()
         if (gameState >= GAME_LAUNCHING)
         {
             // Enter gameLoop with params
-            if (gameLoop(window, shapes, healthBar, targetController));
+            if (gameLoop(window, shapes, healthBar, targetController, highscore));
             else // If game ended (loose, error, etc..)
             {
                 // switch back to MainMenu
                 gameState = MENU_SCREEN;
+                menu_highscore->setText(std::to_string(highscore));
+                shapes.push_back(menu_highscore);
                 shapes.push_back(menu_startButton);
                 shapes.push_back(menu_optionsButton);
                 shapes.push_back(menu_quitButton);
@@ -124,6 +130,7 @@ int main()
                     // else, go to MainMenu
                     gameState = MENU_SCREEN;
                     shapes.clear();
+                    shapes.push_back(menu_highscore);
                     shapes.push_back(menu_startButton);
                     shapes.push_back(menu_optionsButton);
                     shapes.push_back(menu_quitButton);
@@ -155,7 +162,7 @@ void drawAll(sf::RenderWindow& window, const std::vector<sf::Drawable*>& shapes)
     }
 }
 
-bool gameLoop(sf::RenderTarget& window, std::vector<sf::Drawable*>& shapes, Timer* healthBar, TargetController* targetController)
+bool gameLoop(sf::RenderTarget& window, std::vector<sf::Drawable*>& shapes, Timer* healthBar, TargetController* targetController, int& highscore)
 {
     static int hitTargets = 0;
     const float startTimer = 10.0f;
@@ -189,6 +196,7 @@ bool gameLoop(sf::RenderTarget& window, std::vector<sf::Drawable*>& shapes, Time
     {
         // Remove all shapes from vector for menu shapes
         shapes.clear();
+        if (hitTargets > highscore) highscore = hitTargets;
         return false;
     }
 

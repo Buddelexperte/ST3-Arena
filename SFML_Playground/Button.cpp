@@ -30,6 +30,12 @@ bool Button::isMouseOver(const sf::Vector2f& mousePos) const {
 	return B_Box.getGlobalBounds().contains(mousePos); // Check if Box bounds contain position of mouse
 }
 
+void Button::setText(const std::string& text)
+{
+	T_Text.setString(text);
+	move(B_Box.getPosition());
+}
+
 void Button::move(const sf::Vector2f& newPos = {0.0f, 0.0f})
 {
 	// Update Box position and origin
