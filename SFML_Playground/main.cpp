@@ -1,10 +1,8 @@
 #include <SFML/Graphics.hpp>
-#include "Button.h"
-#include "Timer.h"
-#include "TargetController.h"
-#include <iostream>
-#include <vector>
-#include <string>
+#include "Button.h" // Buttons
+#include "Timer.h" // TimerBar
+#include "TargetController.h" // TargetSpawner and Handler
+#include <vector> // Shape storage and access
 
 // Enum for handling gameStages
 enum GameState {

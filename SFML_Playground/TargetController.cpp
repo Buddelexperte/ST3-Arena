@@ -1,5 +1,4 @@
-#include "TargetController.h"
-#include <iostream>
+#include "TargetController.h" // Own header file
 
 void TargetController::newRandomConfig()
 {

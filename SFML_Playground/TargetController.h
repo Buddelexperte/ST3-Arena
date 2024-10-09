@@ -1,7 +1,6 @@
 #include <SFML/Graphics.hpp>
-#include "Button.h"
-#include "Timer.h"
-#include <random>
+#include "Button.h" // For targets (Targets == buttons)
+#include <random> // Random target position generation
 #pragma once
 
 // Class for handling and spawning targets the user can click on

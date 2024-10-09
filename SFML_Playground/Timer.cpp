@@ -1,4 +1,4 @@
-#include "Timer.h"
+#include "Timer.h" // Own header file
 
 void Timer::update(const float& deltaTime)
 {
