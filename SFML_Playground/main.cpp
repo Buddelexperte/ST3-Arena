@@ -2,6 +2,8 @@
 #include "Button.h" // Buttons
 #include "Timer.h" // TimerBar
 #include "TargetController.h" // TargetSpawner and Handler
+#include <iostream> // Console Log and File manipulation
+#include <fstream> // File operations
 #include <vector> // Shape storage and access
 
 // Enum for handling gameStages
@@ -14,17 +16,18 @@ enum GameState {
 } gameState;
 
 // Globals
-int highscore = 0;
+const std::string SAVE_FILE = "../SaveGame.txt";
+void saveData(const std::string& = SAVE_FILE);
+int loadSavedData(const std::string& = SAVE_FILE);
+
+int highscore = loadSavedData();
 float fps = 0.0f;
 float deltaTime = 0.0f;
 sf::Vector2f mousePos(0, 0);
 
-void addMenuToShapes(const std::vector<sf::Drawable*>& vector, std::vector<sf::Drawable*>& shapes)
-{
-    for (const auto& elem : vector) shapes.push_back(elem);
-}
+void addMenuToShapes(const std::vector<sf::Drawable*>&, std::vector<sf::Drawable*>&);
 void drawAll(sf::RenderWindow&, const std::vector<sf::Drawable*>&);
-bool gameLoop(sf::RenderTarget&, std::vector<sf::Drawable*>&, Timer*, TargetController*, int&);
+bool gameLoop(sf::RenderTarget&, std::vector<sf::Drawable*>&, Timer*, TargetController*);
 
 int main()
 {
@@ -36,19 +39,27 @@ int main()
     sf::Vector2f windowCenter = { windowSize.x / 2.0f, windowSize.y / 2.0f };
     // Initiate clock for fps calculation
     sf::Clock clock;
+
     // Target Spawner and Handler
     TargetController* targetController = new TargetController();
-    // MainMenu Button constructs as config variable
-    const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
-        {windowCenter + sf::Vector2f{ 0, -300 }, sf::Vector2f{ 650, 120 }, sf::Color::Transparent, 100, "CLICKER GAME", sf::Color::White},
-        {windowCenter + sf::Vector2f{ 0, -200 }, sf::Vector2f{ 100, 100 }, sf::Color::Transparent, 16, "Higscore: 0", sf::Color::White},
-        {windowCenter + sf::Vector2f{ 0, 0 }, sf::Vector2f{ 300, 100 }, sf::Color::White, 24, "START", sf::Color::Black},
-        {windowCenter + sf::Vector2f{ 0, 150 }, sf::Vector2f{ 300, 100 }, sf::Color::White, 24, "OPTIONS", sf::Color::Black},
-        {windowCenter + sf::Vector2f{ 0, 300 }, sf::Vector2f{ 300, 100 }, sf::Color::White, 24, "QUIT", sf::Color::Black}
-    };
 
     // Master Vector for shape storage, access and handled drawing
     std::vector<sf::Drawable*> shapes;
+
+    /* HOW TO CREATE MENUS USING SHAPES
+    * Create a vector containing your constructs
+    * Create a individual variable for each to-be-interacted-with element
+    * Store them inside a sf::Drawable* vector
+    */
+
+    // MainMenu Button constructs as config variable
+    const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
+        {windowCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 650, 120 }, sf::Color::Transparent,   100, "CLICKER GAME",                            sf::Color::White},
+        {windowCenter + sf::Vector2f{ 0, -200 },    sf::Vector2f{ 100, 100 }, sf::Color::Transparent,   16, "Higscore: " + std::to_string(highscore),   sf::Color::White},
+        {windowCenter + sf::Vector2f{ 0, 0 },       sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "START",                                    sf::Color::Black},
+        {windowCenter + sf::Vector2f{ 0, 150 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "OPTIONS",                                  sf::Color::Black},
+        {windowCenter + sf::Vector2f{ 0, 300 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "QUIT",                                     sf::Color::Black}
+    };
 
     // Creation of shapes and MenuVectors
     Button* menu_title = new Button(MAIN_MENU_CONSTR[0]);
@@ -77,7 +88,7 @@ int main()
         if (gameState >= GAME_LAUNCHING)
         {
             // Enter gameLoop with params
-            if (gameLoop(window, shapes, healthBar, targetController, highscore));
+            if (gameLoop(window, shapes, healthBar, targetController));
             else // If game ended (loose, error, etc..)
             {
                 // switch back to MainMenu
@@ -163,13 +174,18 @@ int main()
     return 0;
 }
 
+void addMenuToShapes(const std::vector<sf::Drawable*>& vector, std::vector<sf::Drawable*>& shapes)
+{
+    for (const auto& elem : vector) shapes.push_back(elem);
+}
+
 void drawAll(sf::RenderWindow& window, const std::vector<sf::Drawable*>& shapes) {
     for (const auto& shape : shapes) {
         window.draw(*shape);
     }
 }
 
-bool gameLoop(sf::RenderTarget& window, std::vector<sf::Drawable*>& shapes, Timer* healthBar, TargetController* targetController, int& highscore)
+bool gameLoop(sf::RenderTarget& window, std::vector<sf::Drawable*>& shapes, Timer* healthBar, TargetController* targetController)
 {
     static int hitTargets = 0;
     const float startTimer = 10.0f;
@@ -204,8 +220,37 @@ bool gameLoop(sf::RenderTarget& window, std::vector<sf::Drawable*>& shapes, Time
         // Remove all shapes from vector for menu shapes
         shapes.clear();
         if (hitTargets > highscore) highscore = hitTargets;
+        saveData(SAVE_FILE);
         return false;
     }
 
     return true;
+}
+
+void saveData(const std::string& path)
+{
+    std::ofstream outFile(path);
+    if (outFile.is_open()) {
+        outFile << highscore;
+        outFile.close();
+        std::cout << "SaveData saved!\n";
+    }
+    else {
+        std::cerr << "Error opening save file for writing.\n";
+    }
+}
+
+int loadSavedData(const std::string& path)
+{
+    int highscore = 0;
+    std::ifstream inFile(path);  // Open file in input mode
+    if (inFile.is_open()) {
+        inFile >> highscore;  // Read the highscore from the file
+        inFile.close();       // Close the file
+        std::cout << "SaveData loaded!\n";
+    }
+    else {
+        std::cerr << "Error opening save file for reading. Defaulting to 0.\n";
+    }
+    return highscore;
 }
