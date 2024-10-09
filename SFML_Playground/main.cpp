@@ -6,11 +6,12 @@
 #include <vector>
 #include <string>
 
+// Enum for handling gameStages
 enum GameState {
-    GAME_ENDED = -1,
-    MENU_SCREEN = 0,
-    GAME_LAUNCHING,
-    IN_GAME
+    GAME_ENDED = -1, // Not started or interrupted
+    MENU_SCREEN = 0, // A Menu with clickable buttons
+    GAME_LAUNCHING, // gameLoop should start and execute init functionality
+    IN_GAME // gameLoop should start
 } gameState;
 
 // Globals
@@ -23,94 +24,106 @@ bool gameLoop(sf::RenderTarget&, std::vector<sf::Drawable*>&, Timer*, TargetCont
 
 int main()
 {
+    // Set gameState for all actions done before player interaction
     gameState = GAME_ENDED;
-
+    // Create window and save size + center
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "SFML_Clicker", sf::Style::Fullscreen);
-    sf::Clock clock;
-
-    TargetController* targetController = new TargetController();
-
     sf::Vector2u windowSize = window.getSize();
     sf::Vector2f windowCenter = { windowSize.x / 2.0f, windowSize.y / 2.0f };
-
+    // Initiate clock for fps calculation
+    sf::Clock clock;
+    // Target Spawner and Handler
+    TargetController* targetController = new TargetController();
+    // MainMenu Button constructs as config variable
     const std::vector<ButtonConstruct> MAIN_MENU = {
         {windowCenter + sf::Vector2f{ 0, 0 }, sf::Vector2f{ 300, 100 }, sf::Color::White, 24, "START", sf::Color::Black},
         {windowCenter + sf::Vector2f{ 0, 150 }, sf::Vector2f{ 300, 100 }, sf::Color::White, 24, "OPTIONS", sf::Color::Black},
         {windowCenter + sf::Vector2f{ 0, 300 }, sf::Vector2f{ 300, 100 }, sf::Color::White, 24, "QUIT", sf::Color::Black}
     };
 
-    // Vector for shape storage and access
+    // Vector for shape storage, access and handled drawing
     std::vector<sf::Drawable*> shapes;
 
-    // Creation of Shapes
+    // Creation of shapes
     Button* menu_startButton = new Button(MAIN_MENU[0]);
-    shapes.push_back(menu_startButton);
     Button* menu_optionsButton = new Button(MAIN_MENU[1]);
-    shapes.push_back(menu_optionsButton);
     Button* menu_quitButton = new Button(MAIN_MENU[2]);
-    shapes.push_back(menu_quitButton);
     Timer* healthBar = new Timer(10.0f, windowSize.x, 100.0f, sf::Vector2f(windowCenter.x, 0.0f));
-    
+    // Main Menu added to viewport and gameState changed accordingly (ready for interaction)
+    shapes.push_back(menu_startButton);
+    shapes.push_back(menu_optionsButton);
+    shapes.push_back(menu_quitButton);
     gameState = MENU_SCREEN;
 
     while (window.isOpen())
     {
+        // Update viewport values
         windowSize = window.getSize();
         windowCenter = { windowSize.x / 2.0f, windowSize.y / 2.0f };
-
+        // Calculate fps and deltaTime based on clock
         deltaTime = clock.restart().asSeconds();
         fps = 1.0f / deltaTime;
 
-
+        // If game is launching or at a later step already
         if (gameState >= GAME_LAUNCHING)
         {
+            // Enter gameLoop with params
             if (gameLoop(window, shapes, healthBar, targetController));
-            else
+            else // If game ended (loose, error, etc..)
             {
+                // switch back to MainMenu
                 gameState = MENU_SCREEN;
                 shapes.push_back(menu_startButton);
                 shapes.push_back(menu_optionsButton);
                 shapes.push_back(menu_quitButton);
             }
         }
+        // Event listener
         sf::Event event;
-        while (window.pollEvent(event))
+        // Only check for events if the game started correctly and didn't (technically) end
+        while (window.pollEvent(event) && gameState != GAME_ENDED)
         {
+            // If close event got called, act accordingly
             if (event.type == sf::Event::Closed)
             {
                 window.close();
                 break;
             }
-
+            // Update global mouse position variable
             mousePos.x = (event.mouseButton.x);
             mousePos.y = (event.mouseButton.y);
 
             // Event Handler
             switch (event.type)
             {
-            case sf::Event::MouseButtonPressed:
-                if (event.mouseButton.button == sf::Mouse::Left)
+            case sf::Event::MouseButtonPressed: // Mouse input
+                if (event.mouseButton.button == sf::Mouse::Left) // LMB
                 {
+                    // Only when in MainMenu, check for button presses
                     if (gameState == MENU_SCREEN)
                     {
-                        if (menu_startButton->isClicked(mousePos))
+                        if (menu_startButton->isClicked(mousePos)) // Start Button
                         {
                             shapes.clear();
                             gameState = GAME_LAUNCHING;
                         }
-                        if (menu_quitButton->isClicked(mousePos))
+                        if (menu_quitButton->isClicked(mousePos)) // Quit Button
+                        {
                             window.close();
+                        }
                     }
                 }
                 break;
-            case sf::Event::KeyPressed:
-                if (event.key.code == sf::Keyboard::Escape)
+            case sf::Event::KeyPressed: // Keyboard input
+                if (event.key.code == sf::Keyboard::Escape) // ESC
                 {
+                    // If already on MainMenu, close game
                     if (gameState == MENU_SCREEN)
                     {
                         window.close();
                         break;
                     }
+                    // else, go to MainMenu
                     gameState = MENU_SCREEN;
                     shapes.clear();
                     shapes.push_back(menu_startButton);
@@ -122,17 +135,15 @@ int main()
                 break;
             }
         }
-
+        // Clear viewport for new draw
         window.clear();
-        // Draw Shapes
+        // Draw all Drawables from shapes vector
         drawAll(window, shapes);
         // Display Draw changes
         window.display();
     }
 
-    std::cout << "Window closed!" << std::endl;
-
-    // Clean up dynamically allocated shapes
+    // Clean up dynamically allocated shapes after game closes
     for (auto shape : shapes) {
         delete shape;
     }
@@ -151,30 +162,34 @@ bool gameLoop(sf::RenderTarget& window, std::vector<sf::Drawable*>& shapes, Time
     static int hitTargets = 0;
     const float startTimer = 10.0f;
     const float minTimer = 1.0f;
-
+    // If called from Menu, initiate game logic
     if (gameState == GAME_LAUNCHING)
     {
+        // Reset values to game start values
         hitTargets = 0;
         targetController->initSpawner(window);
-        shapes.push_back(targetController);
         healthBar->setMaxTime(startTimer, true);
+        // Add Gameplay objects to shapes vector to draw them
+        shapes.push_back(targetController);
         shapes.push_back(healthBar);
         gameState = IN_GAME;
     }
-
+    // Update Gameplay objects with respectable params
     targetController->update(window);
     healthBar->update(deltaTime);
-
+    // If any target got clicked
     if (targetController->clickedAny(mousePos))
     {
+        // Increase targetsHit and change HealthBar accoridngly
         hitTargets++;
         float newMaxTime = startTimer - (float(int(hitTargets) / 3) * 0.2f);
-        healthBar->setMaxTime(std::max(newMaxTime, minTimer));
-        healthBar->setCurrentTime(healthBar->getCurrentTime() + (healthBar->getMaxTime() / 5.0f));
+        healthBar->setMaxTime(std::max(newMaxTime, minTimer)); // Shorten HealthBar lifespan
+        healthBar->setCurrentTime(healthBar->getCurrentTime() + (healthBar->getMaxTime() / 5.0f)); // Regen so a fifth of the max lifespan
     }
-
+    // If the HealthBar drops to 0.0
     if (healthBar->isFinished())
     {
+        // Remove all shapes from vector for menu shapes
         shapes.clear();
         return false;
     }
