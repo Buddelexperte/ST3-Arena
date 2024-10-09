@@ -50,7 +50,25 @@ bool TargetController::clickedAny(const sf::Vector2f& mousePos)
 void TargetController::spawnTarget()
 {
 	newRandomConfig();
-	targets.push_back(std::make_unique<Button>(TARGET_CONFIG));
+	auto newButton = std::make_unique<Button>(TARGET_CONFIG);
+	bool foundSpot = false;
+	while (!foundSpot) {
+		foundSpot = true; // Assume a valid spot is found until proven otherwise
+
+		for (const auto& button : targets)
+		{
+			if (newButton->B_Box.getGlobalBounds().intersects(button->B_Box.getGlobalBounds()))
+			{
+				foundSpot = false; // Collision found, try again
+				newRandomConfig();
+				newButton->move(TARGET_CONFIG.pos);
+				break; // Exit the for loop to check new position
+			}
+		}
+	}
+
+		
+	targets.push_back(std::move(newButton));
 }
 
 void TargetController::initSpawner(sf::RenderTarget& window)

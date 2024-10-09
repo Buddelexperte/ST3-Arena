@@ -6,6 +6,12 @@
 #include <vector>
 #include <string>
 
+enum GameState {
+    GAME_ENDED = -1,
+    MENU_SCREEN = 0,
+    IN_GAME = 1
+} gameState;
+
 // Globals
 float fps = 0.0f;
 float deltaTime = 0.0f;
@@ -16,7 +22,7 @@ bool gameLoop(sf::RenderTarget&, std::vector<sf::Drawable*>&, Timer*, TargetCont
 
 int main()
 {
-    bool bGameStarted = false;
+    gameState = GAME_ENDED;
 
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "SFML_Clicker", sf::Style::Fullscreen);
     sf::Clock clock;
@@ -36,7 +42,6 @@ int main()
     std::vector<sf::Drawable*> shapes;
 
     // Creation of Shapes
-
     Button* startButton = new Button(MAIN_MENU[0]);
     shapes.push_back(startButton);
     Button* optionsButton = new Button(MAIN_MENU[1]);
@@ -44,7 +49,8 @@ int main()
     Button* quitButton = new Button(MAIN_MENU[2]);
     shapes.push_back(quitButton);
     Timer* healthBar = new Timer(10.0f, windowSize.x, 100.0f, sf::Vector2f(windowCenter.x, 0.0f));
-
+    
+    gameState = MENU_SCREEN;
 
     while (window.isOpen())
     {
@@ -55,18 +61,17 @@ int main()
         fps = 1.0f / deltaTime;
 
 
-        if (bGameStarted)
+        if (gameState == IN_GAME)
         {
             if (gameLoop(window, shapes, healthBar, targetController));
             else
             {
-                bGameStarted = false;
+                gameState = MENU_SCREEN;
                 shapes.push_back(startButton);
                 shapes.push_back(optionsButton);
                 shapes.push_back(quitButton);
             }
         }
-
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -85,12 +90,12 @@ int main()
             case sf::Event::MouseButtonPressed:
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
-                    if (!bGameStarted)
+                    if (gameState == MENU_SCREEN)
                     {
                         if (startButton->isClicked(mousePos))
                         {
                             shapes.clear();
-                            bGameStarted = true;
+                            gameState = IN_GAME;
                         }
                         if (quitButton->isClicked(mousePos))
                             window.close();
@@ -100,12 +105,12 @@ int main()
             case sf::Event::KeyPressed:
                 if (event.key.code == sf::Keyboard::Escape)
                 {
-                    if (!bGameStarted)
+                    if (gameState == MENU_SCREEN)
                     {
                         window.close();
                         break;
                     }
-                    bGameStarted = false;
+                    gameState = MENU_SCREEN;
                     shapes.clear();
                     shapes.push_back(startButton);
                     shapes.push_back(optionsButton);

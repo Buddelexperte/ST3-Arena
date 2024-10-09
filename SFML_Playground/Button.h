@@ -24,6 +24,8 @@ public:
 	Button(const ButtonConstruct& constr) : Button(constr.pos, constr.size, constr.color, constr.fontSize, constr.text, constr.textColor) {};
 	Button(const sf::Vector2f&, const sf::Vector2f&, const sf::Color&, const unsigned int&, const std::string&, const sf::Color&);
 
+	void move(const sf::Vector2f&);
+
 	bool isClicked(const sf::Vector2f& mousePos) const;
 	bool isHovered(const sf::Vector2f& mousePos) const;
 

@@ -22,7 +22,7 @@ Button::Button(const sf::Vector2f& pos, const sf::Vector2f& b_size, const sf::Co
 	T_Text.setFillColor(t_color);
 
 	T_Text.setOrigin(T_Text.getGlobalBounds().width / 2.0f, T_Text.getGlobalBounds().height / 2.0f);
-	T_Text.setPosition({pos.x, pos.y - 6});
+	T_Text.setPosition({pos.x, pos.y - 6.0f});
 }
 
 bool Button::isClicked(const sf::Vector2f& mousePos) const {
@@ -30,6 +30,15 @@ bool Button::isClicked(const sf::Vector2f& mousePos) const {
 }
 bool Button::isHovered(const sf::Vector2f& mousePos) const {
 	return B_Box.getGlobalBounds().contains(mousePos);
+}
+
+void Button::move(const sf::Vector2f& newPos = {0.0f, 0.0f})
+{
+	B_Box.setPosition(newPos);
+	B_Box.setOrigin(B_Box.getSize().x / 2.0f, B_Box.getSize().y / 2.0f);
+
+	T_Text.setOrigin(T_Text.getGlobalBounds().width / 2.0f, T_Text.getGlobalBounds().height / 2.0f);
+	T_Text.setPosition({ newPos.x, newPos.y - 6.0f });
 }
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
