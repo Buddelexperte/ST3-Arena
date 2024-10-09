@@ -43,12 +43,12 @@ int main()
     std::vector<sf::Drawable*> shapes;
 
     // Creation of Shapes
-    Button* startButton = new Button(MAIN_MENU[0]);
-    shapes.push_back(startButton);
-    Button* optionsButton = new Button(MAIN_MENU[1]);
-    shapes.push_back(optionsButton);
-    Button* quitButton = new Button(MAIN_MENU[2]);
-    shapes.push_back(quitButton);
+    Button* menu_startButton = new Button(MAIN_MENU[0]);
+    shapes.push_back(menu_startButton);
+    Button* menu_optionsButton = new Button(MAIN_MENU[1]);
+    shapes.push_back(menu_optionsButton);
+    Button* menu_quitButton = new Button(MAIN_MENU[2]);
+    shapes.push_back(menu_quitButton);
     Timer* healthBar = new Timer(10.0f, windowSize.x, 100.0f, sf::Vector2f(windowCenter.x, 0.0f));
     
     gameState = MENU_SCREEN;
@@ -68,9 +68,9 @@ int main()
             else
             {
                 gameState = MENU_SCREEN;
-                shapes.push_back(startButton);
-                shapes.push_back(optionsButton);
-                shapes.push_back(quitButton);
+                shapes.push_back(menu_startButton);
+                shapes.push_back(menu_optionsButton);
+                shapes.push_back(menu_quitButton);
             }
         }
         sf::Event event;
@@ -93,12 +93,12 @@ int main()
                 {
                     if (gameState == MENU_SCREEN)
                     {
-                        if (startButton->isClicked(mousePos))
+                        if (menu_startButton->isClicked(mousePos))
                         {
                             shapes.clear();
                             gameState = GAME_LAUNCHING;
                         }
-                        if (quitButton->isClicked(mousePos))
+                        if (menu_quitButton->isClicked(mousePos))
                             window.close();
                     }
                 }
@@ -113,9 +113,9 @@ int main()
                     }
                     gameState = MENU_SCREEN;
                     shapes.clear();
-                    shapes.push_back(startButton);
-                    shapes.push_back(optionsButton);
-                    shapes.push_back(quitButton);
+                    shapes.push_back(menu_startButton);
+                    shapes.push_back(menu_optionsButton);
+                    shapes.push_back(menu_quitButton);
                 }
                 break;
             default:
@@ -168,7 +168,8 @@ bool gameLoop(sf::RenderTarget& window, std::vector<sf::Drawable*>& shapes, Time
     if (targetController->clickedAny(mousePos))
     {
         hitTargets++;
-        healthBar->setMaxTime(std::max(startTimer - (float(int(hitTargets) / 3) * 0.2f), minTimer));
+        float newMaxTime = startTimer - (float(int(hitTargets) / 3) * 0.2f);
+        healthBar->setMaxTime(std::max(newMaxTime, minTimer));
         healthBar->setCurrentTime(healthBar->getCurrentTime() + (healthBar->getMaxTime() / 5.0f));
     }
 
