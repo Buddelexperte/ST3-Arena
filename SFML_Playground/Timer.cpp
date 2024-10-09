@@ -8,6 +8,7 @@ void Timer::update(const float& deltaTime)
 		currentTime = 0.0f; // Keep currentTime positive
 	}
 	float timeRatio = (currentTime / maxTime); // Calculate ratio from timeLeft to maxTime for progress visuality
+	timerBar.setFillColor(timeRatio < 0.33f ? sf::Color::Red : sf::Color::White);
 	timerBar.setSize(sf::Vector2f(barWidth * timeRatio, barHeight)); //
 }
 
