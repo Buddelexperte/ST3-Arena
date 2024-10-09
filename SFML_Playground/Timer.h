@@ -22,7 +22,7 @@ public:
     float getCurrentTime() const;
     void setCurrentTime(const float&);
     float getMaxTime() const;
-    void setMaxTime(const float&, const bool&);
+    void setMaxTime(const float&, const bool& = false);
     bool isFinished() const;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

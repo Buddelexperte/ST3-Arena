@@ -11,7 +11,7 @@ void TargetController::newRandomConfig()
 	// Use the random device to seed a Mersenne Twister generator
 	std::mt19937 gen(rd());
 
-	TARGET_CONFIG.pos = sf::Vector2f(distrX(gen), distrY(gen));
+	TARGET_CONFIG.pos = sf::Vector2f(int(distrX(gen) / 100) * 100.0f, int(distrY(gen) / 100) * 100.0f);
 }
 
 void TargetController::clear()

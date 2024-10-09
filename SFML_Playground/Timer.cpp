@@ -31,7 +31,7 @@ float Timer::getMaxTime() const
 	return (this->maxTime);
 }
 
-void Timer::setMaxTime(const float& n, const bool& reset = false)
+void Timer::setMaxTime(const float& n, const bool& reset)
 {
 	this->maxTime = n;
 	if (reset || n < currentTime) currentTime = maxTime;
@@ -39,5 +39,5 @@ void Timer::setMaxTime(const float& n, const bool& reset = false)
 
 bool Timer::isFinished() const
 {
-	return (currentTime < 0.0f);
+	return (currentTime <= 0.0f);
 }

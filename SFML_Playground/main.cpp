@@ -149,14 +149,15 @@ void drawAll(sf::RenderWindow& window, const std::vector<sf::Drawable*>& shapes)
 bool gameLoop(sf::RenderTarget& window, std::vector<sf::Drawable*>& shapes, Timer* healthBar, TargetController* targetController)
 {
     static int hitTargets = 0;
-
+    const float startTimer = 10.0f;
+    const float minTimer = 1.0f;
 
     if (gameState == GAME_LAUNCHING)
     {
         hitTargets = 0;
         targetController->initSpawner(window);
         shapes.push_back(targetController);
-        healthBar->setMaxTime(10.0f, true);
+        healthBar->setMaxTime(startTimer, true);
         shapes.push_back(healthBar);
         gameState = IN_GAME;
     }
@@ -166,9 +167,8 @@ bool gameLoop(sf::RenderTarget& window, std::vector<sf::Drawable*>& shapes, Time
 
     if (targetController->clickedAny(mousePos))
     {
-        hitTargets++;
         healthBar->setCurrentTime(healthBar->getCurrentTime() + (healthBar->getMaxTime() / 5.0f));
-        healthBar->setMaxTime(healthBar->getMaxTime() - (float(int(hitTargets) / 3) * 0.2f), false);
+        healthBar->setMaxTime(std::max(startTimer - (float(int(++hitTargets) / 3) * 0.2f), minTimer));
     }
 
     if (healthBar->isFinished())
