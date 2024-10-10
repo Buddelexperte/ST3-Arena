@@ -1,6 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include "Button.h" // Buttons
-#include "Timer.h" // TimerBar
+import WidgetElements; // UI elements and menus
 #include "TargetController.h" // TargetSpawner and Handler
 #include <iostream> // Console Log and File manipulation
 #include <fstream> // File operations
