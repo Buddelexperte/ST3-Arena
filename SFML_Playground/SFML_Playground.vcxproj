@@ -136,14 +136,15 @@
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SFML_Clicker.cpp" />
     <ClCompile Include="TargetController.cpp" />
     <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="WidgetElements.ixx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="TargetController.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="SFML_Clicker.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

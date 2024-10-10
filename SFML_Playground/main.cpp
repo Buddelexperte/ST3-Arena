@@ -1,81 +1,33 @@
-#include <SFML/Graphics.hpp>
-import WidgetElements; // UI elements and menus
-#include "TargetController.h" // TargetSpawner and Handler
-#include <iostream> // Console Log and File manipulation
-#include <fstream> // File operations
-#include <vector> // Shape storage and access
+#include "SFML_Clicker.h"
 
-// Enum for handling gameStages
-enum GameState {
-    GAME_ENDED = -1, // Not started or interrupted
-    MENU_SCREEN = 0, // A Menu with clickable buttons
-    GAME_OVER,
-    GAME_LAUNCHING, // gameLoop should start and execute init functionality
-    IN_GAME // gameLoop should start
-} gameState;
+GI_Clicker& gameInstance = GI_Clicker::getInstance();
+int SaveGame::Stored_Save = SaveGame::loadSavedData();
 
-// Paths and Data Manipulation
-const std::string SAVE_FILE = "../SaveGame.txt";
-void saveData(const std::string& = SAVE_FILE);
-int loadSavedData(const std::string& = SAVE_FILE);
 // Globals
-int highscore = loadSavedData();
 float fps = 0.0f;
 float deltaTime = 0.0f;
 sf::Vector2f mousePos(0, 0);
 
-void addMenuToShapes(const std::vector<sf::Drawable*>&, std::vector<sf::Drawable*>&);
-void drawAll(sf::RenderWindow&, const std::vector<sf::Drawable*>&);
-bool gameLoop(sf::RenderTarget&, std::vector<sf::Drawable*>&, Timer*, TargetController*);
-
 int main()
 {
     // Set gameState for all actions done before player interaction
-    gameState = GAME_ENDED;
+    gameInstance.setGameState(GAME_ENDED);
     // Create window and save size + center
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "SFML_Clicker", sf::Style::Fullscreen);
+    sf::RenderStates states = sf::RenderStates::Default;
     sf::Vector2u windowSize = window.getSize();
     sf::Vector2f windowCenter = { windowSize.x / 2.0f, windowSize.y / 2.0f };
     // Initiate clock for fps calculation
     sf::Clock clock;
 
     // Target Spawner and Handler
-    TargetController* targetController = new TargetController();
-
-    // Master Vector for shape storage, access and handled drawing
-    std::vector<sf::Drawable*> shapes;
-
-    /* HOW TO CREATE MENUS USING SHAPES
-    * Create a vector containing your constructs
-    * Create a individual variable for each to-be-interacted-with element
-    * Store them inside a sf::Drawable* vector
-    */
-
-    // MainMenu Button constructs as config variable
-    const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
-        {windowCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 650, 120 }, sf::Color::Transparent,   100, "CLICKER GAME",                            sf::Color::White},
-        {windowCenter + sf::Vector2f{ 0, -200 },    sf::Vector2f{ 100, 100 }, sf::Color::Transparent,   16, "Higscore: " + std::to_string(highscore),   sf::Color::White},
-        {windowCenter + sf::Vector2f{ 0, 0 },       sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "START",                                    sf::Color::Black},
-        {windowCenter + sf::Vector2f{ 0, 150 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "OPTIONS",                                  sf::Color::Black},
-        {windowCenter + sf::Vector2f{ 0, 300 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "QUIT",                                     sf::Color::Black}
-    };
-
-    // Creation of shapes and MenuVectors
-    Button* menu_title = new Button(MAIN_MENU_CONSTR[0]);
-    Button* menu_highscore = new Button(MAIN_MENU_CONSTR[1]);
-    Button* menu_startButton = new Button(MAIN_MENU_CONSTR[2]);
-    Button* menu_optionsButton = new Button(MAIN_MENU_CONSTR[3]);
-    Button* menu_quitButton = new Button(MAIN_MENU_CONSTR[4]);
-    const std::vector<sf::Drawable*> MAIN_MENU = { menu_title, menu_highscore, menu_startButton, menu_optionsButton, menu_quitButton };
-    
-    Timer* healthBar = new Timer(10.0f, windowSize.x, 100.0f, sf::Vector2f(windowCenter.x, 0.0f));
-    const std::vector<sf::Drawable*> GAMEPLAY_UI = { healthBar };
-
-
+    W_MainMenu* MainMenuRef = new W_MainMenu(window);
+    W_Gameplay* GameplayRef = new W_Gameplay(window);
     // Main Menu added to viewport and gameState changed accordingly (ready for interaction)
-    addMenuToShapes(MAIN_MENU, shapes);
-    gameState = MENU_SCREEN;
+    WidgetMenu* activeMenu = MainMenuRef;
+    gameInstance.setGameState(MENU_SCREEN);
 
+    E_GameState gameState = GAME_ENDED;
 
     // Main Game Loop
     while (window.isOpen())
@@ -87,24 +39,11 @@ int main()
         deltaTime = clock.restart().asSeconds();
         fps = 1.0f / deltaTime;
 
-        // If game is launching or at a later step already
-        if (gameState >= GAME_LAUNCHING)
-        {
-            // Enter gameLoop with params
-            if (gameLoop(window, shapes, healthBar, targetController));
-            else // If game ended (loose, error, etc..)
-            {
-                // switch back to MainMenu
-                gameState = MENU_SCREEN;
-                menu_title->setColor(sf::Color::White, true);
-                menu_highscore->setText("Highscore: " + std::to_string(highscore));
-                for (const auto& elem : MAIN_MENU) shapes.push_back(elem);
-            }
-        }
         // Event listener
+        activeMenu->update(deltaTime);
         sf::Event event;
         // Only check for events if the game started correctly and didn't (technically) end
-        while (window.pollEvent(event) && gameState != GAME_ENDED)
+        while (window.pollEvent(event) && gameInstance.getGameState() != GAME_ENDED)
         {
             // If close event got called, act accordingly
             if (event.type == sf::Event::Closed)
@@ -113,8 +52,8 @@ int main()
                 break;
             }
             // Update global mouse position variable
-            mousePos.x = (event.mouseButton.x);
-            mousePos.y = (event.mouseButton.y);
+            mousePos.x = event.mouseButton.x;
+            mousePos.y = event.mouseButton.y;
 
             // Event Handler
             switch (event.type)
@@ -122,138 +61,62 @@ int main()
             case sf::Event::MouseButtonPressed: // Mouse input
                 if (event.mouseButton.button == sf::Mouse::Left) // LMB
                 {
-                    // Only when in MainMenu, check for button presses
-                    if (gameState == MENU_SCREEN)
-                    {
-                        if (menu_startButton->isMouseOver(mousePos)) // Start Button clicked
-                        {
-                            shapes.clear();
-                            gameState = GAME_LAUNCHING;
-                        }
-                        if (menu_quitButton->isMouseOver(mousePos)) // Quit Button clicked
-                        {
-                            window.close();
-                        }
-                        if (menu_title->isMouseOver(mousePos)) // Title Text clicked
-                        {
-                            bool alreadyChanged = (menu_title->getColor(true) == sf::Color::Red);
-                            menu_title->setColor((alreadyChanged ? sf::Color::White : sf::Color::Red), true);
-                        }
-                    }
+                    activeMenu->isInteracted(mousePos);
                 }
                 break;
             case sf::Event::KeyPressed: // Keyboard input
                 if (event.key.code == sf::Keyboard::Escape) // ESC
                 {
                     // If already on MainMenu, close game
-                    if (gameState == MENU_SCREEN)
+                    if (gameInstance.getGameState() == MENU_SCREEN)
                     {
                         window.close();
                         break;
                     }
                     // else, go to MainMenu
-                    gameState = MENU_SCREEN;
-                    shapes.clear();
-                    for (const auto& elem : MAIN_MENU) shapes.push_back(elem);
+                    gameInstance.setGameState(MENU_SCREEN);
                 }
                 break;
             default:
                 break;
             }
         }
+
+        if (gameInstance.getGameStateChanges(gameState))
+        {
+            switch (gameState)
+            {
+            case GAME_ENDED:
+                window.close();
+                break;
+            case MENU_SCREEN:
+                activeMenu = MainMenuRef;
+                break;
+            case PAUSED:
+                activeMenu = GameplayRef;
+                break;
+            case GAME_OVER:
+                activeMenu = GameplayRef;
+                break;
+            case GAME_LAUNCHING:
+                activeMenu = GameplayRef;
+                break;
+            case IN_GAME:
+                activeMenu = GameplayRef;
+                break;
+            default:
+                activeMenu = MainMenuRef;
+                break;
+            }
+            activeMenu->init();
+        }
+
         // Clear viewport for new draw
         window.clear();
         // Draw all Drawables from shapes vector
-        drawAll(window, shapes);
+        activeMenu->draw(window, states);
         // Display Draw changes
         window.display();
     }
-
-    // Clean up dynamically allocated shapes after game closes
-    for (auto shape : shapes) {
-        delete shape;
-    }
-
     return 0;
-}
-
-void addMenuToShapes(const std::vector<sf::Drawable*>& vector, std::vector<sf::Drawable*>& shapes)
-{
-    for (const auto& elem : vector) shapes.push_back(elem);
-}
-
-void drawAll(sf::RenderWindow& window, const std::vector<sf::Drawable*>& shapes) {
-    for (const auto& shape : shapes) {
-        window.draw(*shape);
-    }
-}
-
-bool gameLoop(sf::RenderTarget& window, std::vector<sf::Drawable*>& shapes, Timer* healthBar, TargetController* targetController)
-{
-    static int hitTargets = 0;
-    const float startTimer = 10.0f;
-    const float minTimer = 1.0f;
-    // If called from Menu, initiate game logic
-    if (gameState == GAME_LAUNCHING)
-    {
-        // Reset values to game start values
-        hitTargets = 0;
-        targetController->initSpawner(window);
-        healthBar->setMaxTime(startTimer, true);
-        // Add Gameplay objects to shapes vector to draw them
-        shapes.push_back(targetController);
-        shapes.push_back(healthBar);
-        gameState = IN_GAME;
-    }
-    // Update Gameplay objects with respectable params
-    targetController->update(window);
-    healthBar->update(deltaTime);
-    // If any target got clicked
-    if (targetController->clickedAny(mousePos))
-    {
-        // Increase targetsHit and change HealthBar accoridngly
-        hitTargets++;
-        float newMaxTime = startTimer - (float(int(hitTargets) / 3) * 0.2f);
-        healthBar->setMaxTime(std::max(newMaxTime, minTimer)); // Shorten HealthBar lifespan
-        healthBar->setCurrentTime(healthBar->getCurrentTime() + (healthBar->getMaxTime() / 5.0f)); // Regen so a fifth of the max lifespan
-    }
-    // If the HealthBar drops to 0.0
-    if (healthBar->isFinished())
-    {
-        // Remove all shapes from vector for menu shapes
-        shapes.clear();
-        if (hitTargets > highscore) highscore = hitTargets; // Update highscore value if new value is bigger
-        saveData(SAVE_FILE); // Save highscore value (didn't change if no greater was achieved)
-        return false;
-    }
-
-    return true;
-}
-
-void saveData(const std::string& path)
-{
-    std::ofstream outFile(path); // Open file in output mode and write the highscore to it
-    if (outFile.is_open()) {
-        outFile << highscore;
-        outFile.close();
-        std::cout << "SaveData saved!\n";
-    }
-    else {
-        std::cerr << "Error opening save file for writing.\n"; // Display file access error message
-    }
-}
-
-int loadSavedData(const std::string& path)
-{
-    int highscore = 0;
-    std::ifstream inFile(path);  // Open file in input mode and write the highscore to it
-    if (inFile.is_open()) {
-        inFile >> highscore;
-        inFile.close();
-        std::cout << "SaveData loaded!\n";
-    }
-    else {
-        std::cerr << "Error opening save file for reading. Defaulting to 0.\n"; // Display file access error message
-    }
-    return highscore;
 }

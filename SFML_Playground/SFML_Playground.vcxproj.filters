@@ -27,8 +27,8 @@
     <ClCompile Include="TargetController.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="WidgetElements.ixx">
-      <Filter>Headerdateien</Filter>
+    <ClCompile Include="SFML_Clicker.cpp">
+      <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -39,6 +39,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="TargetController.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML_Clicker.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
