@@ -55,7 +55,6 @@ void W_Gameplay::init()
 {
 	if (gameInstance.getGameState() == GAME_LAUNCHING)
 	{
-		std::cout << "init" << std::endl;
 		// Reset values to game start values
 		hitTargets = 0;
 		targetController->initSpawner(*window);
@@ -88,7 +87,6 @@ bool W_Gameplay::isInteracted(const sf::Vector2f& mousePos)
 	{
 		// Increase targetsHit and change HealthBar accoridngly
 		hitTargets++;
-		std::cout << "clicked # " << hitTargets << std::endl;
 		float newMaxTime = startTimer - (float(int(hitTargets) / 3) * 0.2f);
 		healthBar->setMaxTime(std::max(newMaxTime, minTimer)); // Shorten HealthBar lifespan
 		healthBar->setCurrentTime(healthBar->getCurrentTime() + (healthBar->getMaxTime() / 5.0f)); // Regen so a fifth of the max lifespan
