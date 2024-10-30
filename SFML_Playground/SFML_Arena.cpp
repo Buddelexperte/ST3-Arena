@@ -33,7 +33,7 @@ void GI_Arena::setGameState(const E_GameState& newGS)
 W_MainMenu::W_MainMenu() : WidgetMenu()
 {
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
-		{windowCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 650, 120 }, sf::Color::Transparent,   100, "CLICKER GAME",											sf::Color::White},
+		{windowCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "ARENA",											sf::Color::White},
 		{windowCenter + sf::Vector2f{ 0, -200 },    sf::Vector2f{ 100, 100 }, sf::Color::Transparent,   16, "Higscore: " + std::to_string(SaveGame::Stored_Save),	sf::Color::White},
 		{windowCenter + sf::Vector2f{ 0, 0 },       sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "START",													sf::Color::Black},
 		{windowCenter + sf::Vector2f{ 0, 150 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "OPTIONS",													sf::Color::Black},
