@@ -45,4 +45,15 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\Downloads\SCI-FI_UI_SFX_PACK.zip">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\..\..\..\Downloads\FREE Textures Of Light.zip">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+    <None Include="..\..\..\..\Downloads\Texture.rar">
+      <Filter>Ressourcendateien</Filter>
+    </None>
+  </ItemGroup>
 </Project>
