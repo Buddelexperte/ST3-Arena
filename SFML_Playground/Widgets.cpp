@@ -50,11 +50,14 @@ bool W_MainMenu::isInteracted(const sf::Vector2f& mousePos)
 W_Gameplay::W_Gameplay() : WidgetMenu()
 {
 	flashlight->setOrigin(512.0f / 2.0f, 512.0f / 2.0f);
-
+	flashlight->setScale(sf::Vector2f(1.4f, 1.4f));
+	sf::Color color = flashlight->getColor();
+	color.a = 128;
+	flashlight->setColor(color);
 
 	targetController = new TargetController();
 	healthBar = new Timer(10.0f, windowSize.x, 100.0f, sf::Vector2f(windowCenter.x, 0.0f));
-	shapes = { flashlight, targetController, healthBar };
+	shapes = { targetController, flashlight, healthBar };
 }
 
 void W_Gameplay::init()
