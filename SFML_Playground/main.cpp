@@ -1,6 +1,5 @@
 #include "SFML_Arena.h"
 
-GI_Clicker& gameInstance = GI_Clicker::getInstance();
 int SaveGame::Stored_Save = SaveGame::loadSavedData();
 
 // Globals
@@ -10,45 +9,41 @@ sf::Vector2f mousePos(0, 0);
 
 int main()
 {
+    GI_Arena& gameInstance = GI_Arena::getInstance();
     // Set gameState for all actions done before player interaction
+    sf::RenderWindow* windowRef = gameInstance.getWindow();
     gameInstance.setGameState(GAME_ENDED);
-    // Create window and save size + center
-    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "SFML_Clicker", sf::Style::Fullscreen);
-    sf::RenderStates states = sf::RenderStates::Default;
-    sf::Vector2u windowSize = window.getSize();
-    sf::Vector2f windowCenter = { windowSize.x / 2.0f, windowSize.y / 2.0f };
     // Initiate clock for fps calculation
     sf::Clock clock;
 
     // Target Spawner and Handler
-    W_MainMenu* MainMenuRef = new W_MainMenu(window);
-    W_Gameplay* GameplayRef = new W_Gameplay(window);
+    W_MainMenu* MainMenuRef = new W_MainMenu();
+    W_Gameplay* GameplayRef = new W_Gameplay();
+
+
     // Main Menu added to viewport and gameState changed accordingly (ready for interaction)
     WidgetMenu* activeMenu = MainMenuRef;
     gameInstance.setGameState(MENU_SCREEN);
 
-    E_GameState gameState = GAME_ENDED;
-
     // Main Game Loop
-    while (window.isOpen())
+    E_GameState gameState = gameInstance.getGameState();
+    while (windowRef->isOpen())
     {
-        // Update viewport values
-        windowSize = window.getSize();
-        windowCenter = { windowSize.x / 2.0f, windowSize.y / 2.0f };
         // Calculate fps and deltaTime based on clock
         deltaTime = clock.restart().asSeconds();
         fps = 1.0f / deltaTime;
 
-        // Event listener
+        // Update Events
+        gameInstance.update();
         activeMenu->update(deltaTime);
         sf::Event event;
         // Only check for events if the game started correctly and didn't (technically) end
-        while (window.pollEvent(event) && gameInstance.getGameState() != GAME_ENDED)
+        while (windowRef->pollEvent(event) && gameInstance.getGameState() != GAME_ENDED)
         {
             // If close event got called, act accordingly
             if (event.type == sf::Event::Closed)
             {
-                window.close();
+                windowRef->close();
                 break;
             }
             // Update global mouse position variable
@@ -70,7 +65,7 @@ int main()
                     // If already on MainMenu, close game
                     if (gameInstance.getGameState() == MENU_SCREEN)
                     {
-                        window.close();
+                        windowRef->close();
                         break;
                     }
                     // else, go to MainMenu
@@ -87,7 +82,7 @@ int main()
             switch (gameState)
             {
             case GAME_ENDED:
-                window.close();
+                windowRef->close();
                 break;
             case MENU_SCREEN:
                 activeMenu = MainMenuRef;
@@ -111,12 +106,7 @@ int main()
             activeMenu->init();
         }
 
-        // Clear viewport for new draw
-        window.clear();
-        // Draw all Drawables from shapes vector
-        activeMenu->draw(window, states);
-        // Display Draw changes
-        window.display();
+        gameInstance.draw(activeMenu);
     }
     return 0;
 }

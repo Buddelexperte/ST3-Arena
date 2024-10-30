@@ -1,12 +1,36 @@
 #pragma once 
 #include "SFML_Arena.h"
 
-void GI_Clicker::setGameState(const E_GameState& newGS)
+GI_Arena::GI_Arena()
+{
+	window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "SFML_Clicker", sf::Style::Fullscreen);
+	states = sf::RenderStates::Default;
+	update();
+}
+
+void GI_Arena::update()
+{
+	// Update viewport values
+	windowSize = window->getSize();
+	windowCenter = { windowSize.x / 2.0f, windowSize.y / 2.0f };
+}
+
+void GI_Arena::draw(sf::Drawable* drawable)
+{
+	// Clear viewport for new draw
+	window->clear();
+	// Draw all Drawables from shapes vector
+	window->draw(*drawable);
+	// Display Draw changes
+	window->display();
+}
+
+void GI_Arena::setGameState(const E_GameState& newGS)
 {
 	gameState = newGS;
 }
 
-W_MainMenu::W_MainMenu(sf::RenderTarget& renderTarget) : WidgetMenu(renderTarget)
+W_MainMenu::W_MainMenu() : WidgetMenu()
 {
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
 		{windowCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 650, 120 }, sf::Color::Transparent,   100, "CLICKER GAME",											sf::Color::White},
@@ -44,7 +68,7 @@ bool W_MainMenu::isInteracted(const sf::Vector2f& mousePos)
 	return false;
 }
 
-W_Gameplay::W_Gameplay(sf::RenderTarget& renderTarget) : WidgetMenu(renderTarget)
+W_Gameplay::W_Gameplay() : WidgetMenu()
 {
 	targetController = new TargetController();
 	healthBar = new Timer(10.0f, windowSize.x, 100.0f, sf::Vector2f(windowCenter.x, 0.0f));

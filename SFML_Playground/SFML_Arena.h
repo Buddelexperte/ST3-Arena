@@ -9,6 +9,8 @@
 
 const std::string SAVE_FILE = "../SaveGame.txt";
 
+class WidgetMenu;
+
 class SaveGame
 {
 private:
@@ -53,20 +55,30 @@ enum E_GameState {
 };
 
 // Global Game Instance
-class GI_Clicker // SINGLETON PATTERN
+class GI_Arena // SINGLETON PATTERN
 {
 private:
-	GI_Clicker() {}
-	GI_Clicker(const GI_Clicker&) = delete;
-	GI_Clicker& operator=(const GI_Clicker&) = delete;
+	GI_Arena();
+	GI_Arena(const GI_Arena&) = delete;
+	GI_Arena& operator=(const GI_Arena&) = delete;
+
+	sf::RenderWindow* window = nullptr;
+	sf::RenderStates states;
+	sf::Vector2u windowSize;
+	sf::Vector2f windowCenter;
 
 	E_GameState gameState = GAME_ENDED;
 public:
-	static GI_Clicker& getInstance()
+	static GI_Arena& getInstance()
 	{
-		static GI_Clicker instance;
+		static GI_Arena instance;
 		return instance;
 	}
+
+	void update();
+	void draw(sf::Drawable*);
+	sf::RenderWindow* getWindow() { return window; }
+	sf::RenderStates getRenderStates() { return states; }
 
 	E_GameState getGameState() const
 	{
@@ -87,13 +99,13 @@ public:
 class WidgetMenu : public sf::Drawable
 {
 protected:
-	GI_Clicker& gameInstance = GI_Clicker::getInstance();
-	sf::RenderTarget* window;
+	GI_Arena& gameInstance = GI_Arena::getInstance();
+	sf::RenderTarget* window = gameInstance.getWindow();
 	sf::Vector2u windowSize;
 	sf::Vector2f windowCenter;
 	std::vector<sf::Drawable*> shapes;
 public:
-	WidgetMenu(sf::RenderTarget& renderTarget) : window(&renderTarget)
+	WidgetMenu()
 	{
 		windowUpdate();
 	}
@@ -120,7 +132,7 @@ private:
 	Button* menu_optionsButton;
 	Button* menu_quitButton;
 public:
-	W_MainMenu(sf::RenderTarget&);
+	W_MainMenu();
 	void init() override { menu_highscore->setText("Highscore: " + std::to_string(SaveGame::Stored_Save)); }
 	bool isInteracted(const sf::Vector2f&) override;
 };
@@ -134,7 +146,7 @@ private:
 	Timer* healthBar;
 	TargetController* targetController;
 public:
-	W_Gameplay(sf::RenderTarget&);
+	W_Gameplay();
 	void init() override;
 	void update(const float& deltaTime) override;
 	bool isInteracted(const sf::Vector2f& mousePos);
