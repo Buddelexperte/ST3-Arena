@@ -1,5 +1,5 @@
 #pragma once 
-#include "SFML_Clicker.h"
+#include "SFML_Arena.h"
 
 void GI_Clicker::setGameState(const E_GameState& newGS)
 {

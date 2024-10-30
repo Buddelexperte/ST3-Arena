@@ -27,7 +27,7 @@
     <ClCompile Include="TargetController.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="SFML_Clicker.cpp">
+    <ClCompile Include="SFML_Arena.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,7 +41,7 @@
     <ClInclude Include="TargetController.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="SFML_Clicker.h">
+    <ClInclude Include="SFML_Arena.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

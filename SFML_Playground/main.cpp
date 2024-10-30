@@ -1,4 +1,4 @@
-#include "SFML_Clicker.h"
+#include "SFML_Arena.h"
 
 GI_Clicker& gameInstance = GI_Clicker::getInstance();
 int SaveGame::Stored_Save = SaveGame::loadSavedData();
