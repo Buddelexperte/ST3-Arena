@@ -1,8 +1,9 @@
 #include "SFML_Arena.h"
 
-int SaveGame::Stored_Save = SaveGame::loadSavedData();
 
 // Globals
+int SaveGame::Stored_Save = SaveGame::loadSavedData();
+
 float fps = 0.0f;
 float deltaTime = 0.0f;
 sf::Vector2f mousePos(0, 0);
@@ -36,16 +37,19 @@ int main()
         // Update Events
         gameInstance.update();
         activeMenu->update(deltaTime);
-        sf::Event event;
         // Only check for events if the game started correctly and didn't (technically) end
+        sf::Event event;
         while (windowRef->pollEvent(event) && gameInstance.getGameState() != GAME_ENDED)
         {
+            
+
             // If close event got called, act accordingly
             if (event.type == sf::Event::Closed)
             {
                 windowRef->close();
                 break;
             }
+
             // Update global mouse position variable
             mousePos.x = event.mouseButton.x;
             mousePos.y = event.mouseButton.y;
@@ -106,6 +110,7 @@ int main()
             activeMenu->init();
         }
 
+        std::cout << mousePos.x << " und " << mousePos.y << std::endl;
         gameInstance.draw(activeMenu);
     }
     return 0;

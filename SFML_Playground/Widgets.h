@@ -23,6 +23,9 @@ private:
 	int hitTargets = 0;
 	Timer* healthBar;
 	TargetController* targetController;
+
+	sf::Texture texture;
+	sf::Sprite* flashlight = new sf::Sprite;
 public:
 	W_Gameplay();
 	void init() override;

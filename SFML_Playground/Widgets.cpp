@@ -49,9 +49,12 @@ bool W_MainMenu::isInteracted(const sf::Vector2f& mousePos)
 
 W_Gameplay::W_Gameplay() : WidgetMenu()
 {
+	flashlight->setOrigin(512.0f / 2.0f, 512.0f / 2.0f);
+
+
 	targetController = new TargetController();
 	healthBar = new Timer(10.0f, windowSize.x, 100.0f, sf::Vector2f(windowCenter.x, 0.0f));
-	shapes = { targetController, healthBar };
+	shapes = { flashlight, targetController, healthBar };
 }
 
 void W_Gameplay::init()
@@ -69,6 +72,21 @@ void W_Gameplay::init()
 void W_Gameplay::update(const float& deltaTime)
 {
 	WidgetMenu::update(deltaTime);
+	// Flashlight Movement and pic by pic
+	static int imgN = 51;
+	static int steps = 0;
+	if (!texture.loadFromFile("../Content/Textures/512x512 textures (" + std::to_string(imgN) + ").png")) {
+		std::cerr << "Error loading image.png" << std::endl;
+		return; // Exit if the image can't be loaded
+	}
+	if (++steps % 10 == 0)
+	{
+		imgN++;
+		if (imgN > 60) imgN = 51;
+	}
+	flashlight->setTexture(texture);
+	flashlight->setPosition(static_cast<sf::Vector2f>(sf::Mouse::getPosition()));
+
 	if (gameInstance.getGameState() >= GAME_LAUNCHING)
 	{
 		// Update Gameplay objects with respectable params

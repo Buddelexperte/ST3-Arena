@@ -43,7 +43,7 @@ public:
 	}
 	void update();
 	void draw(sf::Drawable*);
-	sf::RenderWindow* getWindow() { return window; }
+	sf::RenderWindow* getWindow() const { return window; }
 	sf::RenderStates getRenderStates() const { return states; }
 	E_GameState getGameState() const { return gameState; }
 	void setGameState(const E_GameState&);

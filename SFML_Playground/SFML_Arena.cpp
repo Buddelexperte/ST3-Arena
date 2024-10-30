@@ -20,7 +20,7 @@ void GI_Arena::update()
 void GI_Arena::draw(sf::Drawable* drawable)
 {
 	// Clear viewport for new draw
-	window->clear();
+	window->clear(sf::Color::Black);
 	// Draw all Drawables from shapes vector
 	window->draw(*drawable);
 	// Display Draw changes
