@@ -140,12 +140,15 @@
     <ClCompile Include="SFML_Arena.cpp" />
     <ClCompile Include="TargetController.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
+    <ClInclude Include="BaseClasses.h" />
     <ClInclude Include="TargetController.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="SFML_Arena.h" />
+    <ClInclude Include="Widgets.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\Downloads\FREE Textures Of Light.zip" />

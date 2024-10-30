@@ -1,5 +1,6 @@
-#include <SFML/Graphics.hpp>
 #pragma once
+#include <SFML/Graphics.hpp>
+
 class Timer : public sf::Drawable
 {
 private:
