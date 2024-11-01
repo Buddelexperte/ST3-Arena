@@ -6,7 +6,6 @@ int SaveGame::Stored_Save = SaveGame::loadSavedData();
 
 float fps = 0.0f;
 float deltaTime = 0.0f;
-sf::Vector2f mousePos(0, 0);
 
 int main()
 {
@@ -49,10 +48,6 @@ int main()
                 windowRef->close();
                 break;
             }
-
-            // Update global mouse position variable
-            mousePos.x = event.mouseButton.x;
-            mousePos.y = event.mouseButton.y;
 
             // Event Handler
             switch (event.type)

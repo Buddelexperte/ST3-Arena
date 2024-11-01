@@ -1,7 +1,7 @@
 #pragma once
 #include "Widgets.h"
 
-// W_MainMenu
+// W_MainMenu -------------------------------------------------------------------------------------
 
 void W_MainMenu::init()
 {
@@ -47,19 +47,15 @@ bool W_MainMenu::isMouseOver()
 	return false;
 }
 
-// W_Gameplay
+// W_Gameplay -------------------------------------------------------------------------------------
 
 W_Gameplay::W_Gameplay() : WidgetMenu()
 {
-	flashlight->setOrigin(512.0f / 2.0f, 512.0f / 2.0f);
-	flashlight->setScale(sf::Vector2f(1.4f, 1.4f));
-	sf::Color color = flashlight->getColor();
-	color.a = 128;
-	flashlight->setColor(color);
+	
 
 	targetController = new TargetController();
 	healthBar = new Timer(10.0f, windowSize.x, 100.0f, sf::Vector2f(windowCenter.x, 0.0f));
-	shapes = { targetController, flashlight, healthBar };
+	shapes = { targetController, &flashlightMask, healthBar };
 }
 
 void W_Gameplay::init()
@@ -79,20 +75,6 @@ void W_Gameplay::update(const float& deltaTime)
 {
 	WidgetMenu::update(deltaTime);
 	flashlightMask.update(deltaTime);
-	// Flashlight Movement and pic by pic
-	static int imgN = 51;
-	static int steps = 0;
-	if (!texture.loadFromFile("../Content/Textures/512x512 textures (" + std::to_string(imgN) + ").png")) {
-		std::cerr << "Error loading image.png" << std::endl;
-		return; // Exit if the image can't be loaded
-	}
-	if (++steps % 10 == 0)
-	{
-		imgN++;
-		if (imgN > 60) imgN = 51;
-	}
-	flashlight->setTexture(texture);
-	flashlight->setPosition(static_cast<sf::Vector2f>(sf::Mouse::getPosition()));
 
 	if (gameInstance.getGameState() >= GAME_LAUNCHING)
 	{
@@ -108,12 +90,12 @@ void W_Gameplay::update(const float& deltaTime)
 			gameInstance.setGameState(MENU_SCREEN);
 		}
 	}
-	flashlightMask.drawOtherScene(targetController);
-	flashlightMask.drawOtherScene(flashlight);
+	for (sf::Drawable* elem : shapes) flashlightMask.drawOtherScene(elem);
 }
 
 bool W_Gameplay::isMouseOver()
 {
+	flashlightMask.resetRadius();
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
 	if (targetController->clickedAny(mousePos))
 	{
@@ -129,8 +111,7 @@ bool W_Gameplay::isMouseOver()
 
 void W_Gameplay::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(*targetController, states);
-	target.draw(*flashlight, states);
-	flashlightMask.draw(target, states);
-	target.draw(*healthBar, states);
+	for (const auto elem : shapes) target.draw(*elem, states);
+
+	return;
 }
