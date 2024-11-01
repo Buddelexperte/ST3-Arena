@@ -1,5 +1,8 @@
 #pragma once
 #include "SFML_Arena.h"
+#include "TargetController.h" // TargetSpawner and Handler
+#include "Flashlight.h"
+
 
 class W_MainMenu : public WidgetMenu
 {
@@ -12,7 +15,7 @@ private:
 public:
 	W_MainMenu();
 	void init() override;
-	bool isInteracted(const sf::Vector2f&) override;
+	bool isMouseOver() override;
 };
 
 class W_Gameplay : public WidgetMenu
@@ -24,12 +27,14 @@ private:
 	Timer* healthBar;
 	TargetController* targetController;
 
+	Flashlight flashlightMask;
+
 	sf::Texture texture;
 	sf::Sprite* flashlight = new sf::Sprite;
 public:
 	W_Gameplay();
 	void init() override;
 	void update(const float& deltaTime) override;
-	bool isInteracted(const sf::Vector2f& mousePos);
-
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	bool isMouseOver() override;
 };

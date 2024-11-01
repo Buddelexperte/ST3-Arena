@@ -22,7 +22,7 @@ void GI_Arena::draw(sf::Drawable* drawable)
 	// Clear viewport for new draw
 	window->clear(sf::Color::Black);
 	// Draw all Drawables from shapes vector
-	window->draw(*drawable);
+	if (drawable != nullptr) window->draw(*drawable);
 	// Display Draw changes
 	window->display();
 }
@@ -46,6 +46,7 @@ bool GI_Arena::getGameStateChanges(E_GameState& oldGS) const
 // WidgetMenu Code
 void WidgetMenu::windowUpdate()
 {
+	window = gameInstance.getWindow();
 	windowSize = window->getSize();
 	windowCenter = { windowSize.x / 2.0f, windowSize.y / 2.0f };
 }

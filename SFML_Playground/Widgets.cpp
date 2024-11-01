@@ -1,3 +1,4 @@
+#pragma once
 #include "Widgets.h"
 
 // W_MainMenu
@@ -24,8 +25,9 @@ W_MainMenu::W_MainMenu() : WidgetMenu()
 	menu_quitButton = new Button(MAIN_MENU_CONSTR[4]);
 	shapes = { menu_title, menu_highscore, menu_startButton, menu_optionsButton, menu_quitButton };
 }
-bool W_MainMenu::isInteracted(const sf::Vector2f& mousePos)
+bool W_MainMenu::isMouseOver()
 {
+	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
 	if (menu_title->isMouseOver(mousePos))
 	{
 		bool alreadyChanged = (menu_title->getColor(true) == sf::Color::Red);
@@ -72,9 +74,11 @@ void W_Gameplay::init()
 		gameInstance.setGameState(IN_GAME);
 	}
 }
+
 void W_Gameplay::update(const float& deltaTime)
 {
 	WidgetMenu::update(deltaTime);
+	flashlightMask.update(deltaTime);
 	// Flashlight Movement and pic by pic
 	static int imgN = 51;
 	static int steps = 0;
@@ -104,9 +108,13 @@ void W_Gameplay::update(const float& deltaTime)
 			gameInstance.setGameState(MENU_SCREEN);
 		}
 	}
+	flashlightMask.drawOtherScene(targetController);
+	flashlightMask.drawOtherScene(flashlight);
 }
-bool W_Gameplay::isInteracted(const sf::Vector2f& mousePos)
+
+bool W_Gameplay::isMouseOver()
 {
+	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
 	if (targetController->clickedAny(mousePos))
 	{
 		// Increase targetsHit and change HealthBar accoridngly
@@ -117,4 +125,12 @@ bool W_Gameplay::isInteracted(const sf::Vector2f& mousePos)
 		return true;
 	}
 	return false;
+}
+
+void W_Gameplay::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	target.draw(*targetController, states);
+	target.draw(*flashlight, states);
+	flashlightMask.draw(target, states);
+	target.draw(*healthBar, states);
 }

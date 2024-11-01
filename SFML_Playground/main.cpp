@@ -41,8 +41,6 @@ int main()
         sf::Event event;
         while (windowRef->pollEvent(event) && gameInstance.getGameState() != GAME_ENDED)
         {
-            
-
             // If close event got called, act accordingly
             if (event.type == sf::Event::Closed)
             {
@@ -60,7 +58,7 @@ int main()
             case sf::Event::MouseButtonPressed: // Mouse input
                 if (event.mouseButton.button == sf::Mouse::Left) // LMB
                 {
-                    activeMenu->isInteracted(mousePos);
+                    activeMenu->isMouseOver();
                 }
                 break;
             case sf::Event::KeyPressed: // Keyboard input
@@ -104,13 +102,11 @@ int main()
                 activeMenu = GameplayRef;
                 break;
             default:
-                activeMenu = MainMenuRef;
+                activeMenu = nullptr;
                 break;
             }
             activeMenu->init();
         }
-
-        std::cout << mousePos.x << " und " << mousePos.y << std::endl;
         gameInstance.draw(activeMenu);
     }
     return 0;

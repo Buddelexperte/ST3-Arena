@@ -63,6 +63,6 @@ public:
 	virtual void windowUpdate();
 	virtual void init() {};
 	virtual void update(const float& deltaTime) { windowUpdate(); };
-	virtual bool isInteracted(const sf::Vector2f& mousePos) { return false; };
+	virtual bool isMouseOver() { return false; };
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
