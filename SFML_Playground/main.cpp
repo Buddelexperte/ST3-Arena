@@ -30,6 +30,8 @@ int main()
     E_GameState gameState = gameInstance.getGameState();
     while (windowRef->isOpen())
     {
+        activeMenu->init();
+
         // Calculate fps and deltaTime based on clock
         deltaTime = clock.restart().asSeconds();
         fps = 1.0f / deltaTime;
@@ -105,7 +107,6 @@ int main()
                 activeMenu = nullptr;
                 break;
             }
-            activeMenu->init();
         }
         gameInstance.draw(activeMenu);
     }
