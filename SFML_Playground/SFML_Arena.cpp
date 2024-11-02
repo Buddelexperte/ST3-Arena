@@ -5,7 +5,7 @@
 // Game Instance Code
 GI_Arena::GI_Arena()
 {
-	window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "SFML_Clicker", sf::Style::Fullscreen);
+	window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "SFML_Arena", sf::Style::Fullscreen);
 	states = sf::RenderStates::Default;
 }
 

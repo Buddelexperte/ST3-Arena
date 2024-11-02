@@ -4,30 +4,48 @@
 // Globals
 int SaveGame::Stored_Save = SaveGame::loadSavedData();
 
-float fps = 0.0f;
 float deltaTime = 0.0f;
+float fps = 0.0f;
 
 int main()
 {
     // Initiate clock for fps + deltaTime calculation
     sf::Clock clock;
-
+    // Game Instance init
     GI_Arena& gameInstance = GI_Arena::getInstance();
     sf::RenderWindow* windowRef = gameInstance.getWindow();
 
-    // Target Spawner and Handler
+    // Create all widgets for later use
     W_Gameplay* GameplayRef = new W_Gameplay();
     W_MainMenu* MainMenuRef = new W_MainMenu();
     
     // Gameplay Initialization
     InputWidget* activeMenu = MainMenuRef;
-    E_GameState gameState = gameInstance.getGameState();
+    E_GameState gameState = GAME_ENDED;
     // Main Game Loop
     while (windowRef->isOpen())
     {
-        E_GameState oldGameState = gameState;
-        // Initiate Menu start event
-        activeMenu->construct();
+        // If GameState changed in earlier loop, construct new activeMenu;
+        if (gameState != gameInstance.getGameState())
+        {
+            switch (gameState = gameInstance.getGameState())
+            {
+            case MENU_SCREEN:
+                activeMenu = MainMenuRef;
+                break;
+            case GAME_PAUSED: case GAME_OVER: case GAME_LAUNCHING: case IN_GAME:
+                activeMenu = GameplayRef;
+                break;
+            case GAME_ENDED:
+                windowRef->close();
+                activeMenu = nullptr;
+                break;
+            default:
+                break;
+            }
+            // Initiate Menu start event
+            activeMenu->construct();
+        }
 
         // Calculate fps and deltaTime based on clock
         deltaTime = clock.restart().asSeconds();
@@ -47,25 +65,6 @@ int main()
             }
             // Event Handler
             activeMenu->handleEvent(&event);
-        }
-
-        if (gameState != gameInstance.getGameState())
-        {
-            switch (gameState = gameInstance.getGameState())
-            {
-            case MENU_SCREEN:
-                activeMenu = MainMenuRef;
-                break;
-            case GAME_PAUSED: case GAME_OVER: case GAME_LAUNCHING: case IN_GAME:
-                activeMenu = GameplayRef;
-                break;
-            case GAME_ENDED:
-                windowRef->close();
-                break;
-            default:
-                activeMenu = nullptr;
-                break;
-            }
         }
 
         gameInstance.updateScreen(activeMenu);

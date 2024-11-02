@@ -4,13 +4,10 @@
 
 // W_MainMenu -------------------------------------------------------------------------------------
 
-void W_MainMenu::construct()
-{
-	menu_highscore->setText("Highscore: " + std::to_string(SaveGame::Stored_Save));
-}
-
 W_MainMenu::W_MainMenu() : InputWidget()
 {
+	gameInstance.setGameState(MENU_SCREEN);
+	
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
 		{windowCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "ARENA",											sf::Color::White},
 		{windowCenter + sf::Vector2f{ 0, -200 },    sf::Vector2f{ 100, 100 }, sf::Color::Transparent,   16, "Higscore: " + std::to_string(SaveGame::Stored_Save),	sf::Color::White},
@@ -26,6 +23,12 @@ W_MainMenu::W_MainMenu() : InputWidget()
 	menu_quitButton = new Button(MAIN_MENU_CONSTR[4]);
 	shapes = { menu_title, menu_highscore, menu_startButton, menu_optionsButton, menu_quitButton };
 }
+
+void W_MainMenu::construct()
+{
+	menu_highscore->setText("Highscore: " + std::to_string(SaveGame::Stored_Save));
+}
+
 bool W_MainMenu::isMouseOver()
 {
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
@@ -69,7 +72,6 @@ sf::Keyboard::Key W_MainMenu::keyboardInput(sf::Event* eventRef)
 
 W_Gameplay::W_Gameplay() : InputWidget()
 {
-	gameInstance.setGameState(MENU_SCREEN);
 
 	targetController = new TargetController();
 	healthBar = new Timer(10.0f, windowSize.x, 100.0f, sf::Vector2f(windowCenter.x, 0.0f));
