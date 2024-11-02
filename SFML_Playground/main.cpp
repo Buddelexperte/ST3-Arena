@@ -2,8 +2,6 @@
 
 
 // Globals
-int SaveGame::Stored_Save = SaveGame::loadSavedData();
-
 float deltaTime = 0.0f;
 float fps = 0.0f;
 

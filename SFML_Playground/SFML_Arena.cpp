@@ -3,6 +3,7 @@
 
 
 // Game Instance Code
+
 GI_Arena::GI_Arena()
 {
 	window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "SFML_Arena", sf::Style::Fullscreen);
@@ -38,6 +39,7 @@ void WidgetMenu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	for (const auto& elem : shapes) target.draw(*elem, states);
 }
+
 
 // InputWidget
 
@@ -95,6 +97,9 @@ float InputWidget::scrollInput(sf::Event* eventRef)
 
 
 // SaveGame Code
+
+int SaveGame::Stored_Save = SaveGame::loadSavedData();
+
 int SaveGame::loadSavedData(const std::string& path)
 {
 	std::ifstream inFile(path);  // Open file in input mode and write the highscore to it
