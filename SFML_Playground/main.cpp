@@ -25,6 +25,7 @@ int main()
     // Main Game Loop
     while (windowRef->isOpen())
     {
+        E_GameState oldGameState = gameState;
         // Initiate Menu start event
         activeMenu->construct();
 
@@ -48,9 +49,9 @@ int main()
             activeMenu->handleEvent(&event);
         }
 
-        if (gameInstance.getGameStateChanges(gameState))
+        if (gameState != gameInstance.getGameState())
         {
-            switch (gameState)
+            switch (gameState = gameInstance.getGameState())
             {
             case MENU_SCREEN:
                 activeMenu = MainMenuRef;
@@ -69,5 +70,6 @@ int main()
 
         gameInstance.updateScreen(activeMenu);
     }
+
     return 0;
 }

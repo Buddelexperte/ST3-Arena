@@ -24,16 +24,6 @@ void GI_Arena::setGameState(const E_GameState& newGS)
 	gameState = newGS;
 }
 
-bool GI_Arena::getGameStateChanges(E_GameState& oldGS) const
-{
-	if (oldGS != gameState)
-	{
-		oldGS = gameState;
-		return true;
-	}
-	return false;
-}
-
 
 // WidgetMenu Code
 
