@@ -69,7 +69,7 @@ sf::Keyboard::Key W_MainMenu::keyboardInput(sf::Event* eventRef)
 
 W_Gameplay::W_Gameplay() : InputWidget()
 {
-	
+	gameInstance.setGameState(MENU_SCREEN);
 
 	targetController = new TargetController();
 	healthBar = new Timer(10.0f, windowSize.x, 100.0f, sf::Vector2f(windowCenter.x, 0.0f));

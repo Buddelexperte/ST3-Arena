@@ -9,23 +9,21 @@ float deltaTime = 0.0f;
 
 int main()
 {
-    // Initiate clock for fps calculation
+    // Initiate clock for fps + deltaTime calculation
     sf::Clock clock;
 
     GI_Arena& gameInstance = GI_Arena::getInstance();
     // Set gameState for all actions done before player interaction
     sf::RenderWindow* windowRef = gameInstance.getWindow();
-    gameInstance.setGameState(GAME_ENDED);
 
     // Target Spawner and Handler
-    W_MainMenu* MainMenuRef = new W_MainMenu();
     W_Gameplay* GameplayRef = new W_Gameplay();
-    // Main Menu added to viewport and gameState changed accordingly (ready for interaction)
+    W_MainMenu* MainMenuRef = new W_MainMenu();
+    
+    // Gameplay Initialization
     InputWidget* activeMenu = MainMenuRef;
-    gameInstance.setGameState(MENU_SCREEN);
-
-    // Main Game Loop
     E_GameState gameState = gameInstance.getGameState();
+    // Main Game Loop
     while (windowRef->isOpen())
     {
         // Initiate Menu start event
