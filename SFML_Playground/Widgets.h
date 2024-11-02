@@ -3,8 +3,7 @@
 #include "TargetController.h" // TargetSpawner and Handler
 #include "Flashlight.h"
 
-
-class W_MainMenu : public WidgetMenu
+class W_MainMenu : public InputWidget
 {
 private:
 	Button* menu_title;
@@ -12,13 +11,15 @@ private:
 	Button* menu_startButton;
 	Button* menu_optionsButton;
 	Button* menu_quitButton;
+protected:
+	virtual sf::Keyboard::Key keyboardInput(sf::Event* eventRef) override;
 public:
 	W_MainMenu();
-	void init() override;
-	bool isMouseOver() override;
+	void construct() override;
+	virtual bool isMouseOver() override;
 };
 
-class W_Gameplay : public WidgetMenu
+class W_Gameplay : public InputWidget
 {
 private:
 	const float startTimer = 10.0f;
@@ -28,11 +29,12 @@ private:
 	TargetController* targetController;
 
 	Flashlight flashlightMask;
-
+protected:
+	virtual sf::Keyboard::Key keyboardInput(sf::Event* eventRef) override;
 public:
 	W_Gameplay();
-	void init() override;
+	void construct() override;
 	void update(const float& deltaTime) override;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	bool isMouseOver() override;
+	virtual bool isMouseOver() override;
 };

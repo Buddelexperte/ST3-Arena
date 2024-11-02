@@ -65,7 +65,7 @@ public:
         shapes = { &sceneSprite, flashlightSprite };
     }
 
-    virtual void init() override { return; }
+    virtual void construct() override { return; }
 
     virtual void update(const float& deltaTime) override
     {

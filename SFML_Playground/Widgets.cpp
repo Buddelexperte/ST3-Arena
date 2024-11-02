@@ -1,14 +1,15 @@
 #pragma once
 #include "Widgets.h"
 
+
 // W_MainMenu -------------------------------------------------------------------------------------
 
-void W_MainMenu::init()
+void W_MainMenu::construct()
 {
 	menu_highscore->setText("Highscore: " + std::to_string(SaveGame::Stored_Save));
 }
 
-W_MainMenu::W_MainMenu() : WidgetMenu()
+W_MainMenu::W_MainMenu() : InputWidget()
 {
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
 		{windowCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "ARENA",											sf::Color::White},
@@ -44,12 +45,29 @@ bool W_MainMenu::isMouseOver()
 		gameInstance.setGameState(GAME_ENDED);
 		return true;
 	}
+	// On no button-mouse overlap
 	return false;
+}
+
+sf::Keyboard::Key W_MainMenu::keyboardInput(sf::Event* eventRef)
+{
+	// Call the parent function and store the result
+	sf::Keyboard::Key keyPressed = InputWidget::keyboardInput(eventRef);
+	switch (keyPressed)
+	{
+	case sf::Keyboard::Escape:
+		window->close();
+		break;
+	default:
+		break;
+	}
+
+	return keyPressed;
 }
 
 // W_Gameplay -------------------------------------------------------------------------------------
 
-W_Gameplay::W_Gameplay() : WidgetMenu()
+W_Gameplay::W_Gameplay() : InputWidget()
 {
 	
 
@@ -58,7 +76,7 @@ W_Gameplay::W_Gameplay() : WidgetMenu()
 	shapes = { targetController, &flashlightMask, healthBar };
 }
 
-void W_Gameplay::init()
+void W_Gameplay::construct()
 {
 	if (gameInstance.getGameState() == GAME_LAUNCHING)
 	{
@@ -91,6 +109,23 @@ void W_Gameplay::update(const float& deltaTime)
 		}
 	}
 	for (sf::Drawable* elem : shapes) flashlightMask.drawOtherScene(elem);
+}
+
+sf::Keyboard::Key W_Gameplay::keyboardInput(sf::Event* eventRef)
+{
+	// Call the parent function and store the result
+	sf::Keyboard::Key keyPressed = InputWidget::keyboardInput(eventRef);
+	switch (keyPressed)
+	{
+	case sf::Keyboard::Escape:
+		// on Esc go to MainMenu
+		gameInstance.setGameState(MENU_SCREEN);
+		break;
+	default:
+		break;
+	}
+
+	return keyPressed;
 }
 
 bool W_Gameplay::isMouseOver()

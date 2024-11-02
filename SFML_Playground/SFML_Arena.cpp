@@ -56,6 +56,60 @@ void WidgetMenu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	for (const auto& elem : shapes) target.draw(*elem, states);
 }
 
+// InputWidget
+
+bool InputWidget::handleEvent(sf::Event* eventRef)
+{
+	event = eventRef;
+	switch (event->type)
+	{
+	case sf::Event::KeyPressed:
+		return keyboardInput(event);
+	case sf::Event::MouseButtonPressed:
+		return mouseInput(event);
+	case sf::Event::MouseWheelScrolled:
+		return scrollInput(event);
+	default:
+		break;
+	}
+
+	return false;
+}
+
+sf::Keyboard::Key InputWidget::keyboardInput(sf::Event* eventRef)
+{
+	return eventRef->key.code;
+}
+
+sf::Mouse::Button InputWidget::mouseInput(sf::Event* eventRef)
+{
+	sf::Mouse::Button mouseInput = eventRef->mouseButton.button;
+	if (isMouseOver())
+	{
+		switch (mouseInput)
+		{
+		case sf::Mouse::Left:
+			if (onMouseClickL()) return sf::Mouse::Left;
+			break;
+		case sf::Mouse::Right:
+			if (onMouseClickR()) return sf::Mouse::Right;
+			break;
+		case sf::Mouse::Middle:
+			if (onMouseClickR()) return sf::Mouse::Middle;
+			break;
+		default:
+			break;
+		}
+	}
+	return sf::Mouse::ButtonCount;
+}
+
+float InputWidget::scrollInput(sf::Event* eventRef)
+{
+	if (event->mouseWheelScroll.wheel != sf::Mouse::VerticalWheel) return 0.0f;
+	return eventRef->mouseWheelScroll.delta;
+}
+
 
 // SaveGame Code
 int SaveGame::loadSavedData(const std::string& path)

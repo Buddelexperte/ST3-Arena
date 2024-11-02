@@ -54,15 +54,29 @@ class WidgetMenu : public sf::Drawable
 {
 protected:
 	GI_Arena& gameInstance = GI_Arena::getInstance();
-	sf::RenderTarget* window = gameInstance.getWindow();
+	sf::RenderWindow* window = gameInstance.getWindow();
 	sf::Vector2u windowSize;
 	sf::Vector2f windowCenter;
 	std::vector<sf::Drawable*> shapes;
 public:
 	WidgetMenu() { windowUpdate(); }
 	virtual void windowUpdate();
-	virtual void init() {};
+	virtual void construct() {};
 	virtual void update(const float& deltaTime) { windowUpdate(); };
-	virtual bool isMouseOver() { return false; };
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+};
+
+class InputWidget : public WidgetMenu
+{
+protected:
+	sf::Event* event;
+	virtual sf::Keyboard::Key keyboardInput(sf::Event* eventRef);
+	virtual sf::Mouse::Button mouseInput(sf::Event* eventRef);
+	virtual float scrollInput(sf::Event* eventRef);
+	virtual bool onMouseClickL() { return true; };
+	virtual bool onMouseClickR() { return true; };
+	virtual bool onMouseClickM() { return true; };
+public:
+	bool handleEvent(sf::Event* eventRef);
+	virtual bool isMouseOver() { return false; };
 };
