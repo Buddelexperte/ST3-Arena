@@ -7,17 +7,9 @@ GI_Arena::GI_Arena()
 {
 	window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "SFML_Clicker", sf::Style::Fullscreen);
 	states = sf::RenderStates::Default;
-	update();
 }
 
-void GI_Arena::update()
-{
-	// Update viewport values
-	windowSize = window->getSize();
-	windowCenter = { windowSize.x / 2.0f, windowSize.y / 2.0f };
-}
-
-void GI_Arena::draw(sf::Drawable* drawable)
+void GI_Arena::updateScreen(sf::Drawable* drawable)
 {
 	// Clear viewport for new draw
 	window->clear(sf::Color::Black);
@@ -44,6 +36,7 @@ bool GI_Arena::getGameStateChanges(E_GameState& oldGS) const
 
 
 // WidgetMenu Code
+
 void WidgetMenu::windowUpdate()
 {
 	window = gameInstance.getWindow();

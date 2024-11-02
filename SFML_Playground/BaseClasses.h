@@ -15,7 +15,7 @@ public:
 enum E_GameState {
 	GAME_ENDED = -1, // Not started or interrupted
 	MENU_SCREEN = 0, // A Menu with clickable buttons
-	PAUSED,
+	GAME_PAUSED,
 	GAME_OVER,
 	GAME_LAUNCHING, // gameLoop should start and execute init functionality
 	IN_GAME // gameLoop should start
@@ -31,8 +31,6 @@ private:
 
 	sf::RenderWindow* window = nullptr;
 	sf::RenderStates states;
-	sf::Vector2u windowSize;
-	sf::Vector2f windowCenter;
 
 	E_GameState gameState = GAME_ENDED;
 public:
@@ -41,8 +39,7 @@ public:
 		static GI_Arena instance;
 		return instance;
 	}
-	void update();
-	void draw(sf::Drawable*);
+	void updateScreen(sf::Drawable*);
 	sf::RenderWindow* getWindow() const { return window; }
 	sf::RenderStates getRenderStates() const { return states; }
 	E_GameState getGameState() const { return gameState; }

@@ -13,7 +13,6 @@ int main()
     sf::Clock clock;
 
     GI_Arena& gameInstance = GI_Arena::getInstance();
-    // Set gameState for all actions done before player interaction
     sf::RenderWindow* windowRef = gameInstance.getWindow();
 
     // Target Spawner and Handler
@@ -33,8 +32,7 @@ int main()
         deltaTime = clock.restart().asSeconds();
         fps = 1.0f / deltaTime;
 
-        // Update Events
-        gameInstance.update();
+        // Update current Widget
         activeMenu->update(deltaTime);
         // Only check for events if the game started correctly and didn't (technically) end
         sf::Event event;
@@ -46,7 +44,6 @@ int main()
                 windowRef->close();
                 break;
             }
-
             // Event Handler
             activeMenu->handleEvent(&event);
         }
@@ -55,23 +52,14 @@ int main()
         {
             switch (gameState)
             {
-            case GAME_ENDED:
-                windowRef->close();
-                break;
             case MENU_SCREEN:
                 activeMenu = MainMenuRef;
                 break;
-            case PAUSED:
+            case GAME_PAUSED: case GAME_OVER: case GAME_LAUNCHING: case IN_GAME:
                 activeMenu = GameplayRef;
                 break;
-            case GAME_OVER:
-                activeMenu = GameplayRef;
-                break;
-            case GAME_LAUNCHING:
-                activeMenu = GameplayRef;
-                break;
-            case IN_GAME:
-                activeMenu = GameplayRef;
+            case GAME_ENDED:
+                windowRef->close();
                 break;
             default:
                 activeMenu = nullptr;
@@ -79,7 +67,7 @@ int main()
             }
         }
 
-        gameInstance.draw(activeMenu);
+        gameInstance.updateScreen(activeMenu);
     }
     return 0;
 }
