@@ -102,8 +102,6 @@ public:
         // Draw your scene here (make sure to render the actual scene)
         sceneRenderTexture.draw(*drawable);
 
-        
-
         // Use the shader to draw the flashlight effect
         sceneRenderTexture.draw(sceneSprite, &flashlightShader);
 
