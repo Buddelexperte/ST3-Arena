@@ -15,6 +15,7 @@ public:
 enum E_GameState {
 	GAME_ENDED = -1, // Not started or interrupted
 	MENU_SCREEN = 0, // A Menu with clickable buttons
+	UNPAUSED,
 	GAME_PAUSED,
 	GAME_OVER,
 	GAME_LAUNCHING, // gameLoop should start and execute init functionality
@@ -44,7 +45,6 @@ public:
 	sf::RenderStates getRenderStates() const { return states; }
 	E_GameState getGameState() const { return gameState; }
 	void setGameState(const E_GameState&);
-	bool getGameStateChanges(E_GameState& oldGS) const;
 };
 
 class WidgetMenu : public sf::Drawable
@@ -73,6 +73,7 @@ protected:
 	virtual bool onMouseClickL() { return true; };
 	virtual bool onMouseClickR() { return true; };
 	virtual bool onMouseClickM() { return true; };
+	virtual bool input_esc() { return true;  };
 public:
 	bool handleEvent(sf::Event* eventRef);
 	virtual bool isMouseOver() { return false; };

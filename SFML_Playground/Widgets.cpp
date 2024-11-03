@@ -68,6 +68,44 @@ sf::Keyboard::Key W_MainMenu::keyboardInput(sf::Event* eventRef)
 	return keyPressed;
 }
 
+
+// W_Paused ---------------------------------------------------------------------------------------
+
+W_Paused::W_Paused()
+{
+	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
+		{windowCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "PAUSE",											sf::Color::White},
+		{windowCenter + sf::Vector2f{ 0, 0 },       sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "RESUME",													sf::Color::Black},
+		{windowCenter + sf::Vector2f{ 0, 150 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "OPTIONS",													sf::Color::Black},
+		{windowCenter + sf::Vector2f{ 0, 300 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "QUIT",														sf::Color::Black}
+	};
+
+	pause_title = new Button(MAIN_MENU_CONSTR[0]);
+	pause_resumeButton = new Button(MAIN_MENU_CONSTR[1]);
+	pause_optionsButton = new Button(MAIN_MENU_CONSTR[2]);
+	pause_quitButton = new Button(MAIN_MENU_CONSTR[3]);
+
+	shapes = { pause_title, pause_resumeButton, pause_optionsButton, pause_quitButton };
+}
+
+bool W_Paused::isMouseOver()
+{
+	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
+	if (pause_resumeButton->isMouseOver(mousePos))
+	{
+		gameInstance.setGameState(IN_GAME);
+		return true;
+	}
+	if (pause_quitButton->isMouseOver(mousePos))
+	{
+		gameInstance.setGameState(MENU_SCREEN);
+		return true;
+	}
+	// On no button-mouse overlap
+	return false;
+}
+
+
 // W_Gameplay -------------------------------------------------------------------------------------
 
 W_Gameplay::W_Gameplay() : InputWidget()
@@ -80,6 +118,7 @@ W_Gameplay::W_Gameplay() : InputWidget()
 
 void W_Gameplay::construct()
 {
+	if (gameInstance.getGameState() != GAME_PAUSED) unpause();
 	if (gameInstance.getGameState() == GAME_LAUNCHING)
 	{
 		// Reset values to game start values
@@ -91,11 +130,28 @@ void W_Gameplay::construct()
 	}
 }
 
+void W_Gameplay::pause()
+{
+	if (bPaused) return;
+	bPaused = true;
+	shapes.push_back(&pauseScreen);
+}
+
+void W_Gameplay::unpause()
+{
+	if (!bPaused) return;
+	bPaused = false;
+	shapes.pop_back();
+}
+
+
 void W_Gameplay::update(const float& deltaTime)
 {
 	WidgetMenu::update(deltaTime);
-	flashlightMask.update(deltaTime);
+	// Don't update while paused
+	if (bPaused) return;
 
+	flashlightMask.update(deltaTime);
 	if (gameInstance.getGameState() >= GAME_LAUNCHING)
 	{
 		// Update Gameplay objects with respectable params
@@ -113,6 +169,25 @@ void W_Gameplay::update(const float& deltaTime)
 	for (sf::Drawable* elem : shapes) flashlightMask.drawOtherScene(elem);
 }
 
+bool W_Gameplay::input_esc()
+{
+	switch (gameInstance.getGameState())
+	{
+	case IN_GAME:
+		pause();
+		gameInstance.setGameState(GAME_PAUSED);
+		break;
+	case GAME_PAUSED:
+		unpause();
+		gameInstance.setGameState(IN_GAME);
+		break;
+	default:
+		gameInstance.setGameState(MENU_SCREEN);
+		break;
+	}
+	return true;
+}
+
 sf::Keyboard::Key W_Gameplay::keyboardInput(sf::Event* eventRef)
 {
 	// Call the parent function and store the result
@@ -120,8 +195,7 @@ sf::Keyboard::Key W_Gameplay::keyboardInput(sf::Event* eventRef)
 	switch (keyPressed)
 	{
 	case sf::Keyboard::Escape:
-		// on Esc go to MainMenu
-		gameInstance.setGameState(MENU_SCREEN);
+		input_esc();
 		break;
 	default:
 		break;
@@ -132,6 +206,7 @@ sf::Keyboard::Key W_Gameplay::keyboardInput(sf::Event* eventRef)
 
 bool W_Gameplay::isMouseOver()
 {
+	if (bPaused) return pauseScreen.isMouseOver();
 	flashlightMask.resetRadius();
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
 	if (targetController->clickedAny(mousePos))
