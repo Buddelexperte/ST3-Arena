@@ -31,6 +31,18 @@ public:
 	virtual bool isMouseOver() override;
 };
 
+class W_GameOver : public InputWidget
+{
+private:
+	Button* gameOver_title;
+	Button* gameOver_score;
+	Button* gameOver_quitButton;
+public:
+	W_GameOver(const int& currScore);
+	void changeScore(const int& currScore);
+	virtual bool isMouseOver() override;
+};
+
 class W_Gameplay : public InputWidget
 {
 private:
@@ -42,11 +54,13 @@ private:
 
 	bool bPaused = false;
 	W_Paused pauseScreen;
+	W_GameOver gameOverScreen;
 
 	Flashlight flashlightMask;
 
 	virtual void pause();
 	virtual void unpause();
+	void lose();
 protected:
 	virtual sf::Keyboard::Key keyboardInput(sf::Event* eventRef) override;
 	virtual bool input_esc() override;

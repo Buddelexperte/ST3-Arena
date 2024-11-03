@@ -120,8 +120,7 @@ void SaveGame::saveData()
 	if (outFile.is_open()) {
 		outFile << SaveGame::Stored_Save;
 		outFile.close();
-		std::cout << "SaveData saved!\n";
-		std::cout << SaveGame::Stored_Save << std::endl;
+		std::cout << "SaveData saved! (" << std::to_string(SaveGame::Stored_Save) << ")\n";
 	}
 	else {
 		std::cerr << "Error opening save file for writing.\n"; // Display file access error message
