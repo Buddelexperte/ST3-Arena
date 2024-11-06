@@ -10,12 +10,12 @@ GI_Arena::GI_Arena()
 	states = sf::RenderStates::Default;
 }
 
-void GI_Arena::updateScreen(sf::Drawable* drawable)
+void GI_Arena::updateScreen()
 {
 	// Clear viewport for new draw
 	window->clear(sf::Color::Black);
 	// Draw all Drawables from shapes vector
-	if (drawable != nullptr) window->draw(*drawable);
+	if (activeWidget != nullptr) window->draw(*activeWidget);
 	// Display Draw changes
 	window->display();
 }
@@ -43,7 +43,7 @@ void WidgetElement::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 
 // InputWidget ------------------------------------------------------------------------------------
 
-bool InputWidget::handleEvent(sf::Event* eventRef)
+bool InputWidget::handleInput(sf::Event* eventRef)
 {
 	event = eventRef;
 	switch (event->type)

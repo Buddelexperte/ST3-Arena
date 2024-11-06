@@ -1,32 +1,26 @@
 #pragma once
 #include "Button.h" // Button class for UI
 
-const std::string SAVE_FILE = "../SaveGame.txt";
 
-class SaveGame
-{
-private:
-public:
-	static int Stored_Save;
-	static int loadSavedData(const std::string& path = SAVE_FILE);
-	static void saveData();
-};
-
-// Enum for handling gameStages
+// Enum for handling gameStages in GameInstance
 enum E_GameState {
-	QUIT = -1, // Not started or interrupted
+	QUIT = -1, // Not yet started or game has been interrupted
 	MENU_SCREEN = 0, // A Menu with clickable buttons
-	UNPAUSED,
-	GAME_PAUSED,
-	GAME_OVER,
+	UNPAUSED, // From pause to not paused
+	GAME_PAUSED, // Freeze gamepay and show PauseMenu
+	GAME_OVER, // Game ended somehow, freezes and show GameOverMenu
 	GAME_LAUNCHING, // gameLoop should start and execute init functionality
 	IN_GAME // gameLoop should start
 };
 
+// Forward Declarations
 class WidgetElement;
 class InputWidget;
 
-// Global Game Instance
+
+// Global Game Instance ---------------------------------------------------------------------------
+
+
 class GI_Arena // SINGLETON PATTERN
 {
 private:
@@ -46,7 +40,7 @@ public:
 		static GI_Arena instance;
 		return instance;
 	}
-	void updateScreen(sf::Drawable*);
+	void updateScreen();
 	bool setActiveWidget(InputWidget* newActive)
 	{
 		bool bChanged = (newActive != activeWidget);
@@ -59,6 +53,10 @@ public:
 	E_GameState getGameState() const { return gameState; }
 	void setGameState(const E_GameState&);
 };
+
+
+// WIDGETS ----------------------------------------------------------------------------------------
+
 
 class WidgetElement : public sf::Drawable
 {
@@ -93,6 +91,21 @@ protected:
 	virtual bool onMouseClickM() { return true; };
 	virtual bool input_esc() { return true;  };
 public:
-	bool handleEvent(sf::Event* eventRef);
+	bool handleInput(sf::Event* eventRef);
 	virtual bool isMouseOver() { return false; };
+};
+
+
+// SAVE GAME --------------------------------------------------------------------------------------
+
+
+const std::string SAVE_FILE = "../SaveGame.txt";
+
+class SaveGame
+{
+private:
+public:
+	static int Stored_Save;
+	static int loadSavedData(const std::string& path = SAVE_FILE);
+	static void saveData();
 };

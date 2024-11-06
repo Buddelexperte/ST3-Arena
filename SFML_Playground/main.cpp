@@ -14,12 +14,12 @@ int main()
     GI_Arena& gameInstance = GI_Arena::getInstance();
     sf::RenderWindow* windowRef = gameInstance.getWindow();
 
-    // Create all widgets for later use
+    // Create all main widgets for later use
     W_Gameplay* GameplayRef = new W_Gameplay();
     W_MainMenu* MainMenuRef = new W_MainMenu();
     
-    // Gameplay Initialization
     InputWidget* activeMenu = MainMenuRef;
+    // Gameplay Initialization
     E_GameState gameState = QUIT;
     // Main Game Loop
     while (windowRef->isOpen())
@@ -37,15 +37,22 @@ int main()
             case GAME_PAUSED: case GAME_OVER: case GAME_LAUNCHING: case IN_GAME:
                 activeMenu = GameplayRef;
                 break;
+            // Quit invalidates activeMenu to call a game crash intendedly
             case QUIT:
-                windowRef->close();
                 activeMenu = nullptr;
                 break;
+            // Keeps activeMenu the same if no special rule is set
             default:
                 break;
             }
-            // Initiate Menu start event
-            if (activeMenu == nullptr) break;
+
+            if (activeMenu == nullptr)
+            {
+                // End game intentionally by closing window and calling for next loop check
+                windowRef->close();
+                break;
+            }
+            // Update GameInstance's version of activeMenu to erase confusion
             gameInstance.setActiveWidget(activeMenu);
             // (Re)construct the selected widget for correct display of sub elements
             activeMenu->construct();
@@ -68,10 +75,10 @@ int main()
                 break;
             }
             // Event Handler
-            activeMenu->handleEvent(&event);
+            activeMenu->handleInput(&event);
         }
-
-        gameInstance.updateScreen(activeMenu);
+        // Draw new Menu to screen through GameInstance
+        gameInstance.updateScreen();
     }
 
     return 0;
