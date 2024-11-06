@@ -1,6 +1,8 @@
 #pragma once
 #include "SFML_Arena.h"
 #include "TargetController.h" // TargetSpawner and Handler
+#include "Timer.h" // Timer class for game logic
+#include "Player.h"
 #include "Flashlight.h"
 
 class W_MainMenu : public InputWidget

@@ -1,4 +1,5 @@
 #pragma once
+#include "Button.h" // Button class for UI
 
 const std::string SAVE_FILE = "../SaveGame.txt";
 
@@ -57,6 +58,9 @@ protected:
 	std::vector<sf::Drawable*> shapes;
 public:
 	WidgetMenu() { windowUpdate(); }
+	virtual void setPosition(sf::Vector2f);
+	virtual void setRotation(sf::Vector2f);
+	virtual void setScale(sf::Vector2f);
 	virtual void windowUpdate();
 	virtual void construct() {};
 	virtual void update(const float& deltaTime) { windowUpdate(); };

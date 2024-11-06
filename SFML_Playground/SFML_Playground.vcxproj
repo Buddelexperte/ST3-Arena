@@ -146,6 +146,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="BaseClasses.h" />
     <ClInclude Include="Flashlight.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="TargetController.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="SFML_Arena.h" />
