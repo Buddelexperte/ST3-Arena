@@ -28,20 +28,19 @@ int main()
         {
             switch (gameState = gameInstance.getGameState())
             {
-            case MENU_SCREEN:
+            case MENU_SCREEN: case GAME_ENDED:
                 activeMenu = MainMenuRef;
                 break;
             case GAME_PAUSED: case GAME_OVER: case GAME_LAUNCHING: case IN_GAME:
                 activeMenu = GameplayRef;
                 break;
-            case GAME_ENDED:
-                windowRef->close();
-                activeMenu = nullptr;
-                break;
             default:
                 break;
             }
             // Initiate Menu start event
+            if (activeMenu == nullptr) continue;
+            gameInstance.setActiveWidget(activeMenu);
+
             activeMenu->construct();
         }
 

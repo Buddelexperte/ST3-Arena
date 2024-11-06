@@ -27,11 +27,15 @@ W_MainMenu::W_MainMenu() : InputWidget()
 void W_MainMenu::construct()
 {
 	menu_highscore->setText("Highscore: " + std::to_string(SaveGame::Stored_Save));
+	showOptions(false);
 }
 
 bool W_MainMenu::isMouseOver()
 {
-	if (bOptionsOpen) return optionsMenu.isMouseOver();
+	if (bOptionsOpen)
+	{
+		return optionsMenu.isMouseOver();
+	}
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
 	if (menu_title->isMouseOver(mousePos))
 	{
@@ -46,8 +50,7 @@ bool W_MainMenu::isMouseOver()
 	}
 	if (menu_optionsButton->isMouseOver(mousePos))
 	{
-		shapes = { &optionsMenu };
-		bOptionsOpen = true;
+		showOptions(true);
 		return true;
 	}
 	if (menu_quitButton->isMouseOver(mousePos))
@@ -66,7 +69,7 @@ sf::Keyboard::Key W_MainMenu::keyboardInput(sf::Event* eventRef)
 	switch (keyPressed)
 	{
 	case sf::Keyboard::Escape:
-		window->close();
+		input_esc();
 		break;
 	default:
 		break;
@@ -75,7 +78,25 @@ sf::Keyboard::Key W_MainMenu::keyboardInput(sf::Event* eventRef)
 	return keyPressed;
 }
 
-// W_Options
+void W_MainMenu::showOptions(const bool& bShow)
+{
+	if (bOptionsOpen = bShow)
+	{
+		shapes = { &optionsMenu };
+		return;
+	}
+	shapes = { menu_title, menu_highscore, menu_startButton, menu_optionsButton, menu_quitButton };
+}
+
+bool W_MainMenu::input_esc()
+{
+	if (bOptionsOpen) showOptions(false);
+	else window->close();
+	return true;
+}
+
+
+// W_Options --------------------------------------------------------------------------------------
 
 W_Options::W_Options()
 {
@@ -90,6 +111,18 @@ W_Options::W_Options()
 	options_return = new Button(MAIN_MENU_CONSTR[2]);
 
 	shapes = { options_title, options_test, options_return };
+}
+
+bool W_Options::isMouseOver()
+{
+	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
+	if (options_return->isMouseOver(mousePos))
+	{
+		gameInstance.getActiveWidget()->construct();
+		return true;
+	}
+	// On no button-mouse overlap
+	return false;
 }
 
 // W_Paused ---------------------------------------------------------------------------------------
@@ -217,7 +250,7 @@ void W_Gameplay::lose()
 
 void W_Gameplay::update(const float& deltaTime)
 {
-	WidgetMenu::update(deltaTime);
+	WidgetElement::update(deltaTime);
 	// Don't update while paused
 	if (bPaused) return;
 

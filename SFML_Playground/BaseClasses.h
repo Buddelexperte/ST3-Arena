@@ -23,6 +23,8 @@ enum E_GameState {
 	IN_GAME // gameLoop should start
 };
 
+class WidgetElement;
+
 // Global Game Instance
 class GI_Arena // SINGLETON PATTERN
 {
@@ -35,6 +37,8 @@ private:
 	sf::RenderStates states;
 
 	E_GameState gameState = GAME_ENDED;
+
+	WidgetElement* activeWidget = nullptr;
 public:
 	static GI_Arena& getInstance()
 	{
@@ -42,13 +46,20 @@ public:
 		return instance;
 	}
 	void updateScreen(sf::Drawable*);
+	bool setActiveWidget(WidgetElement* newActive)
+	{
+		bool bChanged = (newActive != activeWidget);
+		activeWidget = newActive;
+		return bChanged;
+	}
+	WidgetElement* getActiveWidget() { return activeWidget; }
 	sf::RenderWindow* getWindow() const { return window; }
 	sf::RenderStates getRenderStates() const { return states; }
 	E_GameState getGameState() const { return gameState; }
 	void setGameState(const E_GameState&);
 };
 
-class WidgetMenu : public sf::Drawable
+class WidgetElement : public sf::Drawable
 {
 protected:
 	GI_Arena& gameInstance = GI_Arena::getInstance();
@@ -57,18 +68,19 @@ protected:
 	sf::Vector2f windowCenter;
 	std::vector<sf::Drawable*> shapes;
 public:
-	WidgetMenu() { windowUpdate(); }
-	// TO_DO
-	//virtual void setPosition(sf::Vector2f);
-	//virtual void setRotation(sf::Vector2f);
-	//virtual void setScale(sf::Vector2f);
+	WidgetElement() { windowUpdate(); }
+
+	virtual void setPosition(sf::Vector2f) {};
+	virtual void setRotation(sf::Vector2f) {};
+	virtual void setScale(sf::Vector2f) {};
+
 	virtual void windowUpdate();
 	virtual void construct() {};
 	virtual void update(const float& deltaTime) { windowUpdate(); };
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 
-class InputWidget : public WidgetMenu
+class InputWidget : public WidgetElement
 {
 protected:
 	sf::Event* event;

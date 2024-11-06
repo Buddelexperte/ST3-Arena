@@ -28,14 +28,14 @@ void GI_Arena::setGameState(const E_GameState& newGS)
 
 // WidgetMenu Code
 
-void WidgetMenu::windowUpdate()
+void WidgetElement::windowUpdate()
 {
 	window = gameInstance.getWindow();
 	windowSize = window->getSize();
 	windowCenter = { windowSize.x / 2.0f, windowSize.y / 2.0f };
 }
 
-void WidgetMenu::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void WidgetElement::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	for (const auto& elem : shapes) target.draw(*elem, states);
 }

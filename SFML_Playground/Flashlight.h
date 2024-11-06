@@ -1,7 +1,7 @@
 #pragma once
 #include "SFML_Arena.h"
 
-class Flashlight : public WidgetMenu
+class Flashlight : public WidgetElement
 {
 private:
     const std::string flashlightShaderCode = R"(
@@ -41,7 +41,7 @@ private:
     sf::Sprite* flashlightSprite = new sf::Sprite;
 
 public:
-    Flashlight() : WidgetMenu()
+    Flashlight() : WidgetElement()
     {
         flashlightSprite->setOrigin(512.0f / 2.0f, 512.0f / 2.0f);
         flashlightSprite->setScale(SPRITE_SCALE);

@@ -8,12 +8,12 @@
 class W_Options : public InputWidget
 {
 private:
-	Button* options_return;
 	Button* options_title;
 	Button* options_test;
+	Button* options_return;
 public:
 	W_Options();
-	virtual bool isMouseOver() override { return false; };
+	virtual bool isMouseOver() override;
 };
 
 class W_MainMenu : public InputWidget
@@ -27,8 +27,11 @@ private:
 
 	W_Options optionsMenu;
 	bool bOptionsOpen = false;
+
+	void showOptions(const bool&);
 protected:
 	virtual sf::Keyboard::Key keyboardInput(sf::Event* eventRef) override;
+	virtual bool input_esc() override;
 public:
 	W_MainMenu();
 	void construct() override;
