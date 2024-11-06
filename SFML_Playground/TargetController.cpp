@@ -3,6 +3,8 @@
 
 void TargetController::newRandomConfig()
 {
+	windowUpdate();
+
 	const float margin = 200.0f; // margin, so the targets dont overlap with healthbar or window edges
 	std::random_device rd; // Get device random Number generator
 	std::mt19937 gen(rd()); // Seed random number generator
@@ -12,9 +14,8 @@ void TargetController::newRandomConfig()
 	TARGET_CONFIG.pos = sf::Vector2f(int(distrX(gen) / 100) * 100.0f, int(distrY(gen) / 100) * 100.0f);
 }
 
-void TargetController::update()
+void TargetController::windowUpdate()
 {
-	// Update window dimensions
 	sf::RenderWindow* window = gameInstance.getWindow();
 	windowWidth = window->getSize().x;
 	windowHeight = window->getSize().y;
@@ -79,6 +80,6 @@ void TargetController::spawnTarget()
 void TargetController::initSpawner()
 {
 	targets.clear(); // Dereference old targets
-	update(); // Set window dimensions before spawning, so spawn positions are correct
+	windowUpdate(); // Set window dimensions before spawning, so spawn positions are correct
 	for (int i = 0; i < 3; i++) spawnTarget(); // Spawn 3 start targets
 }

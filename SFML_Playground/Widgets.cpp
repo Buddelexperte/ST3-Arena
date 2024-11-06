@@ -154,7 +154,7 @@ W_GameOver::W_GameOver(const int& currScore = 0)
 	const std::vector<ButtonConstruct> GAME_OVER_CONSTR = {
 		{windowCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "GAME OVER",							sf::Color::White},
 		{windowCenter + sf::Vector2f{ 0, -200 },    sf::Vector2f{ 100, 100 }, sf::Color::Transparent,   16, "Score: " + std::to_string(0),	sf::Color::White},
-		{windowCenter + sf::Vector2f{ 0, 0 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "QUIT",									sf::Color::Black}
+		{windowCenter + sf::Vector2f{ 0, 0 },		sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "QUIT",									sf::Color::Black}
 	};
 
 	gameOver_title = new Button(GAME_OVER_CONSTR[0]);
@@ -244,7 +244,7 @@ void W_Gameplay::update(const float& deltaTime)
 	{
 		// Update Gameplay objects with respectable params
 		healthBar->update(deltaTime);
-		targetController->update();
+		targetController->windowUpdate();
 		if (healthBar->isFinished()) lose();
 	}
 	for (sf::Drawable* elem : shapes) flashlightMask.drawOtherScene(elem);

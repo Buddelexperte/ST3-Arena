@@ -21,7 +21,7 @@ private:
 	void spawnTarget(); // Spawn a new target using newRandomConfig() inside
 public:
 	void initSpawner(); // Spawn first three targets, reset all old values
-	void update(); // Update window dimensions
+	void windowUpdate(); // Update window dimensions
 	bool isHovering(const sf::Vector2f&);
 	bool clickedAny(const sf::Vector2f&); // Check if any button got clicked and erase it
 
