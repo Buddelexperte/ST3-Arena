@@ -30,7 +30,6 @@ private:
 
 	void showOptions(const bool&);
 protected:
-	virtual sf::Keyboard::Key keyboardInput(sf::Event* eventRef) override;
 	virtual bool input_esc() override;
 public:
 	W_MainMenu();
@@ -81,7 +80,6 @@ private:
 	virtual void unpause();
 	void lose();
 protected:
-	virtual sf::Keyboard::Key keyboardInput(sf::Event* eventRef) override;
 	virtual bool input_esc() override;
 public:
 	W_Gameplay();

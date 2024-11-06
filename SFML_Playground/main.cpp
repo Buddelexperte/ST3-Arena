@@ -1,3 +1,4 @@
+#pragma once
 #include "SFML_Arena.h"
 
 
@@ -19,7 +20,7 @@ int main()
     
     // Gameplay Initialization
     InputWidget* activeMenu = MainMenuRef;
-    E_GameState gameState = GAME_ENDED;
+    E_GameState gameState = QUIT;
     // Main Game Loop
     while (windowRef->isOpen())
     {
@@ -28,19 +29,25 @@ int main()
         {
             switch (gameState = gameInstance.getGameState())
             {
-            case MENU_SCREEN: case GAME_ENDED:
+            // Ending of Game or being in the MenuScreen opens up the MainMenu
+            case MENU_SCREEN:
                 activeMenu = MainMenuRef;
                 break;
+            // Any gamestate greater or equal than GameLaunching shows the GameplayMenu
             case GAME_PAUSED: case GAME_OVER: case GAME_LAUNCHING: case IN_GAME:
                 activeMenu = GameplayRef;
+                break;
+            case QUIT:
+                windowRef->close();
+                activeMenu = nullptr;
                 break;
             default:
                 break;
             }
             // Initiate Menu start event
-            if (activeMenu == nullptr) continue;
+            if (activeMenu == nullptr) break;
             gameInstance.setActiveWidget(activeMenu);
-
+            // (Re)construct the selected widget for correct display of sub elements
             activeMenu->construct();
         }
 
@@ -52,7 +59,7 @@ int main()
         activeMenu->update(deltaTime);
         // Only check for events if the game started correctly and didn't (technically) end
         sf::Event event;
-        while (windowRef->pollEvent(event) && gameInstance.getGameState() != GAME_ENDED)
+        while (windowRef->pollEvent(event) && gameInstance.getGameState() != QUIT)
         {
             // If close event got called, close window and break input wait loop
             if (event.type == sf::Event::Closed)

@@ -14,7 +14,7 @@ public:
 
 // Enum for handling gameStages
 enum E_GameState {
-	GAME_ENDED = -1, // Not started or interrupted
+	QUIT = -1, // Not started or interrupted
 	MENU_SCREEN = 0, // A Menu with clickable buttons
 	UNPAUSED,
 	GAME_PAUSED,
@@ -24,6 +24,7 @@ enum E_GameState {
 };
 
 class WidgetElement;
+class InputWidget;
 
 // Global Game Instance
 class GI_Arena // SINGLETON PATTERN
@@ -36,9 +37,9 @@ private:
 	sf::RenderWindow* window = nullptr;
 	sf::RenderStates states;
 
-	E_GameState gameState = GAME_ENDED;
+	E_GameState gameState = QUIT;
 
-	WidgetElement* activeWidget = nullptr;
+	InputWidget* activeWidget = nullptr;
 public:
 	static GI_Arena& getInstance()
 	{
@@ -46,13 +47,13 @@ public:
 		return instance;
 	}
 	void updateScreen(sf::Drawable*);
-	bool setActiveWidget(WidgetElement* newActive)
+	bool setActiveWidget(InputWidget* newActive)
 	{
 		bool bChanged = (newActive != activeWidget);
 		activeWidget = newActive;
 		return bChanged;
 	}
-	WidgetElement* getActiveWidget() { return activeWidget; }
+	InputWidget* getActiveWidget() { return activeWidget; }
 	sf::RenderWindow* getWindow() const { return window; }
 	sf::RenderStates getRenderStates() const { return states; }
 	E_GameState getGameState() const { return gameState; }

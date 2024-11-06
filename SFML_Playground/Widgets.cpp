@@ -21,6 +21,7 @@ W_MainMenu::W_MainMenu() : InputWidget()
 	menu_startButton = new Button(MAIN_MENU_CONSTR[2]);
 	menu_optionsButton = new Button(MAIN_MENU_CONSTR[3]);
 	menu_quitButton = new Button(MAIN_MENU_CONSTR[4]);
+
 	shapes = { menu_title, menu_highscore, menu_startButton, menu_optionsButton, menu_quitButton };
 }
 
@@ -55,27 +56,11 @@ bool W_MainMenu::isMouseOver()
 	}
 	if (menu_quitButton->isMouseOver(mousePos))
 	{
-		gameInstance.setGameState(GAME_ENDED);
+		gameInstance.setGameState(QUIT);
 		return true;
 	}
 	// On no button-mouse overlap
 	return false;
-}
-
-sf::Keyboard::Key W_MainMenu::keyboardInput(sf::Event* eventRef)
-{
-	// Call the parent function and store the result
-	sf::Keyboard::Key keyPressed = InputWidget::keyboardInput(eventRef);
-	switch (keyPressed)
-	{
-	case sf::Keyboard::Escape:
-		input_esc();
-		break;
-	default:
-		break;
-	}
-
-	return keyPressed;
 }
 
 void W_MainMenu::showOptions(const bool& bShow)
@@ -282,22 +267,6 @@ bool W_Gameplay::input_esc()
 		break;
 	}
 	return true;
-}
-
-sf::Keyboard::Key W_Gameplay::keyboardInput(sf::Event* eventRef)
-{
-	// Call the parent function and store the result
-	sf::Keyboard::Key keyPressed = InputWidget::keyboardInput(eventRef);
-	switch (keyPressed)
-	{
-	case sf::Keyboard::Escape:
-		input_esc();
-		break;
-	default:
-		break;
-	}
-
-	return keyPressed;
 }
 
 bool W_Gameplay::isMouseOver()

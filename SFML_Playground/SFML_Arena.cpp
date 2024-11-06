@@ -26,7 +26,7 @@ void GI_Arena::setGameState(const E_GameState& newGS)
 }
 
 
-// WidgetMenu Code
+// WidgetMenu Code --------------------------------------------------------------------------------
 
 void WidgetElement::windowUpdate()
 {
@@ -41,7 +41,7 @@ void WidgetElement::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 }
 
 
-// InputWidget
+// InputWidget ------------------------------------------------------------------------------------
 
 bool InputWidget::handleEvent(sf::Event* eventRef)
 {
@@ -49,10 +49,13 @@ bool InputWidget::handleEvent(sf::Event* eventRef)
 	switch (event->type)
 	{
 	case sf::Event::KeyPressed:
+		//std::cout << "[Keyboard Event]" << std::endl;
 		return keyboardInput(event);
 	case sf::Event::MouseButtonPressed:
+		//std::cout << "[Mouse Event]" << std::endl;
 		return mouseInput(event);
 	case sf::Event::MouseWheelScrolled:
+		//std::cout << "[Mouse Wheel Event]" << std::endl;
 		return scrollInput(event);
 	default:
 		break;
@@ -63,6 +66,14 @@ bool InputWidget::handleEvent(sf::Event* eventRef)
 
 sf::Keyboard::Key InputWidget::keyboardInput(sf::Event* eventRef)
 {
+	switch (eventRef->key.code)
+	{
+	case sf::Keyboard::Escape:
+		gameInstance.getActiveWidget()->input_esc();
+		break;
+	default:
+		break;
+	}
 	return eventRef->key.code;
 }
 
@@ -96,7 +107,7 @@ float InputWidget::scrollInput(sf::Event* eventRef)
 }
 
 
-// SaveGame Code
+// SaveGame Code ----------------------------------------------------------------------------------
 
 int SaveGame::Stored_Save = SaveGame::loadSavedData();
 
