@@ -16,7 +16,7 @@ public:
 	virtual bool isMouseOver() override;
 };
 
-class W_MainMenu : public InputWidget
+class W_MainMenu : public InputWidget // MainMenu Widget ------------------------------------------
 {
 private:
 	Button* menu_title;
@@ -61,10 +61,10 @@ public:
 	virtual bool isMouseOver() override;
 };
 
-class W_Gameplay : public InputWidget
+class W_Gameplay : public InputWidget // Gameplay Widget ------------------------------------------
 {
 private:
-	const float startTimer = 10.0f;
+	const float TIMER_DEFAULT = 10.0f;
 	const float minTimer = 1.0f;
 	int hitTargets = 0;
 	Timer* healthBar;
@@ -87,5 +87,6 @@ public:
 	
 	void update(const float& deltaTime) override;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	virtual bool onMouseClickL() override;
 	virtual bool isMouseOver() override;
 };

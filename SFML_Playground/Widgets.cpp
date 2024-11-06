@@ -200,8 +200,8 @@ void W_Gameplay::construct()
 		{
 			// Reset values to game start values
 			hitTargets = 0;
-			targetController->initSpawner(*window);
-			healthBar->setMaxTime(startTimer, true);
+			targetController->initSpawner();
+			healthBar->setMaxTime(TIMER_DEFAULT, true);
 			// Add Gameplay objects to shapes vector to draw them
 			gameInstance.setGameState(IN_GAME);
 		}
@@ -244,7 +244,7 @@ void W_Gameplay::update(const float& deltaTime)
 	{
 		// Update Gameplay objects with respectable params
 		healthBar->update(deltaTime);
-		targetController->update(*window);
+		targetController->update();
 		if (healthBar->isFinished()) lose();
 	}
 	for (sf::Drawable* elem : shapes) flashlightMask.drawOtherScene(elem);
@@ -287,18 +287,23 @@ bool W_Gameplay::isMouseOver()
 		}
 	}
 	flashlightMask.resetRadius();
-	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
-	if (targetController->clickedAny(mousePos))
+	return (targetController->isHovering(gameInstance.getMousePos()));
+}
+
+bool W_Gameplay::onMouseClickL()
+{
+	if (targetController->clickedAny(gameInstance.getMousePos()))
 	{
 		// Increase targetsHit and change HealthBar accoridngly
 		hitTargets++;
-		float newMaxTime = startTimer - (float(int(hitTargets) / 3) * 0.2f);
-		healthBar->setMaxTime(std::max(newMaxTime, minTimer)); // Shorten HealthBar lifespan
+		float newMaxTime = TIMER_DEFAULT - (float(hitTargets / 3.0f) * 0.5f); // Shorten HealthBar lifespan
+		healthBar->setMaxTime(std::max(newMaxTime, minTimer)); // Keep it above minimum timer lifetime
 		healthBar->setCurrentTime(healthBar->getCurrentTime() + (healthBar->getMaxTime() / 5.0f)); // Regen so a fifth of the max lifespan
 		return true;
 	}
 	return false;
 }
+	
 
 void W_Gameplay::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {

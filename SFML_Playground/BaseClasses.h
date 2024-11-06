@@ -50,6 +50,7 @@ public:
 	InputWidget* getActiveWidget() { return activeWidget; }
 	sf::RenderWindow* getWindow() const { return window; }
 	sf::RenderStates getRenderStates() const { return states; }
+	sf::Vector2f getMousePos() { return static_cast<sf::Vector2f>(sf::Mouse::getPosition()); }
 	E_GameState getGameState() const { return gameState; }
 	void setGameState(const E_GameState&);
 };

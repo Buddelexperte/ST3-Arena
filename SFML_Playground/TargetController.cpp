@@ -1,3 +1,4 @@
+#pragma once
 #include "TargetController.h" // Own header file
 
 void TargetController::newRandomConfig()
@@ -11,11 +12,12 @@ void TargetController::newRandomConfig()
 	TARGET_CONFIG.pos = sf::Vector2f(int(distrX(gen) / 100) * 100.0f, int(distrY(gen) / 100) * 100.0f);
 }
 
-void TargetController::update(sf::RenderTarget& window)
+void TargetController::update()
 {
 	// Update window dimensions
-	windowWidth = window.getSize().x;
-	windowHeight = window.getSize().y;
+	sf::RenderWindow* window = gameInstance.getWindow();
+	windowWidth = window->getSize().x;
+	windowHeight = window->getSize().y;
 }
 
 void TargetController::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -24,6 +26,16 @@ void TargetController::draw(sf::RenderTarget& target, sf::RenderStates states) c
 	{
 		button->draw(target, states); // Call the draw function for every button created
 	}
+}
+
+bool TargetController::isHovering(const sf::Vector2f& mousePos)
+{
+	// Go through all targets with iterator pointing to each
+	for (const std::unique_ptr<Button>& target : targets)
+	{
+		if (target->isMouseOver(mousePos)) return true;
+	}
+	return false; // No button was clicked
 }
 
 bool TargetController::clickedAny(const sf::Vector2f& mousePos)
@@ -64,9 +76,9 @@ void TargetController::spawnTarget()
 	targets.push_back(std::move(newButton));
 }
 
-void TargetController::initSpawner(sf::RenderTarget& window)
+void TargetController::initSpawner()
 {
 	targets.clear(); // Dereference old targets
-	update(window); // Set window dimensions before spawning, so spawn positions are correct
+	update(); // Set window dimensions before spawning, so spawn positions are correct
 	for (int i = 0; i < 3; i++) spawnTarget(); // Spawn 3 start targets
 }
