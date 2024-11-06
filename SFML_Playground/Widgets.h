@@ -13,7 +13,7 @@ private:
 	Button* options_return;
 public:
 	W_Options();
-	virtual bool isMouseOver() override;
+	virtual bool isMouseOver(const bool&) override;
 };
 
 class W_MainMenu : public InputWidget // MainMenu Widget ------------------------------------------
@@ -34,7 +34,7 @@ protected:
 public:
 	W_MainMenu();
 	void construct() override;
-	virtual bool isMouseOver() override;
+	virtual bool isMouseOver(const bool&) override;
 };
 
 class W_Paused : public InputWidget
@@ -46,7 +46,7 @@ private:
 	Button* pause_quitButton;
 public:
 	W_Paused();
-	virtual bool isMouseOver() override;
+	virtual bool isMouseOver(const bool&) override;
 };
 
 class W_GameOver : public InputWidget
@@ -58,7 +58,7 @@ private:
 public:
 	W_GameOver(const int& currScore);
 	void changeScore(const int& currScore);
-	virtual bool isMouseOver() override;
+	virtual bool isMouseOver(const bool&) override;
 };
 
 class W_Gameplay : public InputWidget // Gameplay Widget ------------------------------------------
@@ -69,6 +69,8 @@ private:
 	int hitTargets = 0;
 	Timer* healthBar;
 	TargetController* targetController;
+
+	Player* player = new Player;
 
 	bool bPaused = false;
 	W_Paused pauseScreen;
@@ -87,6 +89,5 @@ public:
 	
 	void update(const float& deltaTime) override;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	virtual bool onMouseClickL() override;
-	virtual bool isMouseOver() override;
+	virtual bool isMouseOver(const bool&) override;
 };

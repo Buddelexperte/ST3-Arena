@@ -87,13 +87,13 @@ protected:
 	virtual sf::Keyboard::Key keyboardInput(sf::Event* eventRef);
 	virtual sf::Mouse::Button mouseInput(sf::Event* eventRef);
 	virtual float scrollInput(sf::Event* eventRef);
-	virtual bool onMouseClickL() { return true; };
+	virtual bool onMouseClickL() { return isMouseOver(true); };
 	virtual bool onMouseClickR() { return true; };
 	virtual bool onMouseClickM() { return true; };
-	virtual bool input_esc() { return true;  };
+	virtual bool input_esc() { return true; };
 public:
 	bool handleInput(sf::Event* eventRef);
-	virtual bool isMouseOver() { return false; };
+	virtual bool isMouseOver(const bool&) { return false; };
 };
 
 
@@ -104,9 +104,8 @@ const std::string SAVE_FILE = "../SaveGame.txt";
 
 class SaveGame
 {
-private:
 public:
 	static int Stored_Save;
-	static int loadSavedData(const std::string& path = SAVE_FILE);
+	static int loadSavedData(const std::string&);
 	static void saveData();
 };

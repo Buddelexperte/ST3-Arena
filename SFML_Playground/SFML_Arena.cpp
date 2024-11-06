@@ -80,22 +80,24 @@ sf::Keyboard::Key InputWidget::keyboardInput(sf::Event* eventRef)
 sf::Mouse::Button InputWidget::mouseInput(sf::Event* eventRef)
 {
 	sf::Mouse::Button mouseInput = eventRef->mouseButton.button;
-	if (isMouseOver())
+	const bool checkForClick = false;
+	if (isMouseOver(checkForClick))
 	{
 		switch (mouseInput)
 		{
 		case sf::Mouse::Left:
-			if (onMouseClickL()) return sf::Mouse::Left;
+			onMouseClickL();
 			break;
 		case sf::Mouse::Right:
-			if (onMouseClickR()) return sf::Mouse::Right;
+			onMouseClickR();
 			break;
 		case sf::Mouse::Middle:
-			if (onMouseClickR()) return sf::Mouse::Middle;
+			onMouseClickR();
 			break;
 		default:
 			break;
 		}
+		return mouseInput;
 	}
 	return sf::Mouse::ButtonCount;
 }
@@ -109,9 +111,9 @@ float InputWidget::scrollInput(sf::Event* eventRef)
 
 // SaveGame Code ----------------------------------------------------------------------------------
 
-int SaveGame::Stored_Save = SaveGame::loadSavedData();
+int SaveGame::Stored_Save = SaveGame::loadSavedData(SAVE_FILE);
 
-int SaveGame::loadSavedData(const std::string& path)
+int SaveGame::loadSavedData(const std::string& path = SAVE_FILE)
 {
 	std::ifstream inFile(path);  // Open file in input mode and write the highscore to it
 	if (inFile.is_open()) {

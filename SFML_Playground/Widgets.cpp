@@ -31,32 +31,31 @@ void W_MainMenu::construct()
 	showOptions(false);
 }
 
-bool W_MainMenu::isMouseOver()
+bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 {
 	if (bOptionsOpen)
 	{
-		return optionsMenu.isMouseOver();
+		return optionsMenu.isMouseOver(checkForClick);
 	}
-	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
+	sf::Vector2f mousePos = gameInstance.getMousePos();
 	if (menu_title->isMouseOver(mousePos))
 	{
-		bool alreadyChanged = (menu_title->getColor(true) == sf::Color::Red);
-		menu_title->setColor((alreadyChanged ? sf::Color::White : sf::Color::Red), true);
+		if (checkForClick) menu_title->setColor((menu_title->getColor() == sf::Color::White ? sf::Color::Red : sf::Color::White), true);
 		return true;
 	}
 	if (menu_startButton->isMouseOver(mousePos))
 	{
-		gameInstance.setGameState(GAME_LAUNCHING);
+		if (checkForClick) gameInstance.setGameState(GAME_LAUNCHING);
 		return true;
 	}
 	if (menu_optionsButton->isMouseOver(mousePos))
 	{
-		showOptions(true);
+		if (checkForClick) showOptions(true);
 		return true;
 	}
 	if (menu_quitButton->isMouseOver(mousePos))
 	{
-		gameInstance.setGameState(QUIT);
+		if (checkForClick) gameInstance.setGameState(QUIT);
 		return true;
 	}
 	// On no button-mouse overlap
@@ -98,12 +97,12 @@ W_Options::W_Options()
 	shapes = { options_title, options_test, options_return };
 }
 
-bool W_Options::isMouseOver()
+bool W_Options::isMouseOver(const bool& checkForClick = false)
 {
-	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
+	sf::Vector2f mousePos = gameInstance.getMousePos();
 	if (options_return->isMouseOver(mousePos))
 	{
-		gameInstance.getActiveWidget()->construct();
+		if (checkForClick) gameInstance.getActiveWidget()->construct();
 		return true;
 	}
 	// On no button-mouse overlap
@@ -129,7 +128,7 @@ W_Paused::W_Paused()
 	shapes = { pause_title, pause_resumeButton, pause_optionsButton, pause_quitButton };
 }
 
-bool W_Paused::isMouseOver()
+bool W_Paused::isMouseOver(const bool& checkForClick = false)
 {
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
 	if (pause_resumeButton->isMouseOver(mousePos))
@@ -169,7 +168,7 @@ void W_GameOver::changeScore(const int& currScore = 0)
 	gameOver_score->setText("Score: " + std::to_string(currScore));
 }
 
-bool W_GameOver::isMouseOver()
+bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 {
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
 	if (gameOver_quitButton->isMouseOver(mousePos))
@@ -188,7 +187,7 @@ W_Gameplay::W_Gameplay() : InputWidget()
 {
 	targetController = new TargetController();
 	healthBar = new Timer(10.0f, windowSize.x, 100.0f, sf::Vector2f(windowCenter.x, 0.0f));
-	shapes = { targetController, &flashlightMask, healthBar };
+	shapes = { targetController, &flashlightMask, player, healthBar };
 }
 
 void W_Gameplay::construct()
@@ -219,7 +218,7 @@ void W_Gameplay::unpause()
 {
 	if (!bPaused) return;
 	bPaused = false;
-	shapes.pop_back();
+	shapes = { targetController, player, &flashlightMask, healthBar };
 }
 
 void W_Gameplay::lose()
@@ -247,7 +246,10 @@ void W_Gameplay::update(const float& deltaTime)
 		targetController->windowUpdate();
 		if (healthBar->isFinished()) lose();
 	}
-	for (sf::Drawable* elem : shapes) flashlightMask.drawOtherScene(elem);
+	for (sf::Drawable* elem : shapes)
+	{
+		flashlightMask.drawOtherScene(elem);
+	}
 }
 
 bool W_Gameplay::input_esc()
@@ -269,17 +271,17 @@ bool W_Gameplay::input_esc()
 	return true;
 }
 
-bool W_Gameplay::isMouseOver()
+bool W_Gameplay::isMouseOver(const bool& checkForClick = false)
 {
 	if (bPaused)
 	{
 		switch (gameInstance.getGameState())
 		{
 		case GAME_PAUSED:
-			return pauseScreen.isMouseOver();
+			return pauseScreen.isMouseOver(checkForClick);
 			break;
 		case GAME_OVER:
-			return gameOverScreen.isMouseOver();
+			return gameOverScreen.isMouseOver(checkForClick);
 			break;
 		default:
 			return false;
@@ -287,27 +289,23 @@ bool W_Gameplay::isMouseOver()
 		}
 	}
 	flashlightMask.resetRadius();
+	if (checkForClick)
+	{
+		if (targetController->clickedAny(gameInstance.getMousePos()))
+		{
+			// Increase targetsHit and change HealthBar accoridngly
+			hitTargets++;
+			float newMaxTime = TIMER_DEFAULT - (float(hitTargets / 3.0f) * 0.5f); // Shorten HealthBar lifespan
+			healthBar->setMaxTime(std::max(newMaxTime, minTimer)); // Keep it above minimum timer lifetime
+			healthBar->setCurrentTime(healthBar->getCurrentTime() + (healthBar->getMaxTime() / 5.0f)); // Regen so a fifth of the max lifespan
+			return true;
+		}
+		return false;
+	}
 	return (targetController->isHovering(gameInstance.getMousePos()));
 }
-
-bool W_Gameplay::onMouseClickL()
-{
-	if (targetController->clickedAny(gameInstance.getMousePos()))
-	{
-		// Increase targetsHit and change HealthBar accoridngly
-		hitTargets++;
-		float newMaxTime = TIMER_DEFAULT - (float(hitTargets / 3.0f) * 0.5f); // Shorten HealthBar lifespan
-		healthBar->setMaxTime(std::max(newMaxTime, minTimer)); // Keep it above minimum timer lifetime
-		healthBar->setCurrentTime(healthBar->getCurrentTime() + (healthBar->getMaxTime() / 5.0f)); // Regen so a fifth of the max lifespan
-		return true;
-	}
-	return false;
-}
 	
-
 void W_Gameplay::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	for (const auto elem : shapes) target.draw(*elem, states);
-
-	return;
 }

@@ -18,9 +18,9 @@ int main()
     W_Gameplay* GameplayRef = new W_Gameplay();
     W_MainMenu* MainMenuRef = new W_MainMenu();
     
-    InputWidget* activeMenu = MainMenuRef;
     // Gameplay Initialization
     E_GameState gameState = QUIT;
+    InputWidget* activeMenu = MainMenuRef;
     // Main Game Loop
     while (windowRef->isOpen())
     {
