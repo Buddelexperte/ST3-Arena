@@ -3,6 +3,17 @@
 #include "TargetController.h" // TargetSpawner and Handler
 #include "Flashlight.h"
 
+class W_Options : public InputWidget
+{
+private:
+	Button* options_return;
+	Button* options_title;
+	Button* options_test;
+public:
+	W_Options();
+	virtual bool isMouseOver() override { return false; };
+};
+
 class W_MainMenu : public InputWidget
 {
 private:
@@ -11,6 +22,9 @@ private:
 	Button* menu_startButton;
 	Button* menu_optionsButton;
 	Button* menu_quitButton;
+
+	W_Options optionsMenu;
+	bool bOptionsOpen = false;
 protected:
 	virtual sf::Keyboard::Key keyboardInput(sf::Event* eventRef) override;
 public:

@@ -31,6 +31,7 @@ void W_MainMenu::construct()
 
 bool W_MainMenu::isMouseOver()
 {
+	if (bOptionsOpen) return optionsMenu.isMouseOver();
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
 	if (menu_title->isMouseOver(mousePos))
 	{
@@ -41,6 +42,12 @@ bool W_MainMenu::isMouseOver()
 	if (menu_startButton->isMouseOver(mousePos))
 	{
 		gameInstance.setGameState(GAME_LAUNCHING);
+		return true;
+	}
+	if (menu_optionsButton->isMouseOver(mousePos))
+	{
+		shapes = { &optionsMenu };
+		bOptionsOpen = true;
 		return true;
 	}
 	if (menu_quitButton->isMouseOver(mousePos))
@@ -68,6 +75,22 @@ sf::Keyboard::Key W_MainMenu::keyboardInput(sf::Event* eventRef)
 	return keyPressed;
 }
 
+// W_Options
+
+W_Options::W_Options()
+{
+	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
+		{windowCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "OPTIONS",											sf::Color::White},
+		{windowCenter + sf::Vector2f{ 0, 150 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "TEST",													sf::Color::Black},
+		{windowCenter + sf::Vector2f{ 0, 300 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "RETURN",														sf::Color::Black}
+	};
+
+	options_title = new Button(MAIN_MENU_CONSTR[0]);
+	options_test = new Button(MAIN_MENU_CONSTR[1]);
+	options_return = new Button(MAIN_MENU_CONSTR[2]);
+
+	shapes = { options_title, options_test, options_return };
+}
 
 // W_Paused ---------------------------------------------------------------------------------------
 
