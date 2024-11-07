@@ -1,6 +1,6 @@
 #pragma once
+#include <iostream>
 #include "Button.h" // Button class for UI
-
 
 // Enum for handling gameStages in GameInstance
 enum E_GameState {
@@ -16,7 +16,7 @@ enum E_GameState {
 // Forward Declarations
 class WidgetElement;
 class InputWidget;
-
+class Player;
 
 // Global Game Instance ---------------------------------------------------------------------------
 
@@ -34,12 +34,14 @@ private:
 	E_GameState gameState = QUIT;
 
 	InputWidget* activeWidget = nullptr;
+	Player* playerRef = nullptr;
 public:
 	static GI_Arena& getInstance()
 	{
 		static GI_Arena instance;
 		return instance;
 	}
+
 	void updateScreen();
 	bool setActiveWidget(InputWidget* newActive)
 	{
@@ -49,6 +51,8 @@ public:
 	}
 	InputWidget* getActiveWidget() { return activeWidget; }
 	sf::RenderWindow* getWindow() const { return window; }
+	Player* getPlayer();
+	void handleEvent(sf::Event*);
 	sf::RenderStates getRenderStates() const { return states; }
 	sf::Vector2f getMousePos() { return static_cast<sf::Vector2f>(sf::Mouse::getPosition()); }
 	E_GameState getGameState() const { return gameState; }
@@ -62,13 +66,21 @@ public:
 class WidgetElement : public sf::Drawable
 {
 protected:
+	WidgetElement* parent = nullptr;
 	GI_Arena& gameInstance = GI_Arena::getInstance();
 	sf::RenderWindow* window = gameInstance.getWindow();
 	sf::Vector2u windowSize;
 	sf::Vector2f windowCenter;
 	std::vector<sf::Drawable*> shapes;
 public:
-	WidgetElement() { windowUpdate(); }
+	WidgetElement() : WidgetElement(nullptr) {};
+	WidgetElement(WidgetElement* parentWidget)
+	{
+		parent = parentWidget;
+		windowUpdate();
+	}
+
+	WidgetElement* getParent() { return parent; }
 
 	virtual void setPosition(sf::Vector2f) {};
 	virtual void setRotation(sf::Vector2f) {};
@@ -83,7 +95,7 @@ public:
 class InputWidget : public WidgetElement
 {
 protected:
-	sf::Event* event;
+	sf::Event* event = nullptr;
 	virtual sf::Keyboard::Key keyboardInput(sf::Event* eventRef);
 	virtual sf::Mouse::Button mouseInput(sf::Event* eventRef);
 	virtual float scrollInput(sf::Event* eventRef);
@@ -92,8 +104,9 @@ protected:
 	virtual bool onMouseClickM() { return true; };
 	virtual bool input_esc() { return true; };
 public:
+	InputWidget(WidgetElement* parent) : WidgetElement(parent) {};
 	bool handleInput(sf::Event* eventRef);
-	virtual bool isMouseOver(const bool&) { return false; };
+	virtual bool isMouseOver(const bool&) { return false; }
 };
 
 

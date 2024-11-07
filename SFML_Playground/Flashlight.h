@@ -43,6 +43,7 @@ private:
 public:
     Flashlight() : WidgetElement()
     {
+        windowUpdate();
         flashlightSprite->setOrigin(512.0f / 2.0f, 512.0f / 2.0f);
         flashlightSprite->setScale(SPRITE_SCALE);
         sf::Color color = flashlightSprite->getColor();
@@ -98,7 +99,6 @@ public:
 
     void drawOtherScene(sf::Drawable* drawable)
     {
-        
         // Draw your scene here (make sure to render the actual scene)
         sceneRenderTexture.draw(*drawable);
 

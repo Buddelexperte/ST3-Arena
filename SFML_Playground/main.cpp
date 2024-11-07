@@ -15,8 +15,8 @@ int main()
     sf::RenderWindow* windowRef = gameInstance.getWindow();
 
     // Create all main widgets for later use
-    W_Gameplay* GameplayRef = new W_Gameplay();
-    W_MainMenu* MainMenuRef = new W_MainMenu();
+    W_Gameplay* GameplayRef = new W_Gameplay(nullptr);
+    W_MainMenu* MainMenuRef = new W_MainMenu(nullptr);
     
     // Gameplay Initialization
     E_GameState gameState = QUIT;
@@ -52,11 +52,11 @@ int main()
                 windowRef->close();
                 break;
             }
-            // Update GameInstance's version of activeMenu to erase confusion
-            gameInstance.setActiveWidget(activeMenu);
             // (Re)construct the selected widget for correct display of sub elements
             activeMenu->construct();
+            // Update GameInstance's version of activeMenu to erase confusion
         }
+        gameInstance.setActiveWidget(activeMenu);
 
         // Calculate fps and deltaTime based on clock
         deltaTime = clock.restart().asSeconds();
@@ -75,7 +75,7 @@ int main()
                 break;
             }
             // Event Handler
-            activeMenu->handleInput(&event);
+            gameInstance.handleEvent(&event);
         }
         // Draw new Menu to screen through GameInstance
         gameInstance.updateScreen();

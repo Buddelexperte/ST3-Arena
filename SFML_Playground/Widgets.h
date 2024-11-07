@@ -2,7 +2,6 @@
 #include "SFML_Arena.h"
 #include "TargetController.h" // TargetSpawner and Handler
 #include "Timer.h" // Timer class for game logic
-#include "Player.h"
 #include "Flashlight.h"
 
 class W_Options : public InputWidget
@@ -11,8 +10,10 @@ private:
 	Button* options_title;
 	Button* options_test;
 	Button* options_return;
+protected:
+	virtual bool input_esc() override;
 public:
-	W_Options();
+	W_Options(WidgetElement*);
 	virtual bool isMouseOver(const bool&) override;
 };
 
@@ -25,14 +26,13 @@ private:
 	Button* menu_optionsButton;
 	Button* menu_quitButton;
 
-	W_Options optionsMenu;
+	W_Options* optionsMenu = nullptr;
 	bool bOptionsOpen = false;
-
 	void showOptions(const bool&);
 protected:
 	virtual bool input_esc() override;
 public:
-	W_MainMenu();
+	W_MainMenu(WidgetElement*);
 	void construct() override;
 	virtual bool isMouseOver(const bool&) override;
 };
@@ -44,8 +44,16 @@ private:
 	Button* pause_resumeButton;
 	Button* pause_optionsButton;
 	Button* pause_quitButton;
+
+	W_Options* optionsMenu = nullptr;
+	bool bOptionsOpen = false;
+	void showOptions(const bool&);
+protected:
+	virtual bool input_esc() override;
 public:
-	W_Paused();
+	W_Paused(WidgetElement*);
+	virtual bool isSubMenuOpen() { return bOptionsOpen; }
+	virtual void construct() override;
 	virtual bool isMouseOver(const bool&) override;
 };
 
@@ -56,8 +64,8 @@ private:
 	Button* gameOver_score;
 	Button* gameOver_quitButton;
 public:
-	W_GameOver(const int& currScore);
-	void changeScore(const int& currScore);
+	W_GameOver(WidgetElement*);
+	void changeScore(const int&);
 	virtual bool isMouseOver(const bool&) override;
 };
 
@@ -70,11 +78,11 @@ private:
 	Timer* healthBar;
 	TargetController* targetController;
 
-	Player* player = new Player;
+	Player* player = gameInstance.getPlayer();
 
 	bool bPaused = false;
-	W_Paused pauseScreen;
-	W_GameOver gameOverScreen;
+	W_Paused* pauseScreen = nullptr;
+	W_GameOver* gameOverScreen = nullptr;
 
 	Flashlight flashlightMask;
 
@@ -84,10 +92,9 @@ private:
 protected:
 	virtual bool input_esc() override;
 public:
-	W_Gameplay();
+	W_Gameplay(WidgetElement*);
 	void construct() override;
 	
 	void update(const float& deltaTime) override;
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	virtual bool isMouseOver(const bool&) override;
 };

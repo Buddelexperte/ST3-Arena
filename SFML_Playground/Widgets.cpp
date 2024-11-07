@@ -1,10 +1,10 @@
 #pragma once
-#include "Widgets.h"
+#include "SFML_Arena.h"
 
 
 // W_MainMenu -------------------------------------------------------------------------------------
 
-W_MainMenu::W_MainMenu() : InputWidget()
+W_MainMenu::W_MainMenu(WidgetElement* parent) : InputWidget(parent)
 {
 	gameInstance.setGameState(MENU_SCREEN);
 	
@@ -15,6 +15,8 @@ W_MainMenu::W_MainMenu() : InputWidget()
 		{windowCenter + sf::Vector2f{ 0, 150 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "OPTIONS",													sf::Color::Black},
 		{windowCenter + sf::Vector2f{ 0, 300 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "QUIT",														sf::Color::Black}
 	};
+
+	optionsMenu = new W_Options(this);
 
 	menu_title = new Button(MAIN_MENU_CONSTR[0]);
 	menu_highscore = new Button(MAIN_MENU_CONSTR[1]);
@@ -35,7 +37,7 @@ bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 {
 	if (bOptionsOpen)
 	{
-		return optionsMenu.isMouseOver(checkForClick);
+		return optionsMenu->isMouseOver(checkForClick);
 	}
 	sf::Vector2f mousePos = gameInstance.getMousePos();
 	if (menu_title->isMouseOver(mousePos))
@@ -66,7 +68,7 @@ void W_MainMenu::showOptions(const bool& bShow)
 {
 	if (bOptionsOpen = bShow)
 	{
-		shapes = { &optionsMenu };
+		shapes = { optionsMenu };
 		return;
 	}
 	shapes = { menu_title, menu_highscore, menu_startButton, menu_optionsButton, menu_quitButton };
@@ -75,14 +77,14 @@ void W_MainMenu::showOptions(const bool& bShow)
 bool W_MainMenu::input_esc()
 {
 	if (bOptionsOpen) showOptions(false);
-	else window->close();
+	else gameInstance.setGameState(QUIT);
 	return true;
 }
 
 
 // W_Options --------------------------------------------------------------------------------------
 
-W_Options::W_Options()
+W_Options::W_Options(WidgetElement* parent = nullptr) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
 		{windowCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "OPTIONS",											sf::Color::White},
@@ -102,16 +104,22 @@ bool W_Options::isMouseOver(const bool& checkForClick = false)
 	sf::Vector2f mousePos = gameInstance.getMousePos();
 	if (options_return->isMouseOver(mousePos))
 	{
-		if (checkForClick) gameInstance.getActiveWidget()->construct();
+		if (checkForClick) parent->construct();
 		return true;
 	}
 	// On no button-mouse overlap
 	return false;
 }
 
+bool W_Options::input_esc()
+{
+	if (parent != nullptr) parent->construct();
+	return true;
+}
+
 // W_Paused ---------------------------------------------------------------------------------------
 
-W_Paused::W_Paused()
+W_Paused::W_Paused(WidgetElement* parent) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> PAUSED_CONSTR = {
 		{windowCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "PAUSE",											sf::Color::White},
@@ -119,6 +127,8 @@ W_Paused::W_Paused()
 		{windowCenter + sf::Vector2f{ 0, 150 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "OPTIONS",													sf::Color::Black},
 		{windowCenter + sf::Vector2f{ 0, 300 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "QUIT",														sf::Color::Black}
 	};
+
+	optionsMenu = new W_Options(this);
 
 	pause_title = new Button(PAUSED_CONSTR[0]);
 	pause_resumeButton = new Button(PAUSED_CONSTR[1]);
@@ -128,17 +138,46 @@ W_Paused::W_Paused()
 	shapes = { pause_title, pause_resumeButton, pause_optionsButton, pause_quitButton };
 }
 
+void W_Paused::construct()
+{
+	showOptions(false);
+}
+
+bool W_Paused::input_esc()
+{
+	showOptions(!bOptionsOpen);
+	return bOptionsOpen;
+}
+
+void W_Paused::showOptions(const bool& bShow)
+{
+	if (bOptionsOpen = bShow)
+	{
+		shapes = { optionsMenu };
+		return;
+	}
+	optionsMenu->construct();
+	shapes = { pause_title, pause_resumeButton, pause_optionsButton, pause_quitButton };
+}
+
 bool W_Paused::isMouseOver(const bool& checkForClick = false)
 {
+	if (bOptionsOpen) return optionsMenu->isMouseOver(checkForClick);
+
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
 	if (pause_resumeButton->isMouseOver(mousePos))
 	{
-		gameInstance.setGameState(IN_GAME);
+		if (checkForClick) gameInstance.setGameState(IN_GAME);
+		return true;
+	}
+	if (pause_optionsButton->isMouseOver(mousePos))
+	{
+		if (checkForClick) showOptions(true);
 		return true;
 	}
 	if (pause_quitButton->isMouseOver(mousePos))
 	{
-		gameInstance.setGameState(MENU_SCREEN);
+		if (checkForClick) gameInstance.setGameState(MENU_SCREEN);
 		return true;
 	}
 	// On no button-mouse overlap
@@ -148,7 +187,7 @@ bool W_Paused::isMouseOver(const bool& checkForClick = false)
 
 // W_GameOver -------------------------------------------------------------------------------------
 
-W_GameOver::W_GameOver(const int& currScore = 0)
+W_GameOver::W_GameOver(WidgetElement* parent) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> GAME_OVER_CONSTR = {
 		{windowCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "GAME OVER",							sf::Color::White},
@@ -183,8 +222,11 @@ bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 
 // W_Gameplay -------------------------------------------------------------------------------------
 
-W_Gameplay::W_Gameplay() : InputWidget()
+W_Gameplay::W_Gameplay(WidgetElement* parent) : InputWidget(parent)
 {
+	pauseScreen = new W_Paused(this);
+	gameOverScreen = new W_GameOver(this);
+
 	targetController = new TargetController();
 	healthBar = new Timer(10.0f, windowSize.x, 100.0f, sf::Vector2f(windowCenter.x, 0.0f));
 	shapes = { targetController, &flashlightMask, player, healthBar };
@@ -209,16 +251,21 @@ void W_Gameplay::construct()
 
 void W_Gameplay::pause()
 {
-	if (bPaused) return;
 	bPaused = true;
-	shapes.push_back(&pauseScreen);
+	shapes.push_back(pauseScreen);
+	gameInstance.setGameState(GAME_PAUSED);
 }
 
 void W_Gameplay::unpause()
 {
-	if (!bPaused) return;
+	if (pauseScreen->isSubMenuOpen())
+	{
+		pauseScreen->construct();
+		return;
+	}
 	bPaused = false;
-	shapes = { targetController, player, &flashlightMask, healthBar };
+	shapes = { targetController, &flashlightMask, player, healthBar };
+	gameInstance.setGameState(IN_GAME);
 }
 
 void W_Gameplay::lose()
@@ -226,8 +273,8 @@ void W_Gameplay::lose()
 	// Add GameOver Screen to shapes list
 	bPaused = true;
 	gameInstance.setGameState(GAME_OVER);
-	shapes.push_back(&gameOverScreen);
-	gameOverScreen.changeScore(hitTargets);
+	shapes.push_back(gameOverScreen);
+	gameOverScreen->changeScore(hitTargets);
 	if (hitTargets > SaveGame::Stored_Save) SaveGame::Stored_Save = hitTargets; // Update highscore value if new value is bigger
 	SaveGame::saveData(); // Save highscore value (didn't change if no greater was achieved)
 }
@@ -258,11 +305,9 @@ bool W_Gameplay::input_esc()
 	{
 	case IN_GAME:
 		pause();
-		gameInstance.setGameState(GAME_PAUSED);
 		break;
 	case GAME_PAUSED:
 		unpause();
-		gameInstance.setGameState(IN_GAME);
 		break;
 	default:
 		gameInstance.setGameState(MENU_SCREEN);
@@ -278,15 +323,15 @@ bool W_Gameplay::isMouseOver(const bool& checkForClick = false)
 		switch (gameInstance.getGameState())
 		{
 		case GAME_PAUSED:
-			return pauseScreen.isMouseOver(checkForClick);
+			return pauseScreen->isMouseOver(checkForClick);
 			break;
 		case GAME_OVER:
-			return gameOverScreen.isMouseOver(checkForClick);
+			return gameOverScreen->isMouseOver(checkForClick);
 			break;
 		default:
-			return false;
 			break;
 		}
+		return false;
 	}
 	flashlightMask.resetRadius();
 	if (checkForClick)
@@ -303,9 +348,4 @@ bool W_Gameplay::isMouseOver(const bool& checkForClick = false)
 		return false;
 	}
 	return (targetController->isHovering(gameInstance.getMousePos()));
-}
-	
-void W_Gameplay::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-	for (const auto elem : shapes) target.draw(*elem, states);
 }

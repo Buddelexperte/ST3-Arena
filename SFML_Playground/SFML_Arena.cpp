@@ -25,6 +25,17 @@ void GI_Arena::setGameState(const E_GameState& newGS)
 	gameState = newGS;
 }
 
+Player* GI_Arena::getPlayer()
+{
+	if (playerRef == nullptr) playerRef = new Player();
+	return playerRef;
+}
+
+void GI_Arena::handleEvent(sf::Event* eventRef)
+{
+	activeWidget->handleInput(eventRef);
+}
+
 
 // WidgetMenu Code --------------------------------------------------------------------------------
 
