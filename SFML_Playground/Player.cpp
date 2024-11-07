@@ -31,15 +31,30 @@ void Player::tick(const float& deltaTime)
 	gameInstance.updateScreen();
 }
 
+void Player::calcMovement()
+{
+	float x = 0.0f;
+	float y = 0.0f;
+
+	// Check if each key is currently pressed
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) y -= 1.0f; // Move North
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) x += 1.0f; // Move East
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) y += 1.0f; // Move South
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) x -= 1.0f; // Move West
+
+	playerModel->move(playerModel->getPos() + (sf::Vector2f(x, y)));
+}
+
 sf::Keyboard::Key Player::keyboardInput(sf::Event* eventRef)
 {
-	switch (eventRef->key.code)
+	if (!gameInstance.getIsPaused()) calcMovement();
+	sf::Keyboard::Key inputKey = eventRef->key.code;
+	switch (inputKey)
 	{
 	case sf::Keyboard::Escape:
 		gameInstance.handleEvent(eventRef);
 		break;
-	case sf::Keyboard::W: case sf::Keyboard::A: case sf::Keyboard::S: case sf::Keyboard::D:
-		std::cout << "MOVING!!!" << std::endl;
+	case NORTH: case EAST: case SOUTH: case WEST:
 		break;
 	default:
 		break;

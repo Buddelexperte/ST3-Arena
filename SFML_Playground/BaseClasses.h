@@ -35,12 +35,16 @@ private:
 
 	InputWidget* activeWidget = nullptr;
 	Player* playerRef = nullptr;
+
+	bool bIsGameplayPaused = true;
 public:
 	static GI_Arena& getInstance()
 	{
 		static GI_Arena instance;
 		return instance;
 	}
+	void setIsPaused(const bool& bPause) { bIsGameplayPaused = bPause; }
+	bool getIsPaused() { return bIsGameplayPaused; }
 	void updateScreen();
 	void tick(const float&);
 	bool setActiveWidget(InputWidget*);
@@ -61,6 +65,7 @@ public:
 class WidgetElement : public sf::Drawable
 {
 protected:
+	float lastDeltaTime = 0.0f;
 	WidgetElement* parent = nullptr;
 	GI_Arena& gameInstance = GI_Arena::getInstance();
 	sf::RenderWindow* window = gameInstance.getWindow();
@@ -83,7 +88,7 @@ public:
 
 	virtual void windowUpdate();
 	virtual void construct() {};
-	virtual void update(const float& deltaTime) { windowUpdate(); };
+	virtual void update(const float& deltaTime) { lastDeltaTime = deltaTime;  windowUpdate(); };
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 
@@ -107,15 +112,22 @@ public:
 
 // PLAYER -----------------------------------------------------------------------------------------
 
+const sf::Keyboard::Key NORTH = sf::Keyboard::W;
+const sf::Keyboard::Key EAST = sf::Keyboard::D;
+const sf::Keyboard::Key SOUTH = sf::Keyboard::S;
+const sf::Keyboard::Key WEST = sf::Keyboard::A;
 
 class Player : public InputWidget
 {
 private:
 	Button* playerModel = nullptr;
+	void calcMovement();
 protected:
 	sf::Keyboard::Key keyboardInput(sf::Event*) override;
 	sf::Mouse::Button mouseInput(sf::Event*) override;
 public:
+	
+
 	Player(WidgetElement*);
 	virtual void tick(const float&);
 };

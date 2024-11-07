@@ -27,6 +27,7 @@ public:
 	void setText(const std::string&); // Set the texts content
 	void setColor(const sf::Color&, const bool& = false); // Set the color of the text or the button fill
 	sf::Color getColor(const bool& = false) const; // Get the color of the text or the button fill
+	sf::Vector2f getPos() const { return B_Box.getPosition(); }
 	void move(const sf::Vector2f&); // Move the whole button to a new position
 	bool isMouseOver(const sf::Vector2f& mousePos) const; // Check if mouse is over button
 
