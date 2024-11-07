@@ -42,7 +42,8 @@ bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 	sf::Vector2f mousePos = gameInstance.getMousePos();
 	if (menu_title->isMouseOver(mousePos))
 	{
-		if (checkForClick) menu_title->setColor((menu_title->getColor() == sf::Color::White ? sf::Color::Red : sf::Color::White), true);
+		sf::Color newColor = (menu_title->getColor(true) == sf::Color::White ? sf::Color::Red : sf::Color::White);
+		if (checkForClick) menu_title->setColor(newColor, true);
 		return true;
 	}
 	if (menu_startButton->isMouseOver(mousePos))
@@ -236,7 +237,6 @@ void W_Gameplay::construct()
 {
 	if (gameInstance.getGameState() >= GAME_LAUNCHING)
 	{
-		unpause();
 		if (gameInstance.getGameState() == GAME_LAUNCHING)
 		{
 			// Reset values to game start values
@@ -246,6 +246,7 @@ void W_Gameplay::construct()
 			// Add Gameplay objects to shapes vector to draw them
 			gameInstance.setGameState(IN_GAME);
 		}
+		unpause();
 	}
 }
 
@@ -281,7 +282,7 @@ void W_Gameplay::lose()
 
 void W_Gameplay::update(const float& deltaTime)
 {
-	WidgetElement::update(deltaTime);
+	InputWidget::update(deltaTime);
 	// Don't update while paused
 	if (bPaused) return;
 

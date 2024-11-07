@@ -41,18 +41,13 @@ public:
 		static GI_Arena instance;
 		return instance;
 	}
-
 	void updateScreen();
-	bool setActiveWidget(InputWidget* newActive)
-	{
-		bool bChanged = (newActive != activeWidget);
-		activeWidget = newActive;
-		return bChanged;
-	}
+	void tick(const float&);
+	bool setActiveWidget(InputWidget*);
 	InputWidget* getActiveWidget() { return activeWidget; }
 	sf::RenderWindow* getWindow() const { return window; }
 	Player* getPlayer();
-	void handleEvent(sf::Event*);
+	bool handleEvent(sf::Event*);
 	sf::RenderStates getRenderStates() const { return states; }
 	sf::Vector2f getMousePos() { return static_cast<sf::Vector2f>(sf::Mouse::getPosition()); }
 	E_GameState getGameState() const { return gameState; }
@@ -96,18 +91,35 @@ class InputWidget : public WidgetElement
 {
 protected:
 	sf::Event* event = nullptr;
-	virtual sf::Keyboard::Key keyboardInput(sf::Event* eventRef);
-	virtual sf::Mouse::Button mouseInput(sf::Event* eventRef);
-	virtual float scrollInput(sf::Event* eventRef);
+	virtual sf::Keyboard::Key keyboardInput(sf::Event*);
+	virtual sf::Mouse::Button mouseInput(sf::Event*);
+	virtual float scrollInput(sf::Event*);
 	virtual bool onMouseClickL() { return isMouseOver(true); };
 	virtual bool onMouseClickR() { return true; };
 	virtual bool onMouseClickM() { return true; };
 	virtual bool input_esc() { return true; };
 public:
 	InputWidget(WidgetElement* parent) : WidgetElement(parent) {};
-	bool handleInput(sf::Event* eventRef);
+	virtual bool handleInput(sf::Event* eventRef);
 	virtual bool isMouseOver(const bool&) { return false; }
 };
+
+
+// PLAYER -----------------------------------------------------------------------------------------
+
+
+class Player : public InputWidget
+{
+private:
+	Button* playerModel = nullptr;
+protected:
+	sf::Keyboard::Key keyboardInput(sf::Event*) override;
+	sf::Mouse::Button mouseInput(sf::Event*) override;
+public:
+	Player(WidgetElement*);
+	virtual void tick(const float&);
+};
+
 
 
 // SAVE GAME --------------------------------------------------------------------------------------

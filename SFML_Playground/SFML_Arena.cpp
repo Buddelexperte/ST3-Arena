@@ -10,6 +10,12 @@ GI_Arena::GI_Arena()
 	states = sf::RenderStates::Default;
 }
 
+void GI_Arena::tick(const float& deltaTime)
+{
+	activeWidget->update(deltaTime);
+	playerRef->tick(deltaTime);
+}
+
 void GI_Arena::updateScreen()
 {
 	// Clear viewport for new draw
@@ -20,6 +26,13 @@ void GI_Arena::updateScreen()
 	window->display();
 }
 
+bool GI_Arena::setActiveWidget(InputWidget* newActive)
+{
+	bool bChanged = (newActive != activeWidget);
+	activeWidget = newActive;
+	return bChanged;
+}
+
 void GI_Arena::setGameState(const E_GameState& newGS)
 {
 	gameState = newGS;
@@ -27,13 +40,13 @@ void GI_Arena::setGameState(const E_GameState& newGS)
 
 Player* GI_Arena::getPlayer()
 {
-	if (playerRef == nullptr) playerRef = new Player();
+	if (playerRef == nullptr) playerRef = new Player(nullptr);
 	return playerRef;
 }
 
-void GI_Arena::handleEvent(sf::Event* eventRef)
+bool GI_Arena::handleEvent(sf::Event* eventRef)
 {
-	activeWidget->handleInput(eventRef);
+	return activeWidget->handleInput(eventRef);
 }
 
 

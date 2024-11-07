@@ -33,6 +33,9 @@
     <ClCompile Include="Widgets.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h">
@@ -54,9 +57,6 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Flashlight.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

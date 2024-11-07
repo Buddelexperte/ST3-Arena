@@ -27,7 +27,8 @@ int main()
         // If GameState changed in earlier loop, construct new activeMenu;
         if (gameState != gameInstance.getGameState())
         {
-            switch (gameState = gameInstance.getGameState())
+            gameState = gameInstance.getGameState();
+            switch (gameState)
             {
             // Ending of Game or being in the MenuScreen opens up the MainMenu
             case MENU_SCREEN:
@@ -62,23 +63,7 @@ int main()
         deltaTime = clock.restart().asSeconds();
         fps = 1.0f / deltaTime;
 
-        // Update current Widget
-        activeMenu->update(deltaTime);
-        // Only check for events if the game started correctly and didn't (technically) end
-        sf::Event event;
-        while (windowRef->pollEvent(event) && gameInstance.getGameState() != QUIT)
-        {
-            // If close event got called, close window and break input wait loop
-            if (event.type == sf::Event::Closed)
-            {
-                windowRef->close();
-                break;
-            }
-            // Event Handler
-            gameInstance.handleEvent(&event);
-        }
-        // Draw new Menu to screen through GameInstance
-        gameInstance.updateScreen();
+        gameInstance.tick(deltaTime);
     }
 
     return 0;
