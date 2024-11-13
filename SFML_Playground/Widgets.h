@@ -80,7 +80,6 @@ private:
 
 	Player* player = gameInstance.getPlayer();
 
-	bool bPaused = false;
 	W_Paused* pauseScreen = nullptr;
 	W_GameOver* gameOverScreen = nullptr;
 

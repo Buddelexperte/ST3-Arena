@@ -252,7 +252,7 @@ void W_Gameplay::construct()
 
 void W_Gameplay::pause()
 {
-	bPaused = true;
+	gameInstance.setIsPaused(true);
 	shapes.push_back(pauseScreen);
 	gameInstance.setGameState(GAME_PAUSED);
 }
@@ -264,7 +264,7 @@ void W_Gameplay::unpause()
 		pauseScreen->construct();
 		return;
 	}
-	bPaused = false;
+	gameInstance.setIsPaused(false);
 	shapes = { targetController, &flashlightMask, player, healthBar };
 	gameInstance.setGameState(IN_GAME);
 }
@@ -272,7 +272,7 @@ void W_Gameplay::unpause()
 void W_Gameplay::lose()
 {
 	// Add GameOver Screen to shapes list
-	bPaused = true;
+	gameInstance.setIsPaused(true);
 	gameInstance.setGameState(GAME_OVER);
 	shapes.push_back(gameOverScreen);
 	gameOverScreen->changeScore(hitTargets);
@@ -284,7 +284,7 @@ void W_Gameplay::update(const float& deltaTime)
 {
 	InputWidget::update(deltaTime);
 	// Don't update while paused
-	if (bPaused) return;
+	if (gameInstance.getIsPaused()) return;
 
 	flashlightMask.update(deltaTime);
 	if (gameInstance.getGameState() >= GAME_LAUNCHING)
@@ -319,7 +319,7 @@ bool W_Gameplay::input_esc()
 
 bool W_Gameplay::isMouseOver(const bool& checkForClick = false)
 {
-	if (bPaused)
+	if (gameInstance.getIsPaused())
 	{
 		switch (gameInstance.getGameState())
 		{

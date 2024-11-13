@@ -14,7 +14,9 @@ Player::Player(WidgetElement* parent = nullptr) : InputWidget(parent)
 void Player::tick(const float& deltaTime)
 {
 	windowUpdate();
-	// Only check for events if the game started correctly and didn't (technically) end
+	// Only check for movement input when GameInstance is not paused
+	if (!gameInstance.getIsPaused()) calcMovement();
+	// Get user event and distribute events unhandled by player.cpp
 	sf::Event event;
 	while (window->pollEvent(event) && gameInstance.getGameState() != QUIT)
 	{
@@ -47,7 +49,6 @@ void Player::calcMovement()
 
 sf::Keyboard::Key Player::keyboardInput(sf::Event* eventRef)
 {
-	if (!gameInstance.getIsPaused()) calcMovement();
 	sf::Keyboard::Key inputKey = eventRef->key.code;
 	switch (inputKey)
 	{
