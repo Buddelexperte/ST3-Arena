@@ -83,13 +83,13 @@ public:
 	WidgetElement* getParent() { return parent; }
 	// Position
 	virtual void setPos(const sf::Vector2f&) {};
-	virtual sf::Vector2f getPos() {};
+	virtual sf::Vector2f getPos() { return sf::Vector2f(0.0f, 0.0f); };
 	// Rotation
 	virtual void setRot(const float&) {};
-	virtual float getRot() {};
+	virtual float getRot() { return 0.0f; };
 	// Scale (NOT SIZE)
 	virtual void setScale(const sf::Vector2f&) {};
-	virtual sf::Vector2f getScale() {};
+	virtual sf::Vector2f getScale() { return sf::Vector2f(0.0f, 0.0f); };
 
 	virtual void windowUpdate();
 	virtual void construct() {};
