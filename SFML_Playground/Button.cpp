@@ -56,6 +56,12 @@ void Button::setPos(const sf::Vector2f& newPos = {0.0f, 0.0f})
 	T_Text.setPosition({ newPos.x, newPos.y - 6.0f });
 }
 
+void Button::addPos(const sf::Vector2f& x)
+{
+	B_Box.setPosition(B_Box.getPosition() + x);
+	T_Text.setPosition(T_Text.getPosition() + x);
+}
+
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(B_Box, states); // Draw box

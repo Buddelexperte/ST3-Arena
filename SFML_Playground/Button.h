@@ -29,6 +29,7 @@ public:
 	sf::Color getColor(const bool& = false) const; // Get the color of the text or the button fill
 
 	void setPos(const sf::Vector2f&); // Move the whole button to a new position
+	void addPos(const sf::Vector2f&);
 	sf::Vector2f getPos() const { return B_Box.getPosition(); }
 	void setRot(const float& newRot) { B_Box.setRotation(newRot); }
 	float getRot() const { return B_Box.getRotation(); };

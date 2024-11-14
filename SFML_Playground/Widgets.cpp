@@ -6,7 +6,7 @@
 
 W_MainMenu::W_MainMenu(WidgetElement* parent) : InputWidget(parent)
 {
-	gameInstance.setGameState(MENU_SCREEN);
+	// gameInstance.setGameState(MENU_SCREEN); Now handled inside teh gameInstance
 	
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
 		{windowCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "ARENA",											sf::Color::White},

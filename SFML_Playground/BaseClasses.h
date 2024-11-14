@@ -32,7 +32,7 @@ private:
 	sf::RenderWindow* window = nullptr;
 	sf::RenderStates states;
 
-	E_GameState gameState = QUIT;
+	E_GameState gameState = MENU_SCREEN;
 
 	InputWidget* activeWidget = nullptr;
 	Player* playerRef = nullptr;
@@ -84,11 +84,13 @@ public:
 
 	WidgetElement* getParent() { return parent; }
 	// Position
-	virtual void setPos(const sf::Vector2f&) { return; };
+	virtual void setPos(const sf::Vector2f&) { return; }
+	virtual void addPos(const sf::Vector2f&) { return; }
 	virtual sf::Vector2f getPos() { return sf::Vector2f(0.0f, 0.0f); };
 	// Rotation
-	virtual void setRot(const float&) { return; };
-	virtual float getRot() { return 0.0f; };
+	virtual void setRot(const float&) { return; }
+	virtual void addRot(const float&) { return; }
+	virtual float getRot() { return 0.0f; }
 	// Scale (NOT SIZE)
 	virtual void setScale(const sf::Vector2f&) { return; };
 	virtual sf::Vector2f getScale() { return sf::Vector2f(0.0f, 0.0f); };
@@ -129,15 +131,17 @@ class Player : public InputWidget
 private:
 	Button* playerModel = nullptr;
 	void calcMovement();
+	sf::Vector2f velocity = { 0.0f, 0.0f };
 protected:
 	sf::Keyboard::Key keyboardInput(sf::Event*) override;
 	sf::Mouse::Button mouseInput(sf::Event*) override;
 public:
 	Player(WidgetElement*);
 	void update(const float&) override;
+	void addPos(const sf::Vector2f&) override;
+	sf::Vector2f getPos() override;
 	void setRot(const float&) override;
 	float getRot() override;
-	sf::Vector2f getPos() override;
 };
 
 

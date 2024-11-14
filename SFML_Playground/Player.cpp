@@ -37,6 +37,9 @@ void Player::calcMovement()
 {
 	float x = 0.0f;
 	float y = 0.0f;
+	// Multiplier for sprinting, damaged etc.
+	float multiplier = 1.0f;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) multiplier *= 2.0f;
 
 	// Check if each key is currently pressed
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) y -= 1.0f; // Move North
@@ -44,9 +47,11 @@ void Player::calcMovement()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) y += 1.0f; // Move South
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) x -= 1.0f; // Move West
 	
+	velocity = { x * multiplier, y * multiplier };
+	addPos(velocity);
+	// Rotate to current mouse pos
 	float newRot = getLookAtRot(getPos(), static_cast<sf::Vector2f>(sf::Mouse::getPosition()));
 	setRot(newRot);
-	playerModel->setPos(playerModel->getPos() + (sf::Vector2f(x, y)));
 }
 
 sf::Keyboard::Key Player::keyboardInput(sf::Event* eventRef)
@@ -82,6 +87,16 @@ sf::Mouse::Button Player::mouseInput(sf::Event* eventRef)
 
 // Get und Set Attribute
 
+void Player::addPos(const sf::Vector2f& x)
+{
+	playerModel->addPos(x);
+}
+
+sf::Vector2f Player::getPos()
+{
+	return playerModel->getPos();
+}
+
 void Player::setRot(const float& newRot)
 {
 	playerModel->setRot(newRot);
@@ -90,9 +105,4 @@ void Player::setRot(const float& newRot)
 float Player::getRot()
 {
 	return playerModel->getRot();
-}
-
-sf::Vector2f Player::getPos()
-{
-	return playerModel->getPos();
 }
