@@ -33,7 +33,7 @@ bool Button::isMouseOver(const sf::Vector2f& mousePos) const {
 void Button::setText(const std::string& text)
 {
 	T_Text.setString(text);
-	move(B_Box.getPosition()); // Recenter Text (idk why I need that but it works)
+	setPos(B_Box.getPosition()); // Recenter Text (idk why I need that but it works)
 }
 
 void Button::setColor(const sf::Color& color, const bool& bTextColor)
@@ -46,7 +46,7 @@ sf::Color Button::getColor(const bool& bTextColor) const
 	return (bTextColor ? T_Text.getFillColor() : B_Box.getFillColor()); // return either box or text fillcolor
 }
 
-void Button::move(const sf::Vector2f& newPos = {0.0f, 0.0f})
+void Button::setPos(const sf::Vector2f& newPos = {0.0f, 0.0f})
 {
 	// Update Box position and origin
 	B_Box.setPosition(newPos);

@@ -3,6 +3,7 @@
 #include "TargetController.h" // TargetSpawner and Handler
 #include "Timer.h" // Timer class for game logic
 #include "Flashlight.h"
+#include "Button.h" // Button class for UI
 
 class W_Options : public InputWidget
 {

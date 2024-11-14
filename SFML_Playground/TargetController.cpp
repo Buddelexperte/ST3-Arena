@@ -68,7 +68,7 @@ void TargetController::spawnTarget()
 			{
 				foundSpot = false; // Collision found, try again
 				newRandomConfig(); // Make new position
-				newButton->move(TARGET_CONFIG.pos); // Moves newButton to new position
+				newButton->setPos(TARGET_CONFIG.pos); // Moves newButton to new position
 				break; // Exit the for loop to check new position
 			}
 		}

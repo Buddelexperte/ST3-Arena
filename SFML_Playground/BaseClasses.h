@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
-#include "Button.h" // Button class for UI
 #include "Functions.h"
+#include "Button.h"
 
 // Enum for handling gameStages in GameInstance
 enum E_GameState {
@@ -80,20 +80,21 @@ public:
 		parent = parentWidget;
 		windowUpdate();
 	}
+	virtual ~WidgetElement() = default;
 
 	WidgetElement* getParent() { return parent; }
 	// Position
-	virtual void setPos(const sf::Vector2f&) {};
+	virtual void setPos(const sf::Vector2f&) { return; };
 	virtual sf::Vector2f getPos() { return sf::Vector2f(0.0f, 0.0f); };
 	// Rotation
-	virtual void setRot(const float&) {};
+	virtual void setRot(const float&) { return; };
 	virtual float getRot() { return 0.0f; };
 	// Scale (NOT SIZE)
-	virtual void setScale(const sf::Vector2f&) {};
+	virtual void setScale(const sf::Vector2f&) { return; };
 	virtual sf::Vector2f getScale() { return sf::Vector2f(0.0f, 0.0f); };
 
 	virtual void windowUpdate();
-	virtual void construct() {};
+	virtual void construct() { return; };
 	virtual void update(const float& deltaTime) { lastDeltaTime = deltaTime;  windowUpdate(); };
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };

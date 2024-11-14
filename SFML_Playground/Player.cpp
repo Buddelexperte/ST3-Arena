@@ -46,7 +46,7 @@ void Player::calcMovement()
 	
 	float newRot = getLookAtRot(getPos(), static_cast<sf::Vector2f>(sf::Mouse::getPosition()));
 	setRot(newRot);
-	playerModel->move(playerModel->getPos() + (sf::Vector2f(x, y)));
+	playerModel->setPos(playerModel->getPos() + (sf::Vector2f(x, y)));
 }
 
 sf::Keyboard::Key Player::keyboardInput(sf::Event* eventRef)
