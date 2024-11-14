@@ -29,9 +29,9 @@ public:
 	sf::Color getColor(const bool& = false) const; // Get the color of the text or the button fill
 
 	void setPos(const sf::Vector2f&); // Move the whole button to a new position
-	sf::Vector2f getPos() { return B_Box.getPosition(); }
+	sf::Vector2f getPos() const { return B_Box.getPosition(); }
 	void setRot(const float& newRot) { B_Box.setRotation(newRot); }
-	float getRot() { return B_Box.getRotation(); };
+	float getRot() const { return B_Box.getRotation(); };
 
 	bool isMouseOver(const sf::Vector2f& mousePos) const; // Check if mouse is over button
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
