@@ -11,7 +11,7 @@ Player::Player(WidgetElement* parent = nullptr) : InputWidget(parent)
 	shapes = { playerModel };
 }
 
-void Player::tick(const float& deltaTime)
+void Player::update(const float& deltaTime)
 {
 	windowUpdate();
 	// Only check for movement input when GameInstance is not paused
@@ -43,7 +43,9 @@ void Player::calcMovement()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) x += 1.0f; // Move East
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) y += 1.0f; // Move South
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) x -= 1.0f; // Move West
-
+	
+	float newRot = getLookAtRot(getPos(), static_cast<sf::Vector2f>(sf::Mouse::getPosition()));
+	setRot(newRot);
 	playerModel->move(playerModel->getPos() + (sf::Vector2f(x, y)));
 }
 
@@ -76,4 +78,21 @@ sf::Mouse::Button Player::mouseInput(sf::Event* eventRef)
 		break;
 	}
 	return mouseInput;
+}
+
+// Get und Set Attribute
+
+void Player::setRot(const float& newRot)
+{
+	playerModel->setRot(newRot);
+}
+
+float Player::getRot()
+{
+	return playerModel->getRot();
+}
+
+sf::Vector2f Player::getPos()
+{
+	return playerModel->getPos();
 }

@@ -56,7 +56,8 @@ void Button::move(const sf::Vector2f& newPos = {0.0f, 0.0f})
 	T_Text.setPosition({ newPos.x, newPos.y - 6.0f });
 }
 
-void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
 	target.draw(B_Box, states); // Draw box
 	target.draw(T_Text, states); // Draw text
 }

@@ -2,6 +2,7 @@
 
 void Timer::update(const float& deltaTime)
 {
+	return;
 	currentTime -= deltaTime; // Subtract deltaTime from time left
 	if (currentTime < 0.0f)
 	{

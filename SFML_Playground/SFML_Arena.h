@@ -8,8 +8,8 @@
 #include <string>   // String manipulations
 #include <memory> // For shared_ptr and weak_ptr
 
-// Own SFML Classes
-#include "BaseClasses.h"    // Base classes for gameplay
+// Base classes for gameplay
+#include "BaseClasses.h"    
 
 // Viewport Widgets
-#include "Widgets.h"          // Ensure this includes other necessary UI components
+#include "Widgets.h"

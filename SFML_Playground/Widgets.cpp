@@ -229,7 +229,7 @@ W_Gameplay::W_Gameplay(WidgetElement* parent) : InputWidget(parent)
 	gameOverScreen = new W_GameOver(this);
 
 	targetController = new TargetController();
-	healthBar = new Timer(10.0f, windowSize.x, 100.0f, sf::Vector2f(windowCenter.x, 0.0f));
+	healthBar = new Timer(10.0f, static_cast<float>(windowSize.x), 100.0f, sf::Vector2f(windowCenter.x, 0.0f));
 	shapes = { targetController, &flashlightMask, player, healthBar };
 }
 

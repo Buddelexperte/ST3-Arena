@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "Button.h" // Button class for UI
+#include "Functions.h"
 
 // Enum for handling gameStages in GameInstance
 enum E_GameState {
@@ -44,7 +45,7 @@ public:
 		return instance;
 	}
 	void setIsPaused(const bool& bPause) { bIsGameplayPaused = bPause; }
-	bool getIsPaused() { return bIsGameplayPaused; }
+	bool getIsPaused() const { return bIsGameplayPaused; }
 	void updateScreen();
 	void tick(const float&);
 	bool setActiveWidget(InputWidget*);
@@ -131,10 +132,11 @@ protected:
 	sf::Keyboard::Key keyboardInput(sf::Event*) override;
 	sf::Mouse::Button mouseInput(sf::Event*) override;
 public:
-	
-
 	Player(WidgetElement*);
-	virtual void tick(const float&);
+	void update(const float&) override;
+	void setRot(const float&) override;
+	float getRot() override;
+	sf::Vector2f getPos() override;
 };
 
 

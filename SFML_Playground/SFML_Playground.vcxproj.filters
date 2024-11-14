@@ -59,6 +59,9 @@
     <ClInclude Include="Flashlight.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="Functions.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\Downloads\SCI-FI_UI_SFX_PACK.zip">

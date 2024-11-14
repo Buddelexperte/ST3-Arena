@@ -39,7 +39,8 @@ private:
 
     sf::Texture flashlightTexture;
     sf::Sprite* flashlightSprite = new sf::Sprite;
-
+    
+    Player* player = nullptr;
 public:
     Flashlight() : WidgetElement()
     {
@@ -71,7 +72,7 @@ public:
     virtual void update(const float& deltaTime) override
     {
         windowUpdate();
-
+        player = gameInstance.getPlayer();
         // Flashlight Movement and pic by pic
         static int imgN = 51;
         static int steps = 0;
@@ -87,14 +88,23 @@ public:
         }
 
         flashlightSprite->setTexture(flashlightTexture);
-        flashlightSprite->setPosition(static_cast<sf::Vector2f>(sf::Mouse::getPosition()));
+        // sf::Vector2f newPos = static_cast<sf::Vector2f>(sf::Mouse::getPosition()); Mouse based position
+        sf::Vector2f newPos = player->getPos();
+        float newRot = player->getRot();
+        flashlightSprite->setPosition(player->getPos());
+        flashlightSprite->setRotation(player->getRot());
+
         // Clear the render texture with the black color
         sceneRenderTexture.clear(sf::Color::Black);
         // Get mouse position and set shader uniforms
-        sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
-        flashlightShader.setUniform("lightPos", mousePos);
+        flashlightShader.setUniform("lightPos", newPos);
         flashlightShader.setUniform("radius", radius);
         flashlightShader.setUniform("viewportHeight", float(windowSize.y)); // Pass the viewport height
+    }
+
+    sf::Vector2f getPos() const 
+    {
+        return flashlightSprite->getPosition();
     }
 
     void drawOtherScene(sf::Drawable* drawable)

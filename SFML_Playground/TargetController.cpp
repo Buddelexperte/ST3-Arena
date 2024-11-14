@@ -17,8 +17,8 @@ void TargetController::newRandomConfig()
 void TargetController::windowUpdate()
 {
 	sf::RenderWindow* window = gameInstance.getWindow();
-	windowWidth = window->getSize().x;
-	windowHeight = window->getSize().y;
+	windowWidth = static_cast<float>(window->getSize().x);
+	windowHeight = static_cast<float>(window->getSize().y);
 }
 
 void TargetController::draw(sf::RenderTarget& target, sf::RenderStates states) const

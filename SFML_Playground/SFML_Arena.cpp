@@ -13,7 +13,7 @@ GI_Arena::GI_Arena()
 void GI_Arena::tick(const float& deltaTime)
 {
 	activeWidget->update(deltaTime);
-	playerRef->tick(deltaTime);
+	playerRef->update(deltaTime);
 }
 
 void GI_Arena::updateScreen()
