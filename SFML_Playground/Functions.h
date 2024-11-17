@@ -1,7 +1,16 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-const double pi = 4 * std::atan(1.0); // This calculates pi accurately
+// SFML abbreviations
+const sf::Keyboard::Key KEY_W = sf::Keyboard::W;
+const sf::Keyboard::Key KEY_A = sf::Keyboard::A;
+const sf::Keyboard::Key KEY_S = sf::Keyboard::S;
+const sf::Keyboard::Key KEY_D = sf::Keyboard::D;
+const sf::Keyboard::Key KEY_LSHIFT = sf::Keyboard::LShift;
+// Mathematical Pi
+const double pi = 4 * std::atan(1.0); // Calculation of Pi
+
+// Global functions for calculation and conversion
 
 inline float getLookAtRot(const sf::Vector2f& start, const sf::Vector2f& target)
 {

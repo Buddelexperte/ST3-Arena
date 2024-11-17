@@ -121,11 +121,6 @@ public:
 
 // PLAYER -----------------------------------------------------------------------------------------
 
-const sf::Keyboard::Key NORTH = sf::Keyboard::W;
-const sf::Keyboard::Key EAST = sf::Keyboard::D;
-const sf::Keyboard::Key SOUTH = sf::Keyboard::S;
-const sf::Keyboard::Key WEST = sf::Keyboard::A;
-
 class Player : public InputWidget
 {
 private:
@@ -143,7 +138,6 @@ public:
 	void setRot(const float&) override;
 	float getRot() override;
 };
-
 
 
 // SAVE GAME --------------------------------------------------------------------------------------
