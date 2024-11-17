@@ -1,8 +1,8 @@
+#pragma once 
 #include "Button.h" // Own header file
 #include <SFML/Graphics.hpp>
 #include <filesystem> // Finding font file
 #include <iostream> // Error messages
-#pragma once 
 
 Button::Button(const sf::Vector2f& pos, const sf::Vector2f& b_size, const sf::Color& b_color, const unsigned int& t_size, const std::string& t_text, const sf::Color& t_color)
 {

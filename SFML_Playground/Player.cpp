@@ -14,7 +14,8 @@ void Player::update(const float& deltaTime)
 {
 	InputWidget::update(deltaTime); // Call parent function to set necessary values and call base functions
 	if (!gameInstance.getIsPaused()) calcMovement(); // Only check for movement input when GameInstance is not paused
-	sf::Event event; // Collect / Receive user events
+	// Collect / Receive user events
+	sf::Event event;
 	while (window->pollEvent(event) && gameInstance.getGameState() != QUIT)
 	{
 		// If close event got called, close window and break input wait loop
@@ -32,8 +33,8 @@ void Player::update(const float& deltaTime)
 
 void Player::calcMovement()
 {
-	float x = 0.0f; // X Movement per frame
-	float y = 0.0f; // Y Movement per frame
+	float x = 0.0f; // X-Movement per frame
+	float y = 0.0f; // Y-Movement per frame
 	float multiplier = 1.0f; // Speed multiplier
 	// Multiplier for sprinting, damaged etc.
 	if (sf::Keyboard::isKeyPressed(KEY_LSHIFT)) multiplier *= 2.0f;
