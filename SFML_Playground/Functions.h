@@ -18,3 +18,8 @@ inline float getLookAtRot(const sf::Vector2f& start, const sf::Vector2f& target)
 	float angle = std::atan2(dir.y, dir.x) * 180.0f / static_cast<float>(pi);
 	return angle;
 }
+
+inline sf::Vector2f smoothCamera(const sf::Vector2f& currentCenter, const sf::Vector2f& targetCenter, float factor)
+{
+	return currentCenter + factor * (targetCenter - currentCenter);
+}

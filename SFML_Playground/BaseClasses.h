@@ -30,6 +30,7 @@ private:
 	GI_Arena& operator=(const GI_Arena&) = delete;
 
 	sf::RenderWindow* window = nullptr;
+	sf::View* view = nullptr;
 	sf::RenderStates states;
 
 	E_GameState gameState = MENU_SCREEN;
@@ -49,12 +50,13 @@ public:
 	void updateScreen();
 	void tick(const float&);
 	bool setActiveWidget(InputWidget*);
-	InputWidget* getActiveWidget() { return activeWidget; }
 	sf::RenderWindow* getWindow() const { return window; }
+	sf::View* getView() const { return view; }
+	InputWidget* getActiveWidget() { return activeWidget; }
 	Player* getPlayer();
 	bool handleEvent(sf::Event*);
 	sf::RenderStates getRenderStates() const { return states; }
-	sf::Vector2f getMousePos() { return static_cast<sf::Vector2f>(sf::Mouse::getPosition()); }
+	sf::Vector2f getMousePos() { return window->mapPixelToCoords(sf::Mouse::getPosition(*window)); }
 	E_GameState getGameState() const { return gameState; }
 	void setGameState(const E_GameState&);
 };
@@ -72,6 +74,8 @@ protected:
 	sf::RenderWindow* window = gameInstance.getWindow();
 	sf::Vector2u windowSize;
 	sf::Vector2f windowCenter;
+	sf::View* view = nullptr;
+	sf::Vector2f viewCenterPos;
 	std::vector<sf::Drawable*> shapes;
 public:
 	WidgetElement() : WidgetElement(nullptr) {};

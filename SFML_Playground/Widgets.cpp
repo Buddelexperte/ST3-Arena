@@ -39,24 +39,26 @@ bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 	{
 		return optionsMenu->isMouseOver(checkForClick);
 	}
+
 	sf::Vector2f mousePos = gameInstance.getMousePos();
-	if (menu_title->isMouseOver(mousePos))
+
+	if (menu_title->isMouseOver())
 	{
 		sf::Color newColor = (menu_title->getColor(true) == sf::Color::White ? sf::Color::Red : sf::Color::White);
 		if (checkForClick) menu_title->setColor(newColor, true);
 		return true;
 	}
-	if (menu_startButton->isMouseOver(mousePos))
+	if (menu_startButton->isMouseOver())
 	{
 		if (checkForClick) gameInstance.setGameState(GAME_LAUNCHING);
 		return true;
 	}
-	if (menu_optionsButton->isMouseOver(mousePos))
+	if (menu_optionsButton->isMouseOver())
 	{
 		if (checkForClick) showOptions(true);
 		return true;
 	}
-	if (menu_quitButton->isMouseOver(mousePos))
+	if (menu_quitButton->isMouseOver())
 	{
 		if (checkForClick) gameInstance.setGameState(QUIT);
 		return true;
@@ -103,7 +105,7 @@ W_Options::W_Options(WidgetElement* parent = nullptr) : InputWidget(parent)
 bool W_Options::isMouseOver(const bool& checkForClick = false)
 {
 	sf::Vector2f mousePos = gameInstance.getMousePos();
-	if (options_return->isMouseOver(mousePos))
+	if (options_return->isMouseOver())
 	{
 		if (checkForClick) parent->construct();
 		return true;
@@ -139,6 +141,16 @@ W_Paused::W_Paused(WidgetElement* parent) : InputWidget(parent)
 	shapes = { pause_title, pause_resumeButton, pause_optionsButton, pause_quitButton };
 }
 
+void W_Paused::update(const float& deltatime)
+{
+	InputWidget::update(deltatime);
+	pause_title->updateViewCenter(viewCenterPos);
+	pause_resumeButton->updateViewCenter(viewCenterPos);
+	pause_optionsButton->updateViewCenter(viewCenterPos);
+	pause_quitButton->updateViewCenter(viewCenterPos);
+
+}
+
 void W_Paused::construct()
 {
 	showOptions(false);
@@ -166,17 +178,17 @@ bool W_Paused::isMouseOver(const bool& checkForClick = false)
 	if (bOptionsOpen) return optionsMenu->isMouseOver(checkForClick);
 
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
-	if (pause_resumeButton->isMouseOver(mousePos))
+	if (pause_resumeButton->isMouseOver())
 	{
 		if (checkForClick) gameInstance.setGameState(IN_GAME);
 		return true;
 	}
-	if (pause_optionsButton->isMouseOver(mousePos))
+	if (pause_optionsButton->isMouseOver())
 	{
 		if (checkForClick) showOptions(true);
 		return true;
 	}
-	if (pause_quitButton->isMouseOver(mousePos))
+	if (pause_quitButton->isMouseOver())
 	{
 		if (checkForClick) gameInstance.setGameState(MENU_SCREEN);
 		return true;
@@ -203,6 +215,15 @@ W_GameOver::W_GameOver(WidgetElement* parent) : InputWidget(parent)
 	shapes = { gameOver_title, gameOver_score, gameOver_quitButton };
 }
 
+void W_GameOver::update(const float& deltatime)
+{
+	InputWidget::update(deltatime);
+	gameOver_title->updateViewCenter(viewCenterPos);
+	gameOver_score->updateViewCenter(viewCenterPos);
+	gameOver_quitButton->updateViewCenter(viewCenterPos);
+
+}
+
 void W_GameOver::changeScore(const int& currScore = 0)
 {
 	gameOver_score->setText("Score: " + std::to_string(currScore));
@@ -211,7 +232,7 @@ void W_GameOver::changeScore(const int& currScore = 0)
 bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 {
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
-	if (gameOver_quitButton->isMouseOver(mousePos))
+	if (gameOver_quitButton->isMouseOver())
 	{
 		gameInstance.setGameState(MENU_SCREEN);
 		return true;
@@ -282,11 +303,14 @@ void W_Gameplay::lose()
 
 void W_Gameplay::update(const float& deltaTime)
 {
+	const bool drawFlashlight = false;
+
 	InputWidget::update(deltaTime);
+	pauseScreen->update(deltaTime);
+	gameOverScreen->update(deltaTime);
 	// Don't update while paused
 	if (gameInstance.getIsPaused()) return;
 
-	flashlightMask.update(deltaTime);
 	if (gameInstance.getGameState() >= GAME_LAUNCHING)
 	{
 		// Update Gameplay objects with respectable params
@@ -294,9 +318,14 @@ void W_Gameplay::update(const float& deltaTime)
 		targetController->windowUpdate();
 		if (healthBar->isFinished()) lose();
 	}
-	for (sf::Drawable* elem : shapes)
+
+	if (drawFlashlight)
 	{
-		flashlightMask.drawOtherScene(elem);
+		flashlightMask.update(deltaTime);
+		for (sf::Drawable* elem : shapes)
+		{
+			flashlightMask.drawOtherScene(elem);
+		}
 	}
 }
 
@@ -334,7 +363,6 @@ bool W_Gameplay::isMouseOver(const bool& checkForClick = false)
 		}
 		return false;
 	}
-	flashlightMask.resetRadius();
 	if (checkForClick)
 	{
 		if (targetController->clickedAny(gameInstance.getMousePos()))

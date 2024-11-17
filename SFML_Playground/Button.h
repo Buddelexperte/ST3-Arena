@@ -15,6 +15,7 @@ class Button : public sf::Drawable
 {
 private:
 	sf::Font font; // Text font
+	sf::Vector2f lastScreenCenter = sf::Vector2f(0.0f, 0.0f);
 public:
 	// shapes
 	sf::RectangleShape B_Box;
@@ -23,6 +24,8 @@ public:
 	Button() : Button({ 0, 0 }, { 0, 0 }, sf::Color::White, 24, "Text", sf::Color::Black) {};
 	Button(const ButtonConstruct& constr) : Button(constr.pos, constr.size, constr.color, constr.fontSize, constr.text, constr.textColor) {};
 	Button(const sf::Vector2f&, const sf::Vector2f&, const sf::Color&, const unsigned int&, const std::string&, const sf::Color&);
+
+	void updateViewCenter(const sf::Vector2f&);
 
 	void setText(const std::string&); // Set the texts content
 	void setColor(const sf::Color&, const bool& = false); // Set the color of the text or the button fill
@@ -34,6 +37,6 @@ public:
 	void setRot(const float& newRot) { B_Box.setRotation(newRot); }
 	float getRot() const { return B_Box.getRotation(); };
 
-	bool isMouseOver(const sf::Vector2f& mousePos) const; // Check if mouse is over button
+	bool isMouseOver() const; // Check if mouse is over button
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };

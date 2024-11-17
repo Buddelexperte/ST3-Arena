@@ -53,6 +53,7 @@ protected:
 	virtual bool input_esc() override;
 public:
 	W_Paused(WidgetElement*);
+	void update(const float& deltatime) override;
 	virtual bool isSubMenuOpen() { return bOptionsOpen; }
 	virtual void construct() override;
 	virtual bool isMouseOver(const bool&) override;
@@ -66,6 +67,7 @@ private:
 	Button* gameOver_quitButton;
 public:
 	W_GameOver(WidgetElement*);
+	void update(const float&) override;
 	void changeScore(const int&);
 	virtual bool isMouseOver(const bool&) override;
 };

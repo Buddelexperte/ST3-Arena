@@ -34,7 +34,7 @@ bool TargetController::isHovering(const sf::Vector2f& mousePos)
 	// Go through all targets with iterator pointing to each
 	for (const std::unique_ptr<Button>& target : targets)
 	{
-		if (target->isMouseOver(mousePos)) return true;
+		if (target->isMouseOver()) return true;
 	}
 	return false; // No button was clicked
 }
@@ -44,7 +44,7 @@ bool TargetController::clickedAny(const sf::Vector2f& mousePos)
 	// Go through all targets with iterator pointing to each
 	for (auto it = targets.begin(); it != targets.end(); ++it)
 	{
-		if ((*it)->isMouseOver(mousePos))
+		if ((*it)->isMouseOver())
 		{
 			targets.erase(it); // If one is clicked, remove it from the target list
 			spawnTarget(); // Spawn a new target, using random distribution
