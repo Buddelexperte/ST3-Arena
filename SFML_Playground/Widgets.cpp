@@ -386,19 +386,18 @@ void W_Gameplay::update(const float& deltaTime)
 		InputWidget::update(deltaTime);
 		break;
 	}
-
-	// Don't update gameplay while paused
-	if (gameInstance.getIsPaused()) return;
 	
 	// Gameplay updates
-	if (gameInstance.getGameState() >= GAME_LAUNCHING)
+	if (gameInstance.getGameState() >= GAME_PAUSED)
 	{
 		// Update Gameplay objects with respectable params
 		healthBar->update(deltaTime);
-		targetController->windowUpdate();
-		if (healthBar->isFinished()) lose();
+		if (gameInstance.getGameState() >= GAME_LAUNCHING)
+		{
+			targetController->windowUpdate();
+			if (healthBar->isFinished()) lose();
+		}
 	}
-
 }
 
 bool W_Gameplay::input_esc()

@@ -3,6 +3,8 @@
 void Timer::update(const float& deltaTime)
 {
 	WidgetElement::update(deltaTime);
+	// Don't update gameplay while paused
+	if (gameInstance.getIsPaused()) return;
 	return;
 	currentTime -= deltaTime; // Subtract deltaTime from time left
 	if (currentTime < 0.0f)
