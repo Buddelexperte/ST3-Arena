@@ -19,7 +19,18 @@ inline float getLookAtRot(const sf::Vector2f& start, const sf::Vector2f& target)
 	return angle;
 }
 
-inline sf::Vector2f smoothCamera(const sf::Vector2f& currentCenter, const sf::Vector2f& targetCenter, float factor)
+inline float smoothRot(const float& currentRot, const float& targetRot, float factor)
+{
+	float diff = targetRot - currentRot;
+
+	// Wrap difference to the range [-180, 180] for degrees
+	if (diff > 180.0f) diff -= 360.0f;
+	if (diff < -180.0f) diff += 360.0f;
+
+	return currentRot + factor * diff;
+}
+
+inline sf::Vector2f smoothUV(const sf::Vector2f& currentCenter, const sf::Vector2f& targetCenter, float factor)
 {
 	return currentCenter + factor * (targetCenter - currentCenter);
 }

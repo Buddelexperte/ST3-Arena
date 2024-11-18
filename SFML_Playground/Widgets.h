@@ -12,8 +12,10 @@ private:
 	Button* options_test;
 	Button* options_return;
 protected:
+	void windowUpdate() override;
 	virtual bool input_esc() override;
 public:
+	void construct() override;
 	W_Options(WidgetElement*);
 	virtual bool isMouseOver(const bool&) override;
 };
@@ -31,10 +33,12 @@ private:
 	bool bOptionsOpen = false;
 	void showOptions(const bool&);
 protected:
+	void windowUpdate() override;
 	virtual bool input_esc() override;
 public:
 	W_MainMenu(WidgetElement*);
 	void construct() override;
+	void update(const float&) override;
 	virtual bool isMouseOver(const bool&) override;
 };
 
@@ -50,13 +54,14 @@ private:
 	bool bOptionsOpen = false;
 	void showOptions(const bool&);
 protected:
+	void windowUpdate() override;
 	virtual bool input_esc() override;
 public:
 	W_Paused(WidgetElement*);
-	void update(const float& deltatime) override;
-	virtual bool isSubMenuOpen() { return bOptionsOpen; }
-	virtual void construct() override;
-	virtual bool isMouseOver(const bool&) override;
+	void update(const float&) override;
+	bool isSubMenuOpen() { return bOptionsOpen; }
+	void construct() override;
+	bool isMouseOver(const bool&) override;
 };
 
 class W_GameOver : public InputWidget
@@ -66,8 +71,8 @@ private:
 	Button* gameOver_score;
 	Button* gameOver_quitButton;
 public:
+	void windowUpdate() override;
 	W_GameOver(WidgetElement*);
-	void update(const float&) override;
 	void changeScore(const int&);
 	virtual bool isMouseOver(const bool&) override;
 };
@@ -92,6 +97,7 @@ private:
 	virtual void unpause();
 	void lose();
 protected:
+	void windowUpdate() override;
 	virtual bool input_esc() override;
 public:
 	W_Gameplay(WidgetElement*);

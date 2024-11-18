@@ -1,4 +1,3 @@
-// flashlight.h
 #pragma once
 
 // Standard Libraries
@@ -10,6 +9,7 @@
 
 // Base classes for gameplay
 #include "BaseClasses.h"    
+#include "Functions.h"
 
 // Viewport Widgets
 #include "Widgets.h"

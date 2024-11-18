@@ -27,14 +27,6 @@ Button::Button(const sf::Vector2f& pos, const sf::Vector2f& b_size, const sf::Co
 	T_Text.setPosition({pos.x, pos.y - 6.0f});
 }
 
-void Button::updateViewCenter(const sf::Vector2f& newViewCenter)
-{
-	sf::Vector2f diff = { newViewCenter.x - lastScreenCenter.x, newViewCenter.y - lastScreenCenter.y };
-	addPos(diff);
-	std::cout << "Moved button with diff: " << diff.x << " x , " << diff.y << std::endl;
-	lastScreenCenter = newViewCenter;
-}
-
 bool Button::isMouseOver() const {
 	GI_Arena& gameInstance = GI_Arena::getInstance();
 	sf::RenderWindow* window = gameInstance.getWindow();

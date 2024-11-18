@@ -48,6 +48,7 @@ public:
 	void setIsPaused(const bool& bPause) { bIsGameplayPaused = bPause; }
 	bool getIsPaused() const { return bIsGameplayPaused; }
 	void updateScreen();
+	void setViewCenter(const sf::Vector2f&);
 	void tick(const float&);
 	bool setActiveWidget(InputWidget*);
 	sf::RenderWindow* getWindow() const { return window; }
@@ -74,9 +75,11 @@ protected:
 	sf::RenderWindow* window = gameInstance.getWindow();
 	sf::Vector2u windowSize;
 	sf::Vector2f windowCenter;
+	sf::Vector2f ORIGIN = window->getView().getCenter();
 	sf::View* view = nullptr;
-	sf::Vector2f viewCenterPos;
+	sf::Vector2f viewCenter;
 	std::vector<sf::Drawable*> shapes;
+	virtual void windowUpdate();
 public:
 	WidgetElement() : WidgetElement(nullptr) {};
 	WidgetElement(WidgetElement* parentWidget)
@@ -99,8 +102,7 @@ public:
 	virtual void setScale(const sf::Vector2f&) { return; };
 	virtual sf::Vector2f getScale() { return sf::Vector2f(0.0f, 0.0f); };
 
-	virtual void windowUpdate();
-	virtual void construct() { return; };
+	virtual void construct() { windowUpdate(); };
 	virtual void update(const float& deltaTime) { lastDeltaTime = deltaTime;  windowUpdate(); };
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
@@ -116,8 +118,11 @@ protected:
 	virtual bool onMouseClickR() { return true; };
 	virtual bool onMouseClickM() { return true; };
 	virtual bool input_esc() { return true; };
+	virtual void windowUpdate() { WidgetElement::windowUpdate(); }
 public:
-	InputWidget(WidgetElement* parent) : WidgetElement(parent) {};
+	InputWidget(WidgetElement* parent) : WidgetElement(parent) { };
+	virtual void construct() { WidgetElement::construct(); }
+	virtual void update(const float& deltaTime) { WidgetElement::update(deltaTime); }
 	virtual bool handleInput(sf::Event* eventRef);
 	virtual bool isMouseOver(const bool&) { return false; }
 };
@@ -129,7 +134,7 @@ class Player : public InputWidget
 {
 private:
 	Button* playerModel = nullptr;
-	void calcMovement();
+	void calcMovement(const float&);
 	sf::Vector2f velocity = { 0.0f, 0.0f };
 protected:
 	sf::Keyboard::Key keyboardInput(sf::Event*) override;
@@ -137,6 +142,7 @@ protected:
 public:
 	Player(WidgetElement*);
 	void update(const float&) override;
+	void setPos(const sf::Vector2f&) override;
 	void addPos(const sf::Vector2f&) override;
 	sf::Vector2f getPos() override;
 	void setRot(const float&) override;

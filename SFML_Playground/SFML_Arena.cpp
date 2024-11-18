@@ -12,16 +12,21 @@ GI_Arena::GI_Arena()
 	view = new sf::View(sf::Vector2f(desktop.width / 2.0f, desktop.height / 2.0f), sf::Vector2f(desktop.width, desktop.height)); // Arbitrary position
 	std::cout << "View created." << std::endl;
 	window->setView(*view);
+}
 
+void GI_Arena::setViewCenter(const sf::Vector2f& newCenter)
+{
+	view->setCenter(newCenter);
+	window->setView(*view);
 }
 
 void GI_Arena::tick(const float& deltaTime)
 {
 	sf::Vector2f playerPos = getPlayer()->getPos();
 	if (view->getCenter() != playerPos) {
-		sf::Vector2f newCenter = smoothCamera(view->getCenter(), playerPos, 0.1f); // Smooth camera
-		view->setCenter(newCenter);
-		window->setView(*view);
+		const float cameraSmoothing = 0.001f;
+		sf::Vector2f newCenter = smoothUV(view->getCenter(), playerPos, cameraSmoothing); // Smooth camera
+		setViewCenter(newCenter);
 	}
 
 	activeWidget->update(deltaTime);
@@ -72,7 +77,7 @@ void WidgetElement::windowUpdate()
 	windowCenter = { windowSize.x / 2.0f, windowSize.y / 2.0f };
 	// Everything sf::View related
 	view = gameInstance.getView();
-	viewCenterPos = view->getCenter() - windowCenter;
+	viewCenter = view->getCenter();
 }
 
 void WidgetElement::draw(sf::RenderTarget& target, sf::RenderStates states) const

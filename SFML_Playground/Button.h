@@ -25,8 +25,6 @@ public:
 	Button(const ButtonConstruct& constr) : Button(constr.pos, constr.size, constr.color, constr.fontSize, constr.text, constr.textColor) {};
 	Button(const sf::Vector2f&, const sf::Vector2f&, const sf::Color&, const unsigned int&, const std::string&, const sf::Color&);
 
-	void updateViewCenter(const sf::Vector2f&);
-
 	void setText(const std::string&); // Set the texts content
 	void setColor(const sf::Color&, const bool& = false); // Set the color of the text or the button fill
 	sf::Color getColor(const bool& = false) const; // Get the color of the text or the button fill

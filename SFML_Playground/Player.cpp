@@ -13,7 +13,7 @@ Player::Player(WidgetElement* parent = nullptr) : InputWidget(parent)
 void Player::update(const float& deltaTime)
 {
 	InputWidget::update(deltaTime); // Call parent function to set necessary values and call base functions
-	if (!gameInstance.getIsPaused()) calcMovement(); // Only check for movement input when GameInstance is not paused
+	if (!gameInstance.getIsPaused()) calcMovement(deltaTime); // Only check for movement input when GameInstance is not paused
 	// Collect / Receive user events
 	sf::Event event;
 	while (window->pollEvent(event) && gameInstance.getGameState() != QUIT)
@@ -31,26 +31,32 @@ void Player::update(const float& deltaTime)
 	gameInstance.updateScreen();
 }
 
-void Player::calcMovement()
+void Player::calcMovement(const float& deltaTime)
 {
+	// Constants
+	const float walkingSpeed = 0.2f;
+	const float lerpSmoothness = 0.005f;
+
 	float x = 0.0f; // X-Movement per frame
 	float y = 0.0f; // Y-Movement per frame
 	float multiplier = 1.0f; // Speed multiplier
-	// Multiplier for sprinting, damaged etc.
 	if (sf::Keyboard::isKeyPressed(KEY_LSHIFT)) multiplier *= 2.0f;
 	// Check if each key is currently pressed and modify velocity accordingly
-	if (sf::Keyboard::isKeyPressed(KEY_W)) y -= 1.0f; // Move North
-	if (sf::Keyboard::isKeyPressed(KEY_A)) x -= 1.0f; // Move West
-	if (sf::Keyboard::isKeyPressed(KEY_S)) y += 1.0f; // Move South
-	if (sf::Keyboard::isKeyPressed(KEY_D)) x += 1.0f; // Move East
-	// Add velocity * multiplier to PlayerPosition
-	velocity = { x * multiplier, y * multiplier };
-	addPos(velocity);
-	// Rotate player sprite to current mouse pos on screen
+	if (sf::Keyboard::isKeyPressed(KEY_W)) y -= walkingSpeed; // Move North
+	if (sf::Keyboard::isKeyPressed(KEY_A)) x -= walkingSpeed; // Move West
+	if (sf::Keyboard::isKeyPressed(KEY_S)) y += walkingSpeed; // Move South
+	if (sf::Keyboard::isKeyPressed(KEY_D)) x += walkingSpeed; // Move East
+	// Position
 	sf::Vector2f playerPos = getPos();
-	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
+	sf::Vector2f targetVelo = { x * multiplier, y * multiplier };
+	velocity = smoothUV(velocity, targetVelo, lerpSmoothness);
+	sf::Vector2f targetPos = playerPos + velocity;
+	addPos(velocity);
+	// Rotation
+	playerPos = getPos();
+	sf::Vector2f mousePos = gameInstance.getMousePos();
 	float newRot = getLookAtRot(playerPos, mousePos);
-	setRot(newRot);
+	setRot(smoothRot(getRot(), newRot, lerpSmoothness));
 }
 // Override class default keyboard Input to check for specific cases
 sf::Keyboard::Key Player::keyboardInput(sf::Event* eventRef)
@@ -84,6 +90,11 @@ sf::Mouse::Button Player::mouseInput(sf::Event* eventRef)
 }
 
 // Get und Set Attribute
+
+void Player::setPos(const sf::Vector2f& newPos)
+{
+	playerModel->setPos(newPos);
+}
 
 void Player::addPos(const sf::Vector2f& x)
 {
