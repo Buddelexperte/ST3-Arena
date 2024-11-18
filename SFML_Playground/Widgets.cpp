@@ -295,7 +295,7 @@ W_Gameplay::W_Gameplay(WidgetElement* parent) : InputWidget(parent)
 	pauseScreen = new W_Paused(this);
 	gameOverScreen = new W_GameOver(this);
 
-	TestBox = new Button(windowCenter + sf::Vector2f(-1000.0f, 0.0f), sf::Vector2f(500.0f, 500.0f), sf::Color::White, 12, "TEST", sf::Color::Black);
+	TestBox = new Button(windowCenter + sf::Vector2f(-1200.0f, 800.0f), sf::Vector2f(500.0f, 500.0f), sf::Color::White, 12, "TEST", sf::Color::Black);
 
 	targetController = new TargetController();
 	healthBar = new Timer(10.0f, static_cast<float>(windowSize.x), 100.0f, sf::Vector2f(windowCenter.x, 0.0f));

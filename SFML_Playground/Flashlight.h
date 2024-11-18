@@ -28,6 +28,7 @@ private:
         }
     )";
 
+
     sf::Shader flashlightShader;
     sf::RenderTexture sceneRenderTexture;
     sf::Sprite sceneSprite;
@@ -38,7 +39,7 @@ private:
     const sf::Vector2f SHADER_SPRITE_RATIO{ 1.4f / 320.0f, 1.4f / 320.0f };
 
     sf::Texture flashlightTexture;
-    sf::Sprite* flashlightSprite = new sf::Sprite;
+    sf::Sprite flashlightSprite;
     
     Player* player = nullptr;
 
@@ -46,11 +47,11 @@ private:
 public:
     Flashlight() : WidgetElement()
     {
-        flashlightSprite->setOrigin(512.0f / 2.0f, 512.0f / 2.0f);
-        flashlightSprite->setScale(SPRITE_SCALE);
-        sf::Color color = flashlightSprite->getColor();
+        flashlightSprite.setOrigin(512.0f / 2.0f, 512.0f / 2.0f);
+        flashlightSprite.setScale(SPRITE_SCALE);
+        sf::Color color = flashlightSprite.getColor();
         color.a = 128;
-        flashlightSprite->setColor(color);
+        flashlightSprite.setColor(color);
 
         if (!flashlightShader.loadFromMemory(flashlightShaderCode, sf::Shader::Fragment))
         {
@@ -76,38 +77,61 @@ public:
 
         sceneSprite.setTexture(sceneRenderTexture.getTexture());
 
-        shapes = { &sceneSprite, flashlightSprite };
+        shapes = { &sceneSprite, &flashlightSprite };
 
     }
 
     virtual void construct() override { return; }
 
-    virtual void update(const float& deltaTime) override
+    void update(const float& deltaTime) override
     {
         WidgetElement::update(deltaTime);
         player = gameInstance.getPlayer();
-        // Flashlight Movement and pic by pic
+
+        // Update flashlight texture
         static int steps = 0;
-        if (++steps % 60 == 0) {
-            int textureIndex = steps % textures.size();  // Safely index within the bounds of textures
-            flashlightTexture = textures[textureIndex];  // Set the texture to the sprite
-            flashlightSprite->setTexture(flashlightTexture);
+        if (++steps % 100 == 0) {
+            int textureIndex = steps % textures.size();
+            flashlightTexture = textures[textureIndex];
+            flashlightSprite.setTexture(flashlightTexture);
         }
+
+        // Update flashlight position and rotation
         sf::Vector2f newPos = player->getPos();
+        if (flashlightSprite.getPosition() != newPos) {
+            flashlightSprite.setPosition(newPos);
+        }
+
         float newRot = player->getRot();
-        flashlightSprite->setPosition(newPos);
-        flashlightSprite->setRotation(newRot);
-        // Clear the render texture with the black color
-        sceneRenderTexture.clear(sf::Color::Black);
-        // Get mouse position and set shader uniforms
-        flashlightShader.setUniform("lightPos", newPos);
+        if (flashlightSprite.getRotation() != newRot) {
+            flashlightSprite.setRotation(newRot);
+        }
+
+        // Transform player's world position to view-space coordinates for shader
+        sf::Vector2f viewOffset = view->getCenter() - (view->getSize() / 2.0f);
+        sf::Vector2f lightPos = newPos - viewOffset;
+
+        // Pass transformed light position and viewport size to the shader
+        flashlightShader.setUniform("lightPos", lightPos);
         flashlightShader.setUniform("radius", radius);
-        flashlightShader.setUniform("viewportHeight", float(windowSize.y)); // Pass the viewport height
+        flashlightShader.setUniform("viewportHeight", view->getSize().y);
+
+        // Set the render texture's view to match the player's view
+        sceneRenderTexture.setView(*view);
+
+        // Render flashlight effect
+        sceneRenderTexture.clear(sf::Color::Black);
+        sceneRenderTexture.display();
+
+        // Ensure the render texture sprite is positioned properly
+        sceneSprite.setPosition(view->getCenter() - (view->getSize() / 2.0f));
     }
+
+
 
     sf::Vector2f getPos() const 
     {
-        return flashlightSprite->getPosition();
+        return flashlightSprite.getPosition();
     }
 
     void drawOtherScene(sf::Drawable* drawable)
@@ -126,7 +150,7 @@ public:
         radius = newRadius;
         float radiusRatio = (newRadius / SHADER_RADIUS);
         sf::Vector2f newScale = { (SPRITE_SCALE * radiusRatio) };
-        flashlightSprite->setScale(newScale);
+        flashlightSprite.setScale(newScale);
     }
     void resetRadius() { setRadius(SHADER_RADIUS); }
 };
