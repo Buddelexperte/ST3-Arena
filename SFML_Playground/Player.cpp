@@ -36,7 +36,7 @@ void Player::calcMovement(const float& deltaTime)
 	// Constants
 	const float walkingSpeed = 0.2f;
 	const float lerpSmoothness = 0.005f;
-
+	// Check movement inputs (not handled by events but sf::isKeyPressed)
 	float x = 0.0f; // X-Movement per frame
 	float y = 0.0f; // Y-Movement per frame
 	float multiplier = 1.0f; // Speed multiplier
