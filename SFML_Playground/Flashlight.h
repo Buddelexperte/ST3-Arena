@@ -127,8 +127,6 @@ public:
         sceneSprite.setPosition(view->getCenter() - (view->getSize() / 2.0f));
     }
 
-
-
     sf::Vector2f getPos() const 
     {
         return flashlightSprite.getPosition();
