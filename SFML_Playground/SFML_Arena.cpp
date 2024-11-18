@@ -25,7 +25,7 @@ void GI_Arena::tick(const float& deltaTime)
 	sf::Vector2f playerPos = getPlayer()->getPos();
 	if (view->getCenter() != playerPos) {
 		const float cameraSmoothing = 0.001f;
-		sf::Vector2f newCenter = smoothUV(view->getCenter(), playerPos, cameraSmoothing); // Smooth camera
+		sf::Vector2f newCenter = lerp(view->getCenter(), playerPos, cameraSmoothing); // Smooth camera
 		setViewCenter(newCenter);
 	}
 
@@ -125,25 +125,22 @@ sf::Keyboard::Key InputWidget::keyboardInput(sf::Event* eventRef)
 sf::Mouse::Button InputWidget::mouseInput(sf::Event* eventRef)
 {
 	sf::Mouse::Button mouseInput = eventRef->mouseButton.button;
-	const bool checkForClick = false;
-	if (isMouseOver(checkForClick))
+	switch (mouseInput)
 	{
-		switch (mouseInput)
-		{
-		case sf::Mouse::Left:
-			onMouseClickL();
-			break;
-		case sf::Mouse::Right:
-			onMouseClickR();
-			break;
-		case sf::Mouse::Middle:
-			onMouseClickR();
-			break;
-		default:
-			break;
-		}
-		return mouseInput;
+	case sf::Mouse::Left:
+		onMouseClickL();
+		break;
+	case sf::Mouse::Right:
+		onMouseClickR();
+		break;
+	case sf::Mouse::Middle:
+		onMouseClickR();
+		break;
+	default:
+		break;
 	}
+	return mouseInput;
+	
 	return sf::Mouse::ButtonCount;
 }
 

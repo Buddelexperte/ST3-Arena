@@ -49,14 +49,14 @@ void Player::calcMovement(const float& deltaTime)
 	// Position
 	sf::Vector2f playerPos = getPos();
 	sf::Vector2f targetVelo = { x * multiplier, y * multiplier };
-	velocity = smoothUV(velocity, targetVelo, lerpSmoothness);
+	velocity = lerp(velocity, targetVelo, lerpSmoothness);
 	sf::Vector2f targetPos = playerPos + velocity;
 	addPos(velocity);
 	// Rotation
 	playerPos = getPos();
 	sf::Vector2f mousePos = gameInstance.getMousePos();
 	float newRot = getLookAtRot(playerPos, mousePos);
-	setRot(smoothRot(getRot(), newRot, lerpSmoothness));
+	setRot(lerp(getRot(), newRot, lerpSmoothness));
 }
 // Override class default keyboard Input to check for specific cases
 sf::Keyboard::Key Player::keyboardInput(sf::Event* eventRef)
@@ -80,7 +80,7 @@ sf::Mouse::Button Player::mouseInput(sf::Event* eventRef)
 	const bool checkForClick = false;
 	switch (mouseInput)
 	{
-	case sf::Mouse::Left: // LMB goes through gameInstance to handle widget inputs
+	case sf::Mouse::Left: case sf::Mouse::Right: // LMB goes through gameInstance to handle widget inputs
 		gameInstance.handleEvent(eventRef);
 		break;
 	default:

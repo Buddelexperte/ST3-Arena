@@ -1,9 +1,11 @@
 #pragma once
 #include "SFML_Arena.h"
 #include "TargetController.h" // TargetSpawner and Handler
-#include "Timer.h" // Timer class for game logic
-#include "Flashlight.h"
+#include "Flashlight.h" // Timer class for game logic
 #include "Button.h" // Button class for UI
+
+// Forward declarations
+class Timer;
 
 class W_Options : public InputWidget
 {
@@ -59,7 +61,7 @@ protected:
 public:
 	W_Paused(WidgetElement*);
 	void update(const float&) override;
-	bool isSubMenuOpen() { return bOptionsOpen; }
+	bool isSubMenuOpen() const { return bOptionsOpen; }
 	void construct() override;
 	bool isMouseOver(const bool&) override;
 };
@@ -92,14 +94,15 @@ private:
 	W_Paused* pauseScreen = nullptr;
 	W_GameOver* gameOverScreen = nullptr;
 
-	Flashlight flashlightMask;
+	Flashlight flashlightShader;
 
 	virtual void pause();
 	virtual void unpause();
 	void lose();
 protected:
 	void windowUpdate() override;
-	virtual bool input_esc() override;
+	bool input_esc() override;
+	bool onMouseClickR() override;
 public:
 	W_Gameplay(WidgetElement*);
 	void construct() override;

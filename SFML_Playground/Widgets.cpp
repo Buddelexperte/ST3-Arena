@@ -298,8 +298,8 @@ W_Gameplay::W_Gameplay(WidgetElement* parent) : InputWidget(parent)
 	TestBox = new Button(windowCenter + sf::Vector2f(-1200.0f, 800.0f), sf::Vector2f(500.0f, 500.0f), sf::Color::White, 12, "TEST", sf::Color::Black);
 
 	targetController = new TargetController();
-	healthBar = new Timer(10.0f, static_cast<float>(windowSize.x), 100.0f, sf::Vector2f(windowCenter.x, 0.0f));
-	shapes = { targetController, TestBox, &flashlightMask, player, healthBar };
+	healthBar = new Timer(10.0f, static_cast<float>(windowSize.x), 100.0f);
+	shapes = { targetController, TestBox, &flashlightShader, player, healthBar };
 
 }
 
@@ -343,7 +343,7 @@ void W_Gameplay::unpause()
 		return;
 	}
 	gameInstance.setIsPaused(false);
-	shapes = { targetController, TestBox, &flashlightMask, player, healthBar };
+	shapes = { targetController, TestBox, &flashlightShader, player, healthBar };
 	gameInstance.setGameState(IN_GAME);
 }
 
@@ -364,21 +364,33 @@ void W_Gameplay::update(const float& deltaTime)
 	frame++;
 	const bool drawFlashlight = true;
 
-	InputWidget::update(deltaTime);
-	pauseScreen->update(deltaTime);
-	gameOverScreen->update(deltaTime);
+	// Flashlight update
 	if (drawFlashlight)
 	{
-		flashlightMask.update(deltaTime);
+		flashlightShader.update(deltaTime);
 		for (sf::Drawable* elem : shapes)
 		{
-			flashlightMask.drawOtherScene(elem);
+			flashlightShader.drawOtherScene(elem);
 		}
+	}
+
+	switch (gameInstance.getGameState())
+	{
+	case GAME_PAUSED:
+		pauseScreen->update(deltaTime);
+		break;
+	case GAME_OVER:
+		gameOverScreen->update(deltaTime);
+		break;
+	default:
+		InputWidget::update(deltaTime);
+		break;
 	}
 
 	// Don't update gameplay while paused
 	if (gameInstance.getIsPaused()) return;
-
+	
+	// Gameplay updates
 	if (gameInstance.getGameState() >= GAME_LAUNCHING)
 	{
 		// Update Gameplay objects with respectable params
@@ -403,6 +415,12 @@ bool W_Gameplay::input_esc()
 		gameInstance.setGameState(MENU_SCREEN);
 		break;
 	}
+	return true;
+}
+
+bool W_Gameplay::onMouseClickR()
+{
+	flashlightShader.toggleMaskMode();
 	return true;
 }
 

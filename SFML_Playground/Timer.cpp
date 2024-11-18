@@ -2,6 +2,7 @@
 
 void Timer::update(const float& deltaTime)
 {
+	WidgetElement::update(deltaTime);
 	return;
 	currentTime -= deltaTime; // Subtract deltaTime from time left
 	if (currentTime < 0.0f)
@@ -11,6 +12,12 @@ void Timer::update(const float& deltaTime)
 	float timeRatio = (currentTime / maxTime); // Calculate ratio from timeLeft to maxTime for progress visuality
 	timerBar.setFillColor(timeRatio < 0.33f ? sf::Color::Red : sf::Color::White);
 	timerBar.setSize(sf::Vector2f(barWidth * timeRatio, barHeight)); //
+}
+
+void Timer::windowUpdate()
+{
+	WidgetElement::windowUpdate();
+	timerBar.setPosition(viewCenter + sf::Vector2f(0.0f, windowSize.y / -2.0f));
 }
 
 void Timer::draw(sf::RenderTarget& target, sf::RenderStates states) const 

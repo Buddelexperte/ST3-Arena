@@ -19,7 +19,7 @@ inline float getLookAtRot(const sf::Vector2f& start, const sf::Vector2f& target)
 	return angle;
 }
 
-inline float smoothRot(const float& currentRot, const float& targetRot, float factor)
+inline float lerp(const float& currentRot, const float& targetRot, float factor)
 {
 	float diff = targetRot - currentRot;
 
@@ -30,7 +30,11 @@ inline float smoothRot(const float& currentRot, const float& targetRot, float fa
 	return currentRot + factor * diff;
 }
 
-inline sf::Vector2f smoothUV(const sf::Vector2f& currentCenter, const sf::Vector2f& targetCenter, float factor)
+inline sf::Vector2f lerp(const sf::Vector2f& currentCenter, const sf::Vector2f& targetCenter, float factor)
 {
 	return currentCenter + factor * (targetCenter - currentCenter);
+}
+
+constexpr float degreesToRadians(float degrees) {
+	return degrees * static_cast<float>(pi) / 180.0f;
 }

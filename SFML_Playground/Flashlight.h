@@ -4,7 +4,7 @@
 class Flashlight : public WidgetElement
 {
 private:
-    const std::string flashlightShaderCode = R"(
+    const std::string circleMaskShader = R"(
         uniform vec2 lightPos;
         uniform float radius;
         uniform float viewportHeight;
@@ -28,7 +28,43 @@ private:
         }
     )";
 
-    sf::Shader flashlightShader;
+    const std::string coneMaskShader = R"(
+        uniform vec2 lightPos;       // Position of the light source (player)
+        uniform vec2 direction;      // Direction of the cone (normalized)
+        uniform float radius;        // Maximum radius of the cone
+        uniform float angle;         // Half-angle of the cone in radians
+        uniform float viewportHeight; // Height of the viewport for Y-axis flipping
+
+        void main() {
+            vec2 pos = gl_FragCoord.xy;
+            float adjustedY = viewportHeight - pos.y; // Flip Y coordinate
+            vec2 adjustedPos = vec2(pos.x, adjustedY);
+
+            vec2 toPixel = adjustedPos - lightPos;
+            float dist = length(toPixel);
+
+            // Default to fully black background
+            vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
+
+            // Check if within cone and radius
+            if (dist < radius) {
+                vec2 toPixelNorm = normalize(toPixel); // Normalize the direction to this pixel
+                float dotProduct = dot(toPixelNorm, direction);
+
+                // Check if within the cone angle
+                if (dotProduct > cos(angle)) {
+                    float alpha = smoothstep(radius, radius * 0.7, dist); // Creates a soft edge
+                    color = vec4(0.0, 0.0, 0.0, 1.0 - alpha); // Black with transparency to reveal the scene
+                }
+            }
+
+            gl_FragColor = color; // Output the final color
+        }
+
+    )";
+
+    sf::Shader flashlightShader_Circle;
+    sf::Shader flashlightShader_Cone;
     sf::RenderTexture sceneRenderTexture;
     sf::Sprite sceneSprite;
 
@@ -43,18 +79,23 @@ private:
     Player* player = nullptr;
 
     std::vector<sf::Texture> textures = {};
+
+    bool bUseCone = false;
 public:
     Flashlight() : WidgetElement()
     {
         flashlightSprite.setOrigin(512.0f / 2.0f, 512.0f / 2.0f);
-        flashlightSprite.setScale(SPRITE_SCALE);
         sf::Color color = flashlightSprite.getColor();
-        color.a = 128;
+        color.a = 50;
         flashlightSprite.setColor(color);
 
-        if (!flashlightShader.loadFromMemory(flashlightShaderCode, sf::Shader::Fragment))
+        if (!flashlightShader_Circle.loadFromMemory(circleMaskShader, sf::Shader::Fragment))
         {
-            throw std::runtime_error("Failed to load flashlight shader.");
+            throw std::runtime_error("Failed to load flashlight Circle shader.");
+        }
+        if (!flashlightShader_Cone.loadFromMemory(coneMaskShader, sf::Shader::Fragment))
+        {
+            throw std::runtime_error("Failed to load flashlight Cone shader.");
         }
 
         for (int i = 52; i <= 60; i++)
@@ -76,7 +117,7 @@ public:
 
         sceneSprite.setTexture(sceneRenderTexture.getTexture());
 
-        shapes = { &sceneSprite, &flashlightSprite };
+        shapes = { &sceneSprite };
 
     }
 
@@ -95,14 +136,17 @@ public:
             flashlightSprite.setTexture(flashlightTexture);
         }
 
+        if (gameInstance.getIsPaused()) return;
+
         // Update flashlight position and rotation
         sf::Vector2f newPos = player->getPos();
         if (flashlightSprite.getPosition() != newPos) {
             flashlightSprite.setPosition(newPos);
         }
 
-        float newRot = player->getRot();
-        if (flashlightSprite.getRotation() != newRot) {
+        float newRot = getLookAtRot(player->getPos(), gameInstance.getMousePos());
+        if (flashlightSprite.getRotation() != newRot && false)
+        {
             flashlightSprite.setRotation(newRot);
         }
 
@@ -110,10 +154,34 @@ public:
         sf::Vector2f viewOffset = view->getCenter() - (view->getSize() / 2.0f);
         sf::Vector2f lightPos = newPos - viewOffset;
 
-        // Pass transformed light position and viewport size to the shader
-        flashlightShader.setUniform("lightPos", lightPos);
-        flashlightShader.setUniform("radius", radius);
-        flashlightShader.setUniform("viewportHeight", view->getSize().y);
+        // Calculate direction vector to mouse
+        sf::Vector2i mousePosition = sf::Mouse::getPosition(*window); // Mouse in window coordinates
+        sf::Vector2f mouseWorldPosition = window->mapPixelToCoords(mousePosition, *view); // Transform to world coords
+        sf::Vector2f mouseDir = mouseWorldPosition - newPos;
+
+        // Normalize direction vector
+        if (mouseDir != sf::Vector2f(0, 0)) {
+            mouseDir /= std::sqrt(mouseDir.x * mouseDir.x + mouseDir.y * mouseDir.y);
+        }
+
+        if (bUseCone)
+        {
+            flashlightSprite.setScale(SPRITE_SCALE * 2.0f);
+            // Pass uniforms to the shader
+            flashlightShader_Cone.setUniform("lightPos", lightPos);
+            flashlightShader_Cone.setUniform("direction", mouseDir);
+            flashlightShader_Cone.setUniform("radius", radius * 2.0f);
+            flashlightShader_Cone.setUniform("angle", degreesToRadians(25.0f)); // 40° cone (20° half-angle)
+            flashlightShader_Cone.setUniform("viewportHeight", view->getSize().y);
+        }
+        else
+        {
+            flashlightSprite.setScale(SPRITE_SCALE);
+            // Pass transformed light position and viewport size to the shader
+            flashlightShader_Circle.setUniform("lightPos", lightPos);
+            flashlightShader_Circle.setUniform("radius", radius);
+            flashlightShader_Circle.setUniform("viewportHeight", view->getSize().y);
+        }
 
         // Set the render texture's view to match the player's view
         sceneRenderTexture.setView(*view);
@@ -124,6 +192,18 @@ public:
 
         // Ensure the render texture sprite is positioned properly
         sceneSprite.setPosition(view->getCenter() - (view->getSize() / 2.0f));
+        return;
+
+        
+    }
+
+    void setMaskMode(const bool& bCone = false)
+    {
+        bUseCone = bCone;
+    }
+    void toggleMaskMode()
+    {
+        bUseCone = !bUseCone;
     }
 
     sf::Vector2f getPos() const 
@@ -135,9 +215,11 @@ public:
     {
         // Draw your scene here (make sure to render the actual scene)
         sceneRenderTexture.draw(*drawable);
+        sceneRenderTexture.draw(flashlightSprite);
 
         // Use the shader to draw the flashlight effect
-        sceneRenderTexture.draw(sceneSprite, &flashlightShader);
+        sf::Shader* currShader = (bUseCone ? &flashlightShader_Cone : &flashlightShader_Circle);
+        sceneRenderTexture.draw(sceneSprite, currShader);
 
         sceneRenderTexture.display(); // Update the render texture
     }

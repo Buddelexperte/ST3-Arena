@@ -10,6 +10,7 @@
 // Base classes for gameplay
 #include "BaseClasses.h"    
 #include "Functions.h"
+#include "Timer.h"
 
 // Viewport Widgets
 #include "Widgets.h"

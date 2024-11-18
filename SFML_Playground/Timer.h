@@ -1,7 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "SFML_Arena.h"
 
-class Timer : public sf::Drawable
+class Timer : public WidgetElement
 {
 private:
     sf::RectangleShape timerBar;
@@ -10,16 +11,17 @@ private:
     float barWidth; // Length of timerBar
     float barHeight; // Height of timerBar
 public:
-    Timer(float maxTime, float barWidth, float barHeight, const sf::Vector2f& position, const sf::Color& fillColor = sf::Color::White)
-        : maxTime(maxTime), currentTime(maxTime), barWidth(barWidth), barHeight(barHeight)
+    Timer(float maxTime, float barWidth, float barHeight, const sf::Color& fillColor = sf::Color::White)
+        : maxTime(maxTime), currentTime(maxTime), barWidth(barWidth), barHeight(barHeight), WidgetElement()
     {
         timerBar.setSize(sf::Vector2f(barWidth, barHeight));
         timerBar.setFillColor(fillColor);
-        timerBar.setPosition(position);
+        timerBar.setPosition(sf::Vector2f(viewCenter.x, 0.0f));
         timerBar.setOrigin(barWidth / 2.0f, barHeight / 2.0f); // Center timerBar on viewport
     }
 
-    void update(const float&); // update timeLeft using deltaTime
+    void update(const float&) override; // update timeLeft using deltaTime
+    void windowUpdate() override;
     float getCurrentTime() const; // get TimeLeft
     void setCurrentTime(const float&); // set MaxTime
     float getMaxTime() const; // get MaxTime
