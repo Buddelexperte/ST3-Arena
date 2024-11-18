@@ -28,7 +28,6 @@ private:
         }
     )";
 
-
     sf::Shader flashlightShader;
     sf::RenderTexture sceneRenderTexture;
     sf::Sprite sceneSprite;
