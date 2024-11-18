@@ -41,10 +41,11 @@ private:
     sf::Sprite* flashlightSprite = new sf::Sprite;
     
     Player* player = nullptr;
+
+    std::vector<sf::Texture> textures = {};
 public:
     Flashlight() : WidgetElement()
     {
-        windowUpdate();
         flashlightSprite->setOrigin(512.0f / 2.0f, 512.0f / 2.0f);
         flashlightSprite->setScale(SPRITE_SCALE);
         sf::Color color = flashlightSprite->getColor();
@@ -56,6 +57,17 @@ public:
             throw std::runtime_error("Failed to load flashlight shader.");
         }
 
+        for (int i = 52; i <= 60; i++)
+        {
+            sf::Texture newTexture;
+            std::string texturePath = "../Content/Textures/512x512 textures (" + std::to_string(i) + ").png";
+            if (!newTexture.loadFromFile(texturePath)) {
+                std::cerr << "Failed to load texture: " << texturePath << std::endl;
+                continue;
+            }
+            textures.push_back(newTexture);
+        }
+
         // Create the render texture with the window size
         if (!sceneRenderTexture.create(windowSize.x, windowSize.y))
         {
@@ -65,35 +77,26 @@ public:
         sceneSprite.setTexture(sceneRenderTexture.getTexture());
 
         shapes = { &sceneSprite, flashlightSprite };
+
     }
 
     virtual void construct() override { return; }
 
     virtual void update(const float& deltaTime) override
     {
-        windowUpdate();
+        WidgetElement::update(deltaTime);
         player = gameInstance.getPlayer();
         // Flashlight Movement and pic by pic
-        static int imgN = 51;
         static int steps = 0;
-        if (++steps % 10 == 0)
-        {
-            imgN++;
-            if (imgN > 60) imgN = 51;
+        if (++steps % 60 == 0) {
+            int textureIndex = steps % textures.size();  // Safely index within the bounds of textures
+            flashlightTexture = textures[textureIndex];  // Set the texture to the sprite
+            flashlightSprite->setTexture(flashlightTexture);
         }
-
-        if (!flashlightTexture.loadFromFile("../Content/Textures/512x512 textures (" + std::to_string(imgN) + ").png")) {
-            std::cerr << "Error loading image.png" << std::endl;
-            return; // Exit if the image can't be loaded
-        }
-
-        flashlightSprite->setTexture(flashlightTexture);
-        // sf::Vector2f newPos = static_cast<sf::Vector2f>(sf::Mouse::getPosition()); Mouse based position
         sf::Vector2f newPos = player->getPos();
         float newRot = player->getRot();
-        flashlightSprite->setPosition(player->getPos());
-        flashlightSprite->setRotation(player->getRot());
-
+        flashlightSprite->setPosition(newPos);
+        flashlightSprite->setRotation(newRot);
         // Clear the render texture with the black color
         sceneRenderTexture.clear(sf::Color::Black);
         // Get mouse position and set shader uniforms

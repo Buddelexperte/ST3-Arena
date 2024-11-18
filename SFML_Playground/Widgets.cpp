@@ -295,9 +295,12 @@ W_Gameplay::W_Gameplay(WidgetElement* parent) : InputWidget(parent)
 	pauseScreen = new W_Paused(this);
 	gameOverScreen = new W_GameOver(this);
 
+	TestBox = new Button(windowCenter + sf::Vector2f(-1000.0f, 0.0f), sf::Vector2f(500.0f, 500.0f), sf::Color::White, 12, "TEST", sf::Color::Black);
+
 	targetController = new TargetController();
 	healthBar = new Timer(10.0f, static_cast<float>(windowSize.x), 100.0f, sf::Vector2f(windowCenter.x, 0.0f));
-	shapes = { targetController, &flashlightMask, player, healthBar };
+	shapes = { targetController, TestBox, &flashlightMask, player, healthBar };
+
 }
 
 void W_Gameplay::construct()
@@ -340,7 +343,7 @@ void W_Gameplay::unpause()
 		return;
 	}
 	gameInstance.setIsPaused(false);
-	shapes = { targetController, &flashlightMask, player, healthBar };
+	shapes = { targetController, TestBox, &flashlightMask, player, healthBar };
 	gameInstance.setGameState(IN_GAME);
 }
 
@@ -357,12 +360,23 @@ void W_Gameplay::lose()
 
 void W_Gameplay::update(const float& deltaTime)
 {
-	const bool drawFlashlight = false;
+	static int frame = 0;
+	frame++;
+	const bool drawFlashlight = true;
 
 	InputWidget::update(deltaTime);
 	pauseScreen->update(deltaTime);
 	gameOverScreen->update(deltaTime);
-	// Don't update while paused
+	if (drawFlashlight)
+	{
+		flashlightMask.update(deltaTime);
+		for (sf::Drawable* elem : shapes)
+		{
+			flashlightMask.drawOtherScene(elem);
+		}
+	}
+
+	// Don't update gameplay while paused
 	if (gameInstance.getIsPaused()) return;
 
 	if (gameInstance.getGameState() >= GAME_LAUNCHING)
@@ -373,14 +387,6 @@ void W_Gameplay::update(const float& deltaTime)
 		if (healthBar->isFinished()) lose();
 	}
 
-	if (drawFlashlight)
-	{
-		flashlightMask.update(deltaTime);
-		for (sf::Drawable* elem : shapes)
-		{
-			flashlightMask.drawOtherScene(elem);
-		}
-	}
 }
 
 bool W_Gameplay::input_esc()
