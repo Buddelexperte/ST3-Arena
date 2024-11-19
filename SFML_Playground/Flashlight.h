@@ -115,10 +115,11 @@ public:
             throw std::runtime_error("Failed to create scene render texture.");
         }
 
+        sceneRenderTexture.setSmooth(false);
+
         sceneSprite.setTexture(sceneRenderTexture.getTexture());
 
         shapes = { &sceneSprite };
-
     }
 
     virtual void construct() override { return; }
@@ -132,37 +133,57 @@ public:
         static int steps = 0;
         if (++steps % 100 == 0) {
             int textureIndex = steps % textures.size();
-            flashlightTexture = textures[textureIndex];
-            flashlightSprite.setTexture(flashlightTexture);
+            static int lastTextureIndex = -1; // Track last assigned texture index
+            if (textureIndex != lastTextureIndex) {
+                flashlightTexture = textures[textureIndex];
+                flashlightSprite.setTexture(flashlightTexture);
+                lastTextureIndex = textureIndex;
+            }
         }
-
-        if (gameInstance.getIsPaused()) return;
 
         // Update flashlight position and rotation
+        static sf::Vector2f lastPos;
+        static float lastRot;
         sf::Vector2f newPos = player->getPos();
-        if (flashlightSprite.getPosition() != newPos) {
+        if (newPos != lastPos) {
             flashlightSprite.setPosition(newPos);
+            lastPos = newPos;
         }
 
-        float newRot = getLookAtRot(player->getPos(), gameInstance.getMousePos());
-        if (flashlightSprite.getRotation() != newRot && false)
+        if (!(gameInstance.getIsPaused() || bUseCone))
         {
-            flashlightSprite.setRotation(newRot);
+            float newRot = getLookAtRot(newPos, gameInstance.getMousePos());
+            if (newRot != lastRot) {
+                flashlightSprite.setRotation(newRot);
+                lastRot = newRot;
+            }
         }
 
         // Transform player's world position to view-space coordinates for shader
         sf::Vector2f viewOffset = view->getCenter() - (view->getSize() / 2.0f);
         sf::Vector2f lightPos = newPos - viewOffset;
 
-        // Calculate direction vector to mouse
-        sf::Vector2i mousePosition = sf::Mouse::getPosition(*window); // Mouse in window coordinates
-        sf::Vector2f mouseWorldPosition = window->mapPixelToCoords(mousePosition, *view); // Transform to world coords
-        sf::Vector2f mouseDir = mouseWorldPosition - newPos;
+        static float lastMouseDir[2] = { 0.0f, 0.0f };
+        sf::Vector2f mouseDir = { lastMouseDir[0], lastMouseDir[1] };
+        if (!gameInstance.getIsPaused() && bUseCone)
+        {
+            // Calculate direction vector to mouse
+            sf::Vector2i mousePosition = sf::Mouse::getPosition(*window); // Mouse in window coordinates
+            sf::Vector2f mouseWorldPosition = window->mapPixelToCoords(mousePosition, *view); // Transform to world coords
 
-        // Normalize direction vector
-        if (mouseDir != sf::Vector2f(0, 0)) {
-            mouseDir /= std::sqrt(mouseDir.x * mouseDir.x + mouseDir.y * mouseDir.y);
+            // Normalize direction vector
+            mouseDir = mouseWorldPosition - newPos;
+            if (mouseDir != sf::Vector2f(0, 0))
+            {
+                float len = std::sqrt(mouseDir.x * mouseDir.x + mouseDir.y * mouseDir.y);
+                if (len > 0.0001f)
+                {
+                    mouseDir /= len;
+                }
+            }
+            lastMouseDir[0] = mouseDir.x; lastMouseDir[1] = mouseDir.y;
         }
+        
 
         if (bUseCone)
         {
@@ -193,8 +214,6 @@ public:
         // Ensure the render texture sprite is positioned properly
         sceneSprite.setPosition(view->getCenter() - (view->getSize() / 2.0f));
         return;
-
-        
     }
 
     void setMaskMode(const bool& bCone = false)
