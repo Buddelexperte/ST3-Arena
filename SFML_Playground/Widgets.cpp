@@ -173,10 +173,10 @@ W_LevelMenu::W_LevelMenu(InputWidget* parent) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> LEVEL_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f(0.0f, -300.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::Transparent, 100, "LEVEL SELECT", sf::Color::White},
-		{viewCenter + sf::Vector2f(500.0f, 0.0f), sf::Vector2f(200.0f, 200.0f), sf::Color::White, 24, "LEVEL 1", sf::Color::Black},
-		{viewCenter + sf::Vector2f(0.0f, 0.0f), sf::Vector2f(200.0f, 200.0f), sf::Color::White, 24, "LEVEL 2", sf::Color::Black},
-		{viewCenter + sf::Vector2f(-500.0f, 0.0f), sf::Vector2f(200, 200.0f), sf::Color::White, 24, "LEVEL 3", sf::Color::Black},
-		{viewCenter + sf::Vector2f(0.0f, 300.0f), sf::Vector2f(500.0f, 200.0f), sf::Color::White, 100, "RETURN", sf::Color::Black}
+		{viewCenter + sf::Vector2f(500.0f, 0.0f), sf::Vector2f(200.0f, 200.0f), sf::Color::Transparent, 24, "LEVEL 3", sf::Color::White},
+		{viewCenter + sf::Vector2f(0.0f, 0.0f), sf::Vector2f(200.0f, 200.0f), sf::Color::Transparent, 24, "LEVEL 2", sf::Color::White},
+		{viewCenter + sf::Vector2f(-500.0f, 0.0f), sf::Vector2f(200, 200.0f), sf::Color::Transparent, 24, "LEVEL 1", sf::Color::White},
+		{viewCenter + sf::Vector2f(0.0f, 300.0f), sf::Vector2f(200.0f, 100.0f), sf::Color::White, 24, "RETURN", sf::Color::Black}
 	};
 
 	level1_Button.construct(LEVEL_MENU_CONSTR[0]);
@@ -198,8 +198,15 @@ void W_LevelMenu::update(const float& deltaTime)
 	return;
 }
 
-bool W_LevelMenu::isMouseOver(const bool& chechForClick = false)
+bool W_LevelMenu::isMouseOver(const bool& checkForClick = false)
 {
+	sf::Vector2f mousePos = gameInstance.getMousePos();
+	if (return_Button.isMouseOver())
+	{
+		if (checkForClick) parent->construct();
+		return true;
+	}
+	// On no button-mouse overlap
 	return false;
 }
 
