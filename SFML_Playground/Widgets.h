@@ -16,7 +16,7 @@ protected:
 public:
 	virtual bool input_esc() override;
 	void construct() override;
-	W_Options(WidgetElement*);
+	W_Options(InputWidget*);
 	virtual bool isMouseOver(const bool&) override;
 };
 
@@ -31,7 +31,7 @@ private:
 protected:
 public:
 	bool input_esc() override;
-	W_LevelMenu(WidgetElement*);
+	W_LevelMenu(InputWidget*);
 	void construct() override;
 	void update(const float&) override;
 	bool isMouseOver(const bool&) override;
@@ -46,20 +46,19 @@ private:
 	Button menu_optionsButton;
 	Button menu_quitButton;
 
-	int widgetIndex = 0;
-	InputWidget* getWidgetAtIndex(const int&);
-
 	W_Options optionsMenu;
 	W_LevelMenu levelMenu;
 	virtual bool input_esc() override;
 protected:
 	void windowUpdate() override;
 public:
-	InputWidget* setWidgetIndex(const int&);
-	W_MainMenu(WidgetElement*);
+	W_MainMenu(InputWidget*);
 	void construct() override;
 	void update(const float&) override;
 	virtual bool isMouseOver(const bool&) override;
+
+	InputWidget* setWidgetIndex(const int&) override;
+	InputWidget* getWidgetAtIndex(const int&) override;
 };
 
 class W_Paused : public InputWidget
@@ -77,7 +76,7 @@ protected:
 	void windowUpdate() override;
 public:
 	bool input_esc() override;
-	W_Paused(WidgetElement*);
+	W_Paused(InputWidget*);
 	void update(const float&) override;
 	bool isSubMenuOpen() const { return bOptionsOpen; }
 	void construct() override;
@@ -92,7 +91,7 @@ private:
 	Button gameOver_quitButton;
 public:
 	void windowUpdate() override;
-	W_GameOver(WidgetElement*);
+	W_GameOver(InputWidget*);
 	void changeScore(const int&);
 	virtual bool isMouseOver(const bool&) override;
 };
@@ -122,7 +121,7 @@ private:
 protected:
 	void windowUpdate() override;
 public:
-	W_Gameplay(WidgetElement*);
+	W_Gameplay(InputWidget*);
 	void construct() override;
 	
 	void update(const float& deltaTime) override;

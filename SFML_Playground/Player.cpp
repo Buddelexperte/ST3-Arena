@@ -1,13 +1,13 @@
 #pragma once
 #include "SFML_Arena.h"
 
-Player::Player(WidgetElement* parent) : InputWidget(parent)
+Player::Player(InputWidget* parent) : InputWidget(parent)
 {
 	ButtonConstruct playerButtonConstr = {
 		windowCenter + sf::Vector2f{ 0, 0 }, sf::Vector2f(100.0f, 100.0f), sf::Color::Red, 12, "P1", sf::Color::Black
 	};
-	playerModel = new Button(playerButtonConstr);
-	shapes = { playerModel };
+	playerModel.construct(playerButtonConstr);
+	shapes = { &playerModel };
 }
 
 void Player::update(const float& deltaTime)
@@ -93,25 +93,25 @@ sf::Mouse::Button Player::mouseInput(sf::Event* eventRef)
 
 void Player::setPos(const sf::Vector2f& newPos)
 {
-	playerModel->setPos(newPos);
+	playerModel.setPos(newPos);
 }
 
 void Player::addPos(const sf::Vector2f& x)
 {
-	playerModel->addPos(x);
+	playerModel.addPos(x);
 }
 
 sf::Vector2f Player::getPos() const
 {
-	return playerModel->getPos();
+	return playerModel.getPos();
 }
 
 void Player::setRot(const float& newRot)
 {
-	playerModel->setRot(newRot);
+	playerModel.setRot(newRot);
 }
 
 float Player::getRot() const
 {
-	return playerModel->getRot();
+	return playerModel.getRot();
 }

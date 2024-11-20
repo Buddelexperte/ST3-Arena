@@ -82,7 +82,7 @@ private:
 
     bool bUseCone = false;
 public:
-    Flashlight(WidgetElement* parent) : WidgetElement(parent)
+    Flashlight(InputWidget* parent) : WidgetElement(parent)
     {
         flashlightSprite.setOrigin(512.0f / 2.0f, 512.0f / 2.0f);
         sf::Color color = flashlightSprite.getColor();

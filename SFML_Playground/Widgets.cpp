@@ -4,7 +4,7 @@
 
 // W_MainMenu -------------------------------------------------------------------------------------
 
-W_MainMenu::W_MainMenu(WidgetElement* parent) : InputWidget(parent), optionsMenu(this), levelMenu(this)
+W_MainMenu::W_MainMenu(InputWidget* parent) : InputWidget(parent), optionsMenu(this), levelMenu(this)
 {
 	// gameInstance.setGameState(MENU_SCREEN); Now handled inside teh gameInstance
 	
@@ -99,7 +99,8 @@ bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 	}
 	if (menu_startButton.isMouseOver())
 	{
-		if (checkForClick) gameInstance.setGameState(GAME_LAUNCHING);
+		if (checkForClick) setWidgetIndex(2)->construct();
+		//if (checkForClick) gameInstance.setGameState(GAME_LAUNCHING); Disabled for LevelMenu testing
 		return true;
 	}
 	if (menu_optionsButton.isMouseOver())
@@ -126,7 +127,7 @@ bool W_MainMenu::input_esc()
 
 // W_Options --------------------------------------------------------------------------------------
 
-W_Options::W_Options(WidgetElement* parent = nullptr) : InputWidget(parent)
+W_Options::W_Options(InputWidget* parent = nullptr) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "OPTIONS",											sf::Color::White},
@@ -174,7 +175,7 @@ bool W_Options::input_esc()
 
 // W_LevelMenu ---------------------------------------------------------------------------------------
 
-W_LevelMenu::W_LevelMenu(WidgetElement* parent) : InputWidget(parent)
+W_LevelMenu::W_LevelMenu(InputWidget* parent) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> LEVEL_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f(500.0f, 0.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::Transparent, 24, "LEVEL 1", sf::Color::White},
@@ -208,12 +209,13 @@ bool W_LevelMenu::isMouseOver(const bool& chechForClick = false)
 
 bool W_LevelMenu::input_esc()
 {
-	return false;
+	parent->setWidgetIndex(0)->construct();
+	return true;
 }
 
 // W_Paused ---------------------------------------------------------------------------------------
 
-W_Paused::W_Paused(WidgetElement* parent) : InputWidget(parent), optionsMenu(this)
+W_Paused::W_Paused(InputWidget* parent) : InputWidget(parent), optionsMenu(this)
 {
 	const std::vector<ButtonConstruct> PAUSED_CONSTR = {
 		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "PAUSE",											sf::Color::White},
@@ -300,7 +302,7 @@ bool W_Paused::isMouseOver(const bool& checkForClick = false)
 
 // W_GameOver -------------------------------------------------------------------------------------
 
-W_GameOver::W_GameOver(WidgetElement* parent) : InputWidget(parent)
+W_GameOver::W_GameOver(InputWidget* parent) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> GAME_OVER_CONSTR = {
 		{viewCenter + sf::Vector2f{ 0, -300 },	sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "GAME OVER",							sf::Color::White},
@@ -344,7 +346,7 @@ bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 
 // W_Gameplay -------------------------------------------------------------------------------------
 
-W_Gameplay::W_Gameplay(WidgetElement* parent) : InputWidget(parent), flashlightShader(this), pauseScreen(this), gameOverScreen(this), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f)
+W_Gameplay::W_Gameplay(InputWidget* parent) : InputWidget(parent), flashlightShader(this), pauseScreen(this), gameOverScreen(this), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f)
 {
 	ButtonConstruct constr = { windowCenter + sf::Vector2f(-1200.0f, 800.0f), sf::Vector2f(500.0f, 500.0f), sf::Color::White, 12, "TEST", sf::Color::Black };
 	TestBox.construct(constr);

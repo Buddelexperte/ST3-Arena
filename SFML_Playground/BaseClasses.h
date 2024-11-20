@@ -70,7 +70,7 @@ class WidgetElement : public sf::Drawable
 {
 protected:
 	float lastDeltaTime = 0.0f;
-	WidgetElement* parent = nullptr;
+	InputWidget* parent = nullptr;
 	GI_Arena& gameInstance = GI_Arena::getInstance();
 	sf::RenderWindow* window = gameInstance.getWindow();
 	sf::Vector2u windowSize;
@@ -82,7 +82,7 @@ protected:
 
 	virtual void windowUpdate();
 public:
-	WidgetElement(WidgetElement* parentWidget) : parent(parentWidget)
+	WidgetElement(InputWidget* parentWidget) : parent(parentWidget)
 	{
 		windowUpdate();
 	}
@@ -98,7 +98,7 @@ public:
 	}
 	virtual void construct() { windowUpdate(); };
 
-	WidgetElement* getParent() const { return parent; }
+	InputWidget* getParent() const { return parent; }
 	// Position
 	virtual void setPos(const sf::Vector2f&) { return; }
 	virtual void addPos(const sf::Vector2f&) { return; }
@@ -120,6 +120,8 @@ class InputWidget : public WidgetElement
 protected:
 	sf::Event* event = nullptr;
 
+	int widgetIndex = 0;
+
 	virtual sf::Keyboard::Key keyboardInput(sf::Event*);
 	virtual sf::Mouse::Button mouseInput(sf::Event*);
 	virtual float scrollInput(sf::Event*);
@@ -127,8 +129,11 @@ protected:
 	virtual bool onMouseClickR() { return true; };
 	virtual bool onMouseClickM() { return true; };
 public:
-	virtual bool input_esc() { return true; };
-	InputWidget(WidgetElement* parent) : WidgetElement(parent) {};
+	virtual InputWidget* setWidgetIndex(const int&);
+	virtual InputWidget* getWidgetAtIndex(const int&);
+
+	virtual bool input_esc() { return true; }
+	InputWidget(InputWidget* parent) : WidgetElement(parent) {};
 	virtual bool handleInput(sf::Event* eventRef);
 	virtual bool isMouseOver(const bool&) { return false; }
 };
@@ -139,7 +144,7 @@ public:
 class Player : public InputWidget
 {
 private:
-	Button* playerModel = nullptr;
+	Button playerModel;
 	sf::Vector2f velocity = { 0.0f, 0.0f };
 
 	void calcMovement(const float&);
@@ -147,7 +152,7 @@ protected:
 	sf::Keyboard::Key keyboardInput(sf::Event*) override;
 	sf::Mouse::Button mouseInput(sf::Event*) override;
 public:
-	Player(WidgetElement*);
+	Player(InputWidget*);
 	void update(const float&) override;
 	void setPos(const sf::Vector2f&) override;
 	void addPos(const sf::Vector2f&) override;
