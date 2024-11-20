@@ -173,7 +173,7 @@ W_LevelMenu::W_LevelMenu(InputWidget* parent) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> LEVEL_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f(0.0f, -300.0f),	sf::Vector2f(100.0f, 100.0f),	sf::Color::Transparent, 100,	"LEVEL SELECT", sf::Color::White},
-		{viewCenter + sf::Vector2f(-500.0f, 0.0f),	sf::Vector2f(200, 200.0f),		sf::Color(100, 100, 100), 24,		"LEVEL 1", sf::Color::White},
+		{viewCenter + sf::Vector2f(-500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,		"LEVEL 1", sf::Color::White},
 		{viewCenter + sf::Vector2f(0.0f, 0.0f),		sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100), 24,		"LEVEL 2", sf::Color::White},
 		{viewCenter + sf::Vector2f(500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100), 24,		"LEVEL 3", sf::Color::White},
 		{viewCenter + sf::Vector2f(0.0f, 300.0f),	sf::Vector2f(200.0f, 100.0f),	sf::Color::White, 24,			"RETURN", sf::Color::Black}
@@ -217,10 +217,10 @@ bool W_LevelMenu::isMouseOver(const bool& chechForClick = false)
 W_Paused::W_Paused(InputWidget* parent) : InputWidget(parent), optionsMenu(this)
 {
 	const std::vector<ButtonConstruct> PAUSED_CONSTR = {
-		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "PAUSE",											sf::Color::White},
-		{viewCenter + sf::Vector2f{ 0, 0 },       sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "RESUME",													sf::Color::Black},
-		{viewCenter + sf::Vector2f{ 0, 150 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "OPTIONS",													sf::Color::Black},
-		{viewCenter + sf::Vector2f{ 0, 300 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "QUIT",														sf::Color::Black}
+		{viewCenter + sf::Vector2f{ 0.0f, -300.0f },    sf::Vector2f{ 350.0f, 120.0f }, sf::Color::Transparent,   100, "PAUSE",											sf::Color::White},
+		{viewCenter + sf::Vector2f{ 0.0f, 0.0f },       sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "RESUME",													sf::Color::Black},
+		{viewCenter + sf::Vector2f{ 0.0f, 150.0f },     sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "OPTIONS",													sf::Color::Black},
+		{viewCenter + sf::Vector2f{ 0.0f, 300.0f },     sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "QUIT",														sf::Color::Black}
 	};
 
 	pause_title.construct(PAUSED_CONSTR[0]);
@@ -277,10 +277,10 @@ void W_Paused::update(const float& deltaTime)
 void W_Paused::windowUpdate()
 {
 	InputWidget::windowUpdate();
-	pause_title.setPos(viewCenter + sf::Vector2f{ 0, -300 });
-	pause_resumeButton.setPos(viewCenter + sf::Vector2f{ 0, 0 });
-	pause_optionsButton.setPos(viewCenter + sf::Vector2f{ 0, 150 });
-	pause_quitButton.setPos(viewCenter + sf::Vector2f{ 0, 300 });
+	pause_title.setPos(viewCenter + sf::Vector2f{ 0.0f, -300.0f });
+	pause_resumeButton.setPos(viewCenter + sf::Vector2f{ 0.0f, 0.0f });
+	pause_optionsButton.setPos(viewCenter + sf::Vector2f{ 0.0f, 150.0f });
+	pause_quitButton.setPos(viewCenter + sf::Vector2f{ 0.0f, 300.0f });
 }
 
 bool W_Paused::isMouseOver(const bool& checkForClick = false)
@@ -312,9 +312,9 @@ bool W_Paused::isMouseOver(const bool& checkForClick = false)
 W_GameOver::W_GameOver(InputWidget* parent) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> GAME_OVER_CONSTR = {
-		{viewCenter + sf::Vector2f{ 0, -300 },	sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "GAME OVER",							sf::Color::White},
-		{viewCenter + sf::Vector2f{ 0, -200 },	sf::Vector2f{ 100, 100 }, sf::Color::Transparent,   16, "Score: " + std::to_string(0),	sf::Color::White},
-		{viewCenter + sf::Vector2f{ 0, 0 },		sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "QUIT",									sf::Color::Black}
+		{viewCenter + sf::Vector2f{ 0.0f, -300.0f },	sf::Vector2f{ 350.0f, 120.0f }, sf::Color::Transparent,   100, "GAME OVER",							sf::Color::White},
+		{viewCenter + sf::Vector2f{ 0.0f, -200.0f },	sf::Vector2f{ 100.0f, 100.0f }, sf::Color::Transparent,   16, "Score: " + std::to_string(0),	sf::Color::White},
+		{viewCenter + sf::Vector2f{ 0.0f, 0.0f },		sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "QUIT",									sf::Color::Black}
 	};
 
 	gameOver_title.construct(GAME_OVER_CONSTR[0]);
@@ -328,9 +328,9 @@ void W_GameOver::windowUpdate()
 {
 	InputWidget::windowUpdate();
 
-	gameOver_title.setPos(viewCenter + sf::Vector2f{ 0, -300 });
-	gameOver_score.setPos(viewCenter + sf::Vector2f{ 0, -200 });
-	gameOver_quitButton.setPos(viewCenter + sf::Vector2f{ 0, 0 });
+	gameOver_title.setPos(viewCenter + sf::Vector2f{ 0.0f, -300.0f });
+	gameOver_score.setPos(viewCenter + sf::Vector2f{ 0.0f, -200.0f });
+	gameOver_quitButton.setPos(viewCenter + sf::Vector2f{ 0.0f, 0.0f });
 }
 
 void W_GameOver::changeScore(const int& currScore = 0)
