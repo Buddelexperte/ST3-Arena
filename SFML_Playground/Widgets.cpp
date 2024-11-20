@@ -1,6 +1,6 @@
 #pragma once
 #include "SFML_Arena.h"
-
+#include "Widgets.h"
 
 // W_MainMenu -------------------------------------------------------------------------------------
 
@@ -175,6 +175,45 @@ bool W_Options::input_esc()
 {
 	if (parent != nullptr) parent->construct();
 	return true;
+}
+
+// W_LevelMenu ---------------------------------------------------------------------------------------
+
+W_LevelMenu::W_LevelMenu(WidgetElement* parent) : InputWidget(parent)
+{
+	const std::vector<ButtonConstruct> LEVEL_MENU_CONSTR = {
+		{viewCenter + sf::Vector2f(500.0f, 0.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::Transparent, 24, "LEVEL 1", sf::Color::White},
+		{viewCenter + sf::Vector2f(0.0f, 0.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::Transparent, 24, "LEVEL 2", sf::Color::White},
+		{viewCenter + sf::Vector2f(-500.0f, 0.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::Transparent, 24, "LEVEL 3", sf::Color::White},
+		{viewCenter + sf::Vector2f(0.0f, -300.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::Transparent, 100, "LEVEL", sf::Color::White},
+		{viewCenter + sf::Vector2f(0.0f, 300.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::White, 100, "RETURN", sf::Color::Black}
+	};
+
+	level1_Button.construct(LEVEL_MENU_CONSTR[0]);
+	level2_Button.construct(LEVEL_MENU_CONSTR[1]);
+	level3_Button.construct(LEVEL_MENU_CONSTR[2]);
+	levelmenu_title.construct(LEVEL_MENU_CONSTR[3]);
+	return_Button.construct(LEVEL_MENU_CONSTR[4]);
+}
+
+void W_LevelMenu::construct()
+{
+	InputWidget::construct();
+}
+
+void W_LevelMenu::update(const float& deltaTime)
+{
+	
+}
+
+bool W_LevelMenu::isMouseOver(const bool& chechForClick = false)
+{
+	return false;
+}
+
+bool W_LevelMenu::input_esc()
+{
+	return false;
 }
 
 // W_Paused ---------------------------------------------------------------------------------------
