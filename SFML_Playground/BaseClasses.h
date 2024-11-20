@@ -128,7 +128,6 @@ protected:
 	virtual void windowUpdate() { WidgetElement::windowUpdate(); }
 public:
 	InputWidget(WidgetElement* parent) : WidgetElement(parent) { };
-	~InputWidget() { WidgetElement::~WidgetElement(); }
 	virtual void construct() { WidgetElement::construct(); }
 	virtual void update(const float& deltaTime) { WidgetElement::update(deltaTime); }
 	virtual bool handleInput(sf::Event* eventRef);

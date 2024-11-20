@@ -17,7 +17,7 @@ void Button::construct(const ButtonConstruct& constr)
 	// Load text font from project directory
 	if (!font.loadFromFile("../Content/fonts/coolvetica/coolvetica_rg.otf"))
 	{
-		std::cout << "Unable to load font!!" << std::endl; // Error message for console log
+		std::cerr << "Unable to load font!!" << std::endl; // Error message for console log
 	}
 	// Initialize button
 	B_Box.setSize(b_size);
