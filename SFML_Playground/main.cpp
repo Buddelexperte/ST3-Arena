@@ -63,6 +63,7 @@ int main()
         deltaTime = clock.restart().asSeconds();
         fps = 1.0f / deltaTime;
 
+
         gameInstance.tick(deltaTime);
     }
 

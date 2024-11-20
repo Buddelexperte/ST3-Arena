@@ -15,17 +15,19 @@ class Button : public sf::Drawable
 {
 private:
 	sf::Font font; // Text font
-	sf::Vector2f lastScreenCenter = sf::Vector2f(0.0f, 0.0f);
+	sf::Vector2f lastScreenCenter = { 0.0f, 0.0f };
+	std::string text;
 public:
 	// shapes
 	sf::RectangleShape B_Box;
 	sf::Text T_Text;
 	// Constructors
-	Button() : Button(ButtonConstruct({ 0, 0 }, { 0, 0 }, sf::Color::White, 24, "Text", sf::Color::Black)) {};
+	Button() : Button(ButtonConstruct({ 0, 0 }, { 100.0f, 100.0f }, sf::Color::White, 24, "Text", sf::Color::Black)) {};
 	Button(const ButtonConstruct& constr) { construct(constr); }
 	void construct(const ButtonConstruct&);
 
 	void setText(const std::string&); // Set the texts content
+	std::string getText() const { return text; }
 	void setColor(const sf::Color&, const bool& = false); // Set the color of the text or the button fill
 	sf::Color getColor(const bool& = false) const; // Get the color of the text or the button fill
 

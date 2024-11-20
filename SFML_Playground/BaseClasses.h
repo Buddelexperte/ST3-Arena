@@ -93,6 +93,9 @@ public:
 			delete drawable;
 			drawable = nullptr;
 		}
+		delete window;
+		delete view;
+		delete parent;
 	}
 	virtual void construct() { windowUpdate(); };
 
@@ -124,12 +127,9 @@ protected:
 	virtual bool onMouseClickL() { return isMouseOver(true); };
 	virtual bool onMouseClickR() { return true; };
 	virtual bool onMouseClickM() { return true; };
-	virtual bool input_esc() { return true; };
 public:
+	virtual bool input_esc() { return true; };
 	InputWidget(WidgetElement* parent) : WidgetElement(parent) {};
-	virtual void construct() { WidgetElement::construct(); }
-	virtual void construct() { WidgetElement::construct(); }
-	virtual void update(const float& deltaTime) { WidgetElement::update(deltaTime); }
 	virtual bool handleInput(sf::Event* eventRef);
 	virtual bool isMouseOver(const bool&) { return false; }
 };

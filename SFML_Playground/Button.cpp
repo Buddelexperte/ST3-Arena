@@ -12,6 +12,7 @@ void Button::construct(const ButtonConstruct& constr)
 	const sf::Color& b_color = constr.color;
 	const unsigned int& t_size = constr.textSize;
 	const std::string& t_text = constr.text;
+	text = t_text;
 	const sf::Color& t_color = constr.textColor;
 
 	// Load text font from project directory
@@ -26,7 +27,7 @@ void Button::construct(const ButtonConstruct& constr)
 	B_Box.setFillColor(b_color);
 	// Initialize Text
 	T_Text.setFont(font);
-	T_Text.setString(t_text);
+	T_Text.setString(text);
 	T_Text.setCharacterSize(t_size);
 	T_Text.setFillColor(t_color);
 	// Center Text inside Box

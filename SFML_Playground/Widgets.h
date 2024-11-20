@@ -13,8 +13,8 @@ private:
 	Button options_return;
 protected:
 	void windowUpdate() override;
-	virtual bool input_esc() override;
 public:
+	virtual bool input_esc() override;
 	void construct() override;
 	W_Options(WidgetElement*);
 	virtual bool isMouseOver(const bool&) override;
@@ -29,8 +29,8 @@ private:
 	Button level3_Button;
 	Button return_Button;
 protected:
-	bool input_esc() override;
 public:
+	bool input_esc() override;
 	W_LevelMenu(WidgetElement*);
 	void construct() override;
 	void update(const float&) override;
@@ -51,9 +51,9 @@ private:
 
 	W_Options optionsMenu;
 	W_LevelMenu levelMenu;
+	virtual bool input_esc() override;
 protected:
 	void windowUpdate() override;
-	virtual bool input_esc() override;
 public:
 	void setWidgetIndex(const int&);
 	W_MainMenu(WidgetElement*);
@@ -75,8 +75,8 @@ private:
 	void showOptions(const bool&);
 protected:
 	void windowUpdate() override;
-	bool input_esc() override;
 public:
+	bool input_esc() override;
 	W_Paused(WidgetElement*);
 	void update(const float&) override;
 	bool isSubMenuOpen() const { return bOptionsOpen; }
@@ -117,10 +117,10 @@ private:
 	void pause();
 	void unpause();
 	void lose();
-protected:
-	void windowUpdate() override;
 	bool input_esc() override;
 	bool onMouseClickR() override;
+protected:
+	void windowUpdate() override;
 public:
 	W_Gameplay(WidgetElement*);
 	void construct() override;

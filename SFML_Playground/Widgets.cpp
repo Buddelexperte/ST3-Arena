@@ -4,7 +4,7 @@
 
 // W_MainMenu -------------------------------------------------------------------------------------
 
-W_MainMenu::W_MainMenu(WidgetElement* parent) : InputWidget(parent), optionsMenu(this)
+W_MainMenu::W_MainMenu(WidgetElement* parent) : InputWidget(parent), optionsMenu(this), levelMenu(this)
 {
 	// gameInstance.setGameState(MENU_SCREEN); Now handled inside teh gameInstance
 	
@@ -21,18 +21,15 @@ W_MainMenu::W_MainMenu(WidgetElement* parent) : InputWidget(parent), optionsMenu
 	menu_startButton.construct(MAIN_MENU_CONSTR[2]);
 	menu_optionsButton.construct(MAIN_MENU_CONSTR[3]);
 	menu_quitButton.construct(MAIN_MENU_CONSTR[4]);
-
-	shapes = { &menu_title, &menu_highscore, &menu_startButton, &menu_optionsButton, &menu_quitButton };
 }
 
 void W_MainMenu::construct()
 {
-	InputWidget::construct();
+	setWidgetIndex(0);
 	menu_highscore.setText("Highscore: " + std::to_string(SaveGame::Stored_Save));
-	setWidgetIndex(false);
 }
 
-InputWidget* W_MainMenu::getWidgetAtIndex(const int& index = -1)
+InputWidget* W_MainMenu::getWidgetAtIndex(const int& index)
 {
 	switch (index)
 	{
@@ -51,11 +48,33 @@ InputWidget* W_MainMenu::getWidgetAtIndex(const int& index = -1)
 	return nullptr;
 }
 
+void W_MainMenu::setWidgetIndex(const int& newIndex)
+{
+	widgetIndex = newIndex;
+	switch (widgetIndex)
+	{
+	case 0: // MAIN_MENU
+		shapes = { &menu_title, &menu_highscore, &menu_startButton, &menu_optionsButton, &menu_quitButton };
+		break;
+	case 1: // OPTIONS_MENU
+		shapes = { &optionsMenu };
+		break;
+	case 2: // LEVEL_MENU
+		shapes = { &levelMenu };
+		break;
+	default:
+		shapes = {};
+		return;
+		break;
+	}
+	getWidgetAtIndex(widgetIndex)->construct();
+}
+
 void W_MainMenu::update(const float& deltaTime)
 {
-	WidgetElement* activeWidget = nullptr;
-
 	InputWidget::update(deltaTime);
+	WidgetElement* activeWidget = getWidgetAtIndex(widgetIndex);
+	activeWidget->update(deltaTime);
 }
 
 void W_MainMenu::windowUpdate()
@@ -70,6 +89,7 @@ void W_MainMenu::windowUpdate()
 
 bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 {
+	if (getWidgetAtIndex(widgetIndex) != this)
 	return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
 
 	sf::Vector2f mousePos = gameInstance.getMousePos();
@@ -99,31 +119,9 @@ bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 	return false;
 }
 
-void W_MainMenu::setWidgetIndex(const int& newIndex)
-{
-	widgetIndex = newIndex;
-	switch (widgetIndex)
-	{
-	case 0: // MAIN_MENU
-		shapes = { &menu_title, &menu_highscore, &menu_startButton, &menu_optionsButton, &menu_quitButton };
-		construct();
-		break;
-	case 1: // OPTIONS_MENU
-		shapes = { &optionsMenu };
-		optionsMenu.construct();
-		break;
-	case 2: // LEVEL_MENU
-		shapes = { &levelMenu };
-		levelMenu.construct();
-		break;
-	default:
-		break;
-	}
-}
-
 bool W_MainMenu::input_esc()
 {
-	if (widgetIndex > 0) setWidgetIndex(0);
+	if (widgetIndex > 0) getWidgetAtIndex(widgetIndex)->input_esc();
 	else gameInstance.setGameState(QUIT);
 	return true;
 }
@@ -349,7 +347,7 @@ bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 
 // W_Gameplay -------------------------------------------------------------------------------------
 
-W_Gameplay::W_Gameplay(WidgetElement* parent) : InputWidget(parent), pauseScreen(this), flashlightShader(this), gameOverScreen(this), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f)
+W_Gameplay::W_Gameplay(WidgetElement* parent) : InputWidget(parent), flashlightShader(this), pauseScreen(this), gameOverScreen(this), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f)
 {
 	ButtonConstruct constr = { windowCenter + sf::Vector2f(-1200.0f, 800.0f), sf::Vector2f(500.0f, 500.0f), sf::Color::White, 12, "TEST", sf::Color::Black };
 	TestBox.construct(constr);
