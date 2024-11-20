@@ -1,7 +1,7 @@
 #pragma once
 #include "SFML_Arena.h"
 
-Player::Player(WidgetElement* parent = nullptr) : InputWidget(parent)
+Player::Player(WidgetElement* parent) : InputWidget(parent)
 {
 	ButtonConstruct playerButtonConstr = {
 		windowCenter + sf::Vector2f{ 0, 0 }, sf::Vector2f(100.0f, 100.0f), sf::Color::Red, 12, "P1", sf::Color::Black
@@ -101,7 +101,7 @@ void Player::addPos(const sf::Vector2f& x)
 	playerModel->addPos(x);
 }
 
-sf::Vector2f Player::getPos()
+sf::Vector2f Player::getPos() const
 {
 	return playerModel->getPos();
 }
@@ -111,7 +111,7 @@ void Player::setRot(const float& newRot)
 	playerModel->setRot(newRot);
 }
 
-float Player::getRot()
+float Player::getRot() const
 {
 	return playerModel->getRot();
 }

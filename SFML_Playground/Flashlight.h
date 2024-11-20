@@ -5,60 +5,60 @@ class Flashlight : public WidgetElement
 {
 private:
     const std::string circleMaskShader = R"(
-        uniform vec2 lightPos;
-        uniform float radius;
-        uniform float viewportHeight;
+        uniform vec2 lightPos; // light "Source" = Center of Mask
+        uniform float radius; // Circle Radius
+        uniform float viewportHeight; // Viewport Height (probably sf::RenderWindow)
 
         void main() {
-            vec2 pos = gl_FragCoord.xy;
-            float adjustedY = viewportHeight - pos.y; // Flip Y coordinate
-            vec2 adjustedPos = vec2(pos.x, adjustedY);
-            float dist = length(adjustedPos - lightPos);
+            vec2 pos = gl_FragCoord.xy; // Fragment coords
+            float adjustedY = viewportHeight - pos.y; // Flip Y coordinate because SFML
+            vec2 adjustedPos = vec2(pos.x, adjustedY); // Rebuild Frag pos
+            float dist = length(adjustedPos - lightPos); // Pos distance from mask Center
 
-            // Default to black background (fully opaque)
-            vec4 color = vec4(0.0, 0.0, 0.0, 1.0); // Fully black (opaque)
+            vec4 color = vec4(0.0, 0.0, 0.0, 1.0); // Fully black (opaque) for later masking
 
-            // Calculate alpha based on distance from lightPos
+            // If distance from source is smaller than max radius of circle
             if (dist < radius) {
+                // Dist is in range of radius
                 float alpha = smoothstep(radius, radius * 0.7, dist); // Creates a soft edge
                 color = vec4(0.0, 0.0, 0.0, 1.0 - alpha); // Black with varying transparency (revealing the scene)
             }
 
-            gl_FragColor = color; // Output the color
+            gl_FragColor = color; // Output the final color for Fragment
         }
     )";
 
     const std::string coneMaskShader = R"(
-        uniform vec2 lightPos;       // Position of the light source (player)
-        uniform vec2 direction;      // Direction of the cone (normalized)
-        uniform float radius;        // Maximum radius of the cone
-        uniform float angle;         // Half-angle of the cone in radians
+        uniform vec2 lightPos; // light "Source" = Center of Mask
+        uniform vec2 direction; // Direction of the cone from the center(normalized)
+        uniform float radius; // Cone Radius
+        uniform float angle; // Half-angle of the cone in radians
         uniform float viewportHeight; // Height of the viewport for Y-axis flipping
 
         void main() {
-            vec2 pos = gl_FragCoord.xy;
+            vec2 pos = gl_FragCoord.xy; // UV position of Fragment
             float adjustedY = viewportHeight - pos.y; // Flip Y coordinate
-            vec2 adjustedPos = vec2(pos.x, adjustedY);
+            vec2 adjustedPos = vec2(pos.x, adjustedY); // Rebuild position
 
-            vec2 toPixel = adjustedPos - lightPos;
-            float dist = length(toPixel);
+            vec2 toPixel = adjustedPos - lightPos; 
+            float dist = length(toPixel); // Get Frag distance from source
 
-            // Default to fully black background
-            vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
+            vec4 color = vec4(0.0, 0.0, 0.0, 1.0); // Black overlay to mask out
 
             // Check if within cone and radius
             if (dist < radius) {
-                vec2 toPixelNorm = normalize(toPixel); // Normalize the direction to this pixel
-                float dotProduct = dot(toPixelNorm, direction);
+                vec2 fragDir = normalize(toPixel); // Normalize the direction to this pixel
+                float dotProduct = dot(fragDir, direction);
 
-                // Check if within the cone angle
+                // Check if direction is within the cone angle
                 if (dotProduct > cos(angle)) {
-                    float alpha = smoothstep(radius, radius * 0.7, dist); // Creates a soft edge
+                    // dist is in range of radius
+                    float alpha = smoothstep(radius, radius * 0.5, dist); // Creates a soft edge
                     color = vec4(0.0, 0.0, 0.0, 1.0 - alpha); // Black with transparency to reveal the scene
                 }
             }
 
-            gl_FragColor = color; // Output the final color
+            gl_FragColor = color; // Output the final color for fragment
         }
 
     )";
@@ -82,7 +82,7 @@ private:
 
     bool bUseCone = false;
 public:
-    Flashlight() : WidgetElement()
+    Flashlight(WidgetElement* parent) : WidgetElement(parent)
     {
         flashlightSprite.setOrigin(512.0f / 2.0f, 512.0f / 2.0f);
         sf::Color color = flashlightSprite.getColor();
