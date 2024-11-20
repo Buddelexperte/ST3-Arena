@@ -44,6 +44,22 @@ public:
 	virtual bool isMouseOver(const bool&) override;
 };
 
+class W_LevelMenu : public InputWidget // LevelMenu Widget ------------------------------------------
+{
+private:
+	Button* levelmenu_title;
+	Button* level1_Button;
+	Button* level2_Button;
+	Button* level3_Button;
+protected:
+	virtual bool input_esc() override;
+public:
+	W_LevelMenu(WidgetElement*);
+	void construct() override;
+	void update(const float&) override;
+	virtual bool isMouseOver(const bool&) override;
+};
+
 class W_Paused : public InputWidget
 {
 private:
