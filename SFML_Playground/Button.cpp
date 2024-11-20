@@ -32,7 +32,8 @@ void Button::construct(const ButtonConstruct& constr)
 	T_Text.setFillColor(t_color);
 	// Center Text inside Box
 	T_Text.setOrigin(T_Text.getGlobalBounds().width / 2.0f, T_Text.getGlobalBounds().height / 2.0f);
-	T_Text.setPosition({ pos.x, pos.y - 6.0f });
+	float textYFix = T_Text.getCharacterSize() / 2.6f;
+	T_Text.setPosition({ pos.x, pos.y - textYFix});
 }
 
 bool Button::isMouseOver() const {

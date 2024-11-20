@@ -129,11 +129,13 @@ protected:
 	virtual bool onMouseClickR() { return true; };
 	virtual bool onMouseClickM() { return true; };
 public:
+	InputWidget(InputWidget* parent) : WidgetElement(parent) {};
+
 	virtual InputWidget* setWidgetIndex(const int&);
 	virtual InputWidget* getWidgetAtIndex(const int&);
+	int getWidgetIndex() const { return widgetIndex; }
 
 	virtual bool input_esc() { parent->setWidgetIndex(0)->construct(); return true; }
-	InputWidget(InputWidget* parent) : WidgetElement(parent) {};
 	virtual bool handleInput(sf::Event* eventRef);
 	virtual bool isMouseOver(const bool&) { return false; }
 };

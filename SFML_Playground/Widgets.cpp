@@ -172,11 +172,11 @@ bool W_Options::isMouseOver(const bool& checkForClick = false)
 W_LevelMenu::W_LevelMenu(InputWidget* parent) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> LEVEL_MENU_CONSTR = {
-		{viewCenter + sf::Vector2f(500.0f, 0.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::Transparent, 24, "LEVEL 1", sf::Color::White},
-		{viewCenter + sf::Vector2f(0.0f, 0.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::Transparent, 24, "LEVEL 2", sf::Color::White},
-		{viewCenter + sf::Vector2f(-500.0f, 0.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::Transparent, 24, "LEVEL 3", sf::Color::White},
-		{viewCenter + sf::Vector2f(0.0f, -300.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::Transparent, 100, "LEVEL", sf::Color::White},
-		{viewCenter + sf::Vector2f(0.0f, 300.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::White, 100, "RETURN", sf::Color::Black}
+		{viewCenter + sf::Vector2f(0.0f, -300.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::Transparent, 100, "LEVEL SELECT", sf::Color::White},
+		{viewCenter + sf::Vector2f(500.0f, 0.0f), sf::Vector2f(200.0f, 200.0f), sf::Color::White, 24, "LEVEL 1", sf::Color::Black},
+		{viewCenter + sf::Vector2f(0.0f, 0.0f), sf::Vector2f(200.0f, 200.0f), sf::Color::White, 24, "LEVEL 2", sf::Color::Black},
+		{viewCenter + sf::Vector2f(-500.0f, 0.0f), sf::Vector2f(200, 200.0f), sf::Color::White, 24, "LEVEL 3", sf::Color::Black},
+		{viewCenter + sf::Vector2f(0.0f, 300.0f), sf::Vector2f(500.0f, 200.0f), sf::Color::White, 100, "RETURN", sf::Color::Black}
 	};
 
 	level1_Button.construct(LEVEL_MENU_CONSTR[0]);
@@ -218,24 +218,51 @@ W_Paused::W_Paused(InputWidget* parent) : InputWidget(parent), optionsMenu(this)
 	pause_resumeButton.construct(PAUSED_CONSTR[1]);
 	pause_optionsButton.construct(PAUSED_CONSTR[2]);
 	pause_quitButton.construct(PAUSED_CONSTR[3]);
-
-	shapes = { &pause_title, &pause_resumeButton, &pause_optionsButton, &pause_quitButton };
 }
 
 void W_Paused::construct()
 {
 	InputWidget::construct();
-	showOptions(false);
+	setWidgetIndex(0);
+}
+
+InputWidget* W_Paused::getWidgetAtIndex(const int& atIndex)
+{
+	switch (atIndex)
+	{
+	case 0:
+		return this;
+		break;
+	case 1:
+		return &optionsMenu;
+		break;
+	default:
+		break;
+	}
+	return nullptr;
+}
+
+InputWidget* W_Paused::setWidgetIndex(const int& toIndex)
+{
+	switch (widgetIndex = toIndex)
+	{
+	case 0:
+		shapes = { &pause_title, &pause_resumeButton, &pause_optionsButton, &pause_quitButton };
+		break;
+	case 1:
+		shapes = { &optionsMenu };
+		break;
+	default:
+		shapes = {};
+		break;
+	}
+	return getWidgetAtIndex(widgetIndex);
 }
 
 void W_Paused::update(const float& deltaTime)
 {
-	if (bOptionsOpen)
-	{
-		optionsMenu.update(deltaTime);
-		return;
-	}
 	InputWidget::update(deltaTime);
+	if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->update(deltaTime);
 }
 
 void W_Paused::windowUpdate()
@@ -247,21 +274,9 @@ void W_Paused::windowUpdate()
 	pause_quitButton.setPos(viewCenter + sf::Vector2f{ 0, 300 });
 }
 
-void W_Paused::showOptions(const bool& bShow)
-{
-	if (bOptionsOpen = bShow)
-	{
-		shapes = { &optionsMenu };
-		optionsMenu.construct();
-		return;
-	}
-	optionsMenu.construct();
-	shapes = { &pause_title, &pause_resumeButton, &pause_optionsButton, &pause_quitButton };
-}
-
 bool W_Paused::isMouseOver(const bool& checkForClick = false)
 {
-	if (bOptionsOpen) return optionsMenu.isMouseOver(checkForClick);
+	if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
 
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
 	if (pause_resumeButton.isMouseOver())
@@ -271,7 +286,7 @@ bool W_Paused::isMouseOver(const bool& checkForClick = false)
 	}
 	if (pause_optionsButton.isMouseOver())
 	{
-		if (checkForClick) showOptions(true);
+		if (checkForClick) setWidgetIndex(1);
 		return true;
 	}
 	if (pause_quitButton.isMouseOver())
@@ -372,7 +387,7 @@ void W_Gameplay::pause()
 
 void W_Gameplay::unpause()
 {
-	if (pauseScreen.isSubMenuOpen())
+	if (pauseScreen.getWidgetIndex() > 0)
 	{
 		pauseScreen.construct();
 		return;

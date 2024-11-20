@@ -67,14 +67,13 @@ private:
 	Button pause_quitButton;
 
 	W_Options optionsMenu;
-	bool bOptionsOpen = false;
-	void showOptions(const bool&);
 protected:
 	void windowUpdate() override;
 public:
 	W_Paused(InputWidget*);
 	void update(const float&) override;
-	bool isSubMenuOpen() const { return bOptionsOpen; }
+	InputWidget* setWidgetIndex(const int&) override;
+	InputWidget* getWidgetAtIndex(const int&) override;
 	void construct() override;
 	bool isMouseOver(const bool&) override;
 };
