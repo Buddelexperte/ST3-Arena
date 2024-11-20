@@ -109,16 +109,6 @@ bool InputWidget::handleInput(sf::Event* eventRef)
 	return false;
 }
 
-InputWidget* InputWidget::getWidgetAtIndex(const int& index)
-{
-	switch (index)
-	{
-	default:
-		break;
-	}
-	return nullptr;
-}
-
 InputWidget* InputWidget::setWidgetIndex(const int& toIndex)
 {
 	widgetIndex = toIndex;

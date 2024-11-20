@@ -16,7 +16,6 @@ public:
     {
         timerBar.setSize(sf::Vector2f(barWidth, barHeight));
         timerBar.setFillColor(fillColor);
-        timerBar.setPosition(sf::Vector2f(viewCenter.x, 0.0f));
         timerBar.setOrigin(barWidth / 2.0f, barHeight / 2.0f); // Center timerBar on viewport
     }
 

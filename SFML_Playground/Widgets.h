@@ -101,15 +101,13 @@ private:
 	Button TestBox;
 	TargetController targetController;
 
-	W_Paused pauseScreen;
+	W_Paused pauseMenu;
 	W_GameOver gameOverScreen;
 
 	Player* player = gameInstance.getPlayer();
 
 	Flashlight flashlightShader;
 
-	void pause();
-	void unpause();
 	void lose();
 	bool input_esc() override;
 	bool onMouseClickR() override;
@@ -118,7 +116,8 @@ protected:
 public:
 	W_Gameplay(InputWidget*);
 	void construct() override;
-	
 	void update(const float& deltaTime) override;
 	bool isMouseOver(const bool&) override;
+	InputWidget* setWidgetIndex(const int&) override;
+	InputWidget* getWidgetAtIndex(const int&) override;
 };

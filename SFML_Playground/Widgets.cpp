@@ -200,6 +200,11 @@ void W_LevelMenu::update(const float& deltaTime)
 
 bool W_LevelMenu::isMouseOver(const bool& chechForClick = false)
 {
+	if (level1_Button.isMouseOver() || level2_Button.isMouseOver() || level3_Button.isMouseOver())
+	{
+		if (chechForClick) gameInstance.setGameState(GAME_LAUNCHING);
+		return true;
+	}
 	return false;
 }
 
@@ -261,8 +266,8 @@ InputWidget* W_Paused::setWidgetIndex(const int& toIndex)
 
 void W_Paused::update(const float& deltaTime)
 {
-	InputWidget::update(deltaTime);
 	if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->update(deltaTime);
+	InputWidget::update(deltaTime);
 }
 
 void W_Paused::windowUpdate()
@@ -281,7 +286,7 @@ bool W_Paused::isMouseOver(const bool& checkForClick = false)
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
 	if (pause_resumeButton.isMouseOver())
 	{
-		if (checkForClick) gameInstance.setGameState(IN_GAME);
+		input_esc();
 		return true;
 	}
 	if (pause_optionsButton.isMouseOver())
@@ -297,7 +302,6 @@ bool W_Paused::isMouseOver(const bool& checkForClick = false)
 	// On no button-mouse overlap
 	return false;
 }
-
 
 // W_GameOver -------------------------------------------------------------------------------------
 
@@ -345,17 +349,17 @@ bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 
 // W_Gameplay -------------------------------------------------------------------------------------
 
-W_Gameplay::W_Gameplay(InputWidget* parent) : InputWidget(parent), flashlightShader(this), pauseScreen(this), gameOverScreen(this), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f)
+W_Gameplay::W_Gameplay(InputWidget* parent) : InputWidget(parent), flashlightShader(this), pauseMenu(this), gameOverScreen(this), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f)
 {
 	ButtonConstruct constr = { windowCenter + sf::Vector2f(-1200.0f, 800.0f), sf::Vector2f(500.0f, 500.0f), sf::Color::White, 12, "TEST", sf::Color::Black };
 	TestBox.construct(constr);
-	shapes = { &targetController, &TestBox, &flashlightShader, player, &healthBar };
-
 }
 
 void W_Gameplay::construct()
 {
-	InputWidget::windowUpdate();
+	InputWidget::construct();
+	if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->construct();
+
 	if (gameInstance.getGameState() >= GAME_LAUNCHING)
 	{
 		if (gameInstance.getGameState() == GAME_LAUNCHING)
@@ -369,7 +373,7 @@ void W_Gameplay::construct()
 			// Add Gameplay objects to shapes vector to draw them
 			gameInstance.setGameState(IN_GAME);
 		}
-		unpause();
+		setWidgetIndex(0);
 	}
 }
 
@@ -378,31 +382,55 @@ void W_Gameplay::windowUpdate()
 	InputWidget::windowUpdate();
 }
 
-void W_Gameplay::pause()
+InputWidget* W_Gameplay::getWidgetAtIndex(const int& atIndex)
 {
-	gameInstance.setIsPaused(true);
-	shapes.push_back(&pauseScreen);
-	gameInstance.setGameState(GAME_PAUSED);
+	switch (atIndex)
+	{
+	case 0: // SELF
+		return this;
+		break;
+	case 1: // PAUSED
+		return &pauseMenu;
+		break;
+	case 2: // GAME_OVER
+		return &gameOverScreen;
+		break;
+	default:
+		break;
+	}
+	return nullptr;
 }
 
-void W_Gameplay::unpause()
+InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 {
-	if (pauseScreen.getWidgetIndex() > 0)
+	switch (widgetIndex = toIndex)
 	{
-		pauseScreen.construct();
-		return;
+	case 0:
+		gameInstance.setIsPaused(false);
+		gameInstance.setGameState(IN_GAME);
+		shapes = { &targetController, &TestBox, &flashlightShader, player, &healthBar };
+		break;
+	case 1:
+		gameInstance.setIsPaused(true);
+		gameInstance.setGameState(GAME_PAUSED);
+		shapes = { &targetController, &TestBox, &flashlightShader, player, &healthBar, &pauseMenu };
+		break;
+	case 2:
+		gameInstance.setIsPaused(true);
+		gameInstance.setGameState(GAME_OVER);
+		shapes = { &targetController, &TestBox, &flashlightShader, player, &healthBar, &gameOverScreen };
+		break;
+	default:
+		shapes = {};
+		break;
 	}
-	gameInstance.setIsPaused(false);
-	shapes = { &targetController, &TestBox, &flashlightShader, player, &healthBar };
-	gameInstance.setGameState(IN_GAME);
+	return getWidgetAtIndex(widgetIndex);
 }
 
 void W_Gameplay::lose()
 {
 	// Add GameOver Screen to shapes list
-	gameInstance.setIsPaused(true);
-	gameInstance.setGameState(GAME_OVER);
-	shapes.push_back(&gameOverScreen);
+	setWidgetIndex(2)->construct();
 	gameOverScreen.changeScore(hitTargets);
 	if (hitTargets > SaveGame::Stored_Save) SaveGame::Stored_Save = hitTargets; // Update highscore value if new value is bigger
 	SaveGame::saveData(); // Save highscore value (didn't change if no greater was achieved)
@@ -410,9 +438,10 @@ void W_Gameplay::lose()
 
 void W_Gameplay::update(const float& deltaTime)
 {
+	InputWidget::update(deltaTime);
+	const bool drawFlashlight = true;
 	static int frame = 0;
 	frame++;
-	const bool drawFlashlight = true;
 
 	// Flashlight update
 	if (drawFlashlight)
@@ -424,18 +453,6 @@ void W_Gameplay::update(const float& deltaTime)
 		}
 	}
 
-	switch (gameInstance.getGameState())
-	{
-	case GAME_PAUSED:
-		pauseScreen.update(deltaTime);
-		break;
-	case GAME_OVER:
-		gameOverScreen.update(deltaTime);
-		break;
-	default:
-		InputWidget::update(deltaTime);
-		break;
-	}
 	
 	// Gameplay updates
 	if (gameInstance.getGameState() >= GAME_PAUSED)
@@ -452,18 +469,9 @@ void W_Gameplay::update(const float& deltaTime)
 
 bool W_Gameplay::input_esc()
 {
-	switch (gameInstance.getGameState())
-	{
-	case IN_GAME:
-		pause();
-		break;
-	case GAME_PAUSED:
-		unpause();
-		break;
-	default:
-		gameInstance.setGameState(MENU_SCREEN);
-		break;
-	}
+	if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->input_esc();
+	
+	setWidgetIndex(1)->construct(); // If no sub widget open, open optionsMenu
 	return true;
 }
 
@@ -475,21 +483,8 @@ bool W_Gameplay::onMouseClickR()
 
 bool W_Gameplay::isMouseOver(const bool& checkForClick = false)
 {
-	if (gameInstance.getIsPaused())
-	{
-		switch (gameInstance.getGameState())
-		{
-		case GAME_PAUSED:
-			return pauseScreen.isMouseOver(checkForClick);
-			break;
-		case GAME_OVER:
-			return gameOverScreen.isMouseOver(checkForClick);
-			break;
-		default:
-			break;
-		}
-		return false;
-	}
+	if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
+
 	if (checkForClick)
 	{
 		if (targetController.clickedAny(gameInstance.getMousePos()))

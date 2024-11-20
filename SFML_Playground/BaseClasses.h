@@ -132,10 +132,15 @@ public:
 	InputWidget(InputWidget* parent) : WidgetElement(parent) {};
 
 	virtual InputWidget* setWidgetIndex(const int&);
-	virtual InputWidget* getWidgetAtIndex(const int&);
+	virtual InputWidget* getWidgetAtIndex(const int& atIndex) { return (atIndex == 0 ? this : nullptr); };
 	int getWidgetIndex() const { return widgetIndex; }
 
-	virtual bool input_esc() { parent->setWidgetIndex(0)->construct(); return true; }
+	virtual bool input_esc()
+	{ 
+		if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->input_esc();
+		if (parent != nullptr) parent->setWidgetIndex(0)->construct(); 
+		return true;
+	}
 	virtual bool handleInput(sf::Event* eventRef);
 	virtual bool isMouseOver(const bool&) { return false; }
 };
