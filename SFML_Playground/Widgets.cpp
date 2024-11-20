@@ -172,11 +172,11 @@ bool W_Options::isMouseOver(const bool& checkForClick = false)
 W_LevelMenu::W_LevelMenu(InputWidget* parent) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> LEVEL_MENU_CONSTR = {
-		{viewCenter + sf::Vector2f(0.0f, -300.0f),	sf::Vector2f(100.0f, 100.0f),	sf::Color::Transparent, 100, "LEVEL SELECT", sf::Color::White},
-		{viewCenter + sf::Vector2f(-500.0f, 0.0f),	sf::Vector2f(200, 200.0f),		sf::Color::Transparent, 24, "LEVEL 1", sf::Color::White},
-		{viewCenter + sf::Vector2f(0.0f, 0.0f),		sf::Vector2f(200.0f, 200.0f),	sf::Color::Transparent, 24, "LEVEL 2", sf::Color::White},
-		{viewCenter + sf::Vector2f(500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color::Transparent, 24, "LEVEL 3", sf::Color::White},
-		{viewCenter + sf::Vector2f(0.0f, 300.0f),	sf::Vector2f(200.0f, 100.0f),	sf::Color::White, 24, "RETURN", sf::Color::Black}
+		{viewCenter + sf::Vector2f(0.0f, -300.0f),	sf::Vector2f(100.0f, 100.0f),	sf::Color::Transparent, 100,	"LEVEL SELECT", sf::Color::White},
+		{viewCenter + sf::Vector2f(-500.0f, 0.0f),	sf::Vector2f(200, 200.0f),		sf::Color::Transparent, 24,		"LEVEL 1", sf::Color::White},
+		{viewCenter + sf::Vector2f(0.0f, 0.0f),		sf::Vector2f(200.0f, 200.0f),	sf::Color::Transparent, 24,		"LEVEL 2", sf::Color::White},
+		{viewCenter + sf::Vector2f(500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color::Transparent, 24,		"LEVEL 3", sf::Color::White},
+		{viewCenter + sf::Vector2f(0.0f, 300.0f),	sf::Vector2f(200.0f, 100.0f),	sf::Color::White, 24,			"RETURN", sf::Color::Black}
 	};
 
 	levelmenu_title.construct(LEVEL_MENU_CONSTR[0]);
