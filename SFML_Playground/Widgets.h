@@ -94,8 +94,8 @@ private:
 
 	Flashlight flashlightShader;
 
-	virtual void pause();
-	virtual void unpause();
+	void pause();
+	void unpause();
 	void lose();
 protected:
 	void windowUpdate() override;
@@ -106,5 +106,5 @@ public:
 	void construct() override;
 	
 	void update(const float& deltaTime) override;
-	virtual bool isMouseOver(const bool&) override;
+	bool isMouseOver(const bool&) override;
 };

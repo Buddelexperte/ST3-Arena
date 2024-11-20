@@ -286,7 +286,7 @@ bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 
 // W_Gameplay -------------------------------------------------------------------------------------
 
-W_Gameplay::W_Gameplay(WidgetElement* parent) : InputWidget(parent), pauseScreen(this), gameOverScreen(this), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f)
+W_Gameplay::W_Gameplay(WidgetElement* parent) : InputWidget(parent), pauseScreen(this), flashlightShader(this), gameOverScreen(this), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f)
 {
 	ButtonConstruct constr = { windowCenter + sf::Vector2f(-1200.0f, 800.0f), sf::Vector2f(500.0f, 500.0f), sf::Color::White, 12, "TEST", sf::Color::Black };
 	TestBox.construct(constr);

@@ -12,7 +12,7 @@ private:
     float barHeight; // Height of timerBar
 public:
     Timer(float maxTime, float barWidth, float barHeight, const sf::Color& fillColor = sf::Color::White)
-        : maxTime(maxTime), currentTime(maxTime), barWidth(barWidth), barHeight(barHeight), WidgetElement()
+        : maxTime(maxTime), currentTime(maxTime), barWidth(barWidth), barHeight(barHeight), WidgetElement(nullptr)
     {
         timerBar.setSize(sf::Vector2f(barWidth, barHeight));
         timerBar.setFillColor(fillColor);
