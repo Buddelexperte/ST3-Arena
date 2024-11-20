@@ -167,12 +167,6 @@ bool W_Options::isMouseOver(const bool& checkForClick = false)
 	return false;
 }
 
-bool W_Options::input_esc()
-{
-	if (parent != nullptr) parent->construct();
-	return true;
-}
-
 // W_LevelMenu ---------------------------------------------------------------------------------------
 
 W_LevelMenu::W_LevelMenu(InputWidget* parent) : InputWidget(parent)
@@ -190,6 +184,8 @@ W_LevelMenu::W_LevelMenu(InputWidget* parent) : InputWidget(parent)
 	level3_Button.construct(LEVEL_MENU_CONSTR[2]);
 	levelmenu_title.construct(LEVEL_MENU_CONSTR[3]);
 	return_Button.construct(LEVEL_MENU_CONSTR[4]);
+	
+	shapes = { &level1_Button,	&level2_Button,	&level3_Button,	&levelmenu_title, &return_Button };
 }
 
 void W_LevelMenu::construct()
@@ -199,18 +195,12 @@ void W_LevelMenu::construct()
 
 void W_LevelMenu::update(const float& deltaTime)
 {
-	
+	return;
 }
 
 bool W_LevelMenu::isMouseOver(const bool& chechForClick = false)
 {
 	return false;
-}
-
-bool W_LevelMenu::input_esc()
-{
-	parent->setWidgetIndex(0)->construct();
-	return true;
 }
 
 // W_Paused ---------------------------------------------------------------------------------------
@@ -255,12 +245,6 @@ void W_Paused::windowUpdate()
 	pause_resumeButton.setPos(viewCenter + sf::Vector2f{ 0, 0 });
 	pause_optionsButton.setPos(viewCenter + sf::Vector2f{ 0, 150 });
 	pause_quitButton.setPos(viewCenter + sf::Vector2f{ 0, 300 });
-}
-
-bool W_Paused::input_esc()
-{
-	showOptions(!bOptionsOpen);
-	return bOptionsOpen;
 }
 
 void W_Paused::showOptions(const bool& bShow)

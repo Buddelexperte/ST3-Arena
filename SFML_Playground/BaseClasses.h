@@ -132,7 +132,7 @@ public:
 	virtual InputWidget* setWidgetIndex(const int&);
 	virtual InputWidget* getWidgetAtIndex(const int&);
 
-	virtual bool input_esc() { return true; }
+	virtual bool input_esc() { parent->setWidgetIndex(0)->construct(); return true; }
 	InputWidget(InputWidget* parent) : WidgetElement(parent) {};
 	virtual bool handleInput(sf::Event* eventRef);
 	virtual bool isMouseOver(const bool&) { return false; }

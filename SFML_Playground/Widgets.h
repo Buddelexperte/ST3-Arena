@@ -14,10 +14,9 @@ private:
 protected:
 	void windowUpdate() override;
 public:
-	virtual bool input_esc() override;
 	void construct() override;
 	W_Options(InputWidget*);
-	virtual bool isMouseOver(const bool&) override;
+	bool isMouseOver(const bool&) override;
 };
 
 class W_LevelMenu : public InputWidget // LevelMenu Widget ------------------------------------------
@@ -28,9 +27,7 @@ private:
 	Button level2_Button;
 	Button level3_Button;
 	Button return_Button;
-protected:
 public:
-	bool input_esc() override;
 	W_LevelMenu(InputWidget*);
 	void construct() override;
 	void update(const float&) override;
@@ -55,7 +52,7 @@ public:
 	W_MainMenu(InputWidget*);
 	void construct() override;
 	void update(const float&) override;
-	virtual bool isMouseOver(const bool&) override;
+	bool isMouseOver(const bool&) override;
 
 	InputWidget* setWidgetIndex(const int&) override;
 	InputWidget* getWidgetAtIndex(const int&) override;
@@ -75,7 +72,6 @@ private:
 protected:
 	void windowUpdate() override;
 public:
-	bool input_esc() override;
 	W_Paused(InputWidget*);
 	void update(const float&) override;
 	bool isSubMenuOpen() const { return bOptionsOpen; }
@@ -90,10 +86,10 @@ private:
 	Button gameOver_score;
 	Button gameOver_quitButton;
 public:
-	void windowUpdate() override;
 	W_GameOver(InputWidget*);
+	void windowUpdate() override;
 	void changeScore(const int&);
-	virtual bool isMouseOver(const bool&) override;
+	bool isMouseOver(const bool&) override;
 };
 
 class W_Gameplay : public InputWidget // Gameplay Widget ------------------------------------------
