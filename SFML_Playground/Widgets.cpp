@@ -29,16 +29,32 @@ void W_MainMenu::construct()
 {
 	InputWidget::construct();
 	menu_highscore.setText("Highscore: " + std::to_string(SaveGame::Stored_Save));
-	showOptions(false);
+	setWidgetIndex(false);
+}
+
+InputWidget* W_MainMenu::getWidgetAtIndex(const int& index = -1)
+{
+	switch (index)
+	{
+	case 0:
+		return this;
+		break;
+	case 1:
+		return &optionsMenu;
+		break;
+	case 2:
+		return &levelMenu;
+		break;
+	default:
+		break;
+	}
+	return nullptr;
 }
 
 void W_MainMenu::update(const float& deltaTime)
 {
-	if (bOptionsOpen)
-	{
-		optionsMenu.update(deltaTime);
-		return;
-	}
+	WidgetElement* activeWidget = nullptr;
+
 	InputWidget::update(deltaTime);
 }
 
@@ -54,10 +70,7 @@ void W_MainMenu::windowUpdate()
 
 bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 {
-	if (bOptionsOpen)
-	{
-		return optionsMenu.isMouseOver(checkForClick);
-	}
+	return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
 
 	sf::Vector2f mousePos = gameInstance.getMousePos();
 
@@ -74,7 +87,7 @@ bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 	}
 	if (menu_optionsButton.isMouseOver())
 	{
-		if (checkForClick) showOptions(true);
+		if (checkForClick) setWidgetIndex(true);
 		return true;
 	}
 	if (menu_quitButton.isMouseOver())
@@ -86,20 +99,31 @@ bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 	return false;
 }
 
-void W_MainMenu::showOptions(const bool& bShow)
+void W_MainMenu::setWidgetIndex(const int& newIndex)
 {
-	if (bOptionsOpen = bShow)
+	widgetIndex = newIndex;
+	switch (widgetIndex)
 	{
+	case 0: // MAIN_MENU
+		shapes = { &menu_title, &menu_highscore, &menu_startButton, &menu_optionsButton, &menu_quitButton };
+		construct();
+		break;
+	case 1: // OPTIONS_MENU
 		shapes = { &optionsMenu };
 		optionsMenu.construct();
-		return;
+		break;
+	case 2: // LEVEL_MENU
+		shapes = { &levelMenu };
+		levelMenu.construct();
+		break;
+	default:
+		break;
 	}
-	shapes = { &menu_title, &menu_highscore, &menu_startButton, &menu_optionsButton, &menu_quitButton };
 }
 
 bool W_MainMenu::input_esc()
 {
-	if (bOptionsOpen) showOptions(false);
+	if (widgetIndex > 0) setWidgetIndex(0);
 	else gameInstance.setGameState(QUIT);
 	return true;
 }

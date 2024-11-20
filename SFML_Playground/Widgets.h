@@ -29,13 +29,16 @@ private:
 	Button menu_optionsButton;
 	Button menu_quitButton;
 
+	int widgetIndex = 0;
+	InputWidget* getWidgetAtIndex(const int&);
+
 	W_Options optionsMenu;
-	bool bOptionsOpen = false;
-	void showOptions(const bool&);
+	W_LevelMenu levelMenu;
 protected:
 	void windowUpdate() override;
 	virtual bool input_esc() override;
 public:
+	void setWidgetIndex(const int&);
 	W_MainMenu(WidgetElement*);
 	void construct() override;
 	void update(const float&) override;
