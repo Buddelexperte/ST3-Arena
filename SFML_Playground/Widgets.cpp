@@ -172,20 +172,20 @@ bool W_Options::isMouseOver(const bool& checkForClick = false)
 W_LevelMenu::W_LevelMenu(InputWidget* parent) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> LEVEL_MENU_CONSTR = {
-		{viewCenter + sf::Vector2f(0.0f, -300.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::Transparent, 100, "LEVEL SELECT", sf::Color::White},
-		{viewCenter + sf::Vector2f(500.0f, 0.0f), sf::Vector2f(200.0f, 200.0f), sf::Color::Transparent, 24, "LEVEL 3", sf::Color::White},
-		{viewCenter + sf::Vector2f(0.0f, 0.0f), sf::Vector2f(200.0f, 200.0f), sf::Color::Transparent, 24, "LEVEL 2", sf::Color::White},
-		{viewCenter + sf::Vector2f(-500.0f, 0.0f), sf::Vector2f(200, 200.0f), sf::Color::Transparent, 24, "LEVEL 1", sf::Color::White},
-		{viewCenter + sf::Vector2f(0.0f, 300.0f), sf::Vector2f(200.0f, 100.0f), sf::Color::White, 24, "RETURN", sf::Color::Black}
+		{viewCenter + sf::Vector2f(0.0f, -300.0f),	sf::Vector2f(100.0f, 100.0f),	sf::Color::Transparent, 100, "LEVEL SELECT", sf::Color::White},
+		{viewCenter + sf::Vector2f(-500.0f, 0.0f),	sf::Vector2f(200, 200.0f),		sf::Color::Transparent, 24, "LEVEL 1", sf::Color::White},
+		{viewCenter + sf::Vector2f(0.0f, 0.0f),		sf::Vector2f(200.0f, 200.0f),	sf::Color::Transparent, 24, "LEVEL 2", sf::Color::White},
+		{viewCenter + sf::Vector2f(500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color::Transparent, 24, "LEVEL 3", sf::Color::White},
+		{viewCenter + sf::Vector2f(0.0f, 300.0f),	sf::Vector2f(200.0f, 100.0f),	sf::Color::White, 24, "RETURN", sf::Color::Black}
 	};
 
-	level1_Button.construct(LEVEL_MENU_CONSTR[0]);
-	level2_Button.construct(LEVEL_MENU_CONSTR[1]);
-	level3_Button.construct(LEVEL_MENU_CONSTR[2]);
-	levelmenu_title.construct(LEVEL_MENU_CONSTR[3]);
+	levelmenu_title.construct(LEVEL_MENU_CONSTR[0]);
+	level1_Button.construct(LEVEL_MENU_CONSTR[1]);
+	level2_Button.construct(LEVEL_MENU_CONSTR[2]);
+	level3_Button.construct(LEVEL_MENU_CONSTR[3]);
 	return_Button.construct(LEVEL_MENU_CONSTR[4]);
 	
-	shapes = { &level1_Button,	&level2_Button,	&level3_Button,	&levelmenu_title, &return_Button };
+	shapes = { &levelmenu_title, &level1_Button, &level2_Button, &level3_Button, &return_Button };
 }
 
 void W_LevelMenu::construct()
@@ -203,6 +203,11 @@ bool W_LevelMenu::isMouseOver(const bool& chechForClick = false)
 	if (level1_Button.isMouseOver() || level2_Button.isMouseOver() || level3_Button.isMouseOver())
 	{
 		if (chechForClick) gameInstance.setGameState(GAME_LAUNCHING);
+		return true;
+	}
+	if (return_Button.isMouseOver())
+	{
+		if (chechForClick) input_esc();
 		return true;
 	}
 	return false;
@@ -452,8 +457,9 @@ void W_Gameplay::update(const float& deltaTime)
 			flashlightShader.drawOtherScene(elem);
 		}
 	}
-
 	
+	if (getWidgetAtIndex(widgetIndex) != this) getWidgetAtIndex(widgetIndex)->update(deltaTime);
+
 	// Gameplay updates
 	if (gameInstance.getGameState() >= GAME_PAUSED)
 	{
