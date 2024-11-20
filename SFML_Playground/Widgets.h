@@ -55,7 +55,7 @@ private:
 protected:
 	void windowUpdate() override;
 public:
-	void setWidgetIndex(const int&);
+	InputWidget* setWidgetIndex(const int&);
 	W_MainMenu(WidgetElement*);
 	void construct() override;
 	void update(const float&) override;

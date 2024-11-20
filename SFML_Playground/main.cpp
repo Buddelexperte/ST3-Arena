@@ -15,12 +15,12 @@ int main()
     sf::RenderWindow* windowRef = gameInstance.getWindow();
 
     // Create all main widgets for later use
-    W_Gameplay* GameplayRef = new W_Gameplay(nullptr);
-    W_MainMenu* MainMenuRef = new W_MainMenu(nullptr);
+    W_Gameplay GameplayRef(nullptr);
+    W_MainMenu MainMenuRef(nullptr);
     
     // Gameplay Initialization
     E_GameState gameState = QUIT;
-    InputWidget* activeMenu = MainMenuRef;
+    InputWidget* activeMenu = &MainMenuRef;
     // Main Game Loop
     while (windowRef->isOpen())
     {
@@ -32,11 +32,11 @@ int main()
             {
             // Ending of Game or being in the MenuScreen opens up the MainMenu
             case MENU_SCREEN:
-                activeMenu = MainMenuRef;
+                activeMenu = &MainMenuRef;
                 break;
             // Any gamestate greater or equal than GameLaunching shows the GameplayMenu
             case GAME_PAUSED: case GAME_OVER: case GAME_LAUNCHING: case IN_GAME:
-                activeMenu = GameplayRef;
+                activeMenu = &GameplayRef;
                 break;
             // Quit invalidates activeMenu to call a game crash intendedly
             case QUIT:
@@ -56,8 +56,8 @@ int main()
             // (Re)construct the selected widget for correct display of sub elements
             activeMenu->construct();
             // Update GameInstance's version of activeMenu to erase confusion
+            gameInstance.setActiveWidget(activeMenu);
         }
-        gameInstance.setActiveWidget(activeMenu);
 
         // Calculate fps and deltaTime based on clock
         deltaTime = clock.restart().asSeconds();

@@ -90,12 +90,11 @@ public:
 	{
 		for (sf::Drawable* drawable : shapes)
 		{
-			delete drawable;
 			drawable = nullptr;
 		}
-		delete window;
-		delete view;
-		delete parent;
+		window = nullptr;
+		view = nullptr;
+		parent = nullptr;
 	}
 	virtual void construct() { windowUpdate(); };
 

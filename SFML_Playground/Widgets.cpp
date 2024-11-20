@@ -34,7 +34,7 @@ InputWidget* W_MainMenu::getWidgetAtIndex(const int& index)
 	switch (index)
 	{
 	case 0:
-		return this;
+		return this; // Self
 		break;
 	case 1:
 		return &optionsMenu;
@@ -48,10 +48,9 @@ InputWidget* W_MainMenu::getWidgetAtIndex(const int& index)
 	return nullptr;
 }
 
-void W_MainMenu::setWidgetIndex(const int& newIndex)
+InputWidget* W_MainMenu::setWidgetIndex(const int& newIndex)
 {
-	widgetIndex = newIndex;
-	switch (widgetIndex)
+	switch (widgetIndex = newIndex)
 	{
 	case 0: // MAIN_MENU
 		shapes = { &menu_title, &menu_highscore, &menu_startButton, &menu_optionsButton, &menu_quitButton };
@@ -64,17 +63,15 @@ void W_MainMenu::setWidgetIndex(const int& newIndex)
 		break;
 	default:
 		shapes = {};
-		return;
 		break;
 	}
-	getWidgetAtIndex(widgetIndex)->construct();
+	return getWidgetAtIndex(widgetIndex);
 }
 
 void W_MainMenu::update(const float& deltaTime)
 {
 	InputWidget::update(deltaTime);
-	WidgetElement* activeWidget = getWidgetAtIndex(widgetIndex);
-	activeWidget->update(deltaTime);
+	if (getWidgetAtIndex(widgetIndex) != this) getWidgetAtIndex(widgetIndex)->update(deltaTime);
 }
 
 void W_MainMenu::windowUpdate()
