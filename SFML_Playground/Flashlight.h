@@ -5,60 +5,60 @@ class Flashlight : public WidgetElement
 {
 private:
     const std::string circleMaskShader = R"(
-        uniform vec2 lightPos;
-        uniform float radius;
-        uniform float viewportHeight;
+        uniform vec2 lightPos; // light "Source" = Center of Mask
+        uniform float radius; // Circle Radius
+        uniform float viewportHeight; // Viewport Height (probably sf::RenderWindow)
 
         void main() {
-            vec2 pos = gl_FragCoord.xy;
-            float adjustedY = viewportHeight - pos.y; // Flip Y coordinate
-            vec2 adjustedPos = vec2(pos.x, adjustedY);
-            float dist = length(adjustedPos - lightPos);
+            vec2 pos = gl_FragCoord.xy; // Fragment coords
+            float adjustedY = viewportHeight - pos.y; // Flip Y coordinate because SFML
+            vec2 adjustedPos = vec2(pos.x, adjustedY); // Rebuild Frag pos
+            float dist = length(adjustedPos - lightPos); // Pos distance from mask Center
 
-            // Default to black background (fully opaque)
-            vec4 color = vec4(0.0, 0.0, 0.0, 1.0); // Fully black (opaque)
+            vec4 color = vec4(0.0, 0.0, 0.0, 1.0); // Fully black (opaque) for later masking
 
-            // Calculate alpha based on distance from lightPos
+            // If distance from source is smaller than max radius of circle
             if (dist < radius) {
+                // Dist is in range of radius
                 float alpha = smoothstep(radius, radius * 0.7, dist); // Creates a soft edge
                 color = vec4(0.0, 0.0, 0.0, 1.0 - alpha); // Black with varying transparency (revealing the scene)
             }
 
-            gl_FragColor = color; // Output the color
+            gl_FragColor = color; // Output the final color for Fragment
         }
     )";
 
     const std::string coneMaskShader = R"(
-        uniform vec2 lightPos;       // Position of the light source (player)
-        uniform vec2 direction;      // Direction of the cone (normalized)
-        uniform float radius;        // Maximum radius of the cone
-        uniform float angle;         // Half-angle of the cone in radians
+        uniform vec2 lightPos; // light "Source" = Center of Mask
+        uniform vec2 direction; // Direction of the cone from the center(normalized)
+        uniform float radius; // Cone Radius
+        uniform float angle; // Half-angle of the cone in radians
         uniform float viewportHeight; // Height of the viewport for Y-axis flipping
 
         void main() {
-            vec2 pos = gl_FragCoord.xy;
+            vec2 pos = gl_FragCoord.xy; // UV position of Fragment
             float adjustedY = viewportHeight - pos.y; // Flip Y coordinate
-            vec2 adjustedPos = vec2(pos.x, adjustedY);
+            vec2 adjustedPos = vec2(pos.x, adjustedY); // Rebuild position
 
-            vec2 toPixel = adjustedPos - lightPos;
-            float dist = length(toPixel);
+            vec2 toPixel = adjustedPos - lightPos; 
+            float dist = length(toPixel); // Get Frag distance from source
 
-            // Default to fully black background
-            vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
+            vec4 color = vec4(0.0, 0.0, 0.0, 1.0); // Black overlay to mask out
 
             // Check if within cone and radius
             if (dist < radius) {
-                vec2 toPixelNorm = normalize(toPixel); // Normalize the direction to this pixel
-                float dotProduct = dot(toPixelNorm, direction);
+                vec2 fragDir = normalize(toPixel); // Normalize the direction to this pixel
+                float dotProduct = dot(fragDir, direction);
 
-                // Check if within the cone angle
+                // Check if direction is within the cone angle
                 if (dotProduct > cos(angle)) {
-                    float alpha = smoothstep(radius, radius * 0.7, dist); // Creates a soft edge
+                    // dist is in range of radius
+                    float alpha = smoothstep(radius, radius * 0.5, dist); // Creates a soft edge
                     color = vec4(0.0, 0.0, 0.0, 1.0 - alpha); // Black with transparency to reveal the scene
                 }
             }
 
-            gl_FragColor = color; // Output the final color
+            gl_FragColor = color; // Output the final color for fragment
         }
 
     )";
@@ -82,7 +82,7 @@ private:
 
     bool bUseCone = false;
 public:
-    Flashlight() : WidgetElement()
+    Flashlight(WidgetElement* parent) : WidgetElement(parent)
     {
         flashlightSprite.setOrigin(512.0f / 2.0f, 512.0f / 2.0f);
         sf::Color color = flashlightSprite.getColor();
@@ -115,10 +115,11 @@ public:
             throw std::runtime_error("Failed to create scene render texture.");
         }
 
+        sceneRenderTexture.setSmooth(false);
+
         sceneSprite.setTexture(sceneRenderTexture.getTexture());
 
         shapes = { &sceneSprite };
-
     }
 
     virtual void construct() override { return; }
@@ -132,37 +133,57 @@ public:
         static int steps = 0;
         if (++steps % 100 == 0) {
             int textureIndex = steps % textures.size();
-            flashlightTexture = textures[textureIndex];
-            flashlightSprite.setTexture(flashlightTexture);
+            static int lastTextureIndex = -1; // Track last assigned texture index
+            if (textureIndex != lastTextureIndex) {
+                flashlightTexture = textures[textureIndex];
+                flashlightSprite.setTexture(flashlightTexture);
+                lastTextureIndex = textureIndex;
+            }
         }
-
-        if (gameInstance.getIsPaused()) return;
 
         // Update flashlight position and rotation
+        static sf::Vector2f lastPos;
+        static float lastRot;
         sf::Vector2f newPos = player->getPos();
-        if (flashlightSprite.getPosition() != newPos) {
+        if (newPos != lastPos) {
             flashlightSprite.setPosition(newPos);
+            lastPos = newPos;
         }
 
-        float newRot = getLookAtRot(player->getPos(), gameInstance.getMousePos());
-        if (flashlightSprite.getRotation() != newRot && false)
+        if (!(gameInstance.getIsPaused() || bUseCone))
         {
-            flashlightSprite.setRotation(newRot);
+            float newRot = getLookAtRot(newPos, gameInstance.getMousePos());
+            if (newRot != lastRot) {
+                flashlightSprite.setRotation(newRot);
+                lastRot = newRot;
+            }
         }
 
         // Transform player's world position to view-space coordinates for shader
         sf::Vector2f viewOffset = view->getCenter() - (view->getSize() / 2.0f);
         sf::Vector2f lightPos = newPos - viewOffset;
 
-        // Calculate direction vector to mouse
-        sf::Vector2i mousePosition = sf::Mouse::getPosition(*window); // Mouse in window coordinates
-        sf::Vector2f mouseWorldPosition = window->mapPixelToCoords(mousePosition, *view); // Transform to world coords
-        sf::Vector2f mouseDir = mouseWorldPosition - newPos;
+        static float lastMouseDir[2] = { 0.0f, 0.0f };
+        sf::Vector2f mouseDir = { lastMouseDir[0], lastMouseDir[1] };
+        if (!gameInstance.getIsPaused() && bUseCone)
+        {
+            // Calculate direction vector to mouse
+            sf::Vector2i mousePosition = sf::Mouse::getPosition(*window); // Mouse in window coordinates
+            sf::Vector2f mouseWorldPosition = window->mapPixelToCoords(mousePosition, *view); // Transform to world coords
 
-        // Normalize direction vector
-        if (mouseDir != sf::Vector2f(0, 0)) {
-            mouseDir /= std::sqrt(mouseDir.x * mouseDir.x + mouseDir.y * mouseDir.y);
+            // Normalize direction vector
+            mouseDir = mouseWorldPosition - newPos;
+            if (mouseDir != sf::Vector2f(0, 0))
+            {
+                float len = std::sqrt(mouseDir.x * mouseDir.x + mouseDir.y * mouseDir.y);
+                if (len > 0.0001f)
+                {
+                    mouseDir /= len;
+                }
+            }
+            lastMouseDir[0] = mouseDir.x; lastMouseDir[1] = mouseDir.y;
         }
+        
 
         if (bUseCone)
         {
@@ -193,8 +214,6 @@ public:
         // Ensure the render texture sprite is positioned properly
         sceneSprite.setPosition(view->getCenter() - (view->getSize() / 2.0f));
         return;
-
-        
     }
 
     void setMaskMode(const bool& bCone = false)

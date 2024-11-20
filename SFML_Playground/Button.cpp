@@ -5,8 +5,15 @@
 #include <filesystem> // Finding font file
 #include <iostream> // Error messages
 
-Button::Button(const sf::Vector2f& pos, const sf::Vector2f& b_size, const sf::Color& b_color, const unsigned int& t_size, const std::string& t_text, const sf::Color& t_color)
+void Button::construct(const ButtonConstruct& constr)
 {
+	const sf::Vector2f& pos = constr.pos;
+	const sf::Vector2f& b_size = constr.size;
+	const sf::Color& b_color = constr.color;
+	const unsigned int& t_size = constr.textSize;
+	const std::string& t_text = constr.text;
+	const sf::Color& t_color = constr.textColor;
+
 	// Load text font from project directory
 	if (!font.loadFromFile("../Content/fonts/coolvetica/coolvetica_rg.otf"))
 	{
@@ -24,7 +31,7 @@ Button::Button(const sf::Vector2f& pos, const sf::Vector2f& b_size, const sf::Co
 	T_Text.setFillColor(t_color);
 	// Center Text inside Box
 	T_Text.setOrigin(T_Text.getGlobalBounds().width / 2.0f, T_Text.getGlobalBounds().height / 2.0f);
-	T_Text.setPosition({pos.x, pos.y - 6.0f});
+	T_Text.setPosition({ pos.x, pos.y - 6.0f });
 }
 
 bool Button::isMouseOver() const {

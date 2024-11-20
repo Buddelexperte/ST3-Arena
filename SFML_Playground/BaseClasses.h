@@ -27,7 +27,7 @@ class GI_Arena // SINGLETON PATTERN
 private:
 	GI_Arena();
 	GI_Arena(const GI_Arena&) = delete;
-	GI_Arena& operator=(const GI_Arena&) = delete;
+	GI_Arena& operator=(const GI_Arena&) = delete; // Block the '=' operator to stop copies being made of this class
 
 	sf::RenderWindow* window = nullptr;
 	sf::View* view = nullptr;
@@ -79,30 +79,36 @@ protected:
 	sf::View* view = nullptr;
 	sf::Vector2f viewCenter;
 	std::vector<sf::Drawable*> shapes;
+
 	virtual void windowUpdate();
 public:
-	WidgetElement() : WidgetElement(nullptr) {};
-	WidgetElement(WidgetElement* parentWidget)
+	WidgetElement(WidgetElement* parentWidget) : parent(parentWidget)
 	{
-		parent = parentWidget;
 		windowUpdate();
 	}
-	virtual ~WidgetElement() = default;
+	virtual ~WidgetElement()
+	{
+		for (sf::Drawable* drawable : shapes)
+		{
+			delete drawable;
+			drawable = nullptr;
+		}
+	}
+	virtual void construct() { windowUpdate(); };
 
-	WidgetElement* getParent() { return parent; }
+	WidgetElement* getParent() const { return parent; }
 	// Position
 	virtual void setPos(const sf::Vector2f&) { return; }
 	virtual void addPos(const sf::Vector2f&) { return; }
-	virtual sf::Vector2f getPos() { return sf::Vector2f(0.0f, 0.0f); };
+	virtual sf::Vector2f getPos() const { return sf::Vector2f(0.0f, 0.0f); };
 	// Rotation
 	virtual void setRot(const float&) { return; }
 	virtual void addRot(const float&) { return; }
-	virtual float getRot() { return 0.0f; }
+	virtual float getRot() const { return 0.0f; }
 	// Scale (NOT SIZE)
 	virtual void setScale(const sf::Vector2f&) { return; };
-	virtual sf::Vector2f getScale() { return sf::Vector2f(0.0f, 0.0f); };
+	virtual sf::Vector2f getScale() const { return sf::Vector2f(0.0f, 0.0f); };
 
-	virtual void construct() { windowUpdate(); };
 	virtual void update(const float& deltaTime) { lastDeltaTime = deltaTime;  windowUpdate(); };
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
@@ -111,6 +117,7 @@ class InputWidget : public WidgetElement
 {
 protected:
 	sf::Event* event = nullptr;
+
 	virtual sf::Keyboard::Key keyboardInput(sf::Event*);
 	virtual sf::Mouse::Button mouseInput(sf::Event*);
 	virtual float scrollInput(sf::Event*);
@@ -118,10 +125,8 @@ protected:
 	virtual bool onMouseClickR() { return true; };
 	virtual bool onMouseClickM() { return true; };
 	virtual bool input_esc() { return true; };
-	virtual void windowUpdate() { WidgetElement::windowUpdate(); }
 public:
-	InputWidget(WidgetElement* parent) : WidgetElement(parent) { };
-	virtual void construct() { WidgetElement::construct(); }
+	InputWidget(WidgetElement* parent) : WidgetElement(parent) {};
 	virtual void update(const float& deltaTime) { WidgetElement::update(deltaTime); }
 	virtual bool handleInput(sf::Event* eventRef);
 	virtual bool isMouseOver(const bool&) { return false; }
@@ -134,8 +139,9 @@ class Player : public InputWidget
 {
 private:
 	Button* playerModel = nullptr;
-	void calcMovement(const float&);
 	sf::Vector2f velocity = { 0.0f, 0.0f };
+
+	void calcMovement(const float&);
 protected:
 	sf::Keyboard::Key keyboardInput(sf::Event*) override;
 	sf::Mouse::Button mouseInput(sf::Event*) override;
@@ -144,9 +150,9 @@ public:
 	void update(const float&) override;
 	void setPos(const sf::Vector2f&) override;
 	void addPos(const sf::Vector2f&) override;
-	sf::Vector2f getPos() override;
+	sf::Vector2f getPos() const override;
 	void setRot(const float&) override;
-	float getRot() override;
+	float getRot() const override;
 };
 
 

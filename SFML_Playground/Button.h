@@ -6,7 +6,7 @@ struct ButtonConstruct
 	sf::Vector2f pos;
 	sf::Vector2f size;
 	sf::Color color;
-	unsigned int fontSize;
+	unsigned int textSize;
 	std::string text;
 	sf::Color textColor;
 };
@@ -21,9 +21,9 @@ public:
 	sf::RectangleShape B_Box;
 	sf::Text T_Text;
 	// Constructors
-	Button() : Button({ 0, 0 }, { 0, 0 }, sf::Color::White, 24, "Text", sf::Color::Black) {};
-	Button(const ButtonConstruct& constr) : Button(constr.pos, constr.size, constr.color, constr.fontSize, constr.text, constr.textColor) {};
-	Button(const sf::Vector2f&, const sf::Vector2f&, const sf::Color&, const unsigned int&, const std::string&, const sf::Color&);
+	Button() : Button(ButtonConstruct({ 0, 0 }, { 0, 0 }, sf::Color::White, 24, "Text", sf::Color::Black)) {};
+	Button(const ButtonConstruct& constr) { construct(constr); }
+	void construct(const ButtonConstruct&);
 
 	void setText(const std::string&); // Set the texts content
 	void setColor(const sf::Color&, const bool& = false); // Set the color of the text or the button fill

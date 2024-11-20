@@ -3,16 +3,14 @@
 #include "TargetController.h" // TargetSpawner and Handler
 #include "Flashlight.h" // Timer class for game logic
 #include "Button.h" // Button class for UI
-
-// Forward declarations
-class Timer;
+#include "Timer.h"
 
 class W_Options : public InputWidget
 {
 private:
-	Button* options_title;
-	Button* options_test;
-	Button* options_return;
+	Button options_title;
+	Button options_test;
+	Button options_return;
 protected:
 	void windowUpdate() override;
 	virtual bool input_esc() override;
@@ -25,13 +23,13 @@ public:
 class W_MainMenu : public InputWidget // MainMenu Widget ------------------------------------------
 {
 private:
-	Button* menu_title;
-	Button* menu_highscore;
-	Button* menu_startButton;
-	Button* menu_optionsButton;
-	Button* menu_quitButton;
+	Button menu_title;
+	Button menu_highscore;
+	Button menu_startButton;
+	Button menu_optionsButton;
+	Button menu_quitButton;
 
-	W_Options* optionsMenu = nullptr;
+	W_Options optionsMenu;
 	bool bOptionsOpen = false;
 	void showOptions(const bool&);
 protected:
@@ -63,12 +61,12 @@ public:
 class W_Paused : public InputWidget
 {
 private:
-	Button* pause_title;
-	Button* pause_resumeButton;
-	Button* pause_optionsButton;
-	Button* pause_quitButton;
+	Button pause_title;
+	Button pause_resumeButton;
+	Button pause_optionsButton;
+	Button pause_quitButton;
 
-	W_Options* optionsMenu = nullptr;
+	W_Options optionsMenu;
 	bool bOptionsOpen = false;
 	void showOptions(const bool&);
 protected:
@@ -85,9 +83,9 @@ public:
 class W_GameOver : public InputWidget
 {
 private:
-	Button* gameOver_title;
-	Button* gameOver_score;
-	Button* gameOver_quitButton;
+	Button gameOver_title;
+	Button gameOver_score;
+	Button gameOver_quitButton;
 public:
 	void windowUpdate() override;
 	W_GameOver(WidgetElement*);
@@ -101,19 +99,19 @@ private:
 	const float TIMER_DEFAULT = 10.0f;
 	const float minTimer = 1.0f;
 	int hitTargets = 0;
-	Timer* healthBar;
-	Button* TestBox;
-	TargetController* targetController;
+	Timer healthBar;
+	Button TestBox;
+	TargetController targetController;
+
+	W_Paused pauseScreen;
+	W_GameOver gameOverScreen;
 
 	Player* player = gameInstance.getPlayer();
 
-	W_Paused* pauseScreen = nullptr;
-	W_GameOver* gameOverScreen = nullptr;
-
 	Flashlight flashlightShader;
 
-	virtual void pause();
-	virtual void unpause();
+	void pause();
+	void unpause();
 	void lose();
 protected:
 	void windowUpdate() override;
@@ -124,5 +122,5 @@ public:
 	void construct() override;
 	
 	void update(const float& deltaTime) override;
-	virtual bool isMouseOver(const bool&) override;
+	bool isMouseOver(const bool&) override;
 };
