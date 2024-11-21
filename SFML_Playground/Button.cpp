@@ -59,7 +59,7 @@ sf::Color Button::getColor(const bool& bTextColor) const
 	return (bTextColor ? T_Text.getFillColor() : B_Box.getFillColor()); // return either box or text fillcolor
 }
 
-void Button::setTexture(const sf::Texture& newText, const bool& resetTint = false)
+void Button::setTexture(const sf::Texture& newText, const bool resetTint = false)
 {
 	B_Box.setTexture(&newText);
 	if (resetTint) B_Box.setFillColor(sf::Color::White);

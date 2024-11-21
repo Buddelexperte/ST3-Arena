@@ -31,7 +31,8 @@ public:
 	void setColor(const sf::Color&, const bool& = false); // Set the color of the text or the button fill
 	sf::Color getColor(const bool& = false) const; // Get the color of the text or the button fill
 
-	void setTexture(const sf::Texture&, const bool&);
+	void setTexture(const sf::Texture&, const bool);
+	void clearTexture() { B_Box.setTexture(nullptr); };
 	sf::Texture getTexture() const { return *B_Box.getTexture(); }
 
 	void setPos(const sf::Vector2f&); // Move the whole button to a new position
