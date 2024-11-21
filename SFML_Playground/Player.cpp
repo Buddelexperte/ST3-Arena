@@ -34,28 +34,37 @@ void Player::update(const float& deltaTime)
 void Player::calcMovement(const float& deltaTime)
 {
 	// Constants
-	const float walkingSpeed = 0.2f;
+	const float walkingSpeed = 350.0f;
 	const float lerpSmoothness = 0.01f;
-	// Check movement inputs (not handled by events but sf::isKeyPressed)
+
 	float x = 0.0f; // X-Movement per frame
 	float y = 0.0f; // Y-Movement per frame
 	float multiplier = 1.0f; // Speed multiplier
-	if (sf::Keyboard::isKeyPressed(KEY_LSHIFT)) multiplier *= 2.0f;
+
+	if (sf::Keyboard::isKeyPressed(KEY_LSHIFT)) 
+		multiplier *= 2.0f;
+
 	// Check if each key is currently pressed and modify velocity accordingly
 	if (sf::Keyboard::isKeyPressed(KEY_W)) y -= walkingSpeed; // Move North
 	if (sf::Keyboard::isKeyPressed(KEY_A)) x -= walkingSpeed; // Move West
 	if (sf::Keyboard::isKeyPressed(KEY_S)) y += walkingSpeed; // Move South
 	if (sf::Keyboard::isKeyPressed(KEY_D)) x += walkingSpeed; // Move East
-	// Position
-	sf::Vector2f playerPos = getPos();
-	sf::Vector2f targetVelo = { x * multiplier, y * multiplier };
+	
+	// Target velocity (scaled by deltaTime)
+	sf::Vector2f targetVelo = { x * multiplier * deltaTime, y * multiplier * deltaTime };
+
+	// Smoothly interpolate velocity using lerp
 	velocity = lerp(velocity, targetVelo, lerpSmoothness);
-	sf::Vector2f targetPos = playerPos + velocity;
+
+	// Update position
 	addPos(velocity);
+
 	// Rotation
-	playerPos = getPos();
+	sf::Vector2f playerPos = getPos();
 	sf::Vector2f mousePos = gameInstance.getMousePos();
 	float newRot = getLookAtRot(playerPos, mousePos);
+
+	// Smoothly interpolate rotation using lerp
 	setRot(lerp(getRot(), newRot, lerpSmoothness));
 }
 // Override class default keyboard Input to check for specific cases
