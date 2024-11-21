@@ -77,6 +77,7 @@ void WidgetElement::windowUpdate()
 	windowCenter = { windowSize.x / 2.0f, windowSize.y / 2.0f };
 	// Everything sf::View related
 	view = gameInstance.getView();
+	viewSize = view->getSize();
 	viewCenter = view->getCenter();
 }
 

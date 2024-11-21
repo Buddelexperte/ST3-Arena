@@ -20,7 +20,7 @@ private:
             // If distance from source is smaller than max radius of circle
             if (dist < radius) {
                 // Dist is in range of radius
-                float alpha = smoothstep(radius, radius * 0.7, dist); // Creates a soft edge
+                float alpha = smoothstep(radius, radius * 0.4, dist); // Creates a soft edge
                 color = vec4(0.0, 0.0, 0.0, 1.0 - alpha); // Black with varying transparency (revealing the scene)
             }
 

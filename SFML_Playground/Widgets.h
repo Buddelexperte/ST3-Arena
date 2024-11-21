@@ -108,6 +108,10 @@ private:
 
 	Flashlight flashlightShader;
 
+	const float TILING_SCALE = 0.2f; // Larger = more tiling
+	sf::Texture backgroundTexture;
+	sf::RectangleShape background;
+
 	void lose();
 	bool input_esc() override;
 	bool onMouseClickR() override;

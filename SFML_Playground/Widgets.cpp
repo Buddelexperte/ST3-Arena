@@ -357,6 +357,14 @@ W_Gameplay::W_Gameplay(InputWidget* parent) : InputWidget(parent), flashlightSha
 {
 	ButtonConstruct constr = { windowCenter + sf::Vector2f(-1200.0f, 800.0f), sf::Vector2f(500.0f, 500.0f), sf::Color::White, 12, "TEST", sf::Color::Black };
 	TestBox.construct(constr);
+
+	// Load texture
+	if (!backgroundTexture.loadFromFile("../Content/Textures/cobblestone_mossy.png")) {
+		std::cerr << "Error loading the background texture!" << std::endl;
+		return;
+	}
+	backgroundTexture.setRepeated(true);
+	background.setTexture(&backgroundTexture);
 }
 
 void W_Gameplay::construct()
@@ -384,6 +392,18 @@ void W_Gameplay::construct()
 void W_Gameplay::windowUpdate()
 {
 	InputWidget::windowUpdate();
+	sf::Vector2f backgroundPosition = {
+			std::floor(viewCenter.x - viewSize.x / 2.f),
+			std::floor(viewCenter.y - viewSize.y / 2.f)
+	};
+	background.setPosition(backgroundPosition);
+	background.setSize(viewSize);
+	background.setTextureRect(sf::IntRect(
+		static_cast<int>(backgroundPosition.x * TILING_SCALE),
+		static_cast<int>(backgroundPosition.y * TILING_SCALE),
+		static_cast<int>(viewSize.x * TILING_SCALE),
+		static_cast<int>(viewSize.y * TILING_SCALE)
+	));
 }
 
 InputWidget* W_Gameplay::getWidgetAtIndex(const int& atIndex)
@@ -412,17 +432,17 @@ InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 	case 0:
 		gameInstance.setIsPaused(false);
 		gameInstance.setGameState(IN_GAME);
-		shapes = { &targetController, &TestBox, &flashlightShader, player, &healthBar };
+		shapes = { &background, &targetController, &TestBox, &flashlightShader, player, &healthBar };
 		break;
 	case 1:
 		gameInstance.setIsPaused(true);
 		gameInstance.setGameState(GAME_PAUSED);
-		shapes = { &targetController, &TestBox, &flashlightShader, player, &healthBar, &pauseMenu };
+		shapes = { &background, &targetController, &TestBox, &flashlightShader, player, &healthBar, &pauseMenu };
 		break;
 	case 2:
 		gameInstance.setIsPaused(true);
 		gameInstance.setGameState(GAME_OVER);
-		shapes = { &targetController, &TestBox, &flashlightShader, player, &healthBar, &gameOverScreen };
+		shapes = { &background, &targetController, &TestBox, &flashlightShader, player, &healthBar, &gameOverScreen };
 		break;
 	default:
 		shapes = {};
