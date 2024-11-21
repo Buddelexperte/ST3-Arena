@@ -34,8 +34,8 @@ void Player::update(const float& deltaTime)
 void Player::calcMovement(const float& deltaTime)
 {
 	// Constants
-	const float walkingSpeed = 350.0f;
-	const float lerpSmoothness = 0.01f;
+	const float WALKING_SPEED = 350.0f;
+	const float LERP_SMOOTHNESS = 0.01f;
 
 	float x = 0.0f; // X-Movement per frame
 	float y = 0.0f; // Y-Movement per frame
@@ -45,16 +45,17 @@ void Player::calcMovement(const float& deltaTime)
 		multiplier *= 2.0f;
 
 	// Check if each key is currently pressed and modify velocity accordingly
-	if (sf::Keyboard::isKeyPressed(KEY_W)) y -= walkingSpeed; // Move North
-	if (sf::Keyboard::isKeyPressed(KEY_A)) x -= walkingSpeed; // Move West
-	if (sf::Keyboard::isKeyPressed(KEY_S)) y += walkingSpeed; // Move South
-	if (sf::Keyboard::isKeyPressed(KEY_D)) x += walkingSpeed; // Move East
+	if (sf::Keyboard::isKeyPressed(KEY_W)) y -= WALKING_SPEED; // Move North
+	if (sf::Keyboard::isKeyPressed(KEY_A)) x -= WALKING_SPEED; // Move West
+	if (sf::Keyboard::isKeyPressed(KEY_S)) y += WALKING_SPEED; // Move South
+	if (sf::Keyboard::isKeyPressed(KEY_D)) x += WALKING_SPEED; // Move East
 	
 	// Target velocity (scaled by deltaTime)
 	sf::Vector2f targetVelo = { x * multiplier * deltaTime, y * multiplier * deltaTime };
 
 	// Smoothly interpolate velocity using lerp
-	velocity = lerp(velocity, targetVelo, lerpSmoothness);
+	if (velocity != targetVelo)
+		velocity = lerp(velocity, targetVelo, LERP_SMOOTHNESS);
 
 	// Update position
 	addPos(velocity);
@@ -62,10 +63,12 @@ void Player::calcMovement(const float& deltaTime)
 	// Rotation
 	sf::Vector2f playerPos = getPos();
 	sf::Vector2f mousePos = gameInstance.getMousePos();
+	float rotation = getRot();
 	float newRot = getLookAtRot(playerPos, mousePos);
 
 	// Smoothly interpolate rotation using lerp
-	setRot(lerp(getRot(), newRot, lerpSmoothness));
+	if (rotation != newRot)
+		setRot(lerp(rotation, newRot, LERP_SMOOTHNESS));
 }
 // Override class default keyboard Input to check for specific cases
 sf::Keyboard::Key Player::keyboardInput(sf::Event* eventRef)
