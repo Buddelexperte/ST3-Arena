@@ -68,7 +68,7 @@ void Player::calcMovement(const float& deltaTime)
 
 	// Smoothly interpolate rotation using lerp
 	if (rotation != newRot)
-		setRot(lerp(rotation, newRot, LERP_SMOOTHNESS));
+		setRot(lerp(rotation, newRot, LERP_SMOOTHNESS * 10.0f));
 }
 // Override class default keyboard Input to check for specific cases
 sf::Keyboard::Key Player::keyboardInput(sf::Event* eventRef)

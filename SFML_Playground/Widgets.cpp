@@ -393,8 +393,8 @@ void W_Gameplay::windowUpdate()
 {
 	InputWidget::windowUpdate();
 	sf::Vector2f backgroundPosition = {
-			std::floor(viewCenter.x - viewSize.x / 2.f),
-			std::floor(viewCenter.y - viewSize.y / 2.f)
+			viewCenter.x - viewSize.x / 2.0f,
+			viewCenter.y - viewSize.y / 2.0f
 	};
 	background.setPosition(backgroundPosition);
 	background.setSize(viewSize);
