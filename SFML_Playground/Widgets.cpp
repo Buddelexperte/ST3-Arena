@@ -353,18 +353,17 @@ bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 
 // W_Gameplay -------------------------------------------------------------------------------------
 
-W_Gameplay::W_Gameplay(InputWidget* parent) : InputWidget(parent), flashlightShader(this), pauseMenu(this), gameOverScreen(this), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f)
+W_Gameplay::W_Gameplay(InputWidget* parent) : InputWidget(parent), flashlightShader(this), pauseMenu(this), gameOverScreen(this), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f), background(sf::Quads, 4)
 {
 	ButtonConstruct constr = { windowCenter + sf::Vector2f(-1200.0f, 800.0f), sf::Vector2f(500.0f, 500.0f), sf::Color::White, 12, "TEST", sf::Color::Black };
 	TestBox.construct(constr);
 
 	// Load texture
-	if (!backgroundTexture.loadFromFile("../Content/Textures/cobblestone_mossy.png")) {
+	if (!backgroundTexture.loadFromFile("../Content/Textures/cobblestone_mossy.png"))
+	{
 		std::cerr << "Error loading the background texture!" << std::endl;
-		return;
 	}
 	backgroundTexture.setRepeated(true);
-	background.setTexture(&backgroundTexture);
 }
 
 void W_Gameplay::construct()
@@ -392,18 +391,26 @@ void W_Gameplay::construct()
 void W_Gameplay::windowUpdate()
 {
 	InputWidget::windowUpdate();
-	sf::Vector2f backgroundPosition = {
-			viewCenter.x - viewSize.x / 2.0f,
-			viewCenter.y - viewSize.y / 2.0f
-	};
-	background.setPosition(backgroundPosition);
-	background.setSize(viewSize);
-	background.setTextureRect(sf::IntRect(
-		static_cast<int>(backgroundPosition.x * TILING_SCALE),
-		static_cast<int>(backgroundPosition.y * TILING_SCALE),
-		static_cast<int>(viewSize.x * TILING_SCALE),
-		static_cast<int>(viewSize.y * TILING_SCALE)
-	));
+
+	// This creates the parallax effect: background moves as the player moves
+	backgroundPos.x = viewCenter.x * 1.0f;  // Adjust this factor for stronger/weaker parallax
+	backgroundPos.y = viewCenter.y * 1.0f;  // Adjust for vertical parallax as well
+
+	// Background will cover the entire view area
+	background[0].position = sf::Vector2f(viewCenter.x - viewSize.x / 2.0f, viewCenter.y - viewSize.y / 2.0f);
+	background[1].position = sf::Vector2f(viewCenter.x + viewSize.x / 2.0f, viewCenter.y - viewSize.y / 2.0f);
+	background[2].position = sf::Vector2f(viewCenter.x + viewSize.x / 2.0f, viewCenter.y + viewSize.y / 2.0f);
+	background[3].position = sf::Vector2f(viewCenter.x - viewSize.x / 2.0f, viewCenter.y + viewSize.y / 2.0f);
+
+
+	// Set texture coordinates to tile the texture across the background
+	float textureOffsetX = fmod(backgroundPos.x * TILING_SCALE, backgroundTexture.getSize().x);
+	float textureOffsetY = fmod(backgroundPos.y * TILING_SCALE, backgroundTexture.getSize().y);
+
+	background[0].texCoords = sf::Vector2f(textureOffsetX, textureOffsetY);  // Top-left
+	background[1].texCoords = sf::Vector2f(textureOffsetX + viewSize.x * TILING_SCALE, textureOffsetY);  // Top-right
+	background[2].texCoords = sf::Vector2f(textureOffsetX + viewSize.x * TILING_SCALE, textureOffsetY + viewSize.y * TILING_SCALE);  // Bottom-right
+	background[3].texCoords = sf::Vector2f(textureOffsetX, textureOffsetY + viewSize.y * TILING_SCALE);  // Bottom-left
 }
 
 InputWidget* W_Gameplay::getWidgetAtIndex(const int& atIndex)
@@ -524,4 +531,17 @@ bool W_Gameplay::isMouseOver(const bool& checkForClick = false)
 		return false;
 	}
 	return (targetController.isHovering(gameInstance.getMousePos()));
+}
+
+void W_Gameplay::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	for (const auto& elem : shapes)
+	{
+		if (elem == &background)
+		{
+			target.draw(background, &backgroundTexture);
+			continue;
+		}
+		target.draw(*elem, states);
+	}
 }

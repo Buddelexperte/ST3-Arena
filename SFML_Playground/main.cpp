@@ -8,6 +8,7 @@ float fps = 0.0f;
 
 int main()
 {
+
     // Initiate clock for fps + deltaTime calculation
     sf::Clock clock;
     // Game Instance init

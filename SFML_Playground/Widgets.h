@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML_Arena.h"
+#include "BaseClasses.h"
 #include "TargetController.h" // TargetSpawner and Handler
 #include "Button.h" // Button class for UI
 #include "Timer.h"
@@ -105,12 +106,14 @@ private:
 	W_GameOver gameOverScreen;
 
 	Player* player = gameInstance.getPlayer();
+	sf::Vector2f playerPos;
 
 	Flashlight flashlightShader;
 
-	const float TILING_SCALE = 0.2f; // Larger = more tiling
+	sf::Vector2f backgroundPos;
+	const float TILING_SCALE = 0.1f; // Larger = more tiling
 	sf::Texture backgroundTexture;
-	sf::RectangleShape background;
+	sf::VertexArray background;  // 4 vertices for the rectangle (quad)
 
 	void lose();
 	bool input_esc() override;
@@ -124,4 +127,5 @@ public:
 	bool isMouseOver(const bool&) override;
 	InputWidget* setWidgetIndex(const int&) override;
 	InputWidget* getWidgetAtIndex(const int&) override;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };

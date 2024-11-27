@@ -86,7 +86,7 @@ public:
     {
         flashlightSprite.setOrigin(512.0f / 2.0f, 512.0f / 2.0f);
         sf::Color color = flashlightSprite.getColor();
-        color.a = 50;
+        color.a = 200;
         flashlightSprite.setColor(color);
 
         if (!flashlightShader_Circle.loadFromMemory(circleMaskShader, sf::Shader::Fragment))
@@ -208,7 +208,8 @@ public:
         sceneRenderTexture.setView(*view);
 
         // Render flashlight effect
-        sceneRenderTexture.clear(sf::Color::Black);
+        sceneRenderTexture.clear(sf::Color(0, 0, 0, 0)); // Clear with fully transparent background
+
         sceneRenderTexture.display();
 
         // Ensure the render texture sprite is positioned properly
@@ -234,7 +235,7 @@ public:
     {
         // Draw your scene here (make sure to render the actual scene)
         sceneRenderTexture.draw(*drawable);
-        sceneRenderTexture.draw(flashlightSprite);
+        sceneRenderTexture.draw(flashlightSprite, sf::BlendMin);
 
         // Use the shader to draw the flashlight effect
         sf::Shader* currShader = (bUseCone ? &flashlightShader_Cone : &flashlightShader_Circle);
