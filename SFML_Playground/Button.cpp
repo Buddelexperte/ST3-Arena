@@ -23,7 +23,7 @@ void Button::construct(const ButtonConstruct& constr)
 	// Load Click Sound from project directory
 	if (!clickBuffer.loadFromFile("..Content/Sounds/Click_Low.wav"))
 	{
-		std::cout << "Fehler beim Laden vom Click Sound!" << std::endl;
+		std::cout << "Unable to load click sound!" << std::endl;
 	}
 
 	// Initialize button
