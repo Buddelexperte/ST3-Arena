@@ -103,7 +103,7 @@ sf::Mouse::Button Player::mouseInput(sf::Event* eventRef)
 
 float Player::scrollInput(sf::Event* eventRef)
 {
-	return; // TODO
+	return eventRef->mouseWheelScroll.delta; // TODO - heavy
 	float zoomfactor = 1 + (eventRef->mouseWheelScroll.delta * 0.1);
 	gameInstance.getView()->zoom(zoomfactor);
 	return eventRef->mouseWheelScroll.delta;
