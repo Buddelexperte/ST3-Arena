@@ -48,6 +48,8 @@ protected:
 public:
 	W_Options(InputWidget*);
 	void construct() override;
+	InputWidget* setWidgetIndex(const int&) override;
+	InputWidget* getWidgetAtIndex(const int&) override;
 	bool isMouseOver(const bool&) override;
 };	
 
@@ -104,6 +106,7 @@ protected:
 public:
 	W_Paused(InputWidget*);
 	void update(const float&) override;
+	bool input_esc() override;
 	InputWidget* setWidgetIndex(const int&) override;
 	InputWidget* getWidgetAtIndex(const int&) override;
 	void construct() override;

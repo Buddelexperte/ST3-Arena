@@ -201,30 +201,70 @@ bool W_OptionsGraphics::isMouseOver(const bool& checkForClick = false)
 W_Options::W_Options(InputWidget* parent = nullptr) : InputWidget(parent), soundMenu(this)
 {
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
-		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "OPTIONS",											sf::Color::White},
-		{viewCenter + sf::Vector2f{ 0, 150 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "GRAPHICS",													sf::Color::Black},
-		{viewCenter + sf::Vector2f{ 0, 300 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "RETURN",														sf::Color::Black},
-		{viewCenter + sf::Vector2f{ 0, 0 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "SOUNDS",														sf::Color::Black}
+		{viewCenter + sf::Vector2f{ 0, -300 },		sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "OPTIONS",											sf::Color::White},
+		{viewCenter + sf::Vector2f{ 0, 0 },			sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "SOUNDS",														sf::Color::Black},
+		{viewCenter + sf::Vector2f{ 0, 150 },		sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "GRAPHICS",													sf::Color::Black},
+		{viewCenter + sf::Vector2f{ 0, 300 },		sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "RETURN",														sf::Color::Black},
 	};
 
 	options_title.construct(MAIN_MENU_CONSTR[0]);
 	options_graphics.construct(MAIN_MENU_CONSTR[1]);
-	options_return.construct(MAIN_MENU_CONSTR[2]);
-	options_sounds.construct(MAIN_MENU_CONSTR[3]);
+	options_sounds.construct(MAIN_MENU_CONSTR[2]);
+	options_return.construct(MAIN_MENU_CONSTR[3]);
+}
+
+InputWidget* W_Options::getWidgetAtIndex(const int& atIndex)
+{
+	switch (atIndex)
+	{
+	case 0: // OPTIONS SELECTOR
+		return this;
+		break;
+	case 1: // GRAPHICS
+		return &graphicMenu;
+		break;
+	case 2: // SOUNDS
+		return &soundMenu;
+		break;
+	default:
+		return nullptr;
+		break;
+	}
+	return nullptr;
+}
+
+InputWidget* W_Options::setWidgetIndex(const int& newIndex)
+{
+	switch (widgetIndex = newIndex)
+	{
+	case 0: // OPTIONS SELECTOR
+		shapes = { &options_title, &options_graphics, &options_return, &options_sounds };
+		break;
+	case 1: // GRAPHICS
+		shapes = { &graphicMenu };
+		break;
+	case 2: // SOUNDS
+		shapes = { &soundMenu };
+		break;
+	default:
+		shapes = {};
+		break;
+	}
+	return getWidgetAtIndex(widgetIndex);
 }
 
 void W_Options::construct()
 {
 	InputWidget::construct();
-
-	shapes = { &options_title, &options_graphics, &options_return, &options_sounds };
+	setWidgetIndex(0);
 }
 
 void W_Options::windowUpdate()
 {
 	InputWidget::windowUpdate();
 	options_title.setPos(viewCenter + sf::Vector2f{ 0, -300 });
-	options_graphics.setPos(viewCenter + sf::Vector2f{ 0, 150 });
+	options_graphics.setPos(viewCenter + sf::Vector2f{ 0, 0 });
+	options_sounds.setPos(viewCenter + sf::Vector2f{ 0, 150 });
 	options_return.setPos(viewCenter + sf::Vector2f{ 0, 300 });
 }
 
@@ -236,16 +276,14 @@ bool W_Options::isMouseOver(const bool& checkForClick = false)
 		if (checkForClick) parent->construct();
 		return true;
 	}
-	if (options_sounds.isMouseOver())
-	{
-		if (checkForClick) soundMenu.construct();
-		shapes = { &soundMenu };
-		return true;
-	}
 	if (options_graphics.isMouseOver())
 	{
-		if (checkForClick) graphicMenu.construct();
-		shapes = { &soundMenu };
+		if (checkForClick) setWidgetIndex(1)->construct();
+		return true;
+	}
+	if (options_sounds.isMouseOver())
+	{
+		if (checkForClick) setWidgetIndex(2)->construct();
 		return true;
 	}
 	// On no button-mouse overlap
@@ -380,7 +418,7 @@ bool W_Paused::isMouseOver(const bool& checkForClick = false)
 	}
 	if (pause_optionsButton.isMouseOver())
 	{
-		if (checkForClick) setWidgetIndex(1);
+		if (checkForClick) setWidgetIndex(1)->construct();
 		return true;
 	}
 	if (pause_quitButton.isMouseOver())
@@ -390,6 +428,13 @@ bool W_Paused::isMouseOver(const bool& checkForClick = false)
 	}
 	// On no button-mouse overlap
 	return false;
+}
+
+bool W_Paused::input_esc()
+{
+	if (getWidgetAtIndex(widgetIndex) != this) getWidgetAtIndex(widgetIndex)->input_esc();
+	if (parent != nullptr) parent->setWidgetIndex(0)->construct();
+	return true;
 }
 
 // W_GameOver -------------------------------------------------------------------------------------
@@ -585,7 +630,6 @@ void W_Gameplay::update(const float& deltaTime)
 bool W_Gameplay::input_esc()
 {
 	if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->input_esc();
-	
 	setWidgetIndex(1)->construct(); // If no sub widget open, open optionsMenu
 	return true;
 }
