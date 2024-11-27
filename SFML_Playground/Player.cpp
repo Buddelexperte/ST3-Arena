@@ -53,7 +53,7 @@ void Player::calcMovement(const float& deltaTime)
 	// Target velocity (scaled by deltaTime)
 	sf::Vector2f targetVelo = { x * multiplier * deltaTime, y * multiplier * deltaTime };
 
-	// Smoothly interpolate velocity using lerp
+	// Smoothly interpolate velocity using linear interpolation
 	if (velocity != targetVelo)
 		velocity = lerp(velocity, targetVelo, LERP_SMOOTHNESS);
 
