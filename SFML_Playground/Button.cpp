@@ -36,10 +36,16 @@ void Button::construct(const ButtonConstruct& constr)
 	T_Text.setPosition({ pos.x, pos.y - textYFix});
 }
 
-bool Button::isMouseOver() const {
+void Button::onClick()
+{
+
+}
+
+bool Button::isMouseOver(const bool& registerClick = false) const {
 	GI_Arena& gameInstance = GI_Arena::getInstance();
 	sf::RenderWindow* window = gameInstance.getWindow();
 	sf::Vector2f worldMousePos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
+	if (registerClick) onClick();
 	return B_Box.getGlobalBounds().contains(worldMousePos); // Check if the button contains the mouse
 }
 
