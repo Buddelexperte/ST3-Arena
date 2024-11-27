@@ -20,6 +20,12 @@ void Button::construct(const ButtonConstruct& constr)
 	{
 		std::cerr << "Unable to load font!!" << std::endl; // Error message for console log
 	}
+	// Load Click Sound from project directory
+	if (!clickBuffer.loadFromFile("..Content/Sounds/Click_Low.wav"))
+	{
+		std::cout << "Fehler beim Laden vom Click Sound!" << std::endl;
+	}
+
 	// Initialize button
 	B_Box.setSize(b_size);
 	B_Box.setPosition(pos);
@@ -38,14 +44,11 @@ void Button::construct(const ButtonConstruct& constr)
 
 void Button::onClick()
 {
-	sf::SoundBuffer clickBuffer;
-	if (!clickBuffer.loadFromFile("..Content/Sounds/Click_Low.wav"))
-	{
-		std::cout << "Fehler beim Laden vom Click Sound!" << std::endl;
-	}
+	clickSound.setBuffer(clickBuffer);
+	clickSound.play();
 }
 
-bool Button::isMouseOver(const bool& registerClick = false) {
+bool Button::isMouseOver(const bool& registerClick) {
 	GI_Arena& gameInstance = GI_Arena::getInstance();
 	sf::RenderWindow* window = gameInstance.getWindow();
 	sf::Vector2f worldMousePos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
