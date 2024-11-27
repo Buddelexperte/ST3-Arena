@@ -25,7 +25,20 @@ public:
 	sf::RectangleShape B_Box;
 	sf::Text T_Text;
 	// Constructors
-	Button() : Button(ButtonConstruct({ 0, 0 }, { 100.0f, 100.0f }, sf::Color::White, 24, "Text", sf::Color::Black)) {};
+	Button() 
+		: Button(ButtonConstruct({ 0, 0 }, { 100.0f, 100.0f }, sf::Color::White, 24, "Text", sf::Color::Black)) 
+	{
+		// Load text font from project directory
+		if (!font.loadFromFile("../Content/fonts/coolvetica/coolvetica_rg.otf"))
+		{
+			std::cerr << "Unable to load font!!" << std::endl; // Error message for console log
+		}
+		// Load Click Sound from project directory
+		if (!clickBuffer.loadFromFile("..Content/Sounds/Click_Low.wav"))
+		{
+			std::cout << "Unable to load click sound!" << std::endl;
+		}
+	};
 	Button(const ButtonConstruct& constr) { construct(constr); }
 	void construct(const ButtonConstruct&);
 

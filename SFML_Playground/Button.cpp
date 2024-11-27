@@ -15,17 +15,6 @@ void Button::construct(const ButtonConstruct& constr)
 	text = t_text;
 	const sf::Color& t_color = constr.textColor;
 
-	// Load text font from project directory
-	if (!font.loadFromFile("../Content/fonts/coolvetica/coolvetica_rg.otf"))
-	{
-		std::cerr << "Unable to load font!!" << std::endl; // Error message for console log
-	}
-	// Load Click Sound from project directory
-	if (!clickBuffer.loadFromFile("..Content/Sounds/Click_Low.wav"))
-	{
-		std::cout << "Unable to load click sound!" << std::endl;
-	}
-
 	// Initialize button
 	B_Box.setSize(b_size);
 	B_Box.setPosition(pos);
