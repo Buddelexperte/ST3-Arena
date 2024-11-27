@@ -12,13 +12,8 @@ const double pi = 4 * std::atan(1.0); // Calculation of Pi
 
 // Global functions for calculation and conversion
 
-inline float getLookAtRot(const sf::Vector2f& start, const sf::Vector2f& target)
-{
-	sf::Vector2f dir = target - start;
-	float angle = std::atan2(dir.y, dir.x) * 180.0f / static_cast<float>(pi);
-	return angle;
-}
 
+// LERP -------------------------------------------------------------------------------------------
 inline float lerp(const float& currentRot, const float& targetRot, float factor)
 {
 	float diff = targetRot - currentRot;
@@ -35,6 +30,27 @@ inline sf::Vector2f lerp(const sf::Vector2f& currentCenter, const sf::Vector2f& 
 	return currentCenter + factor * (targetCenter - currentCenter);
 }
 
+
+// VECTOR2F MATH ----------------------------------------------------------------------------------
+// Vector2f * float
+inline sf::Vector2f operator*(const sf::Vector2f& vec, float scalar) {
+	return sf::Vector2f(vec.x * scalar, vec.y * scalar);
+}
+
+// Vector2f * Vector2f
+inline sf::Vector2f operator*(const sf::Vector2f& lhs, const sf::Vector2f& rhs) {
+	return sf::Vector2f(lhs.x * rhs.x, lhs.y * rhs.y);
+}
+
+
+// ROTATION ---------------------------------------------------------------------------------------
 constexpr float degreesToRadians(float degrees) {
 	return degrees * static_cast<float>(pi) / 180.0f;
+}
+
+inline float getLookAtRot(const sf::Vector2f& start, const sf::Vector2f& target)
+{
+	sf::Vector2f dir = target - start;
+	float angle = std::atan2(dir.y, dir.x) * 180.0f / static_cast<float>(pi);
+	return angle;
 }

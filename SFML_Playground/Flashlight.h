@@ -4,67 +4,106 @@
 class Flashlight : public WidgetElement
 {
 private:
-    const std::string circleMaskShader = R"(
-        uniform vec2 lightPos; // light "Source" = Center of Mask
-        uniform float radius; // Circle Radius
-        uniform float viewportHeight; // Viewport Height (probably sf::RenderWindow)
+    enum FlashlightType {
+        TEST = -1,
+        CIRCLE = 0,
+        CONE
+    } shaderType = CIRCLE;
 
-        void main() {
-            vec2 pos = gl_FragCoord.xy; // Fragment coords
-            float adjustedY = viewportHeight - pos.y; // Flip Y coordinate because SFML
-            vec2 adjustedPos = vec2(pos.x, adjustedY); // Rebuild Frag pos
-            float dist = length(adjustedPos - lightPos); // Pos distance from mask Center
+    const std::string circleShader_Code = R"(
+    uniform vec2 lightPos; // light "Source" = Center of Mask
+    uniform float radius; // Circle Radius
+    uniform float viewportHeight; // Viewport Height
+    uniform vec2 u_viewSize; // Size of the view
 
-            vec4 color = vec4(0.0, 0.0, 0.0, 1.0); // Fully black (opaque) for later masking
+    void main() {
+        // Convert gl_FragCoord to normalized coordinates (0 to 1)
+        vec2 normalizedCoords = gl_FragCoord.xy / u_viewSize; 
 
-            // If distance from source is smaller than max radius of circle
-            if (dist < radius) {
-                // Dist is in range of radius
-                float alpha = smoothstep(radius, radius * 0.4, dist); // Creates a soft edge
-                color = vec4(0.0, 0.0, 0.0, 1.0 - alpha); // Black with varying transparency (revealing the scene)
-            }
+        // Scale normalized coordinates back to world space
+        vec2 worldCoords = normalizedCoords * u_viewSize;
 
-            gl_FragColor = color; // Output the final color for Fragment
-        }
-    )";
+        // Flip Y coordinate (SFML's Y axis is flipped for textures)
+        worldCoords.y = viewportHeight - worldCoords.y;
 
-    const std::string coneMaskShader = R"(
-        uniform vec2 lightPos; // light "Source" = Center of Mask
-        uniform vec2 direction; // Direction of the cone from the center(normalized)
-        uniform float radius; // Cone Radius
-        uniform float angle; // Half-angle of the cone in radians
-        uniform float viewportHeight; // Height of the viewport for Y-axis flipping
+        // Calculate distance from light position
+        float dist = length(worldCoords - lightPos);
 
-        void main() {
-            vec2 pos = gl_FragCoord.xy; // UV position of Fragment
-            float adjustedY = viewportHeight - pos.y; // Flip Y coordinate
-            vec2 adjustedPos = vec2(pos.x, adjustedY); // Rebuild position
+        // Start with a fully black color (opaque)
+        vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
 
-            vec2 toPixel = adjustedPos - lightPos; 
-            float dist = length(toPixel); // Get Frag distance from source
-
-            vec4 color = vec4(0.0, 0.0, 0.0, 1.0); // Black overlay to mask out
-
-            // Check if within cone and radius
-            if (dist < radius) {
-                vec2 fragDir = normalize(toPixel); // Normalize the direction to this pixel
-                float dotProduct = dot(fragDir, direction);
-
-                // Check if direction is within the cone angle
-                if (dotProduct > cos(angle)) {
-                    // dist is in range of radius
-                    float alpha = smoothstep(radius, radius * 0.5, dist); // Creates a soft edge
-                    color = vec4(0.0, 0.0, 0.0, 1.0 - alpha); // Black with transparency to reveal the scene
-                }
-            }
-
-            gl_FragColor = color; // Output the final color for fragment
+        // If within radius, calculate smooth alpha for soft edge
+        if (dist < radius) {
+            float alpha = smoothstep(radius, radius * 0.4, dist); // Smooth transition
+            color = vec4(0.0, 0.0, 0.0, 1.0 - alpha); // Black with varying transparency
         }
 
-    )";
+        gl_FragColor = color; // Output final color for the fragment
+    }
+)";
+
+    const std::string coneShader_Code = R"(
+    uniform vec2 lightPos; // Light "Source" = Center of Mask
+    uniform vec2 direction; // Direction of the cone from the center (normalized)
+    uniform float radius; // Cone Radius
+    uniform float angle; // Half-angle of the cone in radians
+    uniform float viewportHeight; // Height of the viewport
+    uniform vec2 u_viewSize; // Size of the view
+
+    void main() {
+        // Convert gl_FragCoord to normalized coordinates (0 to 1)
+        vec2 normalizedCoords = gl_FragCoord.xy / u_viewSize;
+
+        // Scale normalized coordinates back to world space
+        vec2 worldCoords = normalizedCoords * u_viewSize;
+
+        // Flip Y coordinate (SFML's Y axis is flipped for textures)
+        worldCoords.y = viewportHeight - worldCoords.y;
+
+        // Calculate the vector to the fragment and its distance
+        vec2 toPixel = worldCoords - lightPos;
+        float dist = length(toPixel);
+
+        // Start with a fully black color (opaque)
+        vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
+
+        // Check if within cone and radius
+        if (dist < radius) {
+            vec2 fragDir = normalize(toPixel); // Normalize the direction to this pixel
+            float dotProduct = dot(fragDir, direction);
+
+            // Check if within the cone angle
+            if (dotProduct > cos(angle)) {
+                float alpha = smoothstep(radius, radius * 0.5, dist); // Smooth transition
+                color = vec4(0.0, 0.0, 0.0, 1.0 - alpha); // Black with transparency
+            }
+        }
+
+        gl_FragColor = color; // Output final color for the fragment
+    }
+)";
+
+    const std::string debugShader_Code = R"(
+    uniform vec2 lightPos; // Light "Source" = Center of Mask
+    uniform vec2 direction; // Direction of the cone from the center (normalized)
+    uniform float radius; // Cone Radius
+    uniform float angle; // Half-angle of the cone in radians
+    uniform float viewportHeight; // Height of the viewport
+    uniform vec2 u_viewSize; // Size of the view
+
+    void main() {
+        vec2 normalizedCoords = gl_FragCoord.xy / u_viewSize;
+        gl_FragColor = vec4(normalizedCoords, 0.0, 1.0); // Output a gradient
+    }
+)";
 
     sf::Shader flashlightShader_Circle;
     sf::Shader flashlightShader_Cone;
+    sf::Shader testShader;
+
+    sf::Shader* currShader = nullptr;
+    bool bUseCone = false;
+
     sf::RenderTexture sceneRenderTexture;
     sf::Sprite sceneSprite;
 
@@ -75,12 +114,11 @@ private:
 
     sf::Texture flashlightTexture;
     sf::Sprite flashlightSprite;
-    
+
     Player* player = nullptr;
 
     std::vector<sf::Texture> textures = {};
 
-    bool bUseCone = false;
 public:
     Flashlight(InputWidget* parent) : WidgetElement(parent)
     {
@@ -89,13 +127,17 @@ public:
         color.a = 200;
         flashlightSprite.setColor(color);
 
-        if (!flashlightShader_Circle.loadFromMemory(circleMaskShader, sf::Shader::Fragment))
+        if (!flashlightShader_Circle.loadFromMemory(circleShader_Code, sf::Shader::Fragment))
         {
             throw std::runtime_error("Failed to load flashlight Circle shader.");
         }
-        if (!flashlightShader_Cone.loadFromMemory(coneMaskShader, sf::Shader::Fragment))
+        if (!flashlightShader_Cone.loadFromMemory(coneShader_Code, sf::Shader::Fragment))
         {
             throw std::runtime_error("Failed to load flashlight Cone shader.");
+        }
+        if (!testShader.loadFromMemory(debugShader_Code, sf::Shader::Fragment))
+        {
+            throw std::runtime_error("Failed to load test shader.");
         }
 
         for (int i = 52; i <= 60; i++)
@@ -128,6 +170,14 @@ public:
     {
         WidgetElement::update(deltaTime);
         player = gameInstance.getPlayer();
+
+        sf::Vector2f viewSize = gameInstance.getView()->getSize();
+
+        currShader = getActiveShader();
+        currShader->setUniform("u_viewSize", sf::Glsl::Vec2(viewSize));
+        currShader->setUniform("viewportHeight", static_cast<float>(window->getSize().y));
+
+        std::cout << "After Switch" << std::endl;
 
         // Update flashlight texture
         static int steps = 0;
@@ -183,10 +233,19 @@ public:
             }
             lastMouseDir[0] = mouseDir.x; lastMouseDir[1] = mouseDir.y;
         }
-        
 
-        if (bUseCone)
+        std::cout << "Before SetUniforms" << std::endl;
+
+        switch (shaderType)
         {
+        case Flashlight::CIRCLE:
+            flashlightSprite.setScale(SPRITE_SCALE);
+            // Pass transformed light position and viewport size to the shader
+            flashlightShader_Circle.setUniform("lightPos", lightPos);
+            flashlightShader_Circle.setUniform("radius", radius);
+            flashlightShader_Circle.setUniform("viewportHeight", view->getSize().y);
+            break;
+        case Flashlight::CONE:
             flashlightSprite.setScale(SPRITE_SCALE * 2.0f);
             // Pass uniforms to the shader
             flashlightShader_Cone.setUniform("lightPos", lightPos);
@@ -194,15 +253,12 @@ public:
             flashlightShader_Cone.setUniform("radius", radius * 2.0f);
             flashlightShader_Cone.setUniform("angle", degreesToRadians(25.0f)); // 40° cone (20° half-angle)
             flashlightShader_Cone.setUniform("viewportHeight", view->getSize().y);
+            break;
+        default:
+            break;
         }
-        else
-        {
-            flashlightSprite.setScale(SPRITE_SCALE);
-            // Pass transformed light position and viewport size to the shader
-            flashlightShader_Circle.setUniform("lightPos", lightPos);
-            flashlightShader_Circle.setUniform("radius", radius);
-            flashlightShader_Circle.setUniform("viewportHeight", view->getSize().y);
-        }
+
+        std::cout << "After SetUniforms" << std::endl;
 
         // Set the render texture's view to match the player's view
         sceneRenderTexture.setView(*view);
@@ -220,15 +276,37 @@ public:
     void setMaskMode(const bool& bCone = false)
     {
         bUseCone = bCone;
+        shaderType = (bUseCone ? CONE : CIRCLE);
     }
     void toggleMaskMode()
     {
         bUseCone = !bUseCone;
+        shaderType = (bUseCone ? CONE : CIRCLE);
+
     }
 
-    sf::Vector2f getPos() const 
+    sf::Vector2f getPos() const
     {
         return flashlightSprite.getPosition();
+    }
+
+    sf::Shader* getActiveShader()
+    {
+        switch (shaderType)
+        {
+        case Flashlight::TEST:
+            return &testShader;
+            break;
+        case Flashlight::CIRCLE:
+            return &flashlightShader_Circle;
+            break;
+        case Flashlight::CONE:
+            return &flashlightShader_Cone;
+            break;
+        default:
+            break;
+        }
+        return nullptr;
     }
 
     void drawOtherScene(sf::Drawable* drawable)
@@ -236,10 +314,10 @@ public:
         // Draw your scene here (make sure to render the actual scene)
         sceneRenderTexture.draw(*drawable);
         sceneRenderTexture.draw(flashlightSprite, sf::BlendMin);
-
         // Use the shader to draw the flashlight effect
-        sf::Shader* currShader = (bUseCone ? &flashlightShader_Cone : &flashlightShader_Circle);
-        sceneRenderTexture.draw(sceneSprite, currShader);
+        sf::Shader* currShader = getActiveShader();
+        if (currShader != nullptr)
+            sceneRenderTexture.draw(sceneSprite, currShader);
 
         sceneRenderTexture.display(); // Update the render texture
     }

@@ -51,24 +51,30 @@ void Player::calcMovement(const float& deltaTime)
 	if (sf::Keyboard::isKeyPressed(KEY_D)) x += WALKING_SPEED; // Move East
 	
 	// Target velocity (scaled by deltaTime)
-	sf::Vector2f targetVelo = { x * multiplier * deltaTime, y * multiplier * deltaTime };
+	sf::Vector2f targetVelo = sf::Vector2f{ x, y } * multiplier * deltaTime;
 
 	// Smoothly interpolate velocity using linear interpolation
 	if (velocity != targetVelo)
-		velocity = lerp(velocity, targetVelo, LERP_SMOOTHNESS * multiplier);
+	{
+		const float WALKING_LERP = LERP_SMOOTHNESS * multiplier;
+		velocity = lerp(velocity, targetVelo, WALKING_LERP);
+	}
 
 	// Update position
 	addPos(velocity);
 
-	// Rotation
+	// Rotation ---------------------------------
 	sf::Vector2f playerPos = getPos();
 	sf::Vector2f mousePos = gameInstance.getMousePos();
 	float rotation = getRot();
-	float newRot = getLookAtRot(playerPos, mousePos);
+	float targetRot = getLookAtRot(playerPos, mousePos);
 
 	// Smoothly interpolate rotation using lerp
-	if (rotation != newRot)
-		setRot(lerp(rotation, newRot, LERP_SMOOTHNESS * 10.0f * multiplier));
+	if (rotation != targetRot)
+	{
+		const float ROT_LERP = LERP_SMOOTHNESS * 10.0f * multiplier;
+		setRot(lerp(rotation, targetRot, ROT_LERP));
+	}
 }
 // Override class default keyboard Input to check for specific cases
 sf::Keyboard::Key Player::keyboardInput(sf::Event* eventRef)
@@ -103,9 +109,9 @@ sf::Mouse::Button Player::mouseInput(sf::Event* eventRef)
 
 float Player::scrollInput(sf::Event* eventRef)
 {
-	return eventRef->mouseWheelScroll.delta; // TODO - heavy
-	float zoomfactor = 1 + (eventRef->mouseWheelScroll.delta * 0.1);
-	gameInstance.getView()->zoom(zoomfactor);
+	return eventRef->mouseWheelScroll.delta; // TODO - flashlightShader heavy
+	float targetZoom = 1 + (eventRef->mouseWheelScroll.delta * -0.1);
+	gameInstance.setZoom(targetZoom);
 	return eventRef->mouseWheelScroll.delta;
 }
 

@@ -7,6 +7,10 @@
 GI_Arena::GI_Arena()
 {
 	window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "SFML_Arena", sf::Style::Fullscreen);
+	
+	// Only use for crash heavy debug
+	//window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "SFML_Arena", sf::Style::Titlebar | sf::Style::Default);
+	
 	std::cout << "RenderWindow created." << std::endl;
 	const sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 	view = new sf::View(sf::Vector2f(desktop.width / 2.0f, desktop.height / 2.0f), sf::Vector2f(desktop.width, desktop.height)); // Arbitrary position

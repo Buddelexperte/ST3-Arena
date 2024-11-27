@@ -35,6 +35,7 @@ private:
 
 	E_GameState gameState = MENU_SCREEN;
 
+	float zoomFactor = 1.0f;
 	InputWidget* activeWidget = nullptr;
 	Player* playerRef = nullptr;
 
@@ -45,21 +46,27 @@ public:
 		static GI_Arena instance;
 		return instance;
 	}
-	void setIsPaused(const bool& bPause) { bIsGameplayPaused = bPause; }
-	bool getIsPaused() const { return bIsGameplayPaused; }
+	// Tick and such
+	void tick(const float&);
 	void updateScreen();
 	void setViewCenter(const sf::Vector2f&);
-	void tick(const float&);
-	bool setActiveWidget(InputWidget*);
+	// Important values and references
 	sf::RenderWindow* getWindow() const { return window; }
 	sf::View* getView() const { return view; }
-	InputWidget* getActiveWidget() { return activeWidget; }
-	Player* getPlayer();
-	bool handleEvent(sf::Event*);
 	sf::RenderStates getRenderStates() const { return states; }
+	Player* getPlayer();
+	void setZoom(const float& newZoom) { view->zoom(zoomFactor = newZoom); }
+	float getZoom() const { return zoomFactor; }
+	bool setActiveWidget(InputWidget*);
+	InputWidget* getActiveWidget() { return activeWidget; }
+	void setIsPaused(const bool& bPause) { bIsGameplayPaused = bPause; }
+	bool getIsPaused() const { return bIsGameplayPaused; }
+	// Input stuff
+	bool handleEvent(sf::Event*);
 	sf::Vector2f getMousePos() { return window->mapPixelToCoords(sf::Mouse::getPosition(*window)); }
-	E_GameState getGameState() const { return gameState; }
+	
 	void setGameState(const E_GameState&);
+	E_GameState getGameState() const { return gameState; }
 };
 
 
