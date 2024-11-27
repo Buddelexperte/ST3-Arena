@@ -221,8 +221,8 @@ public:
         sf::Vector2f viewOffset = view->getCenter() - (view->getSize() / 2.0f);
         sf::Vector2f lightPos = newPos - viewOffset;
 
-        static float lastMouseDir[2] = { 0.0f, 0.0f };
-        sf::Vector2f mouseDir = { lastMouseDir[0], lastMouseDir[1] };
+        static sf::Vector2f lastMouseDir = { 0.0f, 0.0f };
+        sf::Vector2f mouseDir = lastMouseDir;
         if (!gameInstance.getIsPaused() && bUseCone)
         {
             // Calculate direction vector to mouse
@@ -239,7 +239,7 @@ public:
                     mouseDir /= len;
                 }
             }
-            lastMouseDir[0] = mouseDir.x; lastMouseDir[1] = mouseDir.y;
+            lastMouseDir = mouseDir;
         }
 
         switch (shaderType)
