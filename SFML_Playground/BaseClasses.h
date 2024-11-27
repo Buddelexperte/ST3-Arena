@@ -159,6 +159,7 @@ private:
 protected:
 	sf::Keyboard::Key keyboardInput(sf::Event*) override;
 	sf::Mouse::Button mouseInput(sf::Event*) override;
+	float scrollInput(sf::Event*) override;
 public:
 	Player(InputWidget*);
 	void update(const float&) override;

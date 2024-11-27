@@ -487,8 +487,6 @@ void W_Gameplay::windowUpdate()
 	background[2].position = sf::Vector2f(viewCenter.x + viewSize.x / 2.0f, viewCenter.y + viewSize.y / 2.0f);
 	background[3].position = sf::Vector2f(viewCenter.x - viewSize.x / 2.0f, viewCenter.y + viewSize.y / 2.0f);
 
-
-	// Set texture coordinates to tile the texture across the background
 	float textureOffsetX = fmod(backgroundPos.x * TILING_SCALE, backgroundTexture.getSize().x);
 	float textureOffsetY = fmod(backgroundPos.y * TILING_SCALE, backgroundTexture.getSize().y);
 

@@ -16,6 +16,8 @@ class Button : public sf::Drawable
 {
 private:
 	sf::Font font; // Text font
+	sf::SoundBuffer clickBuffer;
+	sf::Sound clickSound;
 	sf::Vector2f lastScreenCenter = { 0.0f, 0.0f };
 	std::string text;
 public:
