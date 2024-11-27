@@ -101,6 +101,15 @@ sf::Mouse::Button Player::mouseInput(sf::Event* eventRef)
 	return mouseInput;
 }
 
+float Player::scrollInput(sf::Event* eventRef)
+{
+	return; // TODO
+	float zoomfactor = 1 + (eventRef->mouseWheelScroll.delta * 0.1);
+	gameInstance.getView()->zoom(zoomfactor);
+	return eventRef->mouseWheelScroll.delta;
+}
+
+
 // Get und Set Attribute
 
 void Player::setPos(const sf::Vector2f& newPos)
