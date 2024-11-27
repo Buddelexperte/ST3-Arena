@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 struct ButtonConstruct
 {
@@ -41,7 +42,7 @@ public:
 	void setRot(const float& newRot) { B_Box.setRotation(newRot); }
 	float getRot() const { return B_Box.getRotation(); };
 
-	bool isMouseOver(const bool& = false) const; // Check if mouse is over button
+	bool isMouseOver(const bool& = false); // Check if mouse is over button
 	void onClick();
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };

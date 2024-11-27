@@ -38,10 +38,14 @@ void Button::construct(const ButtonConstruct& constr)
 
 void Button::onClick()
 {
-
+	sf::SoundBuffer clickBuffer;
+	if (!clickBuffer.loadFromFile("..Content/Sounds/Click_Low.wav"))
+	{
+		std::cout << "Fehler beim Laden vom Click Sound!" << std::endl;
+	}
 }
 
-bool Button::isMouseOver(const bool& registerClick = false) const {
+bool Button::isMouseOver(const bool& registerClick = false) {
 	GI_Arena& gameInstance = GI_Arena::getInstance();
 	sf::RenderWindow* window = gameInstance.getWindow();
 	sf::Vector2f worldMousePos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
