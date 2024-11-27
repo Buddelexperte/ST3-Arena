@@ -45,7 +45,7 @@ void Button::onClick()
 	}
 }
 
-bool Button::isMouseOver(const bool& registerClick = false) {
+bool Button::isMouseOver(const bool& registerClick) {
 	GI_Arena& gameInstance = GI_Arena::getInstance();
 	sf::RenderWindow* window = gameInstance.getWindow();
 	sf::Vector2f worldMousePos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));

@@ -20,6 +20,19 @@ public:
 
 };
 
+class W_OptionsGraphics : public InputWidget // OptionsGraphicsMenu Widget ------------------------------------------
+{
+private:
+	Button optionsGraphics_test;
+
+protected:
+	void windowUpdate() override;
+public:
+	void construct() override;
+	W_OptionsGraphics(InputWidget*);
+	bool isMouseOver(const bool&) override;
+};
+
 class W_Options : public InputWidget // OptionsMenu Widget ------------------------------------------
 {
 private:
@@ -29,6 +42,7 @@ private:
 	Button options_sounds;
 
 	W_OptionsSounds soundMenu;
+	W_OptionsGraphics graphicMenu;
 protected:
 	void windowUpdate() override;
 public:

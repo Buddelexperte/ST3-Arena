@@ -124,6 +124,77 @@ bool W_MainMenu::input_esc()
 	return true;
 }
 
+// OptionSoundMenu ------------------------------------------------------------------------------------
+
+W_OptionsSounds::W_OptionsSounds(InputWidget* parent = nullptr) : InputWidget(parent)
+{
+	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
+		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::White,   100, "TEST",											sf::Color::White},
+
+	};
+
+	optionsSounds_test.construct(MAIN_MENU_CONSTR[0]);
+}
+
+void W_OptionsSounds::construct()
+{
+	InputWidget::construct();
+	shapes = { &optionsSounds_test };
+}
+
+void W_OptionsSounds::windowUpdate()
+{
+	InputWidget::windowUpdate();
+	optionsSounds_test.setPos(viewCenter + sf::Vector2f{ 0, -300 });
+}
+
+bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)
+{
+	sf::Vector2f mousePos = gameInstance.getMousePos();
+	if (optionsSounds_test.isMouseOver())
+	{
+		if (checkForClick) parent->construct();
+		return true;
+	}
+	// On no button-mouse overlap
+	return false;
+}
+
+// OptionGraphicsMenu ------------------------------------------------------------------------------------
+
+W_OptionsGraphics::W_OptionsGraphics(InputWidget* parent = nullptr) : InputWidget(parent)
+{
+	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
+		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::White,   100, "TEST",											sf::Color::White},
+
+	};
+
+	optionsGraphics_test.construct(MAIN_MENU_CONSTR[0]);
+}
+
+void W_OptionsGraphics::construct()
+{
+	InputWidget::construct();
+	shapes = { &optionsGraphics_test };
+}
+
+void W_OptionsGraphics::windowUpdate()
+{
+	InputWidget::windowUpdate();
+	optionsGraphics_test.setPos(viewCenter + sf::Vector2f{ 0, -300 });
+}
+
+bool W_OptionsGraphics::isMouseOver(const bool& checkForClick = false)
+{
+	sf::Vector2f mousePos = gameInstance.getMousePos();
+	if (optionsGraphics_test.isMouseOver())
+	{
+		if (checkForClick) parent->construct();
+		return true;
+	}
+	// On no button-mouse overlap
+	return false;
+}
 
 // W_Options --------------------------------------------------------------------------------------
 
@@ -171,41 +242,10 @@ bool W_Options::isMouseOver(const bool& checkForClick = false)
 		shapes = { &soundMenu };
 		return true;
 	}
-	// On no button-mouse overlap
-	return false;
-}
-
-// OptionSoundMenu ------------------------------------------------------------------------------------
-
-W_OptionsSounds::W_OptionsSounds(InputWidget* parent = nullptr) : InputWidget(parent)
-{
-	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
-		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "TEST",											sf::Color::White},
-		
-	};
-
-	optionsSounds_test.construct(MAIN_MENU_CONSTR[0]);
-
-	shapes = { &optionsSounds_test};
-}
-
-void W_OptionsSounds::construct()
-{
-	InputWidget::construct();
-}
-
-void W_OptionsSounds::windowUpdate()
-{
-	InputWidget::windowUpdate();
-	optionsSounds_test.setPos(viewCenter + sf::Vector2f{ 0, -300 });
-}
-
-bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)
-{
-	sf::Vector2f mousePos = gameInstance.getMousePos();
-	if (optionsSounds_test.isMouseOver())
+	if (options_graphics.isMouseOver())
 	{
-		if (checkForClick) parent->construct();
+		if (checkForClick) graphicMenu.construct();
+		shapes = { &soundMenu };
 		return true;
 	}
 	// On no button-mouse overlap
