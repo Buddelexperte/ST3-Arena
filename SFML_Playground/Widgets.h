@@ -6,19 +6,36 @@
 #include "Timer.h"
 #include "Flashlight.h" // Timer class for game logic
 
-class W_Options : public InputWidget
+class W_OptionsSounds : public InputWidget // OptionSoundMenu Widget ------------------------------------------
 {
 private:
-	Button options_title;
-	Button options_test;
-	Button options_return;
+	Button optionsSounds_test;
+
 protected:
 	void windowUpdate() override;
 public:
 	void construct() override;
-	W_Options(InputWidget*);
+	W_OptionsSounds(InputWidget*);
 	bool isMouseOver(const bool&) override;
+
 };
+
+class W_Options : public InputWidget // OptionsMenu Widget ------------------------------------------
+{
+private:
+	Button options_title;
+	Button options_graphics;
+	Button options_return;
+	Button options_sounds;
+
+	W_OptionsSounds soundMenu;
+protected:
+	void windowUpdate() override;
+public:
+	W_Options(InputWidget*);
+	void construct() override;
+	bool isMouseOver(const bool&) override;
+};	
 
 class W_LevelMenu : public InputWidget // LevelMenu Widget ------------------------------------------
 {
