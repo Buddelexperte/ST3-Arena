@@ -36,7 +36,7 @@ public:
 		// Load Click Sound from project directory
 		if (!clickBuffer.loadFromFile("..Content/Sounds/Click_Low.wav"))
 		{
-			std::cout << "Unable to load click sound!" << std::endl;
+			std::cerr << "Unable to load click sound!" << std::endl;
 		}
 	};
 	Button(const ButtonConstruct& constr) { construct(constr); }
