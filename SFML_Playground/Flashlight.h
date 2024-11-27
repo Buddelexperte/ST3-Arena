@@ -246,18 +246,16 @@ public:
         {
         case Flashlight::CIRCLE:
             flashlightSprite.setScale(SPRITE_SCALE);
-            // Pass transformed light position and viewport size to the shader
             flashlightShader_Circle.setUniform("lightPos", lightPos);
             flashlightShader_Circle.setUniform("radius", radius);
             flashlightShader_Circle.setUniform("viewportHeight", view->getSize().y);
             break;
         case Flashlight::CONE:
             flashlightSprite.setScale(SPRITE_SCALE * 2.0f);
-            // Pass uniforms to the shader
             flashlightShader_Cone.setUniform("lightPos", lightPos);
             flashlightShader_Cone.setUniform("direction", mouseDir);
             flashlightShader_Cone.setUniform("radius", radius * 2.0f);
-            flashlightShader_Cone.setUniform("angle", degreesToRadians(30.0f)); // 40° cone (20° half-angle)
+            flashlightShader_Cone.setUniform("angle", degreesToRadians(30.0f)); // 60° cone (30° half-angle)
             flashlightShader_Cone.setUniform("viewportHeight", view->getSize().y);
             break;
         default:
