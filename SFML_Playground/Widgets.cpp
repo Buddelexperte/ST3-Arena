@@ -129,7 +129,7 @@ bool W_MainMenu::input_esc()
 W_OptionsSounds::W_OptionsSounds(InputWidget* parent = nullptr) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
-		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::White,   100, "TEST",											sf::Color::White},
+		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "TEST",											sf::Color::White},
 
 	};
 
@@ -165,7 +165,7 @@ bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)
 W_OptionsGraphics::W_OptionsGraphics(InputWidget* parent = nullptr) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
-		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::White,   100, "TEST",											sf::Color::White},
+		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "TEST",											sf::Color::White},
 
 	};
 
