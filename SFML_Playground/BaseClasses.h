@@ -140,10 +140,11 @@ public:
 	{ 
 		if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->input_esc();
 		if (parent != nullptr) parent->setWidgetIndex(0)->construct(); 
+		else return false;
 		return true;
 	}
 	virtual bool handleInput(sf::Event* eventRef);
-	virtual bool isMouseOver(const bool&) { return false; }
+	virtual bool isMouseOver(const bool& = false) { return false; }
 };
 
 

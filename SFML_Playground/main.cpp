@@ -2,15 +2,13 @@
 #include "SFML_Arena.h"
 
 
-// Globals
-float deltaTime = 0.0f;
-float fps = 0.0f;
-
 int main()
 {
 
     // Initiate clock for fps + deltaTime calculation
     sf::Clock clock;
+    float deltaTime = 0.0f;
+    float fps = 0.0f;
     // Game Instance init
     GI_Arena& gameInstance = GI_Arena::getInstance();
     sf::RenderWindow* windowRef = gameInstance.getWindow();

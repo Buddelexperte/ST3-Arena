@@ -50,7 +50,7 @@ public:
 	void construct() override;
 	InputWidget* setWidgetIndex(const int&) override;
 	InputWidget* getWidgetAtIndex(const int&) override;
-	bool isMouseOver(const bool&) override;
+	bool isMouseOver(const bool& = false) override;
 };	
 
 class W_LevelMenu : public InputWidget // LevelMenu Widget ------------------------------------------
@@ -66,6 +66,9 @@ public:
 	void construct() override;
 	void update(const float&) override;
 	bool isMouseOver(const bool&) override;
+	
+	InputWidget* setWidgetIndex(const int& newIndex) override;
+	InputWidget* getWidgetAtIndex(const int& atIndex) override;
 };
 
 class W_MainMenu : public InputWidget // MainMenu Widget ------------------------------------------

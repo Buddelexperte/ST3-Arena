@@ -91,24 +91,23 @@ bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 
 	sf::Vector2f mousePos = gameInstance.getMousePos();
 
-	if (menu_title.isMouseOver())
+	if (menu_title.isMouseOver(checkForClick))
 	{
 		sf::Color newColor = (menu_title.getColor(true) == sf::Color::White ? sf::Color::Red : sf::Color::White);
 		if (checkForClick) menu_title.setColor(newColor, true);
 		return true;
 	}
-	if (menu_startButton.isMouseOver())
+	if (menu_startButton.isMouseOver(checkForClick))
 	{
 		if (checkForClick) setWidgetIndex(2)->construct();
-		//if (checkForClick) gameInstance.setGameState(GAME_LAUNCHING); Disabled for LevelMenu testing
 		return true;
 	}
-	if (menu_optionsButton.isMouseOver())
+	if (menu_optionsButton.isMouseOver(checkForClick))
 	{
 		if (checkForClick) setWidgetIndex(1)->construct();
 		return true;
 	}
-	if (menu_quitButton.isMouseOver())
+	if (menu_quitButton.isMouseOver(checkForClick))
 	{
 		if (checkForClick) gameInstance.setGameState(QUIT);
 		return true;
@@ -151,7 +150,7 @@ void W_OptionsSounds::windowUpdate()
 bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)
 {
 	sf::Vector2f mousePos = gameInstance.getMousePos();
-	if (optionsSounds_test.isMouseOver())
+	if (optionsSounds_test.isMouseOver(checkForClick))
 	{
 		if (checkForClick) parent->construct();
 		return true;
@@ -165,7 +164,7 @@ bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)
 W_OptionsGraphics::W_OptionsGraphics(InputWidget* parent = nullptr) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
-		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "TEST",											sf::Color::White},
+		{viewCenter + sf::Vector2f{ 0, -300 }, sf::Vector2f{ 350, 120 }, sf::Color::Transparent, 100, "TEST", sf::Color::White},
 
 	};
 
@@ -186,8 +185,7 @@ void W_OptionsGraphics::windowUpdate()
 
 bool W_OptionsGraphics::isMouseOver(const bool& checkForClick = false)
 {
-	sf::Vector2f mousePos = gameInstance.getMousePos();
-	if (optionsGraphics_test.isMouseOver())
+	if (optionsGraphics_test.isMouseOver(checkForClick))
 	{
 		if (checkForClick) parent->construct();
 		return true;
@@ -198,7 +196,7 @@ bool W_OptionsGraphics::isMouseOver(const bool& checkForClick = false)
 
 // W_Options --------------------------------------------------------------------------------------
 
-W_Options::W_Options(InputWidget* parent = nullptr) : InputWidget(parent), soundMenu(this)
+W_Options::W_Options(InputWidget* parent = nullptr) : InputWidget(parent), soundMenu(this), graphicMenu(this)
 {
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f{ 0, -300 },		sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "OPTIONS",											sf::Color::White},
@@ -237,7 +235,7 @@ InputWidget* W_Options::setWidgetIndex(const int& newIndex)
 {
 	switch (widgetIndex = newIndex)
 	{
-	case 0: // OPTIONS SELECTOR
+	case 0: // THIS
 		shapes = { &options_title, &options_graphics, &options_return, &options_sounds };
 		break;
 	case 1: // GRAPHICS
@@ -268,20 +266,22 @@ void W_Options::windowUpdate()
 	options_return.setPos(viewCenter + sf::Vector2f{ 0, 300 });
 }
 
-bool W_Options::isMouseOver(const bool& checkForClick = false)
+bool W_Options::isMouseOver(const bool& checkForClick)
 {
-	sf::Vector2f mousePos = gameInstance.getMousePos();
-	if (options_return.isMouseOver())
+	if (getWidgetAtIndex(widgetIndex) != this)
+	return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
+
+	if (options_return.isMouseOver(checkForClick))
 	{
 		if (checkForClick) parent->construct();
 		return true;
 	}
-	if (options_graphics.isMouseOver())
+	if (options_graphics.isMouseOver(checkForClick))
 	{
 		if (checkForClick) setWidgetIndex(1)->construct();
 		return true;
 	}
-	if (options_sounds.isMouseOver())
+	if (options_sounds.isMouseOver(checkForClick))
 	{
 		if (checkForClick) setWidgetIndex(2)->construct();
 		return true;
@@ -295,11 +295,11 @@ bool W_Options::isMouseOver(const bool& checkForClick = false)
 W_LevelMenu::W_LevelMenu(InputWidget* parent) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> LEVEL_MENU_CONSTR = {
-		{viewCenter + sf::Vector2f(0.0f, -300.0f),	sf::Vector2f(100.0f, 100.0f),	sf::Color::Transparent, 100,	"LEVEL SELECT", sf::Color::White},
-		{viewCenter + sf::Vector2f(-500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,		"LEVEL 1", sf::Color::White},
-		{viewCenter + sf::Vector2f(0.0f, 0.0f),		sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100), 24,		"LEVEL 2", sf::Color::White},
-		{viewCenter + sf::Vector2f(500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100), 24,		"LEVEL 3", sf::Color::White},
-		{viewCenter + sf::Vector2f(0.0f, 300.0f),	sf::Vector2f(200.0f, 100.0f),	sf::Color::White, 24,			"RETURN", sf::Color::Black}
+		{viewCenter + sf::Vector2f(0.0f, -300.0f),	sf::Vector2f(100.0f, 100.0f),	sf::Color::Transparent,		100,	"LEVEL SELECT", sf::Color::White},
+		{viewCenter + sf::Vector2f(-500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"LEVEL 1",		sf::Color::White},
+		{viewCenter + sf::Vector2f(0.0f, 0.0f),		sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"LEVEL 2",		sf::Color::White},
+		{viewCenter + sf::Vector2f(500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"LEVEL 3",		sf::Color::White},
+		{viewCenter + sf::Vector2f(0.0f, 300.0f),	sf::Vector2f(200.0f, 100.0f),	sf::Color::White,			24,		"RETURN",		sf::Color::Black}
 	};
 
 	levelmenu_title.construct(LEVEL_MENU_CONSTR[0]);
@@ -309,10 +309,37 @@ W_LevelMenu::W_LevelMenu(InputWidget* parent) : InputWidget(parent)
 	return_Button.construct(LEVEL_MENU_CONSTR[4]);
 }
 
+InputWidget* W_LevelMenu::getWidgetAtIndex(const int& atIndex)
+{
+	switch (atIndex)
+	{
+	case 0:
+		return this;
+		break;
+	default:
+		break;
+	}
+	return nullptr;
+}
+
+InputWidget* W_LevelMenu::setWidgetIndex(const int& newIndex)
+{
+	switch (widgetIndex = newIndex)
+	{
+	case 0:
+		shapes = { &levelmenu_title, &level1_Button, &level2_Button, &level3_Button, &return_Button };
+		break;
+	default:
+		shapes = {};
+		break;
+	}
+	return getWidgetAtIndex(widgetIndex);
+}
+
 void W_LevelMenu::construct()
 {
 	InputWidget::construct();
-	shapes = { &levelmenu_title, &level1_Button, &level2_Button, &level3_Button, &return_Button };
+	setWidgetIndex(0);
 }
 
 void W_LevelMenu::update(const float& deltaTime)
@@ -320,16 +347,16 @@ void W_LevelMenu::update(const float& deltaTime)
 	return;
 }
 
-bool W_LevelMenu::isMouseOver(const bool& chechForClick = false)
+bool W_LevelMenu::isMouseOver(const bool& checkForClick = false)
 {
-	if (level1_Button.isMouseOver() || level2_Button.isMouseOver() || level3_Button.isMouseOver())
+	if (level1_Button.isMouseOver(checkForClick) || level2_Button.isMouseOver(checkForClick) || level3_Button.isMouseOver(checkForClick))
 	{
-		if (chechForClick) gameInstance.setGameState(GAME_LAUNCHING);
+		if (checkForClick) gameInstance.setGameState(GAME_LAUNCHING);
 		return true;
 	}
-	if (return_Button.isMouseOver())
+	if (return_Button.isMouseOver(checkForClick))
 	{
-		if (chechForClick) input_esc();
+		if (checkForClick) input_esc();
 		return true;
 	}
 	return false;
@@ -374,9 +401,9 @@ InputWidget* W_Paused::getWidgetAtIndex(const int& atIndex)
 	return nullptr;
 }
 
-InputWidget* W_Paused::setWidgetIndex(const int& toIndex)
+InputWidget* W_Paused::setWidgetIndex(const int& newIndex)
 {
-	switch (widgetIndex = toIndex)
+	switch (widgetIndex = newIndex)
 	{
 	case 0:
 		shapes = { &pause_title, &pause_resumeButton, &pause_optionsButton, &pause_quitButton };
@@ -408,20 +435,20 @@ void W_Paused::windowUpdate()
 
 bool W_Paused::isMouseOver(const bool& checkForClick = false)
 {
-	if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
+	if (getWidgetAtIndex(widgetIndex) != this) 
+	return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
 
-	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
-	if (pause_resumeButton.isMouseOver())
+	if (pause_resumeButton.isMouseOver(checkForClick))
 	{
 		input_esc();
 		return true;
 	}
-	if (pause_optionsButton.isMouseOver())
+	if (pause_optionsButton.isMouseOver(checkForClick))
 	{
 		if (checkForClick) setWidgetIndex(1)->construct();
 		return true;
 	}
-	if (pause_quitButton.isMouseOver())
+	if (pause_quitButton.isMouseOver(checkForClick))
 	{
 		if (checkForClick) gameInstance.setGameState(MENU_SCREEN);
 		return true;
@@ -432,7 +459,7 @@ bool W_Paused::isMouseOver(const bool& checkForClick = false)
 
 bool W_Paused::input_esc()
 {
-	if (getWidgetAtIndex(widgetIndex) != this) getWidgetAtIndex(widgetIndex)->input_esc();
+	if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->input_esc();
 	if (parent != nullptr) parent->setWidgetIndex(0)->construct();
 	return true;
 }
@@ -471,7 +498,7 @@ void W_GameOver::changeScore(const int& currScore = 0)
 bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 {
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
-	if (gameOver_quitButton.isMouseOver())
+	if (gameOver_quitButton.isMouseOver(checkForClick))
 	{
 		gameInstance.setGameState(MENU_SCREEN);
 		return true;
@@ -532,8 +559,8 @@ void W_Gameplay::windowUpdate()
 	background[2].position = sf::Vector2f(viewCenter.x + viewSize.x / 2.0f, viewCenter.y + viewSize.y / 2.0f);
 	background[3].position = sf::Vector2f(viewCenter.x - viewSize.x / 2.0f, viewCenter.y + viewSize.y / 2.0f);
 
-	float textureOffsetX = fmod(backgroundPos.x * TILING_SCALE, backgroundTexture.getSize().x);
-	float textureOffsetY = fmod(backgroundPos.y * TILING_SCALE, backgroundTexture.getSize().y);
+	double textureOffsetX = fmod(backgroundPos.x * TILING_SCALE, backgroundTexture.getSize().x);
+	double textureOffsetY = fmod(backgroundPos.y * TILING_SCALE, backgroundTexture.getSize().y);
 
 	background[0].texCoords = sf::Vector2f(textureOffsetX, textureOffsetY);  // Top-left
 	background[1].texCoords = sf::Vector2f(textureOffsetX + viewSize.x * TILING_SCALE, textureOffsetY);  // Top-right

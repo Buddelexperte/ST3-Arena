@@ -55,7 +55,7 @@ void Player::calcMovement(const float& deltaTime)
 
 	// Smoothly interpolate velocity using linear interpolation
 	if (velocity != targetVelo)
-		velocity = lerp(velocity, targetVelo, LERP_SMOOTHNESS);
+		velocity = lerp(velocity, targetVelo, LERP_SMOOTHNESS * multiplier);
 
 	// Update position
 	addPos(velocity);
@@ -68,7 +68,7 @@ void Player::calcMovement(const float& deltaTime)
 
 	// Smoothly interpolate rotation using lerp
 	if (rotation != newRot)
-		setRot(lerp(rotation, newRot, LERP_SMOOTHNESS * 10.0f));
+		setRot(lerp(rotation, newRot, LERP_SMOOTHNESS * 10.0f * multiplier));
 }
 // Override class default keyboard Input to check for specific cases
 sf::Keyboard::Key Player::keyboardInput(sf::Event* eventRef)
