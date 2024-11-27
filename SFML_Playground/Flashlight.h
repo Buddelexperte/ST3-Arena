@@ -67,16 +67,26 @@ private:
         // Start with a fully black color (opaque)
         vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
 
-        // Check if within cone and radius
+        // Check if within radius
         if (dist < radius) {
             vec2 fragDir = normalize(toPixel); // Normalize the direction to this pixel
             float dotProduct = dot(fragDir, direction);
 
             // Check if within the cone angle
             if (dotProduct > cos(angle)) {
-                float alpha = smoothstep(radius, radius * 0.5, dist); // Smooth transition
-                color = vec4(0.0, 0.0, 0.0, 1.0 - alpha); // Black with transparency
+                // Smooth transition for distance from lightPos
+                float distanceFactor = smoothstep(radius, radius * 0.5, dist);
+
+                // Smooth transition for the cone's angle (sideways blending)
+                float angleFactor = smoothstep(cos(angle), 0.999, dotProduct);
+
+                // Combine both factors multiplicatively
+                float alpha = distanceFactor * angleFactor;
+
+                // Output color with appropriate alpha blending
+                color = vec4(0.0, 0.0, 0.0, 1.0 - alpha);
             }
+
         }
 
         gl_FragColor = color; // Output final color for the fragment
@@ -177,8 +187,6 @@ public:
         currShader->setUniform("u_viewSize", sf::Glsl::Vec2(viewSize));
         currShader->setUniform("viewportHeight", static_cast<float>(window->getSize().y));
 
-        std::cout << "After Switch" << std::endl;
-
         // Update flashlight texture
         static int steps = 0;
         if (++steps % 100 == 0) {
@@ -234,8 +242,6 @@ public:
             lastMouseDir[0] = mouseDir.x; lastMouseDir[1] = mouseDir.y;
         }
 
-        std::cout << "Before SetUniforms" << std::endl;
-
         switch (shaderType)
         {
         case Flashlight::CIRCLE:
@@ -251,14 +257,12 @@ public:
             flashlightShader_Cone.setUniform("lightPos", lightPos);
             flashlightShader_Cone.setUniform("direction", mouseDir);
             flashlightShader_Cone.setUniform("radius", radius * 2.0f);
-            flashlightShader_Cone.setUniform("angle", degreesToRadians(25.0f)); // 40° cone (20° half-angle)
+            flashlightShader_Cone.setUniform("angle", degreesToRadians(30.0f)); // 40° cone (20° half-angle)
             flashlightShader_Cone.setUniform("viewportHeight", view->getSize().y);
             break;
         default:
             break;
         }
-
-        std::cout << "After SetUniforms" << std::endl;
 
         // Set the render texture's view to match the player's view
         sceneRenderTexture.setView(*view);
