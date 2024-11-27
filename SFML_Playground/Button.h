@@ -34,7 +34,7 @@ public:
 			std::cerr << "Unable to load font!!" << std::endl; // Error message for console log
 		}
 		// Load Click Sound from project directory
-		if (!clickBuffer.loadFromFile("..Content/Sounds/Click_Low.wav"))
+		if (!clickBuffer.loadFromFile("../Content/Sounds/Click_Low.wav"))
 		{
 			std::cerr << "Unable to load click sound!" << std::endl;
 		}
