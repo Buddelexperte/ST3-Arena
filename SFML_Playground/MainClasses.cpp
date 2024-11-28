@@ -6,6 +6,7 @@
 
 // Game Instance Code
 
+
 GI_Arena::GI_Arena()
 {
 	const sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
@@ -24,24 +25,18 @@ GI_Arena::GI_Arena()
 
 bool GI_Arena::initWidgets()
 {
-	widgets.clear(); // Alte Widgets werden automatisch freigegeben.
-
 	try {
-		// Temporäre Sammlung für initialisierte Widgets
-		std::vector<std::unique_ptr<InputWidget>> tempWidgets;
-		tempWidgets.push_back(std::make_unique<W_MainMenu>(nullptr));
-		tempWidgets.push_back(std::make_unique<W_Gameplay>(nullptr));
-
+		widgets.clear();
+		widgets.push_back(std::make_shared<W_MainMenu>(nullptr));
+		widgets.push_back(std::make_shared<W_Gameplay>(nullptr));
 		std::cout << "Initiated widgets..." << std::endl;
-
-		// Übertrage erfolgreich erstellte Widgets
-		widgets = std::move(tempWidgets);
 		return true;
 	}
 	catch (const std::exception& e) {
 		std::cerr << "Exception caught: " << e.what() << std::endl;
+		widgets.clear(); // Cleanup in case of partial initialization
+		return false;
 	}
-	return false;
 }
 
 void GI_Arena::start()
@@ -197,7 +192,7 @@ sf::Keyboard::Key InputWidget::keyboardInput(sf::Event* eventRef)
 	switch (eventRef->key.code)
 	{
 	case sf::Keyboard::Escape:
-		gameInstance.getActiveWidget()->input_esc();
+		lockWeakPtr( gameInstance.getActiveWidget() )->input_esc();
 		break;
 	default:
 		break;

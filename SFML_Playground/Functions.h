@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <functional>
 
 // SFML abbreviations
 const sf::Keyboard::Key KEY_W = sf::Keyboard::W;
@@ -12,6 +13,16 @@ const double pi = 4 * std::atan(1.0); // Calculation of Pi
 
 // Global functions for calculation and conversion
 
+
+// Lock weak pointer into shared pointer
+template <typename T>
+std::shared_ptr<T> lockWeakPtr(const std::weak_ptr<T>& weakPtr) {
+	if (auto lockedPtr = weakPtr.lock()) {
+		return lockedPtr;
+	}
+	std::cerr << "Widget has expired and is unavailable!\n";
+	return nullptr;  // Or handle the expired object case appropriately
+}
 
 // LERP -------------------------------------------------------------------------------------------
 inline float lerp(const float& currentRot, const float& targetRot, float factor)

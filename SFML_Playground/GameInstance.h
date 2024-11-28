@@ -38,10 +38,10 @@ private:
 
 	E_GameState gameState = MENU_SCREEN;
 	// Create all main widgets for later use
-	std::vector<std::unique_ptr<InputWidget>> widgets;
+	std::vector<std::shared_ptr<InputWidget>> widgets;
+	std::shared_ptr<InputWidget> activeMenu = nullptr;
 
 	float zoomFactor = 1.0f;
-	InputWidget* activeMenu = nullptr;
 	Player* playerRef = nullptr;
 
 	bool bIsGameplayPaused = true;
@@ -65,7 +65,7 @@ public:
 	Player* getPlayer();
 	void setZoom(const float& newZoom) { view->zoom(zoomFactor = newZoom); }
 	float getZoom() const { return zoomFactor; }
-	InputWidget* getActiveWidget() { return activeMenu; }
+	std::weak_ptr<InputWidget> getActiveWidget() { return activeMenu; }
 	void setIsPaused(const bool& bPause) { bIsGameplayPaused = bPause; }
 	bool getIsPaused() const { return bIsGameplayPaused; }
 	// Input stuff

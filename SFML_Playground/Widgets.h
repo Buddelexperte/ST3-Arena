@@ -5,6 +5,8 @@
 #include "TargetController.h"
 #include "Flashlight.h"
 
+const std::string WIDGET_EXP = "Widget is no longer available.\n";
+
 class W_OptionsSounds : public InputWidget // OptionSoundMenu Widget ------------------------------------------
 {
 private:
