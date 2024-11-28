@@ -138,7 +138,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="SFML_Arena.cpp" />
+    <ClCompile Include="MainClasses.cpp" />
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="TargetController.cpp" />
     <ClCompile Include="Timer.cpp" />

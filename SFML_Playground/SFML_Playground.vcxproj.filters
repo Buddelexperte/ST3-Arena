@@ -27,7 +27,7 @@
     <ClCompile Include="TargetController.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="SFML_Arena.cpp">
+    <ClCompile Include="MainClasses.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="Widgets.cpp">

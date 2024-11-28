@@ -1,6 +1,7 @@
 #pragma once 
-#include "SFML_Arena.h"
-
+#include "GameInstance.h"
+#include "BaseClasses.h"
+#include <fstream>
 
 // Game Instance Code
 
