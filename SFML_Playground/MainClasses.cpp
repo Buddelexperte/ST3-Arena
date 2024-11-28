@@ -24,24 +24,24 @@ GI_Arena::GI_Arena()
 
 bool GI_Arena::initWidgets()
 {
-	try
-	{
-		widgets.push_back(new W_MainMenu(nullptr));
-		widgets.push_back(new W_Gameplay(nullptr));
+	widgets.clear(); // Alte Widgets werden automatisch freigegeben.
+
+	try {
+		// Temporäre Sammlung für initialisierte Widgets
+		std::vector<std::unique_ptr<InputWidget>> tempWidgets;
+		tempWidgets.push_back(std::make_unique<W_MainMenu>(nullptr));
+		tempWidgets.push_back(std::make_unique<W_Gameplay>(nullptr));
+
 		std::cout << "Initiated widgets..." << std::endl;
+
+		// Übertrage erfolgreich erstellte Widgets
+		widgets = std::move(tempWidgets);
 		return true;
 	}
-	catch (const std::exception& e) // Catch standard exceptions
-	{
+	catch (const std::exception& e) {
 		std::cerr << "Exception caught: " << e.what() << std::endl;
-		for (auto& elem : widgets)
-		{
-			delete elem;
-			elem = nullptr;
-		}
 	}
 	return false;
-
 }
 
 void GI_Arena::start()

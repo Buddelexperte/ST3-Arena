@@ -17,6 +17,7 @@ enum E_GameState {
 class InputWidget;
 class Player;
 
+
 // Global Game Instance ---------------------------------------------------------------------------
 
 
@@ -37,7 +38,7 @@ private:
 
 	E_GameState gameState = MENU_SCREEN;
 	// Create all main widgets for later use
-	std::vector<InputWidget*> widgets = {};
+	std::vector<std::unique_ptr<InputWidget>> widgets;
 
 	float zoomFactor = 1.0f;
 	InputWidget* activeMenu = nullptr;
