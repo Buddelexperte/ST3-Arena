@@ -1,6 +1,9 @@
 #pragma once
 #include "BaseClasses.h"
 #include "Button.h"
+#include "Timer.h"
+#include "TargetController.h"
+#include "Flashlight.h"
 
 class W_OptionsSounds : public InputWidget // OptionSoundMenu Widget ------------------------------------------
 {

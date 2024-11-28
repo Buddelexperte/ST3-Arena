@@ -23,6 +23,10 @@ class Player;
 class GI_Arena // SINGLETON PATTERN
 {
 private:
+	sf::Clock clock;
+	float deltaTime = 0.0f;
+	float fps = 0.0f;
+
 	GI_Arena();
 	GI_Arena(const GI_Arena&) = delete;
 	GI_Arena& operator=(const GI_Arena&) = delete; // Block the '=' operator to stop copies being made of this class
@@ -32,9 +36,11 @@ private:
 	sf::RenderStates states;
 
 	E_GameState gameState = MENU_SCREEN;
+	// Create all main widgets for later use
+	std::vector<InputWidget*> widgets = {};
 
 	float zoomFactor = 1.0f;
-	InputWidget* activeWidget = nullptr;
+	InputWidget* activeMenu = nullptr;
 	Player* playerRef = nullptr;
 
 	bool bIsGameplayPaused = true;
@@ -45,6 +51,9 @@ public:
 		return instance;
 	}
 	// Tick and such
+	bool initWidgets();
+	void start();
+	void preTick();
 	void tick(const float&);
 	void updateScreen();
 	void setViewCenter(const sf::Vector2f&);
@@ -55,8 +64,7 @@ public:
 	Player* getPlayer();
 	void setZoom(const float& newZoom) { view->zoom(zoomFactor = newZoom); }
 	float getZoom() const { return zoomFactor; }
-	bool setActiveWidget(InputWidget*);
-	InputWidget* getActiveWidget() { return activeWidget; }
+	InputWidget* getActiveWidget() { return activeMenu; }
 	void setIsPaused(const bool& bPause) { bIsGameplayPaused = bPause; }
 	bool getIsPaused() const { return bIsGameplayPaused; }
 	// Input stuff

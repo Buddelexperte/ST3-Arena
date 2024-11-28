@@ -2,27 +2,94 @@
 #include "GameInstance.h"
 #include "BaseClasses.h"
 #include <fstream>
+#include "Widgets.h"
 
 // Game Instance Code
 
 GI_Arena::GI_Arena()
 {
-	window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "SFML_Arena", sf::Style::Fullscreen);
+	const sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+	window = new sf::RenderWindow(desktop, "SFML_Arena", sf::Style::Fullscreen);
 	
 	// Only use for crash heavy debug
 	//window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "SFML_Arena", sf::Style::Titlebar | sf::Style::Default);
 	
 	std::cout << "RenderWindow created." << std::endl;
-	const sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+
 	view = new sf::View(sf::Vector2f(desktop.width / 2.0f, desktop.height / 2.0f), sf::Vector2f(desktop.width, desktop.height)); // Arbitrary position
-	std::cout << "View created." << std::endl;
+	std::cout << "View created" << std::endl;
 	window->setView(*view);
+	std::cout << "View attached" << std::endl;
 }
 
-void GI_Arena::setViewCenter(const sf::Vector2f& newCenter)
+bool GI_Arena::initWidgets()
 {
-	view->setCenter(newCenter);
-	window->setView(*view);
+	try
+	{
+		widgets.push_back(new W_MainMenu(nullptr));
+		widgets.push_back(new W_Gameplay(nullptr));
+		std::cout << "Initiated widgets..." << std::endl;
+		return true;
+	}
+	catch (const std::exception& e) // Catch standard exceptions
+	{
+		std::cerr << "Exception caught: " << e.what() << std::endl;
+		for (auto& elem : widgets)
+		{
+			delete elem;
+			elem = nullptr;
+		}
+	}
+	return false;
+
+}
+
+void GI_Arena::start()
+{
+	initWidgets();
+
+	std::cout << "Starting Game" << std::endl;
+
+	preTick();
+	// Main Game Loop
+	while (window->isOpen())
+	{
+		deltaTime = clock.restart().asSeconds();
+		fps = 1.0f / deltaTime;
+		tick(deltaTime);
+		preTick();
+	}
+}
+
+void GI_Arena::preTick()
+{
+	// If GameState changed in earlier loop, construct new activeMenu;
+	static E_GameState oldGS = QUIT;
+
+	if (gameState == oldGS) return;
+
+	switch (oldGS = gameState)
+	{
+	case MENU_SCREEN: // MAIN_MENU
+		activeMenu = widgets[0];
+		break;
+	case GAME_PAUSED: case GAME_OVER: case GAME_LAUNCHING: case IN_GAME: // GAMEPLAY
+		activeMenu = widgets[1];
+		break;
+	case QUIT: // QUIT GAME
+		activeMenu = nullptr;
+		break;
+	default: // KEEP
+		break;
+	}
+
+	if (activeMenu == nullptr)
+	{
+		window->close();
+		return;
+	}
+
+	activeMenu->construct();
 }
 
 void GI_Arena::tick(const float& deltaTime)
@@ -34,8 +101,14 @@ void GI_Arena::tick(const float& deltaTime)
 		setViewCenter(newCenter);
 	}
 
-	activeWidget->update(deltaTime);
+	activeMenu->update(deltaTime);
 	playerRef->update(deltaTime);
+}
+
+void GI_Arena::setViewCenter(const sf::Vector2f& newCenter)
+{
+	view->setCenter(newCenter);
+	window->setView(*view);
 }
 
 void GI_Arena::updateScreen()
@@ -43,16 +116,9 @@ void GI_Arena::updateScreen()
 	// Clear viewport for new draw
 	window->clear(sf::Color::Black);
 	// Draw all Drawables from shapes vector
-	if (activeWidget != nullptr) window->draw(*activeWidget);
+	if (activeMenu != nullptr) window->draw(*activeMenu);
 	// Display Draw changes
 	window->display();
-}
-
-bool GI_Arena::setActiveWidget(InputWidget* newActive)
-{
-	bool bChanged = (newActive != activeWidget);
-	activeWidget = newActive;
-	return bChanged;
 }
 
 void GI_Arena::setGameState(const E_GameState& newGS)
@@ -68,7 +134,7 @@ Player* GI_Arena::getPlayer()
 
 bool GI_Arena::handleEvent(sf::Event* eventRef)
 {
-	return activeWidget->handleInput(eventRef);
+	return activeMenu->handleInput(eventRef);
 }
 
 
