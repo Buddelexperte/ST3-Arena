@@ -41,8 +41,8 @@ void Player::calcMovement(const float& deltaTime)
 	float y = 0.0f; // Y-Movement per frame
 	float multiplier = 1.0f; // Speed multiplier
 
-	if (sf::Keyboard::isKeyPressed(KEY_LSHIFT)) 
-		multiplier *= 2.0f;
+	if (sf::Keyboard::isKeyPressed(KEY_LSHIFT))
+		multiplier *= 1.7f;
 
 	// Check if each key is currently pressed and modify velocity accordingly
 	if (sf::Keyboard::isKeyPressed(KEY_W)) y -= WALKING_SPEED; // Move North
