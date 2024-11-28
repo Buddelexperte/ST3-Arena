@@ -1,7 +1,6 @@
 #pragma once
-#include "BaseClasses.h"
-#include <random> // Random target position generation
 #include "Button.h"
+#include <random> // Random target position generation
 
 // Class for handling and spawning targets the user can click on
 class TargetController : public sf::Drawable

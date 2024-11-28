@@ -1,5 +1,5 @@
 #pragma once
-#include "SFML_Arena.h"
+#include "BaseClasses.h"
 
 class Flashlight : public WidgetElement
 {
@@ -179,7 +179,6 @@ public:
     void update(const float& deltaTime) override
     {
         WidgetElement::update(deltaTime);
-        player = gameInstance.getPlayer();
 
         sf::Vector2f viewSize = gameInstance.getView()->getSize();
 
@@ -202,7 +201,7 @@ public:
         // Update flashlight position and rotation
         static sf::Vector2f lastPos;
         static float lastRot;
-        sf::Vector2f newPos = player->getPos();
+        sf::Vector2f newPos = gameInstance.getPlayer()->getPos();
         if (newPos != lastPos) {
             flashlightSprite.setPosition(newPos);
             lastPos = newPos;

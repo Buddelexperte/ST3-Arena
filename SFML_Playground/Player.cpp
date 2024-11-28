@@ -110,7 +110,7 @@ sf::Mouse::Button Player::mouseInput(sf::Event* eventRef)
 float Player::scrollInput(sf::Event* eventRef)
 {
 	return eventRef->mouseWheelScroll.delta; // TODO - flashlightShader heavy
-	float targetZoom = 1 + (eventRef->mouseWheelScroll.delta * -0.1);
+	float targetZoom = 1.0f + (eventRef->mouseWheelScroll.delta * -0.1);
 	gameInstance.setZoom(targetZoom);
 	return eventRef->mouseWheelScroll.delta;
 }

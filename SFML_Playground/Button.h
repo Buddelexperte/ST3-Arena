@@ -1,4 +1,6 @@
 #pragma once
+#include "GameInstance.h"
+// SFML Libraries
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
@@ -15,6 +17,8 @@ struct ButtonConstruct
 class Button : public sf::Drawable
 {
 private:
+	GI_Arena& gameInstance = GI_Arena::getInstance();
+
 	sf::Font font; // Text font
 	sf::SoundBuffer clickBuffer;
 	sf::Sound clickSound;
@@ -59,5 +63,7 @@ public:
 
 	bool isMouseOver(const bool& = false); // Check if mouse is over button
 	void onClick();
+	void onHover();
+	void onUnhover();
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };

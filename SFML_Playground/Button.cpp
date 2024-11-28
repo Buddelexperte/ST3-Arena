@@ -1,9 +1,6 @@
 #pragma once 
-#include "SFML_Arena.h"
 #include "Button.h" // Own header file
-#include <SFML/Graphics.hpp>
-#include <filesystem> // Finding font file
-#include <iostream> // Error messages
+
 
 void Button::construct(const ButtonConstruct& constr)
 {
@@ -37,12 +34,28 @@ void Button::onClick()
 	clickSound.play();
 }
 
-bool Button::isMouseOver(const bool& registerClick) {
-	GI_Arena& gameInstance = GI_Arena::getInstance();
-	sf::RenderWindow* window = gameInstance.getWindow();
-	sf::Vector2f worldMousePos = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
-	if (registerClick) onClick();
-	return B_Box.getGlobalBounds().contains(worldMousePos); // Check if the button contains the mouse
+void Button::onHover()
+{
+
+}
+
+void Button::onUnhover()
+{
+
+}
+
+bool Button::isMouseOver(const bool& registerClick)
+{
+	bool bIsMouseOver = B_Box.getGlobalBounds().contains(gameInstance.getMousePos());
+
+	if (bIsMouseOver)
+	{
+		if (registerClick) onClick();
+		else onHover();
+	}
+	else onUnhover();
+
+	return bIsMouseOver;  // Check if the button contains the mouse
 }
 
 void Button::setText(const std::string& text)

@@ -1,10 +1,6 @@
 #pragma once
-#include "SFML_Arena.h"
 #include "BaseClasses.h"
-#include "TargetController.h" // TargetSpawner and Handler
-#include "Button.h" // Button class for UI
-#include "Timer.h"
-#include "Flashlight.h" // Timer class for game logic
+#include "Button.h"
 
 class W_OptionsSounds : public InputWidget // OptionSoundMenu Widget ------------------------------------------
 {
