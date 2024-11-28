@@ -1,1 +1,3 @@
-# SFML_Playground
+# ARENA
+## Unsere Spielidee
+Ein wellenbadierter Top-Down Shooter
