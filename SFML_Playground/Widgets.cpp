@@ -309,6 +309,16 @@ W_LevelMenu::W_LevelMenu(InputWidget* parent) : InputWidget(parent)
 	return_Button.construct(LEVEL_MENU_CONSTR[4]);
 }
 
+void W_LevelMenu::windowUpdate()
+{
+	InputWidget::windowUpdate();
+	levelmenu_title.setPos(	viewCenter + sf::Vector2f(0.0f, -300.0f)	);
+	level1_Button.setPos(	viewCenter + sf::Vector2f(-500.0f, 0.0f)	);
+	level2_Button.setPos(	viewCenter + sf::Vector2f(0.0f, 0.0f)		);
+	level3_Button.setPos(	viewCenter + sf::Vector2f(500.0f, 0.0f)		);
+	return_Button.setPos(	viewCenter + sf::Vector2f(0.0f, 300.0f)		);
+}
+
 InputWidget* W_LevelMenu::getWidgetAtIndex(const int& atIndex)
 {
 	switch (atIndex)
@@ -526,23 +536,21 @@ W_Gameplay::W_Gameplay(InputWidget* parent) : InputWidget(parent), flashlightSha
 void W_Gameplay::construct()
 {
 	InputWidget::construct();
-	if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->construct();
 
-	if (gameInstance.getGameState() >= GAME_LAUNCHING)
+	if (gameInstance.getGameState() < GAME_LAUNCHING) return getWidgetAtIndex(widgetIndex)->construct();
+
+	if (gameInstance.getGameState() == GAME_LAUNCHING)
 	{
-		if (gameInstance.getGameState() == GAME_LAUNCHING)
-		{
-			gameInstance.getPlayer()->setPos((sf::Vector2f(0.0f, 0.0f) + windowCenter));
-			gameInstance.setViewCenter(gameInstance.getPlayer()->getPos());
-			// Reset values to game start values
-			hitTargets = 0;
-			targetController.initSpawner();
-			healthBar.setMaxTime(TIMER_DEFAULT, true);
-			// Add Gameplay objects to shapes vector to draw them
-			gameInstance.setGameState(IN_GAME);
-		}
-		setWidgetIndex(0);
+		gameInstance.getPlayer()->setPos((sf::Vector2f(0.0f, 0.0f) + windowCenter));
+		gameInstance.setViewCenter(gameInstance.getPlayer()->getPos());
+		// Reset values to game start values
+		hitTargets = 0;
+		targetController.initSpawner();
+		healthBar.setMaxTime(TIMER_DEFAULT, true);
+		// Add Gameplay objects to shapes vector to draw them
+		gameInstance.setGameState(IN_GAME);
 	}
+	setWidgetIndex(0);
 }
 
 void W_Gameplay::windowUpdate()

@@ -62,6 +62,8 @@ private:
 	Button level2_Button;
 	Button level3_Button;
 	Button return_Button;
+protected:
+	void windowUpdate() override;
 public:
 	W_LevelMenu(InputWidget*);
 	void construct() override;
