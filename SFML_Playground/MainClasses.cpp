@@ -157,18 +157,17 @@ void WidgetElement::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 
 bool InputWidget::handleInput(sf::Event* eventRef)
 {
-	event = eventRef;
-	switch (event->type)
+	switch (eventRef->type)
 	{
 	case sf::Event::KeyPressed:
 		//std::cout << "[Keyboard Event]" << std::endl;
-		return keyboardInput(event);
+		return keyboardInput(eventRef);
 	case sf::Event::MouseButtonPressed:
 		//std::cout << "[Mouse Event]" << std::endl;
-		return mouseInput(event);
+		return mouseInput(eventRef);
 	case sf::Event::MouseWheelScrolled:
 		//std::cout << "[Mouse Wheel Event]" << std::endl;
-		return scrollInput(event);
+		return scrollInput(eventRef);
 	default:
 		break;
 	}
@@ -202,7 +201,8 @@ sf::Keyboard::Key InputWidget::keyboardInput(sf::Event* eventRef)
 
 sf::Mouse::Button InputWidget::mouseInput(sf::Event* eventRef)
 {
-	sf::Mouse::Button mouseInput = eventRef->mouseButton.button;
+	const sf::Mouse::Button mouseInput = eventRef->mouseButton.button;
+
 	switch (mouseInput)
 	{
 	case sf::Mouse::Left:
@@ -218,8 +218,6 @@ sf::Mouse::Button InputWidget::mouseInput(sf::Event* eventRef)
 		break;
 	}
 	return mouseInput;
-	
-	return sf::Mouse::ButtonCount;
 }
 
 float InputWidget::scrollInput(sf::Event* eventRef)

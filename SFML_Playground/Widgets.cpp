@@ -537,12 +537,15 @@ void W_Gameplay::construct()
 {
 	InputWidget::construct();
 
-	if (gameInstance.getGameState() < GAME_LAUNCHING) return getWidgetAtIndex(widgetIndex)->construct();
+	E_GameState gameState = gameInstance.getGameState();
 
-	if (gameInstance.getGameState() == GAME_LAUNCHING)
+	if (gameState < GAME_LAUNCHING) return getWidgetAtIndex(widgetIndex)->construct();
+
+	if (gameState == GAME_LAUNCHING)
 	{
-		gameInstance.getPlayer()->setPos((sf::Vector2f(0.0f, 0.0f) + windowCenter));
-		gameInstance.setViewCenter(gameInstance.getPlayer()->getPos());
+		Player* player = gameInstance.getPlayer();
+		player->setPos((sf::Vector2f(0.0f, 0.0f) + windowCenter));
+		gameInstance.setViewCenter(player->getPos());
 		// Reset values to game start values
 		hitTargets = 0;
 		targetController.initSpawner();
@@ -671,7 +674,8 @@ bool W_Gameplay::input_esc()
 
 bool W_Gameplay::onMouseClickR()
 {
-	flashlightShader.toggleMaskMode();
+	if (!gameInstance.getIsPaused())
+		flashlightShader.toggleMaskMode();
 	return true;
 }
 

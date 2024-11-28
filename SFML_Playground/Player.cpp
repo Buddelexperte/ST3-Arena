@@ -53,7 +53,7 @@ void Player::calcMovement(const float& deltaTime)
 	// Target velocity (scaled by deltaTime)
 	sf::Vector2f targetVelo = sf::Vector2f{ x, y } * multiplier * deltaTime;
 
-	// Smoothly interpolate velocity using linear interpolation
+	// Smoothly interpolate velocity using linear interpolation if location changed
 	if (velocity != targetVelo)
 	{
 		const float WALKING_LERP = LERP_SMOOTHNESS * multiplier;
@@ -69,7 +69,7 @@ void Player::calcMovement(const float& deltaTime)
 	float rotation = getRot();
 	float targetRot = getLookAtRot(playerPos, mousePos);
 
-	// Smoothly interpolate rotation using lerp
+	// Smoothly interpolate rotation using lerp if rot changed
 	if (rotation != targetRot)
 	{
 		const float ROT_LERP = LERP_SMOOTHNESS * 10.0f * multiplier;
@@ -79,7 +79,8 @@ void Player::calcMovement(const float& deltaTime)
 // Override class default keyboard Input to check for specific cases
 sf::Keyboard::Key Player::keyboardInput(sf::Event* eventRef)
 {
-	sf::Keyboard::Key inputKey = eventRef->key.code;
+	const sf::Keyboard::Key inputKey = eventRef->key.code;
+
 	switch (inputKey)
 	{
 	case sf::Keyboard::Escape: // Esc goes through gameInstance to handle widget input
@@ -88,14 +89,14 @@ sf::Keyboard::Key Player::keyboardInput(sf::Event* eventRef)
 	default:
 		break;
 	}
-	return eventRef->key.code;
+	return inputKey;
 }
 
 // Override class default mouse Input to check for specific cases
 sf::Mouse::Button Player::mouseInput(sf::Event* eventRef)
 {
-	sf::Mouse::Button mouseInput = eventRef->mouseButton.button;
-	const bool checkForClick = false;
+	const sf::Mouse::Button mouseInput = eventRef->mouseButton.button;
+
 	switch (mouseInput)
 	{
 	case sf::Mouse::Left: case sf::Mouse::Right: // LMB goes through gameInstance to handle widget inputs
@@ -109,10 +110,12 @@ sf::Mouse::Button Player::mouseInput(sf::Event* eventRef)
 
 float Player::scrollInput(sf::Event* eventRef)
 {
-	return eventRef->mouseWheelScroll.delta; // TODO - flashlightShader heavy
-	float targetZoom = 1.0f + (eventRef->mouseWheelScroll.delta * -0.1);
+	const float scrollDelta = eventRef->mouseWheelScroll.delta;
+
+	return scrollDelta; // TODO - flashlightShader heavy
+	float targetZoom = 1.0f + (scrollDelta * -0.1f);
 	gameInstance.setZoom(targetZoom);
-	return eventRef->mouseWheelScroll.delta;
+	return scrollDelta;
 }
 
 
