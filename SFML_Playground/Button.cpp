@@ -30,8 +30,15 @@ void Button::construct(const ButtonConstruct& constr)
 
 void Button::onClick()
 {
-	clickSound.setBuffer(clickBuffer);
-	clickSound.play();
+	if (text == "RETURN")
+	{
+		clickReturnSound.play();
+	}
+	else
+	{
+		clickSound.play();
+	}
+
 }
 
 void Button::onHover()

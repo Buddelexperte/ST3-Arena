@@ -21,7 +21,9 @@ private:
 
 	sf::Font font; // Text font
 	sf::SoundBuffer clickBuffer;
+	sf::SoundBuffer clickReturnBuffer;
 	sf::Sound clickSound;
+	sf::Sound clickReturnSound;
 	sf::Vector2f lastScreenCenter = { 0.0f, 0.0f };
 	std::string text;
 public:
@@ -38,10 +40,16 @@ public:
 			std::cerr << "Unable to load font!!" << std::endl; // Error message for console log
 		}
 		// Load Click Sound from project directory
-		if (!clickBuffer.loadFromFile("../Content/Sounds/click-151673.wav"))
+		if (!clickBuffer.loadFromFile("../Content/Sounds/Glitch.wav"))
 		{
 			std::cerr << "Unable to load click sound!" << std::endl;
-		}
+		} else
+			clickSound.setBuffer(clickBuffer);
+		if (!clickReturnBuffer.loadFromFile("../Content/Sounds/Glitch2.wav"))
+		{
+			std::cerr << "Unable to load click Return sound!" << std::endl;
+		} else
+			clickReturnSound.setBuffer(clickReturnBuffer);
 	};
 	Button(const ButtonConstruct& constr) { construct(constr); }
 	void construct(const ButtonConstruct&);
