@@ -82,5 +82,6 @@
     <None Include="..\..\..\..\Downloads\Texture.rar">
       <Filter>Ressourcendateien</Filter>
     </None>
+    <None Include="..\.dll\openal32.dll" />
   </ItemGroup>
 </Project>
