@@ -32,7 +32,7 @@ public:
 	sf::Text T_Text;
 	// Constructors
 	Button() 
-		: Button(ButtonConstruct({ 0, 0 }, { 100.0f, 100.0f }, sf::Color::White, 24, "Text", sf::Color::Black)) 
+		: Button(ButtonConstruct{ { 0, 0 }, { 100.0f, 100.0f }, sf::Color::White, 24, "Text", sf::Color::Black })
 	{
 		// Load text font from project directory
 		if (!font.loadFromFile("../Content/fonts/coolvetica/coolvetica_rg.otf"))
