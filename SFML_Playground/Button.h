@@ -35,17 +35,17 @@ public:
 		: Button(ButtonConstruct{ { 0, 0 }, { 100.0f, 100.0f }, sf::Color::White, 24, "Text", sf::Color::Black })
 	{
 		// Load text font from project directory
-		if (!font.loadFromFile("../Content/fonts/coolvetica/coolvetica_rg.otf"))
+		if (!font.loadFromFile("Content/fonts/coolvetica/coolvetica_rg.otf"))
 		{
 			std::cerr << "Unable to load font!!" << std::endl; // Error message for console log
 		}
 		// Load Click Sound from project directory
-		if (!clickBuffer.loadFromFile("../Content/Sounds/Glitch.wav"))
+		if (!clickBuffer.loadFromFile("Content/Sounds/Glitch.wav"))
 		{
 			std::cerr << "Unable to load click sound!" << std::endl;
 		} else
 			clickSound.setBuffer(clickBuffer);
-		if (!clickReturnBuffer.loadFromFile("../Content/Sounds/Glitch2.wav"))
+		if (!clickReturnBuffer.loadFromFile("Content/Sounds/Glitch2.wav"))
 		{
 			std::cerr << "Unable to load click Return sound!" << std::endl;
 		} else

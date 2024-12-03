@@ -526,7 +526,7 @@ W_Gameplay::W_Gameplay(InputWidget* parent) : InputWidget(parent), flashlightSha
 	TestBox.construct(constr);
 
 	// Load texture
-	if (!backgroundTexture.loadFromFile("../Content/Textures/cobblestone_mossy.png"))
+	if (!backgroundTexture.loadFromFile("Content/Textures/cobblestone_mossy.png"))
 	{
 		std::cerr << "Error loading the background texture!" << std::endl;
 	}
