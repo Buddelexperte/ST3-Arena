@@ -163,11 +163,6 @@
     <None Include="..\..\..\..\Downloads\FREE Textures Of Light.zip" />
     <None Include="..\..\..\..\Downloads\SCI-FI_UI_SFX_PACK.zip" />
     <None Include="..\..\..\..\Downloads\Texture.rar" />
-    <None Include="..\.dll\openal32.dll">
-		<Link>mydll.dll</Link>
-		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-	<EmbeddedResource Include="..\.dll\openal32.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
