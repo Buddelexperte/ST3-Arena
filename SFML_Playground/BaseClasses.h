@@ -113,7 +113,7 @@ public:
 // SAVE GAME --------------------------------------------------------------------------------------
 
 
-const std::string SAVE_FILE = "../SaveGame.txt";
+const std::string SAVE_FILE = "SaveGame.txt";
 
 class SaveGame
 {
