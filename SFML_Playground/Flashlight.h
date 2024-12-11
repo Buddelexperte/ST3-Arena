@@ -117,10 +117,10 @@ private:
     sf::RenderTexture sceneRenderTexture;
     sf::Sprite sceneSprite;
 
-    const float SHADER_RADIUS = 320.0f;
+    const float SHADER_RADIUS = 480;
     float radius = SHADER_RADIUS;
-    const sf::Vector2f SPRITE_SCALE = { 1.4f, 1.4f };
-    const sf::Vector2f SHADER_SPRITE_RATIO{ 1.4f / 320.0f, 1.4f / 320.0f };
+    const sf::Vector2f SPRITE_SCALE = { 2.1f, 2.1f };
+    const sf::Vector2f SHADER_SPRITE_RATIO{ 2.1f / SHADER_RADIUS, 2.1f / SHADER_RADIUS };
 
     sf::Texture flashlightTexture;
     sf::Sprite flashlightSprite;

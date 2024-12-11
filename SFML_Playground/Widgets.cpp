@@ -652,16 +652,12 @@ void W_Gameplay::update(const float& deltaTime)
 	
 	if (getWidgetAtIndex(widgetIndex) != this) getWidgetAtIndex(widgetIndex)->update(deltaTime);
 
-	// Gameplay updates
-	if (gameInstance.getGameState() >= GAME_PAUSED)
+	// Update Gameplay objects with respectable params
+	targetController.update(deltaTime);
+	healthBar.update(deltaTime);
+	if (gameInstance.getGameState() >= IN_GAME)
 	{
-		// Update Gameplay objects with respectable params
-		healthBar.update(deltaTime);
-		if (gameInstance.getGameState() >= GAME_LAUNCHING)
-		{
-			targetController.windowUpdate();
-			if (healthBar.isFinished()) lose();
-		}
+		if (healthBar.isFinished()) lose();
 	}
 }
 

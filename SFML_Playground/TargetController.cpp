@@ -1,24 +1,55 @@
 #pragma once
 #include "TargetController.h" // Own header file
+#include "BaseClasses.h"
+
+TargetController::TargetController() : gen(rd())
+{
+
+}
 
 void TargetController::newRandomConfig()
 {
 	windowUpdate();
 
 	const float margin = 200.0f; // margin, so the targets dont overlap with healthbar or window edges
-	std::random_device rd; // Get device random Number generator
-	std::mt19937 gen(rd()); // Seed random number generator
-	std::uniform_real_distribution<float> distrX(margin, windowWidth - margin); // Distr for X coordinates based on actual windowWidth
-	std::uniform_real_distribution<float> distrY(margin, windowHeight - margin); // Distr for Y coordinates based on actual windowHeight
+	
+	sf::Vector2f upL = viewCorner(view, 1);
+	sf::Vector2f downR = viewCorner(view, 4);
+
+	std::uniform_real_distribution<float> distrX(upL.x + margin, downR.x - margin); // Distr for X coordinates based on actual windowWidth
+	std::uniform_real_distribution<float> distrY(upL.y + margin, downR.y - margin); // Distr for Y coordinates based on actual windowHeight
 	// Set TARGET_CONFIG to generation of distrX and Y but mapped to a 100x100 grid
-	TARGET_CONFIG.pos = sf::Vector2f(int(distrX(gen) / 100) * 100.0f, int(distrY(gen) / 100) * 100.0f);
+	sf::Vector2f generatedPos = { distrX(gen), distrY(gen) };
+
+	generatedPos += gameInstance.getPlayer()->getDirection() * 1000.0f;
+
+	sf::Vector2f gridPos = { std::trunc(generatedPos.x / 100), std::trunc(generatedPos.y / 100) };
+	gridPos = 100.0f * gridPos;
+
+	TARGET_CONFIG.pos = gridPos;
+	//TARGET_CONFIG.pos = sf::Vector2f(int(distrX(gen) / 100) * 100.0f, int(distrY(gen) / 100) * 100.0f);
 }
 
 void TargetController::windowUpdate()
 {
-	sf::RenderWindow* window = gameInstance.getWindow();
-	windowWidth = static_cast<float>(window->getSize().x);
-	windowHeight = static_cast<float>(window->getSize().y);
+	view = gameInstance.getView();
+	viewCenter = view->getCenter();
+	viewHalfSize = view->getSize() / 2.0f;
+}
+
+void TargetController::update(const float& deltaTime)
+{
+	static float timer = 1.0f;
+	windowUpdate();
+	
+	if (gameInstance.getIsPaused()) return;
+	timer -= deltaTime;
+	if (timer <= 0.0f)
+	{
+		spawnTarget();
+		timer = 1.0f;
+		return;
+	}
 }
 
 void TargetController::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -58,9 +89,8 @@ void TargetController::spawnTarget()
 {
 	newRandomConfig();
 	auto newButton = std::make_unique<Button>(TARGET_CONFIG);
-	bool foundSpot = false;
-	while (!foundSpot) {
-		foundSpot = true; // Assume a valid spot is found until proven otherwise
+	bool foundSpot = true;
+	for (int i = 0; i < 16 && !foundSpot; i++) {
 		// Check if any already exitsing target is overlapping with that position
 		for (const auto& button : targets)
 		{

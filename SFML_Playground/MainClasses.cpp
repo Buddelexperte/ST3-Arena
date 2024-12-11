@@ -91,7 +91,7 @@ void GI_Arena::tick(const float& deltaTime)
 {
 	sf::Vector2f playerPos = getPlayer()->getPos();
 	if (view->getCenter() != playerPos) {
-		const float cameraSmoothing = 0.0025f;
+		const float cameraSmoothing = 0.005f;
 		sf::Vector2f newCenter = lerp(view->getCenter(), playerPos, cameraSmoothing); // Smooth camera
 		setViewCenter(newCenter);
 	}

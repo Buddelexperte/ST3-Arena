@@ -93,6 +93,7 @@ class Player : public InputWidget
 private:
 	Button playerModel;
 	sf::Vector2f velocity = { 0.0f, 0.0f };
+	sf::Vector2f direction = { 0.0f, 0.0f };
 
 	void calcMovement(const float&);
 protected:
@@ -107,6 +108,8 @@ public:
 	sf::Vector2f getPos() const override;
 	void setRot(const float&) override;
 	float getRot() const override;
+	sf::Vector2f getVelocity() const { return velocity; };
+	sf::Vector2f getDirection() const { return direction; };
 };
 
 

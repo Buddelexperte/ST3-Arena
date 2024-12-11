@@ -60,6 +60,8 @@ void Player::calcMovement(const float& deltaTime)
 		velocity = lerp(velocity, targetVelo, WALKING_LERP);
 	}
 
+	direction = { velocity.x / WALKING_SPEED, velocity.y / WALKING_SPEED };
+
 	// Update position
 	addPos(velocity);
 
