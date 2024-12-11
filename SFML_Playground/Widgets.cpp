@@ -522,9 +522,6 @@ bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 
 W_Gameplay::W_Gameplay(InputWidget* parent) : InputWidget(parent), flashlightShader(this), pauseMenu(this), gameOverScreen(this), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f), background(sf::Quads, 4)
 {
-	ButtonConstruct constr = { windowCenter + sf::Vector2f(-1200.0f, 800.0f), sf::Vector2f(500.0f, 500.0f), sf::Color::White, 12, "TEST", sf::Color::Black };
-	TestBox.construct(constr);
-
 	// Load texture
 	if (!backgroundTexture.loadFromFile("Content/Textures/cobblestone_mossy.png"))
 	{
@@ -600,22 +597,23 @@ InputWidget* W_Gameplay::getWidgetAtIndex(const int& atIndex)
 
 InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 {
+	shapes = { &background, &targetController, &flashlightShader, player, &healthBar };
+
 	switch (widgetIndex = toIndex)
 	{
 	case 0:
 		gameInstance.setIsPaused(false);
 		gameInstance.setGameState(IN_GAME);
-		shapes = { &background, &targetController, &TestBox, &flashlightShader, player, &healthBar };
 		break;
 	case 1:
 		gameInstance.setIsPaused(true);
 		gameInstance.setGameState(GAME_PAUSED);
-		shapes = { &background, &targetController, &TestBox, &flashlightShader, player, &healthBar, &pauseMenu };
+		shapes.push_back(&pauseMenu);
 		break;
 	case 2:
 		gameInstance.setIsPaused(true);
 		gameInstance.setGameState(GAME_OVER);
-		shapes = { &background, &targetController, &TestBox, &flashlightShader, player, &healthBar, &gameOverScreen };
+		shapes.push_back(& gameOverScreen);
 		break;
 	default:
 		shapes = {};

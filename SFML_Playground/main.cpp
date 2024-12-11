@@ -1,7 +1,6 @@
 #pragma once
 #include "SFML_Arena.h"
 
-
 int main()
 {
     // Game Instance init

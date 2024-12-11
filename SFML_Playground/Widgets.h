@@ -139,7 +139,6 @@ private:
 	const float minTimer = 1.0f;
 	int hitTargets = 0;
 	Timer healthBar;
-	Button TestBox;
 	TargetController targetController;
 
 	W_Paused pauseMenu;
