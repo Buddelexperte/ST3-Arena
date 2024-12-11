@@ -4,9 +4,16 @@
 Player::Player(InputWidget* parent) : InputWidget(parent)
 {
 	ButtonConstruct playerButtonConstr = {
-		windowCenter + sf::Vector2f{ 0, 0 }, sf::Vector2f(100.0f, 100.0f), sf::Color::Red, 12, "P1", sf::Color::Black
+		windowCenter + sf::Vector2f{ 0, 0 }, sf::Vector2f(200.0f, 200.0f), sf::Color::Red, 12, "", sf::Color::Black
 	};
 	playerModel.construct(playerButtonConstr);
+	
+	if (!playerTexture.loadFromFile("Content/Textures/player/frames/player1.png"))
+	{
+		std::cerr << "Failed to load player texture!" << std::endl;
+	}
+
+	playerModel.setTexture(playerTexture, true);;
 	shapes = { &playerModel };
 }
 
@@ -138,10 +145,10 @@ sf::Vector2f Player::getPos() const
 
 void Player::setRot(const float& newRot)
 {
-	playerModel.setRot(newRot);
+	playerModel.setRot(newRot - 90.0f);
 }
 
 float Player::getRot() const
 {
-	return playerModel.getRot();
+	return playerModel.getRot() + 90.0f;
 }
