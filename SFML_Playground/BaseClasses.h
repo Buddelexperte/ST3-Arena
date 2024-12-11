@@ -95,6 +95,8 @@ private:
 	sf::Vector2f velocity = { 0.0f, 0.0f };
 	sf::Vector2f direction = { 0.0f, 0.0f };
 
+	sf::Texture playerTexture;
+
 	void calcMovement(const float&);
 protected:
 	sf::Keyboard::Key keyboardInput(sf::Event*) override;
