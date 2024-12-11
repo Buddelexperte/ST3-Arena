@@ -2,9 +2,9 @@
 #include "TargetController.h" // Own header file
 #include "BaseClasses.h"
 
-TargetController::TargetController() : gen(rd())
+TargetController::TargetController()
 {
-
+	view = gameInstance.getView();
 }
 
 void TargetController::newRandomConfig()
@@ -16,12 +16,12 @@ void TargetController::newRandomConfig()
 	sf::Vector2f upL = viewCorner(view, 1);
 	sf::Vector2f downR = viewCorner(view, 4);
 
-	std::uniform_real_distribution<float> distrX(upL.x + margin, downR.x - margin); // Distr for X coordinates based on actual windowWidth
-	std::uniform_real_distribution<float> distrY(upL.y + margin, downR.y - margin); // Distr for Y coordinates based on actual windowHeight
-	// Set TARGET_CONFIG to generation of distrX and Y but mapped to a 100x100 grid
-	sf::Vector2f generatedPos = { distrX(gen), distrY(gen) };
+	sf::Vector2f playerPos = gameInstance.getPlayer()->getPos();
+	float randomRadius = rng.floatInRange(500.0f, 1000.0f);
 
-	generatedPos += gameInstance.getPlayer()->getDirection() * 1000.0f;
+	sf::Vector2f generatedPos = rng.posInRadius(playerPos, randomRadius);
+	sf::Vector2f velocity = gameInstance.getPlayer()->getVelocity();
+	generatedPos += velocity * 100.0f;
 
 	sf::Vector2f gridPos = { std::trunc(generatedPos.x / 100), std::trunc(generatedPos.y / 100) };
 	gridPos = 100.0f * gridPos;
@@ -32,22 +32,21 @@ void TargetController::newRandomConfig()
 
 void TargetController::windowUpdate()
 {
-	view = gameInstance.getView();
-	viewCenter = view->getCenter();
-	viewHalfSize = view->getSize() / 2.0f;
+
 }
 
 void TargetController::update(const float& deltaTime)
 {
-	static float timer = 1.0f;
+	static float timer = 0.1f;
 	windowUpdate();
 	
 	if (gameInstance.getIsPaused()) return;
+
 	timer -= deltaTime;
 	if (timer <= 0.0f)
 	{
 		spawnTarget();
-		timer = 1.0f;
+		timer = 0.1f;
 		return;
 	}
 }
@@ -78,7 +77,6 @@ bool TargetController::clickedAny(const sf::Vector2f& mousePos)
 		if ((*it)->isMouseOver())
 		{
 			targets.erase(it); // If one is clicked, remove it from the target list
-			spawnTarget(); // Spawn a new target, using random distribution
 			return true;
 		}
 	}

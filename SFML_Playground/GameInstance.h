@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "Functions.h"
+#include "RandomNumbers.h"
 
 // Enum for handling gameStages in GameInstance
 enum E_GameState {
