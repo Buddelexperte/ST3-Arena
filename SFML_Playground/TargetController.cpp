@@ -62,7 +62,7 @@ void TargetController::draw(sf::RenderTarget& target, sf::RenderStates states) c
 bool TargetController::isHovering(const sf::Vector2f& mousePos)
 {
 	// Go through all targets with iterator pointing to each
-	for (const std::unique_ptr<Button>& target : targets)
+	for (auto& target : targets)
 	{
 		if (target->isMouseOver()) return true;
 	}
@@ -86,7 +86,7 @@ bool TargetController::clickedAny(const sf::Vector2f& mousePos)
 void TargetController::spawnTarget()
 {
 	newRandomConfig();
-	auto newButton = std::make_unique<Button>(TARGET_CONFIG);
+	std::unique_ptr<Button> newButton = std::make_unique<Button>(TARGET_CONFIG);
 	bool foundSpot = true;
 	for (int i = 0; i < 16 && !foundSpot; i++) {
 		// Check if any already exitsing target is overlapping with that position

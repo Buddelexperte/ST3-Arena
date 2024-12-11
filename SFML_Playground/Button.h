@@ -1,8 +1,10 @@
 #pragma once
-#include "GameInstance.h"
 // SFML Libraries
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+// Own libraries
+#include "GameInstance.h"
+#include "SoundManager.h"
 
 struct ButtonConstruct
 {
@@ -20,12 +22,12 @@ private:
 	GI_Arena& gameInstance = GI_Arena::getInstance();
 
 	sf::Font font; // Text font
-	sf::SoundBuffer clickBuffer;
-	sf::SoundBuffer clickReturnBuffer;
-	sf::Sound clickSound;
-	sf::Sound clickReturnSound;
 	sf::Vector2f lastScreenCenter = { 0.0f, 0.0f };
 	std::string text;
+
+	// Sounds + Buffers
+	sf::Sound clickSound;
+	sf::Sound clickReturnSound;
 public:
 	// shapes
 	sf::RectangleShape B_Box;
@@ -33,25 +35,19 @@ public:
 	// Constructors
 	Button() 
 		: Button(ButtonConstruct{ { 0, 0 }, { 100.0f, 100.0f }, sf::Color::White, 24, "Text", sf::Color::Black })
+	{};
+
+	Button(const ButtonConstruct& constr)
 	{
 		// Load text font from project directory
 		if (!font.loadFromFile("Content/fonts/coolvetica/coolvetica_rg.otf"))
-		{
 			std::cerr << "Unable to load font!!" << std::endl; // Error message for console log
-		}
-		// Load Click Sound from project directory
-		if (!clickBuffer.loadFromFile("Content/Sounds/Glitch.wav"))
-		{
-			std::cerr << "Unable to load click sound!" << std::endl;
-		} else
-			clickSound.setBuffer(clickBuffer);
-		if (!clickReturnBuffer.loadFromFile("Content/Sounds/Glitch2.wav"))
-		{
-			std::cerr << "Unable to load click Return sound!" << std::endl;
-		} else
-			clickReturnSound.setBuffer(clickReturnBuffer);
+
+		clickSound.setBuffer(SoundManager::getInstance().getClickBuffer());
+		clickReturnSound.setBuffer(SoundManager::getInstance().getReturnClickBuffer());
+		
+		construct(constr);
 	};
-	Button(const ButtonConstruct& constr) { construct(constr); }
 	void construct(const ButtonConstruct&);
 
 	void setText(const std::string&); // Set the texts content

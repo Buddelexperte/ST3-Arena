@@ -635,8 +635,6 @@ void W_Gameplay::update(const float& deltaTime)
 {
 	InputWidget::update(deltaTime);
 	const bool drawFlashlight = true;
-	static int frame = 0;
-	frame++;
 
 	// Flashlight update
 	if (drawFlashlight)

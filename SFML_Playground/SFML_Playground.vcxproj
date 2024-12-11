@@ -161,6 +161,7 @@
     <ClInclude Include="Functions.h" />
     <ClInclude Include="RandomNumbers.h" />
     <ClInclude Include="Slider.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="TargetController.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="SFML_Arena.h" />

@@ -30,14 +30,10 @@ void Button::construct(const ButtonConstruct& constr)
 
 void Button::onClick()
 {
-	if (text == "RETURN")
-	{
+	if (text == "RETURN" || text == "QUIT")
 		clickReturnSound.play();
-	}
 	else
-	{
 		clickSound.play();
-	}
 
 }
 
