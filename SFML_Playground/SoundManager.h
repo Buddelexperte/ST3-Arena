@@ -9,6 +9,8 @@ private:
     SoundManager() = default;
     ~SoundManager() = default;
 
+    std::vector<std::unique_ptr<sf::Sound>> tempSounds;
+
     sf::SoundBuffer soundBuffer_click;
     sf::SoundBuffer soundBuffer_returnClick;
 
@@ -18,6 +20,7 @@ private:
     // Verbiete Kopieren und Zuweisung
     SoundManager(const SoundManager&) = delete;
     SoundManager& operator=(const SoundManager&) = delete;
+
 public:
     static SoundManager& getInstance()
     {
@@ -47,4 +50,22 @@ public:
         return soundBuffer_returnClick;
     }
 
+    void play(const sf::SoundBuffer& buffer)
+    {
+        std::unique_ptr<sf::Sound> newSound = std::make_unique<sf::Sound>(); // Create new Sound Object
+        newSound->setBuffer(buffer);
+        newSound->play(); // Play the sound immediately
+        tempSounds.push_back(std::move(newSound));
+    }
+
+    void cleanUp()
+    {
+        // Remove all sounds that are not playing anymore
+        tempSounds.erase(
+            std::remove_if(tempSounds.begin(), tempSounds.end(),
+                [](const std::unique_ptr<sf::Sound>& sound) {
+                    return sound->getStatus() == sf::Sound::Stopped;
+                }),
+            tempSounds.end());
+    }
 };

@@ -18,7 +18,7 @@ void Button::construct(const ButtonConstruct& constr)
 	B_Box.setOrigin(b_size.x / 2.0f, b_size.y / 2.0f);
 	B_Box.setFillColor(b_color);
 	// Initialize Text
-	T_Text.setFont(font);
+	T_Text.setFont(fm.getFont(fontID));
 	T_Text.setString(text);
 	T_Text.setCharacterSize(t_size);
 	T_Text.setFillColor(t_color);
@@ -31,10 +31,9 @@ void Button::construct(const ButtonConstruct& constr)
 void Button::onClick()
 {
 	if (text == "RETURN" || text == "QUIT")
-		clickReturnSound.play();
+		sm.play(sm.getReturnClickBuffer());
 	else
-		clickSound.play();
-
+		sm.play(sm.getClickBuffer());
 }
 
 void Button::onHover()

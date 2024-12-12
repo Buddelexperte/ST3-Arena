@@ -24,6 +24,20 @@ std::shared_ptr<T> lockWeakPtr(const std::weak_ptr<T>& weakPtr) {
 	return nullptr;  // Or handle the expired object case appropriately
 }
 
+// Zero round "too small" float values
+inline void zeroPrecision(float& value)
+{
+	const float epsilon = 1e-6f;
+	if (std::abs(value) < epsilon) value = 0.0f;
+}
+
+inline void zeroPrecision(sf::Vector2f& value)
+{
+	const float epsilon = 1e-6f;
+	if (std::abs(value.x) < epsilon) value.x = 0.0f;
+	if (std::abs(value.y) < epsilon) value.y = 0.0f;
+}
+
 // LERP -------------------------------------------------------------------------------------------
 inline float lerp(const float& currentRot, const float& targetRot, float factor)
 {

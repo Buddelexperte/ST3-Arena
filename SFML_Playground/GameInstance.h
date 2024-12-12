@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include "Functions.h"
+#include "SoundManager.h"
+#include "FontManager.h"
 #include "RandomNumbers.h"
 
 // Enum for handling gameStages in GameInstance
@@ -32,6 +34,9 @@ private:
 	GI_Arena();
 	GI_Arena(const GI_Arena&) = delete;
 	GI_Arena& operator=(const GI_Arena&) = delete; // Block the '=' operator to stop copies being made of this class
+
+	SoundManager& soundManager = SoundManager::getInstance();
+	FontManager& fontManager = FontManager::getInstance();
 
 	sf::RenderWindow* window = nullptr;
 	sf::View* view = nullptr;

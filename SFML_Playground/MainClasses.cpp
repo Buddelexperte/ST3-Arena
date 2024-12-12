@@ -6,18 +6,17 @@
 
 // Game Instance Code
 
-
 GI_Arena::GI_Arena()
 {
 	const sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 	window = new sf::RenderWindow(desktop, "SFML_Arena", sf::Style::Fullscreen);
 	
-	// Only use for crash heavy debug
+	// Only use for crash heavy debug !
 	//window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "SFML_Arena", sf::Style::Titlebar | sf::Style::Default);
 	
 	std::cout << "RenderWindow created." << std::endl;
-
-	view = new sf::View(sf::Vector2f(desktop.width / 2.0f, desktop.height / 2.0f), sf::Vector2f(desktop.width, desktop.height)); // Arbitrary position
+	sf::Vector2f desktopSize = { static_cast<float>(desktop.width), static_cast<float>(desktop.height) };
+	view = new sf::View(desktopSize / 2.0f, desktopSize); // Arbitrary position
 	std::cout << "View created" << std::endl;
 	window->setView(*view);
 	std::cout << "View attached" << std::endl;
@@ -41,6 +40,7 @@ bool GI_Arena::initWidgets()
 
 void GI_Arena::start()
 {
+	fontManager.loadFonts();
 	initWidgets();
 
 	std::cout << "Starting Game" << std::endl;
@@ -89,6 +89,8 @@ void GI_Arena::preTick()
 
 void GI_Arena::tick(const float& deltaTime)
 {
+	soundManager.cleanUp();
+
 	sf::Vector2f playerPos = getPlayer()->getPos();
 	if (view->getCenter() != playerPos) {
 		const float cameraSmoothing = 0.005f;

@@ -13,7 +13,8 @@ void TargetController::newRandomConfig()
 	// Generating the random position
 	sf::Vector2f generatedPos = rng.posInRadius(playerPos, randomRadius);
 	sf::Vector2f velocity = gameInstance.getPlayer()->getVelocity();
-	generatedPos += velocity * 10000.0f;
+	generatedPos += velocity * 10.0f;
+	std::cout << "Current velocity = " << velocity.x << " x; " << velocity.y << " y;" << std::endl;
 	// Snapping the position on a grid (100 x 100)
 	sf::Vector2f gridPos = { std::trunc(generatedPos.x / 100), std::trunc(generatedPos.y / 100) };
 	gridPos = 100.0f * gridPos;
@@ -24,7 +25,7 @@ void TargetController::newRandomConfig()
 void TargetController::update(const float& deltaTime)
 {
 	static float timer = spawnInterval;
-	windowUpdate();
+	WidgetElement::update(deltaTime);
 	
 	if (gameInstance.getIsPaused()) return;
 
@@ -94,6 +95,4 @@ void TargetController::spawnTarget()
 void TargetController::initSpawner()
 {
 	targets.clear(); // Dereference old targets
-	windowUpdate(); // Set window dimensions before spawning, so spawn positions are correct
-	for (int i = 0; i < 3; i++) spawnTarget(); // Spawn 3 start targets
 }

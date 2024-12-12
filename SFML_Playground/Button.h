@@ -4,7 +4,6 @@
 #include <SFML/Audio.hpp>
 // Own libraries
 #include "GameInstance.h"
-#include "SoundManager.h"
 
 struct ButtonConstruct
 {
@@ -20,14 +19,14 @@ class Button : public sf::Drawable
 {
 private:
 	GI_Arena& gameInstance = GI_Arena::getInstance();
+	SoundManager& sm = SoundManager::getInstance();
+	FontManager& fm = FontManager::getInstance();
 
-	sf::Font font; // Text font
+	int fontID = 0; // [0] in FontManager.h
 	sf::Vector2f lastScreenCenter = { 0.0f, 0.0f };
 	std::string text;
 
-	// Sounds + Buffers
-	sf::Sound clickSound;
-	sf::Sound clickReturnSound;
+	// Sounds (Buffers in SoundManager.h)
 public:
 	// shapes
 	sf::RectangleShape B_Box;
@@ -39,13 +38,7 @@ public:
 
 	Button(const ButtonConstruct& constr)
 	{
-		// Load text font from project directory
-		if (!font.loadFromFile("Content/fonts/coolvetica/coolvetica_rg.otf"))
-			std::cerr << "Unable to load font!!" << std::endl; // Error message for console log
-
-		clickSound.setBuffer(SoundManager::getInstance().getClickBuffer());
-		clickReturnSound.setBuffer(SoundManager::getInstance().getReturnClickBuffer());
-		
+		// Construct button parameters (font, text, color, etc)
 		construct(constr);
 	};
 	void construct(const ButtonConstruct&);

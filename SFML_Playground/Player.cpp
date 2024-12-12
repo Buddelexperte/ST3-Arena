@@ -61,6 +61,7 @@ void Player::calcMovement(const float& deltaTime)
 	sf::Vector2f targetVelo = sf::Vector2f{ x, y } * multiplier * deltaTime;
 
 	// Smoothly interpolate velocity using linear interpolation if location changed
+	zeroPrecision(velocity);
 	if (velocity != targetVelo)
 	{
 		const float WALKING_LERP = LERP_SMOOTHNESS * multiplier;
@@ -79,6 +80,7 @@ void Player::calcMovement(const float& deltaTime)
 	float targetRot = getLookAtRot(playerPos, mousePos);
 
 	// Smoothly interpolate rotation using lerp if rot changed
+	zeroPrecision(rotation);
 	if (rotation != targetRot)
 	{
 		const float ROT_LERP = LERP_SMOOTHNESS * 10.0f * multiplier;
