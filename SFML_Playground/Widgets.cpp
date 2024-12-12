@@ -520,7 +520,7 @@ bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 
 // W_Gameplay -------------------------------------------------------------------------------------
 
-W_Gameplay::W_Gameplay(InputWidget* parent) : InputWidget(parent), flashlightShader(this), pauseMenu(this), gameOverScreen(this), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f), background(sf::Quads, 4)
+W_Gameplay::W_Gameplay(InputWidget* parent) : InputWidget(parent), flashlightShader(this), pauseMenu(this), gameOverScreen(this), targetController(this), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f), background(sf::Quads, 4)
 {
 	// Load texture
 	if (!backgroundTexture.loadFromFile("Content/Textures/cobblestone_mossy.png"))

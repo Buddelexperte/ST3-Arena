@@ -16,6 +16,7 @@ protected:
 	sf::Vector2f ORIGIN = window->getView().getCenter();
 	sf::View* view = nullptr;
 	sf::Vector2f viewSize;
+	sf::Vector2f viewHalfSize;
 	sf::Vector2f viewCenter;
 	std::vector<sf::Drawable*> shapes;
 

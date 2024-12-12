@@ -312,6 +312,7 @@ public:
 
     void drawOtherScene(sf::Drawable* drawable)
     {
+        return;
         // Draw your scene here (make sure to render the actual scene)
         sceneRenderTexture.draw(*drawable);
         sceneRenderTexture.draw(flashlightSprite, sf::BlendMin);

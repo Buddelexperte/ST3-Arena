@@ -144,7 +144,9 @@ void WidgetElement::windowUpdate()
 	// Everything sf::View related
 	view = gameInstance.getView();
 	viewSize = view->getSize();
+	viewHalfSize = viewSize / 2.0f;
 	viewCenter = view->getCenter();
+
 }
 
 void WidgetElement::draw(sf::RenderTarget& target, sf::RenderStates states) const

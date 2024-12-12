@@ -1,11 +1,5 @@
 #pragma once
 #include "TargetController.h" // Own header file
-#include "BaseClasses.h"
-
-TargetController::TargetController()
-{
-	view = gameInstance.getView();
-}
 
 void TargetController::newRandomConfig()
 {
@@ -21,23 +15,17 @@ void TargetController::newRandomConfig()
 
 	sf::Vector2f generatedPos = rng.posInRadius(playerPos, randomRadius);
 	sf::Vector2f velocity = gameInstance.getPlayer()->getVelocity();
-	generatedPos += velocity * 100.0f;
+	generatedPos += velocity * 10000.0f;
 
 	sf::Vector2f gridPos = { std::trunc(generatedPos.x / 100), std::trunc(generatedPos.y / 100) };
 	gridPos = 100.0f * gridPos;
 
 	TARGET_CONFIG.pos = gridPos;
-	//TARGET_CONFIG.pos = sf::Vector2f(int(distrX(gen) / 100) * 100.0f, int(distrY(gen) / 100) * 100.0f);
-}
-
-void TargetController::windowUpdate()
-{
-
 }
 
 void TargetController::update(const float& deltaTime)
 {
-	static float timer = 0.1f;
+	static float timer = spawnInterval;
 	windowUpdate();
 	
 	if (gameInstance.getIsPaused()) return;
