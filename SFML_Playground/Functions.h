@@ -24,7 +24,7 @@ std::shared_ptr<T> lockWeakPtr(const std::weak_ptr<T>& weakPtr) {
 	return nullptr;  // Or handle the expired object case appropriately
 }
 
-// Zero round "too small" float values
+// Clamp "too small" float values to 0.0f
 inline void zeroPrecision(float& value)
 {
 	const float epsilon = 1e-6f;
