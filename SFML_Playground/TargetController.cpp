@@ -7,19 +7,17 @@ void TargetController::newRandomConfig()
 
 	const float margin = 200.0f; // margin, so the targets dont overlap with healthbar or window edges
 	
-	sf::Vector2f upL = viewCorner(view, 1);
-	sf::Vector2f downR = viewCorner(view, 4);
-
+	// Getting values for generating a position
 	sf::Vector2f playerPos = gameInstance.getPlayer()->getPos();
 	float randomRadius = rng.floatInRange(500.0f, 1000.0f);
-
+	// Generating the random position
 	sf::Vector2f generatedPos = rng.posInRadius(playerPos, randomRadius);
 	sf::Vector2f velocity = gameInstance.getPlayer()->getVelocity();
 	generatedPos += velocity * 10000.0f;
-
+	// Snapping the position on a grid (100 x 100)
 	sf::Vector2f gridPos = { std::trunc(generatedPos.x / 100), std::trunc(generatedPos.y / 100) };
 	gridPos = 100.0f * gridPos;
-
+	// Setting the new Button Target Position in the ButtonConfig variable for later use inside spawnTarget()
 	TARGET_CONFIG.pos = gridPos;
 }
 

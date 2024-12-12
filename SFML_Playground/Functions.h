@@ -24,50 +24,6 @@ std::shared_ptr<T> lockWeakPtr(const std::weak_ptr<T>& weakPtr) {
 	return nullptr;  // Or handle the expired object case appropriately
 }
 
-// VIEW CORNERS ----------------------------------------------------------------------------------
-/* CORNER IDs
-* 0 = Center
-* 1 = topleft
-* 2 = topright
-* 3 = downleft
-* 4 = downright
-*/ 
-inline sf::Vector2f viewCorner(const sf::View* viewRef, const int& cornerID)
-{
-	sf::Vector2f viewCenter = viewRef->getCenter();
-	sf::Vector2f viewSize = viewRef->getSize();
-	sf::Vector2f halfSize = viewSize / 2.0f;
-
-	sf::Vector2f corner = viewCenter;
-	switch (cornerID)
-	{
-	case 0: // Center
-		return corner;
-		break;
-	case 1: // Top-Left
-		corner.x -= halfSize.x;
-		corner.y -= halfSize.y;
-		return corner;
-		break;
-	case 2: // Top-Right
-		corner.x += halfSize.x;
-		corner.y -= halfSize.y;
-		return corner;
-		break;
-	case 3: // Down-Left
-		corner.x -= halfSize.x;
-		corner.y += halfSize.y;
-		return corner;
-		break;
-	case 4:  // Down-Right
-		corner.x += halfSize.x;
-		corner.y += halfSize.y;
-		return corner;
-		break;
-	}
-	return { 0.0f, 0.0f };
-}
-
 // LERP -------------------------------------------------------------------------------------------
 inline float lerp(const float& currentRot, const float& targetRot, float factor)
 {
