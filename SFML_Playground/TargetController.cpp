@@ -5,11 +5,9 @@ void TargetController::newRandomConfig()
 {
 	windowUpdate();
 
-	const float margin = 200.0f; // margin, so the targets dont overlap with healthbar or window edges
-	
 	// Getting values for generating a position
 	sf::Vector2f playerPos = gameInstance.getPlayer()->getPos();
-	float distance = rng.floatInRange(500.0f, 1000.0f);
+	float distance = rng.floatInRange(600.0f, 1000.0f);
 	// Generating the random position
 	sf::Vector2f generatedPos = rng.posInDistance(playerPos, distance);
 	sf::Vector2f velocity = gameInstance.getPlayer()->getVelocity();
@@ -44,26 +42,27 @@ void TargetController::draw(sf::RenderTarget& target, sf::RenderStates states) c
 	}
 }
 
-bool TargetController::isHovering(const sf::Vector2f& mousePos)
+bool TargetController::isHovering()
 {
 	// Go through all targets with iterator pointing to each
-	for (auto& target : targets)
+	for (const auto& target : targets)
 	{
 		if (target->isMouseOver()) return true;
 	}
 	return false; // No button was clicked
 }
 
-bool TargetController::clickedAny(const sf::Vector2f& mousePos)
+bool TargetController::clickedAny()
 {
 	// Go through all targets with iterator pointing to each
-	for (auto it = targets.begin(); it != targets.end(); ++it)
+	for (std::vector<std::unique_ptr<Button>>::iterator it = targets.begin(); it != targets.end(); /*No Increment*/)
 	{
-		if ((*it)->isMouseOver())
+		if ((*it)->isMouseOver(true))
 		{
 			targets.erase(it); // If one is clicked, remove it from the target list
 			return true;
 		}
+		else it++;
 	}
 	return false; // No button was clicked
 }
@@ -72,9 +71,10 @@ void TargetController::spawnTarget()
 {
 	newRandomConfig();
 	std::unique_ptr<Button> newButton = std::make_unique<Button>(TARGET_CONFIG);
-	bool foundSpot = true;
-	for (int i = 0; i < 16 && !foundSpot; i++) {
+	bool foundSpot = false;
+	for (int i = 0; i < 4 && !foundSpot; i++) {
 		// Check if any already exitsing target is overlapping with that position
+		foundSpot = true;
 		for (const auto& button : targets)
 		{
 			if (newButton->B_Box.getGlobalBounds().intersects(button->B_Box.getGlobalBounds()))
@@ -86,6 +86,7 @@ void TargetController::spawnTarget()
 			}
 		}
 	}
+	if (!foundSpot) return;
 	// Move uniquePointer to targets vector using std::move (required for unique_ptr)
 	targets.push_back(std::move(newButton));
 }

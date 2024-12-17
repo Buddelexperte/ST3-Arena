@@ -34,8 +34,6 @@ void Player::update(const float& deltaTime)
 		// Event Handler
 		handleInput(&event); // Distinguishes between mouse, keyboard etc.
 	}
-	// Draw new Menu to screen through GameInstance
-	gameInstance.updateScreen();
 }
 
 void Player::calcMovement(const float& deltaTime)

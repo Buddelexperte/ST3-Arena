@@ -22,8 +22,8 @@ public:
 	TargetController(InputWidget* parent) : WidgetElement(parent) {}
 	void initSpawner(); // Spawn first three targets, reset all old values
 	void update(const float&) override;
-	bool isHovering(const sf::Vector2f&);
-	bool clickedAny(const sf::Vector2f&); // Check if any button got clicked and erase it
+	bool isHovering();
+	bool clickedAny(); // Check if any button got clicked and erase it
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override; // Draw all target buttons
 };

@@ -677,7 +677,7 @@ bool W_Gameplay::isMouseOver(const bool& checkForClick = false)
 
 	if (checkForClick)
 	{
-		if (targetController.clickedAny(gameInstance.getMousePos()))
+		if (targetController.clickedAny())
 		{
 			// Increase targetsHit and change HealthBar accoridngly
 			hitTargets++;
@@ -688,7 +688,7 @@ bool W_Gameplay::isMouseOver(const bool& checkForClick = false)
 		}
 		return false;
 	}
-	return (targetController.isHovering(gameInstance.getMousePos()));
+	return (targetController.isHovering());
 }
 
 void W_Gameplay::draw(sf::RenderTarget& target, sf::RenderStates states) const

@@ -105,7 +105,7 @@ void GI_Arena::tick(const float& deltaTime)
 
 	sf::Vector2f playerPos = getPlayer()->getPos();
 	if (view->getCenter() != playerPos) {
-		const float cameraSmoothing = 0.005f;
+		const float cameraSmoothing = 0.001f;
 		sf::Vector2f newCenter = lerp(view->getCenter(), playerPos, cameraSmoothing); // Smooth camera
 		setViewCenter(newCenter);
 	}
@@ -117,6 +117,8 @@ void GI_Arena::tick(const float& deltaTime)
 void GI_Arena::postTick()
 {
 	correctWidget();
+	// Draw new Menu to screen through GameInstance
+	updateScreen();
 }
 
 void GI_Arena::setViewCenter(const sf::Vector2f& newCenter)
