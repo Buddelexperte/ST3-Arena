@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <functional>
 
 // SFML abbreviations
 const sf::Keyboard::Key KEY_W = sf::Keyboard::W;
@@ -25,17 +24,16 @@ std::shared_ptr<T> lockWeakPtr(const std::weak_ptr<T>& weakPtr) {
 }
 
 // Clamp "too small" float values to 0.0f
-inline void zeroPrecision(float& value)
+inline void zeroPrecision(float& value, const float& precision = 1e-6f)
 {
-	const float epsilon = 1e-6f;
+	const float epsilon = precision;
 	if (std::abs(value) < epsilon) value = 0.0f;
 }
 
 inline void zeroPrecision(sf::Vector2f& value)
 {
-	const float epsilon = 1e-6f;
-	if (std::abs(value.x) < epsilon) value.x = 0.0f;
-	if (std::abs(value.y) < epsilon) value.y = 0.0f;
+	zeroPrecision(value.x);
+	zeroPrecision(value.y);
 }
 
 // LERP -------------------------------------------------------------------------------------------

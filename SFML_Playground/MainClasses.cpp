@@ -1,7 +1,7 @@
 #pragma once 
+#include <fstream>
 #include "GameInstance.h"
 #include "BaseClasses.h"
-#include <fstream>
 #include "Widgets.h"
 
 // Game Instance Code
@@ -16,7 +16,7 @@ GI_Arena::GI_Arena()
 	
 	std::cout << "RenderWindow created." << std::endl;
 	sf::Vector2f desktopSize = { static_cast<float>(desktop.width), static_cast<float>(desktop.height) };
-	view = new sf::View(desktopSize / 2.0f, desktopSize); // Arbitrary position
+	view = new sf::View(desktopSize / 2.0f, desktopSize);
 	std::cout << "View created" << std::endl;
 	window->setView(*view);
 	std::cout << "View attached" << std::endl;
@@ -24,11 +24,17 @@ GI_Arena::GI_Arena()
 
 bool GI_Arena::initWidgets()
 {
-	try {
-		widgets.clear();
+	static bool didOnce = false;
+
+	if (didOnce) return false;
+	didOnce = true;
+
+	widgets.clear(); 
+	std::cout << "Initiating widgets..." << std::endl;
+	try { // Adding base widgets with their nullptr parent HERE!
 		widgets.push_back(std::make_shared<W_MainMenu>(nullptr));
 		widgets.push_back(std::make_shared<W_Gameplay>(nullptr));
-		std::cout << "Initiated widgets..." << std::endl;
+		std::cout << "Initiated widgets" << std::endl;
 		return true;
 	}
 	catch (const std::exception& e) {
@@ -40,23 +46,24 @@ bool GI_Arena::initWidgets()
 
 void GI_Arena::start()
 {
-	fontManager.loadFonts();
+	fontManager.loadFonts(); // No lazy loading for fonts
 	initWidgets();
+	correctWidget();
 
-	std::cout << "Starting Game" << std::endl;
+	std::cout << "\n### Starting Game ###\n" << std::endl;
 
-	preTick();
 	// Main Game Loop
 	while (window->isOpen())
 	{
+		preTick();
 		deltaTime = clock.restart().asSeconds();
 		fps = 1.0f / deltaTime;
 		tick(deltaTime);
-		preTick();
+		postTick();
 	}
 }
 
-void GI_Arena::preTick()
+void GI_Arena::correctWidget()
 {
 	// If GameState changed in earlier loop, construct new activeMenu;
 	static E_GameState oldGS = QUIT;
@@ -87,6 +94,11 @@ void GI_Arena::preTick()
 	activeMenu->construct();
 }
 
+void GI_Arena::preTick()
+{
+
+}
+
 void GI_Arena::tick(const float& deltaTime)
 {
 	soundManager.cleanUp();
@@ -100,6 +112,11 @@ void GI_Arena::tick(const float& deltaTime)
 
 	activeMenu->update(deltaTime);
 	playerRef->update(deltaTime);
+}
+
+void GI_Arena::postTick()
+{
+	correctWidget();
 }
 
 void GI_Arena::setViewCenter(const sf::Vector2f& newCenter)
@@ -148,7 +165,6 @@ void WidgetElement::windowUpdate()
 	viewSize = view->getSize();
 	viewHalfSize = viewSize / 2.0f;
 	viewCenter = view->getCenter();
-
 }
 
 void WidgetElement::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -184,6 +200,9 @@ InputWidget* InputWidget::setWidgetIndex(const int& toIndex)
 	widgetIndex = toIndex;
 	switch (widgetIndex)
 	{
+	case 0:
+		// Implement default shapes in child classes
+		break;
 	default:
 		break;
 	}

@@ -18,6 +18,11 @@ private:
 public:
     void loadFonts()
     {
+        static bool didOnce = false;
+
+        if (didOnce) return;
+        didOnce = true;
+
         const std::vector<std::string> fontPaths = {
             "Content/fonts/coolvetica/coolvetica_rg.otf" // [0]
         };

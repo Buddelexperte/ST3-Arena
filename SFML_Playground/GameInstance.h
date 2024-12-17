@@ -27,6 +27,7 @@ class Player;
 class GI_Arena // SINGLETON PATTERN
 {
 private:
+	// Time calculation (deltaTime etc.)
 	sf::Clock clock;
 	float deltaTime = 0.0f;
 	float fps = 0.0f;
@@ -34,50 +35,55 @@ private:
 	GI_Arena();
 	GI_Arena(const GI_Arena&) = delete;
 	GI_Arena& operator=(const GI_Arena&) = delete; // Block the '=' operator to stop copies being made of this class
-
+	// Manager instances
 	SoundManager& soundManager = SoundManager::getInstance();
 	FontManager& fontManager = FontManager::getInstance();
-
+	// SFML Viewport objects
 	sf::RenderWindow* window = nullptr;
 	sf::View* view = nullptr;
 	sf::RenderStates states;
-
+	// Custom GameState
 	E_GameState gameState = MENU_SCREEN;
 	// Create all main widgets for later use
 	std::vector<std::shared_ptr<InputWidget>> widgets;
 	std::shared_ptr<InputWidget> activeMenu = nullptr;
 
-	float zoomFactor = 1.0f;
 	Player* playerRef = nullptr;
-
+	// Somehow Gameplay related?
+	float zoomFactor = 1.0f;
 	bool bIsGameplayPaused = true;
 public:
-	static GI_Arena& getInstance()
+	static GI_Arena& getInstance() // SINGLETON getInstance
 	{
 		static GI_Arena instance;
 		return instance;
 	}
-	// Tick and such
+	// Basics
+	void start(); // Function to call from main()
 	bool initWidgets();
-	void start();
-	void preTick();
-	void tick(const float&);
+	void correctWidget();
+	// Ticks
+	void preTick(); // Logic before Player input (Checks for Inventory etc.)
+	void tick(const float&); // Player Input and window.draw()
+	void postTick(); // Logic after Player Input (Checks for game closing etc.)
+	// Viewport
 	void updateScreen();
 	void setViewCenter(const sf::Vector2f&);
-	// Important values and references
+	// Setters and Getters of pointers and important variables
 	sf::RenderWindow* getWindow() const { return window; }
 	sf::View* getView() const { return view; }
 	sf::RenderStates getRenderStates() const { return states; }
 	Player* getPlayer();
-	void setZoom(const float& newZoom) { view->zoom(zoomFactor = newZoom); }
-	float getZoom() const { return zoomFactor; }
 	std::weak_ptr<InputWidget> getActiveWidget() { return activeMenu; }
 	void setIsPaused(const bool& bPause) { bIsGameplayPaused = bPause; }
 	bool getIsPaused() const { return bIsGameplayPaused; }
+	// Update Zoom (WIP)
+	void setZoom(const float& newZoom) { view->zoom(zoomFactor = newZoom); }
+	float getZoom() const { return zoomFactor; }
 	// Input stuff
 	bool handleEvent(sf::Event*);
 	sf::Vector2f getMousePos() { return window->mapPixelToCoords(sf::Mouse::getPosition(*window)); }
-	
+	// GameState 
 	void setGameState(const E_GameState&);
 	E_GameState getGameState() const { return gameState; }
 };
