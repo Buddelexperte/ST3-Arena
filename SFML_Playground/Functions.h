@@ -67,6 +67,14 @@ inline sf::Vector2f operator*(const sf::Vector2f& lhs, const sf::Vector2f& rhs) 
 	return sf::Vector2f(lhs.x * rhs.x, lhs.y * rhs.y);
 }
 
+// Snapping a sf::Vector2f onto a grid of squares (sideLength is gridSize)
+inline sf::Vector2f posToGrid(const sf::Vector2f& pos, const float& gridSize)
+{
+	sf::Vector2f snappedPos = { std::trunc(pos.x / gridSize), std::trunc(pos.y / gridSize) };
+	snappedPos *= gridSize;
+	return snappedPos;
+}
+
 
 // ROTATION ---------------------------------------------------------------------------------------
 constexpr float degreesToRadians(float degrees) {

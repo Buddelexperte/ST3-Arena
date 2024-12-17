@@ -9,15 +9,13 @@ void TargetController::newRandomConfig()
 	
 	// Getting values for generating a position
 	sf::Vector2f playerPos = gameInstance.getPlayer()->getPos();
-	float randomRadius = rng.floatInRange(500.0f, 1000.0f);
+	float distance = rng.floatInRange(500.0f, 1000.0f);
 	// Generating the random position
-	sf::Vector2f generatedPos = rng.posInRadius(playerPos, randomRadius);
+	sf::Vector2f generatedPos = rng.posInDistance(playerPos, distance);
 	sf::Vector2f velocity = gameInstance.getPlayer()->getVelocity();
-	generatedPos += velocity * 10.0f;
-	std::cout << "Current velocity = " << velocity.x << " x; " << velocity.y << " y;" << std::endl;
+	generatedPos += velocity * 10.0f; // Take velocity into calculation for "movement prediction"
 	// Snapping the position on a grid (100 x 100)
-	sf::Vector2f gridPos = { std::trunc(generatedPos.x / 100), std::trunc(generatedPos.y / 100) };
-	gridPos = 100.0f * gridPos;
+	sf::Vector2f gridPos = posToGrid(generatedPos, 100.0f);
 	// Setting the new Button Target Position in the ButtonConfig variable for later use inside spawnTarget()
 	TARGET_CONFIG.pos = gridPos;
 }
@@ -30,7 +28,7 @@ void TargetController::update(const float& deltaTime)
 	if (gameInstance.getIsPaused()) return;
 
 	timer -= deltaTime;
-	if (timer <= 0.0f)
+	if (timer < 0.0f)
 	{
 		spawnTarget();
 		timer = 0.1f;

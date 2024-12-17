@@ -41,12 +41,12 @@ public:
 
 		return sf::Vector2f(x, y);
 	}
-	sf::Vector2f posInRadius(const sf::Vector2f& center, const float& radius)
+	sf::Vector2f posInDistance(const sf::Vector2f& center, const float& dist)
 	{
 		float angle = floatInRange(0.0f, 2.0f * static_cast<float>(pi));
 
-		float x = center.x + radius * std::cos(angle);
-		float y = center.y + radius * std::sin(angle);
+		float x = center.x + dist * std::cos(angle);
+		float y = center.y + dist * std::sin(angle);
 
 		return sf::Vector2f(x, y);
 	}

@@ -111,7 +111,8 @@ public:
 	sf::Vector2f getPos() const override;
 	void setRot(const float&) override;
 	float getRot() const override;
-	sf::Vector2f getVelocity() const { return velocity; };
+	sf::Vector2f getVelocity() const { return
+		; };
 	sf::Vector2f getDirection() const { return direction; };
 };
 
