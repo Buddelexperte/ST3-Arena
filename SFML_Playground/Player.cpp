@@ -7,14 +7,28 @@ Player::Player(InputWidget* parent) : InputWidget(parent)
 		windowCenter + sf::Vector2f{ 0, 0 }, sf::Vector2f(200.0f, 200.0f), sf::Color::Red, 12, "", sf::Color::Black
 	};
 	playerModel.construct(playerButtonConstr);
-	
-	if (!playerTexture.loadFromFile("Content/Textures/player/frames/player1.png"))
+
+	for (int i = 4; i <= 6; i++)
 	{
-		std::cerr << "Failed to load player texture!" << std::endl;
+		sf::Texture newTexture;
+		std::string texturePath = "Content/Textures/player/frames/player" + std::to_string(i) + ".png";
+		if (!newTexture.loadFromFile(texturePath)) {
+			std::cerr << "Failed to load texture: " << texturePath << std::endl;
+			continue;
+		}
+		playerTexture.push_back(newTexture);
+	}
+	
+	shapes = { &playerModel };
+	
+	if (!playerTexture.empty())
+	{
+		playerModel.setTexture(playerTexture[0], true);
 	}
 
-	playerModel.setTexture(playerTexture, true);;
-	shapes = { &playerModel };
+	currentframe = 0;
+	animationAccu = 0.0f;
+	animationSpeed = 0.2f;
 }
 
 void Player::update(const float& deltaTime)
@@ -22,6 +36,19 @@ void Player::update(const float& deltaTime)
 	InputWidget::update(deltaTime); // Call parent function to set necessary values and call base functions
 	if (!gameInstance.getIsPaused()) calcMovement(deltaTime); // Only check for movement input when GameInstance is not paused
 	// Collect / Receive user events
+
+	if (!playerTexture.empty())
+	{
+		animationAccu += deltaTime;
+
+		if (animationAccu >= animationSpeed) 
+		{
+			currentframe = (currentframe + 1) % playerTexture.size();
+			playerModel.setTexture(playerTexture[currentframe], true);
+			animationAccu -= animationSpeed; 
+		}
+	}
+
 	sf::Event event;
 	while (window->pollEvent(event) && gameInstance.getGameState() != QUIT)
 	{

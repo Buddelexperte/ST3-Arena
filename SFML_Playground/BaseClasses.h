@@ -96,7 +96,10 @@ private:
 	sf::Vector2f velocity = { 0.0f, 0.0f };
 	sf::Vector2f direction = { 0.0f, 0.0f };
 
-	sf::Texture playerTexture;
+	std::vector<sf::Texture> playerTexture = {};
+	int currentframe;
+	float animationAccu;
+	float animationSpeed;
 
 	void calcMovement(const float&);
 protected:
