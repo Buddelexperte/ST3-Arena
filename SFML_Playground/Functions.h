@@ -29,21 +29,21 @@ inline bool shouldZero(const float& value, const float& precision = 1e-6f)
 	return (std::abs(value) < epsilon);
 }
 
-inline bool shouldZero(const sf::Vector2f& value)
+inline bool shouldZero(const sf::Vector2f& value, const float& precision = 1e-6f)
 {
-	return (shouldZero(value.x) && shouldZero(value.y));
+	return (shouldZero(value.x, precision) || shouldZero(value.y, precision));
 }
 
 // Clamp "too small" float values to 0.0f
-inline void zeroPrecision(float& value)
+inline void zeroPrecision(float& value, const float& precision = 1e-6f)
 {
-	if (shouldZero(value)) value = 0.0f;
+	if (shouldZero(value, precision)) value = 0.0f;
 }
 
-inline void zeroPrecision(sf::Vector2f& value)
+inline void zeroPrecision(sf::Vector2f& value, const float& precision = 1e-6f)
 {
-	zeroPrecision(value.x);
-	zeroPrecision(value.y);
+	zeroPrecision(value.x, precision);
+	zeroPrecision(value.y, precision);
 }
 
 
