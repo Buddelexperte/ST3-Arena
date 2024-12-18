@@ -23,11 +23,21 @@ std::shared_ptr<T> lockWeakPtr(const std::weak_ptr<T>& weakPtr) {
 	return nullptr;  // Or handle the expired object case appropriately
 }
 
-// Clamp "too small" float values to 0.0f
-inline void zeroPrecision(float& value, const float& precision = 1e-6f)
+inline bool shouldZero(const float& value, const float& precision = 1e-6f)
 {
 	const float epsilon = precision;
-	if (std::abs(value) < epsilon) value = 0.0f;
+	return (std::abs(value) < epsilon);
+}
+
+inline bool shouldZero(const sf::Vector2f& value)
+{
+	return (shouldZero(value.x) && shouldZero(value.y));
+}
+
+// Clamp "too small" float values to 0.0f
+inline void zeroPrecision(float& value)
+{
+	if (shouldZero(value)) value = 0.0f;
 }
 
 inline void zeroPrecision(sf::Vector2f& value)
@@ -35,6 +45,7 @@ inline void zeroPrecision(sf::Vector2f& value)
 	zeroPrecision(value.x);
 	zeroPrecision(value.y);
 }
+
 
 // LERP -------------------------------------------------------------------------------------------
 inline float lerp(const float& currentRot, const float& targetRot, float factor)
@@ -55,6 +66,11 @@ inline sf::Vector2f lerp(const sf::Vector2f& currentCenter, const sf::Vector2f& 
 
 
 // VECTOR2F MATH ----------------------------------------------------------------------------------
+// Compatre Vector2f
+inline bool operator==(const sf::Vector2f& vec1, const sf::Vector2f& vec2) {
+	return (vec1.x == vec2.x && vec1.y == vec2.y);
+}
+
 // Vector2f * float
 inline sf::Vector2f operator*(const sf::Vector2f& vec, float scalar) {
 	return sf::Vector2f(vec.x * scalar, vec.y * scalar);

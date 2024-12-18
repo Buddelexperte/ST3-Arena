@@ -540,9 +540,8 @@ void W_Gameplay::construct()
 
 	if (gameState == GAME_LAUNCHING)
 	{
-		Player* player = gameInstance.getPlayer();
-		player->setPos((sf::Vector2f(0.0f, 0.0f) + windowCenter));
-		gameInstance.setViewCenter(player->getPos());
+		gameInstance.getPlayer()->setPos((sf::Vector2f(0.0f, 0.0f) + windowCenter));
+		gameInstance.setViewPos(windowCenter);
 		// Reset values to game start values
 		hitTargets = 0;
 		targetController.initSpawner();

@@ -68,7 +68,8 @@ public:
 	void postTick(); // Logic after Player Input (Checks for game closing etc.)
 	// Viewport
 	void updateScreen();
-	void setViewCenter(const sf::Vector2f&);
+	void tickView(const float&);
+	void setViewPos(const sf::Vector2f&);
 	// Setters and Getters of pointers and important variables
 	sf::RenderWindow* getWindow() const { return window; }
 	sf::View* getView() const { return view; }

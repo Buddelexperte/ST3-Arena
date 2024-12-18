@@ -103,12 +103,7 @@ void GI_Arena::tick(const float& deltaTime)
 {
 	soundManager.cleanUp();
 
-	sf::Vector2f playerPos = getPlayer()->getPos();
-	if (view->getCenter() != playerPos) {
-		const float cameraSmoothing = 0.001f;
-		sf::Vector2f newCenter = lerp(view->getCenter(), playerPos, cameraSmoothing); // Smooth camera
-		setViewCenter(newCenter);
-	}
+	tickView(deltaTime);
 
 	activeMenu->update(deltaTime);
 	playerRef->update(deltaTime);
@@ -121,10 +116,58 @@ void GI_Arena::postTick()
 	updateScreen();
 }
 
-void GI_Arena::setViewCenter(const sf::Vector2f& newCenter)
+void GI_Arena::setViewPos(const sf::Vector2f& newPos)
 {
-	view->setCenter(newCenter);
+	view->setCenter(newPos);
 	window->setView(*view);
+}
+
+void GI_Arena::tickView(const float& deltaTime) // (WIP)
+{
+	// Camera movement settings
+	constexpr float CAMERA_SMOOTHNESS = 0.005f;
+	constexpr float MAX_DISTANCE = 350.0f; // Maximum allowed distance in x and y directions
+
+	// Get the current camera position and the player's position
+	const sf::Vector2f& camPos = view->getCenter();
+	const sf::Vector2f& playerPos = getPlayer()->getPos();
+
+	// Calculate the distance vector between the camera and the player
+	sf::Vector2f distance = camPos - playerPos;
+
+	if (shouldZero(distance))
+	{
+		setViewPos(playerPos);
+		return;
+	}
+
+	// Target position starts as the current camera position
+	sf::Vector2f snappedPos = camPos;
+
+	// Snap to the max distance if the player exceeds the threshold
+	if (std::abs(distance.x) > MAX_DISTANCE)
+	{
+		snappedPos.x = playerPos.x + (distance.x > 0 ? MAX_DISTANCE : -MAX_DISTANCE);
+	}
+
+	if (std::abs(distance.y) > MAX_DISTANCE)
+	{
+		snappedPos.y = playerPos.y + (distance.y > 0 ? MAX_DISTANCE : -MAX_DISTANCE);
+	}
+
+	
+	// If within bounds, lerp smoothly; if snapping, directly update
+	if (!shouldZero(camPos - snappedPos))
+	{
+		// Snap immediately to the valid position
+		setViewPos(snappedPos);
+	}
+	else
+	{
+		// Smoothly follow the player when within bounds
+		sf::Vector2f newCamPos = lerp(camPos, playerPos, CAMERA_SMOOTHNESS);
+		setViewPos(newCamPos);
+	}
 }
 
 void GI_Arena::updateScreen()

@@ -66,8 +66,8 @@ void Player::update(const float& deltaTime)
 void Player::calcMovement(const float& deltaTime)
 {
 	// Constants
-	const float WALKING_SPEED = 350.0f;
-	const float LERP_SMOOTHNESS = 0.01f;
+	constexpr float WALKING_SPEED = 350.0f;
+	constexpr float LERP_SMOOTHNESS = 0.01f;
 
 	float x = 0.0f; // X-Movement per frame
 	float y = 0.0f; // Y-Movement per frame
@@ -81,17 +81,19 @@ void Player::calcMovement(const float& deltaTime)
 	if (sf::Keyboard::isKeyPressed(KEY_A)) x -= WALKING_SPEED; // Move West
 	if (sf::Keyboard::isKeyPressed(KEY_S)) y += WALKING_SPEED; // Move South
 	if (sf::Keyboard::isKeyPressed(KEY_D)) x += WALKING_SPEED; // Move East
-	
+
 	// Target velocity (scaled by deltaTime)
 	sf::Vector2f targetVelo = sf::Vector2f{ x, y } * multiplier * deltaTime;
 
 	// Smoothly interpolate velocity using linear interpolation if location changed
 	zeroPrecision(velocity);
-	if (velocity != targetVelo)
-	{
+	if (!shouldZero(targetVelo - velocity))
+	{	
 		const float WALKING_LERP = LERP_SMOOTHNESS * multiplier;
 		velocity = lerp(velocity, targetVelo, WALKING_LERP);
 	}
+	else
+		velocity = targetVelo;
 
 	direction = { velocity.x / WALKING_SPEED, velocity.y / WALKING_SPEED };
 
