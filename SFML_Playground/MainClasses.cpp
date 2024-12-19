@@ -122,10 +122,10 @@ void GI_Arena::setViewPos(const sf::Vector2f& newPos)
 	window->setView(*view);
 }
 
-void GI_Arena::tickView(const float& deltaTime) // (WIP)
+void GI_Arena::tickView(const float& deltaTime) // Updated
 {
 	// Camera movement settings
-	constexpr float CAMERA_SMOOTHNESS = 0.001f;
+	constexpr float CAMERA_SMOOTHNESS = 5.0f; // Higher values = faster catch-up
 	constexpr float MAX_DISTANCE = 350.0f; // Maximum allowed distance in x and y directions
 
 	// Get the current camera position and the player's position
@@ -135,6 +135,7 @@ void GI_Arena::tickView(const float& deltaTime) // (WIP)
 	// Calculate the distance vector between the camera and the player
 	sf::Vector2f distance = camPos - playerPos;
 
+	// Snap immediately if the distance is below a threshold
 	if (shouldZero(distance))
 	{
 		setViewPos(playerPos);
@@ -144,6 +145,7 @@ void GI_Arena::tickView(const float& deltaTime) // (WIP)
 	// Target position starts as the current camera position
 	sf::Vector2f snappedPos = camPos;
 
+	// Calculate the excess distance in each axis
 	sf::Vector2f distanceToMax = { std::abs(distance.x) - MAX_DISTANCE, std::abs(distance.y) - MAX_DISTANCE };
 
 	// Snap to the max distance if the player exceeds the threshold
@@ -156,19 +158,18 @@ void GI_Arena::tickView(const float& deltaTime) // (WIP)
 	{
 		snappedPos.y = playerPos.y + (distance.y > 0 ? MAX_DISTANCE : -MAX_DISTANCE);
 	}
-	
-	// If within bounds, lerp smoothly; if snapping, directly update
-	if (snappedPos != camPos && !shouldZero(distanceToMax, 1.0f))
-	{
-		// Snap immediately to the valid position
-		setViewPos(snappedPos);
-	}
-	else
-	{
-		// Smoothly follow the player when within bounds
-		sf::Vector2f newCamPos = lerp(camPos, playerPos, CAMERA_SMOOTHNESS);
-		setViewPos(newCamPos);
-	}
+
+	// Determine the target position
+	sf::Vector2f targetPos = (snappedPos != camPos && !shouldZero(distanceToMax, 100.0f)
+		? snappedPos
+		: playerPos);
+
+	// Smoothly follow the player when within bounds using deltaTime
+	float lerpFactor = CAMERA_SMOOTHNESS * deltaTime; // Scaled by delta time
+	sf::Vector2f newCamPos = lerp(camPos, targetPos, lerpFactor);
+
+	// Update the view position
+	setViewPos(newCamPos);
 }
 
 void GI_Arena::updateScreen()
