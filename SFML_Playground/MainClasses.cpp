@@ -125,8 +125,9 @@ void GI_Arena::setViewPos(const sf::Vector2f& newPos)
 void GI_Arena::tickView(const float& deltaTime) // Updated
 {
 	// Camera movement settings
-	constexpr float CAMERA_SMOOTHNESS = 5.0f; // Higher values = faster catch-up
-	constexpr float MAX_DISTANCE = 350.0f; // Maximum allowed distance in x and y directions
+	constexpr float CAMERA_SMOOTHNESS = 1.0f; // Higher values = faster catch-up
+	constexpr float SNAPPED_SMOOTHNESS = 4.0f;
+	constexpr float MAX_DISTANCE = 150.0f; // Maximum allowed distance in x and y directions
 
 	// Get the current camera position and the player's position
 	const sf::Vector2f& camPos = view->getCenter();
@@ -160,16 +161,24 @@ void GI_Arena::tickView(const float& deltaTime) // Updated
 	}
 
 	// Determine the target position
-	sf::Vector2f targetPos = (snappedPos != camPos && !shouldZero(distanceToMax, 100.0f)
-		? snappedPos
-		: playerPos);
+	bool bSnap = (snappedPos != camPos && !shouldZero(distanceToMax, 1.0f));
 
-	// Smoothly follow the player when within bounds using deltaTime
-	float lerpFactor = CAMERA_SMOOTHNESS * deltaTime; // Scaled by delta time
-	sf::Vector2f newCamPos = lerp(camPos, targetPos, lerpFactor);
-
-	// Update the view position
-	setViewPos(newCamPos);
+	sf::Vector2f targetPos = (bSnap ? snappedPos : playerPos);
+	const float lerpFactor = (bSnap ? SNAPPED_SMOOTHNESS : CAMERA_SMOOTHNESS) * deltaTime; // Scaled by delta time
+	if (bSnap)
+	{
+		// Smoothly follow the player when within bounds using deltaTime
+		sf::Vector2f newCamPos = lerp(camPos, targetPos, lerpFactor);
+		// Update the view position
+		setViewPos(newCamPos);
+	}
+	else
+	{
+		// Smoothly follow the player when within bounds using deltaTime
+		sf::Vector2f newCamPos = lerp(camPos, targetPos, lerpFactor);
+		// Update the view position
+		setViewPos(newCamPos);
+	}
 }
 
 void GI_Arena::updateScreen()
