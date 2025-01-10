@@ -9,6 +9,7 @@ private:
 	RNG& rng = RNG::getInstance();
 
 	const float spawnInterval = 0.1f;
+	int numTargets = 0;
 	
 	ButtonConstruct TARGET_CONFIG = {
 		sf::Vector2f{500.0f, 500.0f}, sf::Vector2f{100.0f, 100.0f}, sf::Color::White, 0, "", sf::Color::Transparent

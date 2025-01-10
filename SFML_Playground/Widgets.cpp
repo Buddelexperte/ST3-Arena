@@ -541,11 +541,12 @@ void W_Gameplay::construct()
 	if (gameState == GAME_LAUNCHING)
 	{
 		gameInstance.getPlayer()->setPos((sf::Vector2f(0.0f, 0.0f) + windowCenter));
-		gameInstance.setViewPos(windowCenter);
+		gameInstance.resetViewPos();
 		// Reset values to game start values
 		hitTargets = 0;
 		targetController.initSpawner();
 		healthBar.setMaxTime(TIMER_DEFAULT, true);
+
 		// Add Gameplay objects to shapes vector to draw them
 		gameInstance.setGameState(IN_GAME);
 	}

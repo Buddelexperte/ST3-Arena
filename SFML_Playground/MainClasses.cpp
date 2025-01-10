@@ -46,6 +46,7 @@ bool GI_Arena::initWidgets()
 
 void GI_Arena::start()
 {
+	prevCamPos = view->getCenter();
 	fontManager.loadFonts(); // No lazy loading for fonts
 	initWidgets();
 	correctWidget();
@@ -96,7 +97,7 @@ void GI_Arena::correctWidget()
 
 void GI_Arena::preTick()
 {
-
+	prevCamPos = view->getCenter();
 }
 
 void GI_Arena::tick(const float& deltaTime)
@@ -122,63 +123,49 @@ void GI_Arena::setViewPos(const sf::Vector2f& newPos)
 	window->setView(*view);
 }
 
-void GI_Arena::tickView(const float& deltaTime) // Updated
+void GI_Arena::resetViewPos()
 {
-	// Camera movement settings
-	constexpr float CAMERA_SMOOTHNESS = 1.0f; // Higher values = faster catch-up
-	constexpr float SNAPPED_SMOOTHNESS = 4.0f;
-	constexpr float MAX_DISTANCE = 150.0f; // Maximum allowed distance in x and y directions
+	setViewPos(getPlayer()->getPos());
+	prevCamPos = view->getCenter();
+}
 
-	// Get the current camera position and the player's position
+void GI_Arena::tickView(const float& deltaTime)
+{
+	constexpr float SPRING_STRENGTH = 4.0f; // Higher = Quicker follow
+	constexpr float DAMPING_COEFFICIENT = 2.5f; // Higher = More Resistance
+	constexpr float MAX_DISTANCE = 150.0f; // Max allowed distance in x and y
+
+	// Get current camera and player positions
 	const sf::Vector2f& camPos = view->getCenter();
 	const sf::Vector2f& playerPos = getPlayer()->getPos();
 
-	// Calculate the distance vector between the camera and the player
+	// Calculate distance between both positions (x and y)
 	sf::Vector2f distance = camPos - playerPos;
 
-	// Snap immediately if the distance is below a threshold
-	if (shouldZero(distance))
-	{
-		setViewPos(playerPos);
-		return;
-	}
-
-	// Target position starts as the current camera position
-	sf::Vector2f snappedPos = camPos;
-
-	// Calculate the excess distance in each axis
-	sf::Vector2f distanceToMax = { std::abs(distance.x) - MAX_DISTANCE, std::abs(distance.y) - MAX_DISTANCE };
-
-	// Snap to the max distance if the player exceeds the threshold
+	// Apply MAX_DISTANCE constraint to avoid camera clipping player
 	if (std::abs(distance.x) > MAX_DISTANCE)
 	{
-		snappedPos.x = playerPos.x + (distance.x > 0 ? MAX_DISTANCE : -MAX_DISTANCE);
+		distance.x = (distance.x > 0 ? MAX_DISTANCE : -MAX_DISTANCE);
 	}
-
 	if (std::abs(distance.y) > MAX_DISTANCE)
 	{
-		snappedPos.y = playerPos.y + (distance.y > 0 ? MAX_DISTANCE : -MAX_DISTANCE);
+		distance.y = (distance.y > 0 ? MAX_DISTANCE : -MAX_DISTANCE);
 	}
 
-	// Determine the target position
-	bool bSnap = (snappedPos != camPos && !shouldZero(distanceToMax, 1.0f));
+	// Calculate Spring Force (Using distance to target)
+	sf::Vector2f springForce = -SPRING_STRENGTH * distance;
 
-	sf::Vector2f targetPos = (bSnap ? snappedPos : playerPos);
-	const float lerpFactor = (bSnap ? SNAPPED_SMOOTHNESS : CAMERA_SMOOTHNESS) * deltaTime; // Scaled by delta time
-	if (bSnap)
-	{
-		// Smoothly follow the player when within bounds using deltaTime
-		sf::Vector2f newCamPos = lerp(camPos, targetPos, lerpFactor);
-		// Update the view position
-		setViewPos(newCamPos);
-	}
-	else
-	{
-		// Smoothly follow the player when within bounds using deltaTime
-		sf::Vector2f newCamPos = lerp(camPos, targetPos, lerpFactor);
-		// Update the view position
-		setViewPos(newCamPos);
-	}
+	// Calculate velocity (Using old and new position)
+	sf::Vector2f velocity = camPos - prevCamPos;
+	// Calculate Damping Force (Using velocity)
+	sf::Vector2f dampingForce = -DAMPING_COEFFICIENT * velocity;
+
+	// Calculate total force (spring + damping)
+	sf::Vector2f totalForce = dampingForce + springForce;
+
+	sf::Vector2f newCamPos = camPos + (totalForce * deltaTime);
+
+	setViewPos(newCamPos);
 }
 
 void GI_Arena::updateScreen()

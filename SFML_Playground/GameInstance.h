@@ -49,6 +49,7 @@ private:
 	std::shared_ptr<InputWidget> activeMenu = nullptr;
 
 	Player* playerRef = nullptr;
+	sf::Vector2f prevCamPos;
 	// Somehow Gameplay related?
 	float zoomFactor = 1.0f;
 	bool bIsGameplayPaused = true;
@@ -69,6 +70,7 @@ public:
 	// Viewport
 	void updateScreen();
 	void tickView(const float&);
+	void resetViewPos();
 	void setViewPos(const sf::Vector2f&);
 	// Setters and Getters of pointers and important variables
 	sf::RenderWindow* getWindow() const { return window; }

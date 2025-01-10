@@ -4,6 +4,7 @@
 
 void Button::construct(const ButtonConstruct& constr)
 {
+	usedConstr = constr;
 	const sf::Vector2f& pos = constr.pos;
 	const sf::Vector2f& b_size = constr.size;
 	const sf::Color& b_color = constr.color;

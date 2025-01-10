@@ -8,12 +8,15 @@ void TargetController::newRandomConfig()
 	// Getting values for generating a position
 	sf::Vector2f playerPos = gameInstance.getPlayer()->getPos();
 	float distance = rng.floatInRange(600.0f, 1000.0f);
+
 	// Generating the random position
 	sf::Vector2f generatedPos = rng.posInDistance(playerPos, distance);
 	sf::Vector2f velocity = gameInstance.getPlayer()->getVelocity();
 	generatedPos += velocity * 10.0f; // Take velocity into calculation for "movement prediction"
+	
 	// Snapping the position on a grid (100 x 100)
 	sf::Vector2f gridPos = posToGrid(generatedPos, 100.0f);
+	
 	// Setting the new Button Target Position in the ButtonConfig variable for later use inside spawnTarget()
 	TARGET_CONFIG.pos = gridPos;
 }
@@ -24,6 +27,8 @@ void TargetController::update(const float& deltaTime)
 	WidgetElement::update(deltaTime);
 	
 	if (gameInstance.getIsPaused()) return;
+
+	if (numTargets > 100) return;
 
 	timer -= deltaTime;
 	if (timer < 0.0f)
@@ -60,6 +65,7 @@ bool TargetController::clickedAny()
 		if ((*it)->isMouseOver(true))
 		{
 			targets.erase(it); // If one is clicked, remove it from the target list
+			numTargets--;
 			return true;
 		}
 		else it++;
@@ -89,6 +95,7 @@ void TargetController::spawnTarget()
 	if (!foundSpot) return;
 	// Move uniquePointer to targets vector using std::move (required for unique_ptr)
 	targets.push_back(std::move(newButton));
+	numTargets++;
 }
 
 void TargetController::initSpawner()

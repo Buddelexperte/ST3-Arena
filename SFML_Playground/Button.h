@@ -24,9 +24,9 @@ private:
 
 	int fontID = 0; // [0] in FontManager.h
 	sf::Vector2f lastScreenCenter = { 0.0f, 0.0f };
+	
 	std::string text;
-
-	// Sounds (Buffers in SoundManager.h)
+	ButtonConstruct usedConstr{};
 public:
 	// shapes
 	sf::RectangleShape B_Box;
@@ -56,7 +56,8 @@ public:
 	void addPos(const sf::Vector2f&);
 	sf::Vector2f getPos() const { return B_Box.getPosition(); }
 	void setRot(const float& newRot) { B_Box.setRotation(newRot); }
-	float getRot() const { return B_Box.getRotation(); };
+	float getRot() const { return B_Box.getRotation(); }
+	sf::Vector2f getSize() const { return usedConstr.size; }
 
 	bool isMouseOver(const bool& = false); // Check if mouse is over button
 	void onClick();
