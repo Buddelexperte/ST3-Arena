@@ -28,7 +28,7 @@ void TargetController::update(const float& deltaTime)
 	
 	if (gameInstance.getIsPaused()) return;
 
-	if (numTargets > 100) return;
+	if (numTargets > 10) return;
 
 	timer -= deltaTime;
 	if (timer < 0.0f)

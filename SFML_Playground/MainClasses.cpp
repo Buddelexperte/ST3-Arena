@@ -129,10 +129,11 @@ void GI_Arena::resetViewPos()
 	prevCamPos = view->getCenter();
 }
 
+// Adjust the camera position based on velocity and distance to player (Spring-Damp-System)
 void GI_Arena::tickView(const float& deltaTime)
 {
 	constexpr float SPRING_STRENGTH = 4.0f; // Higher = Quicker follow
-	constexpr float DAMPING_COEFFICIENT = 2.5f; // Higher = More Resistance
+	constexpr float DAMPING_COEFFICIENT = 1.0f; // Higher = More Resistance
 	constexpr float MAX_DISTANCE = 150.0f; // Max allowed distance in x and y
 
 	// Get current camera and player positions
