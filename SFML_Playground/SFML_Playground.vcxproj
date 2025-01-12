@@ -145,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="FontManager.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -157,6 +158,8 @@
   <ItemGroup>
     <ClInclude Include="BaseClasses.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="GameInstance.h" />
     <ClInclude Include="Flashlight.h" />
     <ClInclude Include="Functions.h" />

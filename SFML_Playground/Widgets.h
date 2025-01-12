@@ -2,7 +2,8 @@
 #include "BaseClasses.h"
 #include "Button.h"
 #include "Timer.h"
-#include "TargetController.h"
+#include "TargetController.h" // Old EnemyManager
+#include "EnemyManager.h" // New EnemyManager
 #include "Flashlight.h"
 
 const std::string WIDGET_EXP = "Widget is no longer available.\n";
@@ -140,6 +141,7 @@ private:
 	int hitTargets = 0;
 	Timer healthBar;
 	TargetController targetController;
+	EnemyManager enemyManager;
 
 	W_Paused pauseMenu;
 	W_GameOver gameOverScreen;

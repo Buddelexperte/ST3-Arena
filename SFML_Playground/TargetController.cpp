@@ -28,7 +28,7 @@ void TargetController::update(const float& deltaTime)
 	
 	if (gameInstance.getIsPaused()) return;
 
-	if (numTargets > 10) return;
+	if (numTargetsAlive > 10) return;
 
 	timer -= deltaTime;
 	if (timer < 0.0f)
@@ -65,7 +65,7 @@ bool TargetController::clickedAny()
 		if ((*it)->isMouseOver(true))
 		{
 			targets.erase(it); // If one is clicked, remove it from the target list
-			numTargets--;
+			numTargetsAlive--;
 			return true;
 		}
 		else it++;
@@ -95,7 +95,7 @@ void TargetController::spawnTarget()
 	if (!foundSpot) return;
 	// Move uniquePointer to targets vector using std::move (required for unique_ptr)
 	targets.push_back(std::move(newButton));
-	numTargets++;
+	numTargetsAlive++;
 }
 
 void TargetController::initSpawner()

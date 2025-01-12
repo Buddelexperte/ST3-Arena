@@ -67,7 +67,7 @@ void Player::calcMovement(const float& deltaTime)
 {
 	// Constants
 	constexpr float WALKING_SPEED = 350.0f;
-	constexpr float LERP_SMOOTHNESS = 0.01f;
+	constexpr float LERP_SMOOTHNESS = 0.1f;
 
 	float x = 0.0f; // X-Movement per frame
 	float y = 0.0f; // Y-Movement per frame

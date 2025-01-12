@@ -520,7 +520,8 @@ bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 
 // W_Gameplay -------------------------------------------------------------------------------------
 
-W_Gameplay::W_Gameplay(InputWidget* parent) : InputWidget(parent), flashlightShader(this), pauseMenu(this), gameOverScreen(this), targetController(this), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f), background(sf::Quads, 4)
+W_Gameplay::W_Gameplay(InputWidget* parent) 
+	: InputWidget(parent), flashlightShader(this), pauseMenu(this), gameOverScreen(this), targetController(this), enemyManager(), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f), background(sf::Quads, 4)
 {
 	// Load texture
 	if (!backgroundTexture.loadFromFile("Content/Textures/cobblestone_mossy.png"))
@@ -528,6 +529,8 @@ W_Gameplay::W_Gameplay(InputWidget* parent) : InputWidget(parent), flashlightSha
 		std::cerr << "Error loading the background texture!" << std::endl;
 	}
 	backgroundTexture.setRepeated(true);
+
+	enemyManager.spawnEnemy(windowCenter, { 100.0f, 100.0f }, sf::Color::White);
 }
 
 void W_Gameplay::construct()
@@ -544,7 +547,7 @@ void W_Gameplay::construct()
 		gameInstance.resetViewPos();
 		// Reset values to game start values
 		hitTargets = 0;
-		targetController.initSpawner();
+		//targetController.initSpawner();
 		healthBar.setMaxTime(TIMER_DEFAULT, true);
 
 		// Add Gameplay objects to shapes vector to draw them
@@ -597,7 +600,7 @@ InputWidget* W_Gameplay::getWidgetAtIndex(const int& atIndex)
 
 InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 {
-	shapes = { &background, &targetController, &flashlightShader, player, &healthBar };
+	shapes = { &background, &enemyManager, &flashlightShader, player, &healthBar };
 
 	switch (widgetIndex = toIndex)
 	{
@@ -649,7 +652,8 @@ void W_Gameplay::update(const float& deltaTime)
 	if (getWidgetAtIndex(widgetIndex) != this) getWidgetAtIndex(widgetIndex)->update(deltaTime);
 
 	// Update Gameplay objects with respectable params
-	targetController.update(deltaTime);
+	//targetController.update(deltaTime);
+	enemyManager.tick(deltaTime);
 	healthBar.update(deltaTime);
 	if (gameInstance.getGameState() >= IN_GAME)
 	{

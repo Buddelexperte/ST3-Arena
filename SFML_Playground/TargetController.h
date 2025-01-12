@@ -9,13 +9,13 @@ private:
 	RNG& rng = RNG::getInstance();
 
 	const float spawnInterval = 0.1f;
-	int numTargets = 0;
+	int numTargetsAlive = 0;
+	std::vector<std::unique_ptr<Button>> targets;
 	
 	ButtonConstruct TARGET_CONFIG = {
 		sf::Vector2f{500.0f, 500.0f}, sf::Vector2f{100.0f, 100.0f}, sf::Color::White, 0, "", sf::Color::Transparent
 	}; // A white button constructor with no text, 100x100
 	
-	std::vector<std::unique_ptr<Button>> targets;
 	
 	void newRandomConfig(); // New TARGET_CONFIG using random distr position
 	void spawnTarget(); // Spawn a new target using newRandomConfig() inside

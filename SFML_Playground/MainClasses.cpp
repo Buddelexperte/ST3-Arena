@@ -17,6 +17,7 @@ GI_Arena::GI_Arena()
 	std::cout << "RenderWindow created." << std::endl;
 	sf::Vector2f desktopSize = { static_cast<float>(desktop.width), static_cast<float>(desktop.height) };
 	view = new sf::View(desktopSize / 2.0f, desktopSize);
+	prevCamPos = view->getCenter();
 	std::cout << "View created" << std::endl;
 	window->setView(*view);
 	std::cout << "View attached" << std::endl;
@@ -32,8 +33,8 @@ bool GI_Arena::initWidgets()
 	widgets.clear(); 
 	std::cout << "Initiating widgets..." << std::endl;
 	try { // Adding base widgets with their nullptr parent HERE!
-		widgets.push_back(std::make_shared<W_MainMenu>(nullptr));
-		widgets.push_back(std::make_shared<W_Gameplay>(nullptr));
+		widgets.push_back(std::make_shared<W_MainMenu>(nullptr)); // MainMenu = 0
+		widgets.push_back(std::make_shared<W_Gameplay>(nullptr)); // Gameplay = 1
 		std::cout << "Initiated widgets" << std::endl;
 		return true;
 	}
@@ -46,7 +47,6 @@ bool GI_Arena::initWidgets()
 
 void GI_Arena::start()
 {
-	prevCamPos = view->getCenter();
 	fontManager.loadFonts(); // No lazy loading for fonts
 	initWidgets();
 	correctWidget();
