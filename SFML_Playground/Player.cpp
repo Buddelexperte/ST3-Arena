@@ -43,7 +43,7 @@ void Player::update(const float& deltaTime)
 
 		if (animationAccu >= animationSpeed) 
 		{
-			currentframe = (currentframe + 1) % playerTexture.size();
+			currentframe = (static_cast<size_t>(currentframe + 1)) % playerTexture.size();
 			playerModel.setTexture(playerTexture[currentframe], true);
 			animationAccu -= animationSpeed; 
 		}
