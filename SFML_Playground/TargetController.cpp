@@ -1,17 +1,18 @@
 #pragma once
 #include "TargetController.h" // Own header file
+#include "GameInstance.h"
 
 void TargetController::newRandomConfig()
 {
 	windowUpdate();
 
 	// Getting values for generating a position
-	sf::Vector2f playerPos = gameInstance.getPlayer()->getPos();
+	sf::Vector2f playerPos = gameInstance->getPlayer()->getPos();
 	float distance = rng.floatInRange(600.0f, 1000.0f);
 
 	// Generating the random position
 	sf::Vector2f generatedPos = rng.posInDistance(playerPos, distance);
-	sf::Vector2f velocity = gameInstance.getPlayer()->getVelocity();
+	sf::Vector2f velocity = gameInstance->getPlayer()->getVelocity();
 	generatedPos += velocity * 10.0f; // Take velocity into calculation for "movement prediction"
 	
 	// Snapping the position on a grid (100 x 100)
@@ -26,7 +27,7 @@ void TargetController::update(const float& deltaTime)
 	static float timer = spawnInterval;
 	WidgetElement::update(deltaTime);
 	
-	if (gameInstance.getIsPaused()) return;
+	if (gameInstance->getIsPaused()) return;
 
 	if (numTargetsAlive > 10) return;
 

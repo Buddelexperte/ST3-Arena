@@ -3,7 +3,10 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 // Own libraries
-#include "GameInstance.h"
+#include "SoundManager.h"
+#include "FontManager.h"
+
+class GI_Arena;
 
 struct ButtonConstruct
 {
@@ -18,7 +21,7 @@ struct ButtonConstruct
 class Button : public sf::Drawable
 {
 private:
-	GI_Arena& gameInstance = GI_Arena::getInstance();
+	GI_Arena* gameInstance;
 	SoundManager& sm = SoundManager::getInstance();
 	FontManager& fm = FontManager::getInstance();
 
@@ -28,19 +31,13 @@ private:
 	std::string text;
 	ButtonConstruct usedConstr{};
 public:
-	// shapes
 	sf::RectangleShape B_Box;
 	sf::Text T_Text;
 	// Constructors
-	Button() 
-		: Button(ButtonConstruct{ { 0, 0 }, { 100.0f, 100.0f }, sf::Color::White, 24, "Text", sf::Color::Black })
-	{};
 
-	Button(const ButtonConstruct& constr)
-	{
-		// Construct button parameters (font, text, color, etc)
-		construct(constr);
-	};
+	Button();
+	Button(const ButtonConstruct& constr);
+
 	void construct(const ButtonConstruct&);
 
 	void setText(const std::string&); // Set the texts content

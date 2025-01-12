@@ -1,6 +1,6 @@
 #pragma once
 #include "Button.h"
-#include "BaseClasses.h" // WidgetElement dependency
+#include "GameInstance.h"
 
 // Class for handling and spawning targets the user can click on
 class TargetController : public WidgetElement

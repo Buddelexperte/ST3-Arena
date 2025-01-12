@@ -1,11 +1,11 @@
 #pragma once
 #include "SFML_Arena.h"
 
-Player::Player(InputWidget* parent) : InputWidget(parent)
+Player::Player(InputWidget* parent) 
+	: InputWidget(parent)
 {
-	ButtonConstruct playerButtonConstr = {
-		windowCenter + sf::Vector2f{ 0, 0 }, sf::Vector2f(200.0f, 200.0f), sf::Color::Red, 12, "", sf::Color::Black
-	};
+	const ButtonConstruct playerButtonConstr = {
+		windowCenter + sf::Vector2f{ 0, 0 }, sf::Vector2f(200.0f, 200.0f), sf::Color::Red, 12, "", sf::Color::Black};
 	playerModel.construct(playerButtonConstr);
 
 	for (int i = 4; i <= 6; i++)
@@ -34,7 +34,7 @@ Player::Player(InputWidget* parent) : InputWidget(parent)
 void Player::update(const float& deltaTime)
 {
 	InputWidget::update(deltaTime); // Call parent function to set necessary values and call base functions
-	if (!gameInstance.getIsPaused()) calcMovement(deltaTime); // Only check for movement input when GameInstance is not paused
+	if (!gameInstance->getIsPaused()) calcMovement(deltaTime); // Only check for movement input when GameInstance is not paused
 	// Collect / Receive user events
 
 	if (!playerTexture.empty())
@@ -50,7 +50,7 @@ void Player::update(const float& deltaTime)
 	}
 
 	sf::Event event;
-	while (window->pollEvent(event) && gameInstance.getGameState() != QUIT)
+	while (window->pollEvent(event) && gameInstance->getGameState() != QUIT)
 	{
 		// If close event got called, close window and break input wait loop
 		if (event.type == sf::Event::Closed)
@@ -67,7 +67,7 @@ void Player::calcMovement(const float& deltaTime)
 {
 	// Constants
 	constexpr float WALKING_SPEED = 350.0f;
-	constexpr float LERP_SMOOTHNESS = 0.1f;
+	constexpr float LERP_SMOOTHNESS = 0.01f;
 
 	float x = 0.0f; // X-Movement per frame
 	float y = 0.0f; // Y-Movement per frame
@@ -83,7 +83,7 @@ void Player::calcMovement(const float& deltaTime)
 	if (sf::Keyboard::isKeyPressed(KEY_D)) x += WALKING_SPEED; // Move East
 
 	// Target velocity (scaled by deltaTime)
-	sf::Vector2f targetVelo = sf::Vector2f{ x, y } * multiplier * deltaTime;
+	sf::Vector2f targetVelo = sf::Vector2f{ x, y } * multiplier;
 
 	// Smoothly interpolate velocity using linear interpolation if location changed
 	zeroPrecision(velocity);
@@ -98,11 +98,11 @@ void Player::calcMovement(const float& deltaTime)
 	direction = { velocity.x / WALKING_SPEED, velocity.y / WALKING_SPEED };
 
 	// Update position
-	addPos(velocity);
+	addPos(velocity * deltaTime);
 
 	// Rotation ---------------------------------
 	sf::Vector2f playerPos = getPos();
-	sf::Vector2f mousePos = gameInstance.getMousePos();
+	sf::Vector2f mousePos = gameInstance->getMousePos();
 	float rotation = getRot();
 	float targetRot = getLookAtRot(playerPos, mousePos);
 
@@ -122,7 +122,7 @@ sf::Keyboard::Key Player::keyboardInput(sf::Event* eventRef)
 	switch (inputKey)
 	{
 	case sf::Keyboard::Escape: // Esc goes through gameInstance to handle widget input
-		gameInstance.handleEvent(eventRef);
+		gameInstance->handleEvent(eventRef);
 		break;
 	default:
 		break;
@@ -138,7 +138,7 @@ sf::Mouse::Button Player::mouseInput(sf::Event* eventRef)
 	switch (mouseInput)
 	{
 	case sf::Mouse::Left: case sf::Mouse::Right: // LMB goes through gameInstance to handle widget inputs
-		gameInstance.handleEvent(eventRef);
+		gameInstance->handleEvent(eventRef);
 		break;
 	default:
 		break;
@@ -152,7 +152,7 @@ float Player::scrollInput(sf::Event* eventRef)
 
 	return scrollDelta; // TODO - flashlightShader heavy
 	float targetZoom = 1.0f + (scrollDelta * -0.1f);
-	gameInstance.setZoom(targetZoom);
+	gameInstance->setZoom(targetZoom);
 	return scrollDelta;
 }
 

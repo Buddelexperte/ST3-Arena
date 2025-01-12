@@ -7,7 +7,6 @@
 // Game Instance Code
 
 GI_Arena::GI_Arena()
-	: player(nullptr)
 {
 	const sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 	window = new sf::RenderWindow(desktop, "SFML_Arena", sf::Style::Fullscreen);
@@ -46,10 +45,21 @@ bool GI_Arena::initWidgets()
 	}
 }
 
+bool GI_Arena::makePlayer()
+{
+	if (player) return false;
+	player = new Player(nullptr);
+	std::cout << "Player created" << std::endl;
+	return true;
+}
+
 void GI_Arena::start()
 {
 	fontManager.loadFonts(); // No lazy loading for fonts
+	makePlayer();
+	
 	initWidgets();
+
 	correctWidget();
 
 	std::cout << "\n### Starting Game ###\n" << std::endl;
@@ -107,7 +117,7 @@ void GI_Arena::tick(const float& deltaTime)
 {
 	tickView(deltaTime);
 
-	player.update(deltaTime);
+	player->update(deltaTime);
 	activeMenu->update(deltaTime);
 }
 
@@ -189,7 +199,7 @@ void GI_Arena::setGameState(const E_GameState& newGS)
 
 Player* GI_Arena::getPlayer()
 {
-	return &player;
+	return player;
 }
 
 bool GI_Arena::handleEvent(sf::Event* eventRef)
@@ -201,19 +211,20 @@ bool GI_Arena::handleEvent(sf::Event* eventRef)
 // WidgetMenu Code --------------------------------------------------------------------------------
 
 WidgetElement::WidgetElement(InputWidget* parentWidget)
-	: parent(parentWidget), gameInstance(GI_Arena::getInstance())
+	: parent(parentWidget), gameInstance(&GI_Arena::getInstance()), window(gameInstance->getWindow())
 {
+	ORIGIN = window->getView().getCenter();
 	windowUpdate();
 }
 
 void WidgetElement::windowUpdate()
 {
 	// Everything sf::RenderWindow related
-	window = gameInstance.getWindow();
+	window = gameInstance->getWindow();
 	windowSize = window->getSize();
 	windowCenter = { windowSize.x / 2.0f, windowSize.y / 2.0f };
 	// Everything sf::View related
-	view = gameInstance.getView();
+	view = gameInstance->getView();
 	viewSize = view->getSize();
 	viewHalfSize = viewSize / 2.0f;
 	viewCenter = view->getCenter();
@@ -266,7 +277,7 @@ sf::Keyboard::Key InputWidget::keyboardInput(sf::Event* eventRef)
 	switch (eventRef->key.code)
 	{
 	case sf::Keyboard::Escape:
-		lockWeakPtr( gameInstance.getActiveWidget() )->input_esc();
+		lockWeakPtr( gameInstance->getActiveWidget() )->input_esc();
 		break;
 	default:
 		break;

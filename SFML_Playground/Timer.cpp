@@ -1,10 +1,11 @@
 #include "Timer.h" // Own header file
+#include "GameInstance.h"
 
 void Timer::update(const float& deltaTime)
 {
 	WidgetElement::update(deltaTime);
 	// Don't update gameplay while paused
-	if (gameInstance.getIsPaused()) return;
+	if (gameInstance->getIsPaused()) return;
 
 
 	return;

@@ -2,11 +2,12 @@
 #include <SFML/Graphics.hpp>
 
 class GI_Arena;
+class EnemyManager;
 
 class Enemy : public sf::Drawable
 {
 private:
-    GI_Arena& gameInstance;
+    GI_Arena* gameInstance;
 
 	sf::RectangleShape shape;
 	sf::Vector2f velocity;
@@ -18,6 +19,8 @@ public:
 	void setPosition(const sf::Vector2f& pos);
 	void setSize(const sf::Vector2f& size);
 	void setColor(const sf::Color& color);
+
+	sf::Vector2f getVelocity() const { return velocity; }
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };

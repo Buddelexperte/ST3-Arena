@@ -180,7 +180,7 @@ public:
     {
         WidgetElement::update(deltaTime);
 
-        sf::Vector2f viewSize = gameInstance.getView()->getSize();
+        sf::Vector2f viewSize = gameInstance->getView()->getSize();
 
         currShader = getActiveShader();
         currShader->setUniform("u_viewSize", sf::Glsl::Vec2(viewSize));
@@ -201,15 +201,15 @@ public:
         // Update flashlight position and rotation
         static sf::Vector2f lastPos;
         static float lastRot;
-        sf::Vector2f newPos = gameInstance.getPlayer()->getPos();
+        sf::Vector2f newPos = gameInstance->getPlayer()->getPos();
         if (newPos != lastPos) {
             flashlightSprite.setPosition(newPos);
             lastPos = newPos;
         }
 
-        if (!(gameInstance.getIsPaused() || bUseCone))
+        if (!(gameInstance->getIsPaused() || bUseCone))
         {
-            float newRot = getLookAtRot(newPos, gameInstance.getMousePos());
+            float newRot = getLookAtRot(newPos, gameInstance->getMousePos());
             if (newRot != lastRot) {
                 flashlightSprite.setRotation(newRot);
                 lastRot = newRot;
@@ -222,7 +222,7 @@ public:
 
         static sf::Vector2f lastMouseDir = { 0.0f, 0.0f };
         sf::Vector2f mouseDir = lastMouseDir;
-        if (!gameInstance.getIsPaused() && bUseCone)
+        if (!gameInstance->getIsPaused() && bUseCone)
         {
             // Calculate direction vector to mouse
             sf::Vector2i mousePosition = sf::Mouse::getPosition(*window); // Mouse in window coordinates

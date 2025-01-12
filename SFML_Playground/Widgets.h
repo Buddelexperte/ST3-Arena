@@ -140,12 +140,12 @@ private:
 	const float minTimer = 1.0f;
 	int hitTargets = 0;
 	Timer healthBar;
-	EnemyManager* enemyManager = nullptr;
+	EnemyManager& enemyManager = EnemyManager::getInstance();
 
 	W_Paused pauseMenu;
 	W_GameOver gameOverScreen;
 
-	Player* player = gameInstance.getPlayer();
+	Player* player = gameInstance->getPlayer();
 	sf::Vector2f playerPos;
 
 	Flashlight flashlightShader;

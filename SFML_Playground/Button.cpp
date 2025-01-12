@@ -1,6 +1,18 @@
 #pragma once 
 #include "Button.h" // Own header file
+#include "GameInstance.h"
 
+
+Button::Button()
+	: Button(ButtonConstruct{ { 0, 0 }, { 100.0f, 100.0f }, sf::Color::White, 24, "Text", sf::Color::Black })
+{};
+
+Button::Button(const ButtonConstruct& constr)
+	: gameInstance(&GI_Arena::getInstance())
+{
+	// Construct button parameters (font, text, color, etc)
+	construct(constr);
+};
 
 void Button::construct(const ButtonConstruct& constr)
 {
@@ -49,7 +61,7 @@ void Button::onUnhover()
 
 bool Button::isMouseOver(const bool& registerClick)
 {
-	bool bIsMouseOver = B_Box.getGlobalBounds().contains(gameInstance.getMousePos());
+	bool bIsMouseOver = B_Box.getGlobalBounds().contains(gameInstance->getMousePos());
 
 	if (bIsMouseOver)
 	{

@@ -3,8 +3,8 @@
 #include "BaseClasses.h"
 #include "Functions.h"
 #include "SoundManager.h"
-#include "EnemyManager.h"
 #include "FontManager.h"
+#include "EnemyManager.h"
 #include "RandomNumbers.h"
 
 // Enum for handling gameStages in GameInstance
@@ -17,10 +17,6 @@ enum E_GameState {
 	GAME_LAUNCHING, // gameLoop should start and execute init functionality
 	IN_GAME // gameLoop should start
 };
-
-// Forward Declarations
-class InputWidget;
-class Player;
 
 
 // Global Game Instance ---------------------------------------------------------------------------
@@ -53,7 +49,7 @@ private:
 	std::vector<std::shared_ptr<InputWidget>> widgets;
 	std::shared_ptr<InputWidget> activeMenu = nullptr;
 
-	Player player;
+	Player* player = nullptr;
 	// Somehow Gameplay related?
 	sf::Vector2f prevCamPos;
 	float zoomFactor = 1.0f;
@@ -67,6 +63,7 @@ public:
 	// Basics
 	void start(); // Function to call from main()
 	bool initWidgets();
+	bool makePlayer();
 	void correctWidget();
 	// Ticks
 	void preTick(); // Logic before Player input (Checks for Inventory etc.)

@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include "EnemyManager.h"
 
 EnemyManager::EnemyManager()
@@ -19,17 +20,31 @@ void EnemyManager::spawnEnemy(const sf::Vector2f& pos, const sf::Vector2f& size,
 
 void EnemyManager::deleteEnemy(const size_t& index)
 {
-	enemyPool.release(std::move(activeEnemies[index]));
+	//enemyPool.release(std::move(activeEnemies[index]));
 
 	enemyRenderer.removeEnemy(index);
 }
 
 void EnemyManager::tick(const float& deltaTime)
 {
+	// Tick all enemies first
+	for (std::unique_ptr<Enemy>& enemy : activeEnemies)
+	{
+		enemy->tick(deltaTime);
+	}
+
+	
+
+	for (size_t i = 0; i < activeEnemies.size(); i++)
+	{
+		enemyRenderer.setVelocity(i, activeEnemies[i]->getVelocity());
+	}
+
+	// Update the Renderer at last
 	enemyRenderer.tick(deltaTime);
 }
 
 void EnemyManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(enemyRenderer, states);
+	enemyRenderer.draw(target, states);
 }

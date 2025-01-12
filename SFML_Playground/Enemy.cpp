@@ -1,10 +1,11 @@
 #pragma once
 
 #include "GameInstance.h"
+#include "EnemyManager.h"
 #include "Enemy.h"
 
 Enemy::Enemy(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Color& color)
-	: velocity(0.0f, 0.0f), gameInstance(GI_Arena::getInstance())
+	: velocity(0.0f, 0.0f), gameInstance(&GI_Arena::getInstance())
 {
 	setPosition(pos);
 	setSize(size);
@@ -13,7 +14,7 @@ Enemy::Enemy(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Color&
 
 void Enemy::tick(const float& deltaTime)
 {
-
+	velocity = gameInstance->getPlayer()->getVelocity();
 }
 
 void Enemy::setPosition(const sf::Vector2f& pos)

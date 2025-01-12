@@ -2,6 +2,7 @@
 #include "Button.h"
 
 class GI_Arena;
+class InputWidget;
 
 // WIDGETS ----------------------------------------------------------------------------------------
 
@@ -11,11 +12,11 @@ class WidgetElement : public sf::Drawable
 protected:
 	float lastDeltaTime = 0.0f;
 	InputWidget* parent = nullptr;
-	GI_Arena& gameInstance;
-	sf::RenderWindow* window = gameInstance.getWindow();
+	GI_Arena* gameInstance;
+	sf::RenderWindow* window;
 	sf::Vector2u windowSize;
 	sf::Vector2f windowCenter;
-	sf::Vector2f ORIGIN = window->getView().getCenter();
+	sf::Vector2f ORIGIN;
 	sf::View* view = nullptr;
 	sf::Vector2f viewSize;
 	sf::Vector2f viewHalfSize;

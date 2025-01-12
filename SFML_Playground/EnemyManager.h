@@ -11,7 +11,7 @@ private:
 	std::vector<std::unique_ptr<Enemy>> activeEnemies;
 
 	// Private constructor to prevent direct instantiation
-	EnemyManager() {}
+	EnemyManager();
 	EnemyManager(const EnemyManager&) = delete;
 	EnemyManager& operator=(const EnemyManager&) = delete; // Block the '=' operator to stop copies being made of this class
 

@@ -89,7 +89,7 @@ bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 	if (getWidgetAtIndex(widgetIndex) != this)
 	return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
 
-	sf::Vector2f mousePos = gameInstance.getMousePos();
+	sf::Vector2f mousePos = gameInstance->getMousePos();
 
 	if (menu_title.isMouseOver(checkForClick))
 	{
@@ -109,7 +109,7 @@ bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 	}
 	if (menu_quitButton.isMouseOver(checkForClick))
 	{
-		if (checkForClick) gameInstance.setGameState(QUIT);
+		if (checkForClick) gameInstance->setGameState(QUIT);
 		return true;
 	}
 	// On no button-mouse overlap
@@ -119,7 +119,7 @@ bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 bool W_MainMenu::input_esc()
 {
 	if (widgetIndex > 0) getWidgetAtIndex(widgetIndex)->input_esc();
-	else gameInstance.setGameState(QUIT);
+	else gameInstance->setGameState(QUIT);
 	return true;
 }
 
@@ -149,7 +149,7 @@ void W_OptionsSounds::windowUpdate()
 
 bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)
 {
-	sf::Vector2f mousePos = gameInstance.getMousePos();
+	sf::Vector2f mousePos = gameInstance->getMousePos();
 	if (optionsSounds_test.isMouseOver(checkForClick))
 	{
 		if (checkForClick) parent->construct();
@@ -361,7 +361,7 @@ bool W_LevelMenu::isMouseOver(const bool& checkForClick = false)
 {
 	if (level1_Button.isMouseOver(checkForClick) || level2_Button.isMouseOver(checkForClick) || level3_Button.isMouseOver(checkForClick))
 	{
-		if (checkForClick) gameInstance.setGameState(GAME_LAUNCHING);
+		if (checkForClick) gameInstance->setGameState(GAME_LAUNCHING);
 		return true;
 	}
 	if (return_Button.isMouseOver(checkForClick))
@@ -460,7 +460,7 @@ bool W_Paused::isMouseOver(const bool& checkForClick = false)
 	}
 	if (pause_quitButton.isMouseOver(checkForClick))
 	{
-		if (checkForClick) gameInstance.setGameState(MENU_SCREEN);
+		if (checkForClick) gameInstance->setGameState(MENU_SCREEN);
 		return true;
 	}
 	// On no button-mouse overlap
@@ -510,7 +510,7 @@ bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
 	if (gameOver_quitButton.isMouseOver(checkForClick))
 	{
-		gameInstance.setGameState(MENU_SCREEN);
+		gameInstance->setGameState(MENU_SCREEN);
 		return true;
 	}
 	// On no button-mouse overlap
@@ -521,7 +521,7 @@ bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 // W_Gameplay -------------------------------------------------------------------------------------
 
 W_Gameplay::W_Gameplay(InputWidget* parent) 
-	: InputWidget(parent), flashlightShader(this), pauseMenu(this), gameOverScreen(this), enemyManager(), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f), background(sf::Quads, 4)
+	: InputWidget(parent), flashlightShader(this), pauseMenu(this), gameOverScreen(this), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f), background(sf::Quads, 4)
 {
 	// Load texture
 	if (!backgroundTexture.loadFromFile("Content/Textures/cobblestone_mossy.png"))
@@ -539,21 +539,21 @@ void W_Gameplay::construct()
 {
 	InputWidget::construct();
 
-	E_GameState gameState = gameInstance.getGameState();
+	E_GameState gameState = gameInstance->getGameState();
 
 	if (gameState < GAME_LAUNCHING) return getWidgetAtIndex(widgetIndex)->construct();
 
 	if (gameState == GAME_LAUNCHING)
 	{
-		gameInstance.getPlayer()->setPos((sf::Vector2f(0.0f, 0.0f) + windowCenter));
-		gameInstance.resetViewPos();
+		gameInstance->getPlayer()->setPos((sf::Vector2f(0.0f, 0.0f) + windowCenter));
+		gameInstance->resetViewPos();
 		// Reset values to game start values
 		hitTargets = 0;
 		//targetController.initSpawner();
 		healthBar.setMaxTime(TIMER_DEFAULT, true);
 
 		// Add Gameplay objects to shapes vector to draw them
-		gameInstance.setGameState(IN_GAME);
+		gameInstance->setGameState(IN_GAME);
 	}
 	setWidgetIndex(0);
 }
@@ -607,17 +607,17 @@ InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 	switch (widgetIndex = toIndex)
 	{
 	case 0:
-		gameInstance.setIsPaused(false);
-		gameInstance.setGameState(IN_GAME);
+		gameInstance->setIsPaused(false);
+		gameInstance->setGameState(IN_GAME);
 		break;
 	case 1:
-		gameInstance.setIsPaused(true);
-		gameInstance.setGameState(GAME_PAUSED);
+		gameInstance->setIsPaused(true);
+		gameInstance->setGameState(GAME_PAUSED);
 		shapes.push_back(&pauseMenu);
 		break;
 	case 2:
-		gameInstance.setIsPaused(true);
-		gameInstance.setGameState(GAME_OVER);
+		gameInstance->setIsPaused(true);
+		gameInstance->setGameState(GAME_OVER);
 		shapes.push_back(& gameOverScreen);
 		break;
 	default:
@@ -658,7 +658,7 @@ void W_Gameplay::update(const float& deltaTime)
 	//targetController.update(deltaTime);
 	enemyManager.tick(deltaTime);
 	healthBar.update(deltaTime);
-	if (gameInstance.getGameState() >= IN_GAME)
+	if (gameInstance->getGameState() >= IN_GAME)
 	{
 		if (healthBar.isFinished()) lose();
 	}
@@ -673,7 +673,7 @@ bool W_Gameplay::input_esc()
 
 bool W_Gameplay::onMouseClickR()
 {
-	if (!gameInstance.getIsPaused())
+	if (!gameInstance->getIsPaused())
 		flashlightShader.toggleMaskMode();
 	return true;
 }
