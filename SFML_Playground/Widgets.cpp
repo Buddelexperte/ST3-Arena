@@ -521,7 +521,7 @@ bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 // W_Gameplay -------------------------------------------------------------------------------------
 
 W_Gameplay::W_Gameplay(InputWidget* parent) 
-	: InputWidget(parent), flashlightShader(this), pauseMenu(this), gameOverScreen(this), targetController(this), enemyManager(), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f), background(sf::Quads, 4)
+	: InputWidget(parent), flashlightShader(this), pauseMenu(this), gameOverScreen(this), enemyManager(), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f), background(sf::Quads, 4)
 {
 	// Load texture
 	if (!backgroundTexture.loadFromFile("Content/Textures/cobblestone_mossy.png"))
@@ -530,7 +530,9 @@ W_Gameplay::W_Gameplay(InputWidget* parent)
 	}
 	backgroundTexture.setRepeated(true);
 
-	enemyManager.spawnEnemy(windowCenter, { 100.0f, 100.0f }, sf::Color::White);
+	enemyManager.spawnEnemy(windowCenter + sf::Vector2f(0.0f, 0.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::White);
+	enemyManager.spawnEnemy(windowCenter + sf::Vector2f(0.0f, 200.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::White);
+	enemyManager.spawnEnemy(windowCenter + sf::Vector2f(0.0f, -200.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::White);
 }
 
 void W_Gameplay::construct()
@@ -649,6 +651,7 @@ void W_Gameplay::update(const float& deltaTime)
 		}
 	}
 	
+	// If Gameplay is focused
 	if (getWidgetAtIndex(widgetIndex) != this) getWidgetAtIndex(widgetIndex)->update(deltaTime);
 
 	// Update Gameplay objects with respectable params
@@ -679,6 +682,11 @@ bool W_Gameplay::isMouseOver(const bool& checkForClick = false)
 {
 	if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
 
+	// Implement new click logic here (projectile direction etc)
+	return false;
+
+	/* Old click logic using depricated targetController
+	
 	if (checkForClick)
 	{
 		if (targetController.clickedAny())
@@ -693,6 +701,7 @@ bool W_Gameplay::isMouseOver(const bool& checkForClick = false)
 		return false;
 	}
 	return (targetController.isHovering());
+	*/
 }
 
 void W_Gameplay::draw(sf::RenderTarget& target, sf::RenderStates states) const

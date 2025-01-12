@@ -1,6 +1,8 @@
 #pragma once
 #include "Button.h"
 
+class GI_Arena;
+
 // WIDGETS ----------------------------------------------------------------------------------------
 
 
@@ -9,7 +11,7 @@ class WidgetElement : public sf::Drawable
 protected:
 	float lastDeltaTime = 0.0f;
 	InputWidget* parent = nullptr;
-	GI_Arena& gameInstance = GI_Arena::getInstance();
+	GI_Arena& gameInstance;
 	sf::RenderWindow* window = gameInstance.getWindow();
 	sf::Vector2u windowSize;
 	sf::Vector2f windowCenter;
@@ -22,10 +24,7 @@ protected:
 
 	virtual void windowUpdate();
 public:
-	WidgetElement(InputWidget* parentWidget) : parent(parentWidget)
-	{
-		windowUpdate();
-	}
+	WidgetElement(InputWidget* parentWidget);
 	virtual ~WidgetElement()
 	{
 		for (sf::Drawable* drawable : shapes)

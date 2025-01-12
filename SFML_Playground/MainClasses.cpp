@@ -1,12 +1,13 @@
 #pragma once 
 #include <fstream>
-#include "GameInstance.h"
 #include "BaseClasses.h"
+#include "GameInstance.h"
 #include "Widgets.h"
 
 // Game Instance Code
 
 GI_Arena::GI_Arena()
+	: player(nullptr)
 {
 	const sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 	window = new sf::RenderWindow(desktop, "SFML_Arena", sf::Style::Fullscreen);
@@ -57,6 +58,7 @@ void GI_Arena::start()
 	while (window->isOpen())
 	{
 		preTick();
+		// Calculate deltaTime for time corrected physics
 		deltaTime = clock.restart().asSeconds();
 		fps = 1.0f / deltaTime;
 		tick(deltaTime);
@@ -98,21 +100,21 @@ void GI_Arena::correctWidget()
 void GI_Arena::preTick()
 {
 	prevCamPos = view->getCenter();
+	soundManager.cleanUp();
 }
 
 void GI_Arena::tick(const float& deltaTime)
 {
-	soundManager.cleanUp();
-
 	tickView(deltaTime);
 
+	player.update(deltaTime);
 	activeMenu->update(deltaTime);
-	playerRef->update(deltaTime);
 }
 
 void GI_Arena::postTick()
 {
 	correctWidget();
+
 	// Draw new Menu to screen through GameInstance
 	updateScreen();
 }
@@ -123,6 +125,7 @@ void GI_Arena::setViewPos(const sf::Vector2f& newPos)
 	window->setView(*view);
 }
 
+// ReCenter sf::View position on current Player position and set prevCamPos
 void GI_Arena::resetViewPos()
 {
 	setViewPos(getPlayer()->getPos());
@@ -186,8 +189,7 @@ void GI_Arena::setGameState(const E_GameState& newGS)
 
 Player* GI_Arena::getPlayer()
 {
-	if (playerRef == nullptr) playerRef = new Player(nullptr);
-	return playerRef;
+	return &player;
 }
 
 bool GI_Arena::handleEvent(sf::Event* eventRef)
@@ -197,6 +199,12 @@ bool GI_Arena::handleEvent(sf::Event* eventRef)
 
 
 // WidgetMenu Code --------------------------------------------------------------------------------
+
+WidgetElement::WidgetElement(InputWidget* parentWidget)
+	: parent(parentWidget), gameInstance(GI_Arena::getInstance())
+{
+	windowUpdate();
+}
 
 void WidgetElement::windowUpdate()
 {

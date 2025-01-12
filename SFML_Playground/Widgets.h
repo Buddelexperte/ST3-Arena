@@ -2,7 +2,7 @@
 #include "BaseClasses.h"
 #include "Button.h"
 #include "Timer.h"
-#include "TargetController.h" // Old EnemyManager
+//#include "TargetController.h" // Old EnemyManager
 #include "EnemyManager.h" // New EnemyManager
 #include "Flashlight.h"
 
@@ -140,8 +140,7 @@ private:
 	const float minTimer = 1.0f;
 	int hitTargets = 0;
 	Timer healthBar;
-	TargetController targetController;
-	EnemyManager enemyManager;
+	EnemyManager* enemyManager = nullptr;
 
 	W_Paused pauseMenu;
 	W_GameOver gameOverScreen;

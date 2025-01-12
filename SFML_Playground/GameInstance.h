@@ -1,7 +1,9 @@
 #pragma once
 #include <iostream>
+#include "BaseClasses.h"
 #include "Functions.h"
 #include "SoundManager.h"
+#include "EnemyManager.h"
 #include "FontManager.h"
 #include "RandomNumbers.h"
 
@@ -32,25 +34,28 @@ private:
 	float deltaTime = 0.0f;
 	float fps = 0.0f;
 
+	// Privatize constructors and copy operators
 	GI_Arena();
 	GI_Arena(const GI_Arena&) = delete;
 	GI_Arena& operator=(const GI_Arena&) = delete; // Block the '=' operator to stop copies being made of this class
 	// Manager instances
 	SoundManager& soundManager = SoundManager::getInstance();
 	FontManager& fontManager = FontManager::getInstance();
+	EnemyManager& enemyManager = EnemyManager::getInstance();
 	// SFML Viewport objects
 	sf::RenderWindow* window = nullptr;
 	sf::View* view = nullptr;
 	sf::RenderStates states;
 	// Custom GameState
 	E_GameState gameState = MENU_SCREEN;
-	// Create all main widgets for later use
+
+	// Widget variables
 	std::vector<std::shared_ptr<InputWidget>> widgets;
 	std::shared_ptr<InputWidget> activeMenu = nullptr;
 
-	Player* playerRef = nullptr;
-	sf::Vector2f prevCamPos;
+	Player player;
 	// Somehow Gameplay related?
+	sf::Vector2f prevCamPos;
 	float zoomFactor = 1.0f;
 	bool bIsGameplayPaused = true;
 public:

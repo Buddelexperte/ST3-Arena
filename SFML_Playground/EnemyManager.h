@@ -1,10 +1,7 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <memory>
-#include <queue>
-#include <vector>
 
-#include "Enemy.h"
+#include "EnemyPool.h"
+#include "EnemyRenderer.h"
 
 class EnemyManager : public sf::Drawable
 {
@@ -13,8 +10,19 @@ private:
 	EnemyRenderer enemyRenderer; // Manages draw calls
 	std::vector<std::unique_ptr<Enemy>> activeEnemies;
 
+	// Private constructor to prevent direct instantiation
+	EnemyManager() {}
+	EnemyManager(const EnemyManager&) = delete;
+	EnemyManager& operator=(const EnemyManager&) = delete; // Block the '=' operator to stop copies being made of this class
+
 public:
-	EnemyManager();
+	static EnemyManager& getInstance()
+	{
+		static EnemyManager instance;
+		return instance;
+	}
+
+	int getActiveEnemies() const;
 
 	void spawnEnemy(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Color& color);
 	void deleteEnemy(const size_t& index);

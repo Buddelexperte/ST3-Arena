@@ -5,14 +5,16 @@ EnemyManager::EnemyManager()
 	: enemyPool(), enemyRenderer()
 {}
 
+int EnemyManager::getActiveEnemies() const
+{
+	return activeEnemies.size();
+}
+
 void EnemyManager::spawnEnemy(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Color& color)
 {
 	activeEnemies.push_back(enemyPool.get(pos, size, color));
 
 	enemyRenderer.addEnemy(pos, size, color);
-
-	// Testing the velocity in the EnemyRenderer, DEV
-	enemyRenderer.setVelocity(activeEnemies.size() - 1, { 350.0f, 0.0f });
 }
 
 void EnemyManager::deleteEnemy(const size_t& index)
