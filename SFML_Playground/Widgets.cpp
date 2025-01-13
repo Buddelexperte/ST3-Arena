@@ -651,12 +651,18 @@ void W_Gameplay::update(const float& deltaTime)
 		}
 	}
 	
-	// If Gameplay is focused
+	// Execute subWidgets
 	if (getWidgetAtIndex(widgetIndex) != this) getWidgetAtIndex(widgetIndex)->update(deltaTime);
 
 	// Update Gameplay objects with respectable params
 	//targetController.update(deltaTime);
-	enemyManager.tick(deltaTime);
+	
+	// If Gameplay is UnPaused
+	if (!gameInstance->getIsPaused())
+	{
+		enemyManager.tick(deltaTime);
+	}
+
 	healthBar.update(deltaTime);
 	if (gameInstance->getGameState() >= IN_GAME)
 	{

@@ -33,8 +33,6 @@ void EnemyManager::tick(const float& deltaTime)
 		enemy->tick(deltaTime);
 	}
 
-	
-
 	for (size_t i = 0; i < activeEnemies.size(); i++)
 	{
 		enemyRenderer.setVelocity(i, activeEnemies[i]->getVelocity());
