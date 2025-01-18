@@ -145,9 +145,8 @@ void GI_Arena::resetViewPos()
 // Adjust the camera position based on velocity and distance to player (Spring-Damp-System)
 void GI_Arena::tickView(const float& deltaTime)
 {
-	constexpr float SPRING_STRENGTH = 4.0f; // Higher = Quicker follow
-	constexpr float DAMPING_COEFFICIENT = 1.0f; // Higher = More Resistance
-	constexpr float MAX_DISTANCE = 150.0f; // Max allowed distance in x and y
+	constexpr float SPRING_STRENGTH = 2.5f; // Higher = Quicker follow
+	constexpr float DAMPING_COEFFICIENT = 4.0f; // Higher = More Resistance
 
 	// Get current camera and player positions
 	const sf::Vector2f& camPos = view->getCenter();
@@ -155,16 +154,6 @@ void GI_Arena::tickView(const float& deltaTime)
 
 	// Calculate distance between both positions (x and y)
 	sf::Vector2f distance = camPos - playerPos;
-
-	// Apply MAX_DISTANCE constraint to avoid camera clipping player
-	if (std::abs(distance.x) > MAX_DISTANCE)
-	{
-		distance.x = (distance.x > 0 ? MAX_DISTANCE : -MAX_DISTANCE);
-	}
-	if (std::abs(distance.y) > MAX_DISTANCE)
-	{
-		distance.y = (distance.y > 0 ? MAX_DISTANCE : -MAX_DISTANCE);
-	}
 
 	// Calculate Spring Force (Using distance to target)
 	sf::Vector2f springForce = -SPRING_STRENGTH * distance;
