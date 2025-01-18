@@ -31,7 +31,7 @@ inline bool shouldZero(const float& value, const float& precision = 1e-6f)
 
 inline bool shouldZero(const sf::Vector2f& value, const float& precision = 1e-6f)
 {
-	return (shouldZero(value.x, precision) || shouldZero(value.y, precision));
+	return (shouldZero(value.x, precision) && shouldZero(value.y, precision));
 }
 
 // Clamp "too small" float values to 0.0f

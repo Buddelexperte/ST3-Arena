@@ -82,22 +82,22 @@ void Player::calcMovement(const float& deltaTime)
 	if (sf::Keyboard::isKeyPressed(KEY_S)) y += WALKING_SPEED; // Move South
 	if (sf::Keyboard::isKeyPressed(KEY_D)) x += WALKING_SPEED; // Move East
 
-	// Target velocity (scaled by deltaTime)
 	sf::Vector2f targetVelo = sf::Vector2f{ x, y } * multiplier;
 
 	// Smoothly interpolate velocity using linear interpolation if location changed
 	zeroPrecision(velocity);
 	if (!shouldZero(targetVelo - velocity))
-	{	
-		const float WALKING_LERP = LERP_SMOOTHNESS * multiplier;
-		velocity = lerp(velocity, targetVelo, WALKING_LERP);
+	{
+		velocity = lerp(velocity, targetVelo, LERP_SMOOTHNESS);
 	}
 	else
 		velocity = targetVelo;
 
+	// Setting current movement direction
 	direction = { velocity.x / WALKING_SPEED, velocity.y / WALKING_SPEED };
 
 	// Update position
+	std::cout << velocity.x << std::endl;
 	addPos(velocity * deltaTime);
 
 	// Rotation ---------------------------------

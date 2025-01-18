@@ -28,9 +28,10 @@ public:
 		return dist(this->rng);
 	}
 
-	bool roulette(const float& percentage)
+	// Percentage in 0.0f to 1.0f notation
+	bool chance(const float& percentage)
 	{
-		return (floatInRange(0.0f, 100.0f) <= percentage);
+		return (floatInRange(0.0f, 1.0f) <= percentage);
 	}
 
 	// Position in box shape from down-left to up-right

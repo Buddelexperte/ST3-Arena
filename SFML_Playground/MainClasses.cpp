@@ -154,7 +154,6 @@ void GI_Arena::tickView(const float& deltaTime)
 
 	// Calculate distance between both positions (x and y)
 	sf::Vector2f distance = camPos - playerPos;
-
 	// Calculate Spring Force (Using distance to target)
 	sf::Vector2f springForce = -SPRING_STRENGTH * distance;
 
@@ -165,7 +164,7 @@ void GI_Arena::tickView(const float& deltaTime)
 
 	// Calculate total force (spring + damping)
 	sf::Vector2f totalForce = dampingForce + springForce;
-
+	// Applying total camera force (scaled by deltaTime) onto old Position
 	sf::Vector2f newCamPos = camPos + (totalForce * deltaTime);
 
 	setViewPos(newCamPos);

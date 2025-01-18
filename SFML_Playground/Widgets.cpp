@@ -6,8 +6,6 @@
 
 W_MainMenu::W_MainMenu(InputWidget* parent) : InputWidget(parent), optionsMenu(this), levelMenu(this)
 {
-	// gameInstance.setGameState(MENU_SCREEN); Now handled inside teh gameInstance
-	
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "ARENA",											sf::Color::White},
 		{viewCenter + sf::Vector2f{ 0, -200 },    sf::Vector2f{ 100, 100 }, sf::Color::Transparent,   16, "Higscore: " + std::to_string(SaveGame::Stored_Save),	sf::Color::White},
@@ -21,6 +19,8 @@ W_MainMenu::W_MainMenu(InputWidget* parent) : InputWidget(parent), optionsMenu(t
 	menu_startButton.construct(MAIN_MENU_CONSTR[2]);
 	menu_optionsButton.construct(MAIN_MENU_CONSTR[3]);
 	menu_quitButton.construct(MAIN_MENU_CONSTR[4]);
+
+	std::cout << "Constructed MainMenu" << std::endl;
 }
 
 void W_MainMenu::construct()
@@ -533,6 +533,8 @@ W_Gameplay::W_Gameplay(InputWidget* parent)
 	enemyManager.spawnEnemy(windowCenter + sf::Vector2f(0.0f, 0.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::White);
 	enemyManager.spawnEnemy(windowCenter + sf::Vector2f(0.0f, 200.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::White);
 	enemyManager.spawnEnemy(windowCenter + sf::Vector2f(0.0f, -200.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::White);
+
+	std::cout << "Constructed GameplayWidget" << std::endl;
 }
 
 void W_Gameplay::construct()

@@ -22,7 +22,8 @@ public:
 		return instance;
 	}
 
-	int getActiveEnemies() const;
+	int getNumActiveEnemies() const;
+	void callUpdate(const size_t&);
 
 	void spawnEnemy(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Color& color);
 	void deleteEnemy(const size_t& index);
