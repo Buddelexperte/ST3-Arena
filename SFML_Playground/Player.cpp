@@ -97,7 +97,6 @@ void Player::calcMovement(const float& deltaTime)
 	direction = { velocity.x / WALKING_SPEED, velocity.y / WALKING_SPEED };
 
 	// Update position
-	std::cout << velocity.x << std::endl;
 	addPos(velocity * deltaTime);
 
 	// Rotation ---------------------------------

@@ -551,7 +551,6 @@ void W_Gameplay::construct()
 		gameInstance->resetViewPos();
 		// Reset values to game start values
 		hitTargets = 0;
-		//targetController.initSpawner();
 		healthBar.setMaxTime(TIMER_DEFAULT, true);
 
 		// Add Gameplay objects to shapes vector to draw them
@@ -656,9 +655,6 @@ void W_Gameplay::update(const float& deltaTime)
 	// Execute subWidgets
 	if (getWidgetAtIndex(widgetIndex) != this) getWidgetAtIndex(widgetIndex)->update(deltaTime);
 
-	// Update Gameplay objects with respectable params
-	//targetController.update(deltaTime);
-	
 	// If Gameplay is UnPaused
 	if (!gameInstance->getIsPaused())
 	{
@@ -692,24 +688,6 @@ bool W_Gameplay::isMouseOver(const bool& checkForClick = false)
 
 	// Implement new click logic here (projectile direction etc)
 	return false;
-
-	/* Old click logic using depricated targetController
-	
-	if (checkForClick)
-	{
-		if (targetController.clickedAny())
-		{
-			// Increase targetsHit and change HealthBar accoridngly
-			hitTargets++;
-			float newMaxTime = TIMER_DEFAULT - (float(hitTargets / 3.0f) * 0.5f); // Shorten HealthBar lifespan
-			healthBar.setMaxTime(std::max(newMaxTime, minTimer)); // Keep it above minimum timer lifetime
-			healthBar.setCurrentTime(healthBar.getCurrentTime() + (healthBar.getMaxTime() / 5.0f)); // Regen so a fifth of the max lifespan
-			return true;
-		}
-		return false;
-	}
-	return (targetController.isHovering());
-	*/
 }
 
 void W_Gameplay::draw(sf::RenderTarget& target, sf::RenderStates states) const
