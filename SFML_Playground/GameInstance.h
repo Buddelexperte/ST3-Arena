@@ -27,8 +27,6 @@ class GI_Arena // SINGLETON PATTERN
 private:
 	// Time calculation (deltaTime etc.)
 	sf::Clock clock;
-	float deltaTime = 0.0f;
-	float fps = 0.0f;
 
 	// Privatize constructors and copy operators
 	GI_Arena();

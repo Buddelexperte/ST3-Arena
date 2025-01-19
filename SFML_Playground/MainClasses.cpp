@@ -69,8 +69,7 @@ void GI_Arena::start()
 	{
 		preTick();
 		// Calculate deltaTime for time corrected physics
-		deltaTime = clock.restart().asSeconds();
-		fps = 1.0f / deltaTime;
+		const float deltaTime = clock.restart().asSeconds();
 		tick(deltaTime);
 		postTick();
 	}
