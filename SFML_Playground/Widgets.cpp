@@ -7,11 +7,11 @@
 W_MainMenu::W_MainMenu(InputWidget* parent) : InputWidget(parent), optionsMenu(this), levelMenu(this)
 {
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
-		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "ARENA",											sf::Color::White},
-		{viewCenter + sf::Vector2f{ 0, -200 },    sf::Vector2f{ 100, 100 }, sf::Color::Transparent,   16, "Higscore: " + std::to_string(SaveGame::Stored_Save),	sf::Color::White},
-		{viewCenter + sf::Vector2f{ 0, 0 },       sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "START",													sf::Color::Black},
-		{viewCenter + sf::Vector2f{ 0, 150 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "OPTIONS",													sf::Color::Black},
-		{viewCenter + sf::Vector2f{ 0, 300 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "QUIT",														sf::Color::Black}
+		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100,	"ARENA",												sf::Color::White},
+		{viewCenter + sf::Vector2f{ 0, -200 },    sf::Vector2f{ 100, 100 }, sf::Color::Transparent,   16,	"Higscore: " + std::to_string(SaveGame::Stored_Save),	sf::Color::White},
+		{viewCenter + sf::Vector2f{ 0, 0 },       sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"START",												sf::Color::Black},
+		{viewCenter + sf::Vector2f{ 0, 150 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"OPTIONS",												sf::Color::Black},
+		{viewCenter + sf::Vector2f{ 0, 300 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"QUIT",													sf::Color::Black}
 	};
 
 	menu_title.construct(MAIN_MENU_CONSTR[0]);
@@ -20,7 +20,8 @@ W_MainMenu::W_MainMenu(InputWidget* parent) : InputWidget(parent), optionsMenu(t
 	menu_optionsButton.construct(MAIN_MENU_CONSTR[3]);
 	menu_quitButton.construct(MAIN_MENU_CONSTR[4]);
 
-	std::cout << "Constructed MainMenu" << std::endl;
+	// Done out
+	std::cout << "- Constructed MainMenu" << std::endl;
 }
 
 void W_MainMenu::construct()
@@ -37,10 +38,10 @@ InputWidget* W_MainMenu::getWidgetAtIndex(const int& index)
 		return this; // Self
 		break;
 	case 1:
-		return &optionsMenu;
+		return &optionsMenu; // OPTIONS_MENU
 		break;
 	case 2:
-		return &levelMenu;
+		return &levelMenu; // LEVEL_MENU
 		break;
 	default:
 		break;
@@ -55,14 +56,8 @@ InputWidget* W_MainMenu::setWidgetIndex(const int& newIndex)
 	case 0: // MAIN_MENU
 		shapes = { &menu_title, &menu_highscore, &menu_startButton, &menu_optionsButton, &menu_quitButton };
 		break;
-	case 1: // OPTIONS_MENU
-		shapes = { &optionsMenu };
-		break;
-	case 2: // LEVEL_MENU
-		shapes = { &levelMenu };
-		break;
-	default:
-		shapes = {};
+	default: // SUB-WIDGETS
+		shapes = { getWidgetAtIndex(widgetIndex) };
 		break;
 	}
 	return getWidgetAtIndex(widgetIndex);
@@ -530,11 +525,8 @@ W_Gameplay::W_Gameplay(InputWidget* parent)
 	}
 	backgroundTexture.setRepeated(true);
 
-	enemyManager.spawnEnemy(windowCenter + sf::Vector2f(0.0f, 0.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::White);
-	enemyManager.spawnEnemy(windowCenter + sf::Vector2f(0.0f, 200.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::White);
-	enemyManager.spawnEnemy(windowCenter + sf::Vector2f(0.0f, -200.0f), sf::Vector2f(100.0f, 100.0f), sf::Color::White);
-
-	std::cout << "Constructed GameplayWidget" << std::endl;
+	// Done out
+	std::cout << "- Constructed GameplayWidget" << std::endl;
 }
 
 void W_Gameplay::construct()

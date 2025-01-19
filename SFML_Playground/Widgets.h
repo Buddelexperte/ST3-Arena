@@ -153,7 +153,7 @@ private:
 	sf::Vector2f backgroundPos;
 	const float TILING_SCALE = 0.1f; // Larger = more tiling
 	sf::Texture backgroundTexture;
-	sf::VertexArray background;  // 4 vertices for the rectangle (quad)
+	sf::VertexArray background;  // 4 vertices for the rectangle (quad), specified in Widget Constructor
 
 	void lose();
 	bool input_esc() override;
