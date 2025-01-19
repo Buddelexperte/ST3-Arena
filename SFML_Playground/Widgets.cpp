@@ -56,7 +56,7 @@ InputWidget* W_MainMenu::setWidgetIndex(const int& newIndex)
 	case 0: // MAIN_MENU
 		shapes = { &menu_title, &menu_highscore, &menu_startButton, &menu_optionsButton, &menu_quitButton };
 		break;
-	default: // SUB-WIDGETS
+	default: // SUB-WIDGETS (implement this notation in EVERY other Widget)
 		shapes = { getWidgetAtIndex(widgetIndex) };
 		break;
 	}
