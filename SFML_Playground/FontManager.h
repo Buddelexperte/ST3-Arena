@@ -6,7 +6,11 @@
 class FontManager
 {
 private:
-    FontManager() = default;
+    FontManager()
+    {
+        loadFonts();
+    }
+
     ~FontManager() = default;
 
     std::vector<std::unique_ptr<sf::Font>> allFonts;

@@ -10,10 +10,10 @@ GI_Arena::GI_Arena()
 {
 	const sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 	window = new sf::RenderWindow(desktop, "SFML_Arena", sf::Style::Fullscreen);
-	
+
 	// Only use for crash heavy debug !
 	//window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "SFML_Arena", sf::Style::Titlebar | sf::Style::Default);
-	
+
 	std::cout << "RenderWindow created." << std::endl;
 	sf::Vector2f desktopSize = { static_cast<float>(desktop.width), static_cast<float>(desktop.height) };
 	view = new sf::View(desktopSize / 2.0f, desktopSize);
@@ -25,6 +25,7 @@ GI_Arena::GI_Arena()
 
 bool GI_Arena::initWidgets()
 {
+	// Only execute this method once
 	static bool didOnce = false;
 
 	if (didOnce) return false;
@@ -35,32 +36,34 @@ bool GI_Arena::initWidgets()
 	try { // Adding base widgets with their nullptr parent HERE!
 		widgets.push_back(std::make_shared<W_MainMenu>(nullptr)); // MainMenu = 0
 		widgets.push_back(std::make_shared<W_Gameplay>(nullptr)); // Gameplay = 1
-		std::cout << "Initiated widgets" << std::endl;
-		return true;
 	}
 	catch (const std::exception& e) {
 		std::cerr << "Exception caught: " << e.what() << std::endl;
 		widgets.clear(); // Cleanup in case of partial initialization
 		return false;
 	}
+
+	// Console log
+	std::cout << "Initiated widgets" << std::endl;
+
+	// Apply correct widget
+	correctWidget();
+	return true;
 }
 
 bool GI_Arena::makePlayer()
 {
 	if (player) return false;
 	player = new Player(nullptr);
-	std::cout << "Player created" << std::endl;
 	return true;
 }
 
 void GI_Arena::start()
 {
-	fontManager.loadFonts(); // No lazy loading for fonts
 	makePlayer();
-	
-	initWidgets();
+	std::cout << "Player created" << std::endl;
 
-	correctWidget();
+	initWidgets();
 
 	std::cout << "\n### Starting Game ###\n" << std::endl;
 
