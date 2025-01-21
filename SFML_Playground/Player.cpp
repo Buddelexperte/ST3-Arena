@@ -150,6 +150,8 @@ float Player::scrollInput(sf::Event* eventRef)
 	const float scrollDelta = eventRef->mouseWheelScroll.delta;
 
 	return scrollDelta; // TODO - flashlightShader heavy
+
+
 	float targetZoom = 1.0f + (scrollDelta * -0.1f);
 	gameInstance->setZoom(targetZoom);
 	return scrollDelta;

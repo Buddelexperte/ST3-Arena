@@ -38,13 +38,14 @@ void Enemy::spawn()
 void Enemy::spawn(const sf::Vector2f& pos)
 {
 	setPosition(pos);
+
+	if (enemyIndex == 0)
+		setColor(sf::Color::Red);
 }
 
 void Enemy::tick(const float& deltaTime)
 {
-	if (enemyIndex == 0)
-		setColor(sf::Color::Red);
-	velocity = gameInstance->getPlayer()->getVelocity();
+	velocity = (gameInstance->getPlayer()->getVelocity() * random.floatInRange(0.2f, 1.2f)); 
 
 	position += velocity * deltaTime;
 }
