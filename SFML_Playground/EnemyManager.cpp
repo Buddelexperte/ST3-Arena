@@ -18,20 +18,21 @@ void EnemyManager::spawnEnemy()
 
 void EnemyManager::spawnEnemy(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Color& color)
 {
-	// Retrieve an enemy instance from the pool
-	std::unique_ptr<Enemy> newEnemy = enemyPool.get(pos, size, color);
+    // Retrieve an enemy instance from the pool
+    const std::unique_ptr<Enemy> newEnemy = enemyPool.get(pos, size, color);
 
-	// Extract render information and pass it to the renderer
-	const Enemy::EnemyRenderInfo& renderInfo = newEnemy->getRenderInfo();
-	enemyRenderer.addEnemy(renderInfo.pos, renderInfo.size, renderInfo.velocity, renderInfo.color);
+    // Extract render information and pass it to the renderer
+    const Enemy::EnemyRenderInfo& renderInfo = newEnemy->getRenderInfo();
+    enemyRenderer.addEnemy(renderInfo);
 
-	// Set the enemy's index and add it to the activeEnemies vector
-	newEnemy->setIndex(getNumActiveEnemies());
-	activeEnemies.push_back(std::move(newEnemy));
+    // Set the enemy's index and add it to the activeEnemies vector
+    size_t enemyIndex = getNumActiveEnemies();
+    newEnemy->setIndex(enemyIndex);
+
     // Actually spawn the enemy properly and update it's attributes accordingly
-	activeEnemies.back()->spawn();
+    activeEnemies.push_back(std::move(newEnemy));
+    activeEnemies.back()->spawn();
 }
-
 
 void EnemyManager::deleteEnemy(const size_t& index)
 {
@@ -53,29 +54,25 @@ void EnemyManager::tick_spawning(const float& deltaTime)
     static float timer = spawnInterval; // Static variable to track time between enemy spawns.
 
     // If the number of active enemies would exceed the maximum allowed cancel any spawning attempt
-    if (getNumActiveEnemies() + 1 > maxEnemies) 
+    if (getNumActiveEnemies() >= maxEnemies)
         return;
 
-    timer -= deltaTime; // Decrease spawnTimer (Countdown)
+    // Decrease spawnTimer (Countdown)
+    timer -= deltaTime; 
     // If the timer did not reach zero, cancel spawn attempt
     if (timer > 0.0f)
         return;
 
-    timer = spawnInterval; // Reset the timer to the configured spawn interval.
+    timer += spawnInterval; // Reset the timer to the configured spawn interval
     spawnEnemy();
 }
 
 void EnemyManager::tick_enemies(const float& deltaTime)
 {
-    // Iterate through all active enemies and update their state.
-    for (const std::unique_ptr<Enemy>& enemy : activeEnemies)
-    {
-        enemy->tick(deltaTime);
-    }
-
     // Update the renderer with the velocity of each active enemy, for clean movement
     for (size_t i = 0; i < activeEnemies.size(); i++)
     {
+        activeEnemies[i]->tick(deltaTime);
         enemyRenderer.setVelocity(i, activeEnemies[i]->getVelocity());
     }
 }
@@ -91,7 +88,6 @@ void EnemyManager::tick(const float& deltaTime)
     // Update the enemy renderer at last
     enemyRenderer.tick(deltaTime);
 }
-
 
 void EnemyManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {

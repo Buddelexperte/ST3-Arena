@@ -45,7 +45,7 @@ void Enemy::spawn(const sf::Vector2f& pos)
 
 void Enemy::tick(const float& deltaTime)
 {
-	velocity = (gameInstance->getPlayer()->getVelocity() * random.floatInRange(0.2f, 1.2f)); 
+	velocity = (gameInstance->getPlayer()->getVelocity()); 
 
 	position += velocity * deltaTime;
 }

@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <unordered_set>
+#include "Enemy.h"
 
 class EnemyRenderer : public sf::Drawable
 {
@@ -15,6 +16,11 @@ public:
     EnemyRenderer()
         : enemies(sf::Quads)
     {}
+
+    void addEnemy(const Enemy::EnemyRenderInfo& info)
+    {
+        addEnemy(info.pos, info.size, info.velocity, info.color);
+    }
 
     void addEnemy(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Vector2f& velocity, const sf::Color& color)
     {
@@ -137,22 +143,35 @@ public:
 
     void tick(const float& deltaTime)
     {
-        for (const size_t& index : changedIndices)
+        // Update only the changed indices
+        for (size_t i : changedIndices)
         {
-            updateVertexQuad(index);
+            updateVertexQuad(i);
         }
-        changedIndices.clear();
 
+        // Cache velocities to avoid redundant multiplications
+        std::vector<sf::Vector2f> offsets(numEnemies);
         for (size_t i = 0; i < numEnemies; i++)
         {
-            sf::Vector2f offset = infos[i].velocity;
+            offsets[i] = infos[i].velocity * deltaTime;
+        }
 
-            // Update all 4 vertices of the quad
+        // Apply the cached offsets to all vertices
+        for (size_t i = 0; i < numEnemies; i++)
+        {
+            const sf::Vector2f& offset = offsets[i];
+
+            // Skip stationary enemies
+            if (offset == sf::Vector2f(0.0f, 0.0f))
+                continue;
+
             for (size_t j = 0; j < 4; j++)
             {
-                enemies[i * 4 + j].position += offset * deltaTime;
+                enemies[i * 4 + j].position += offset;
             }
         }
+
+        changedIndices.clear();
     }
 
     void draw(sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates::Default) const override
