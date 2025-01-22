@@ -10,7 +10,6 @@ class EnemyPool
 {
 private:
     std::queue<std::unique_ptr<Enemy>> pool;
-
 public:
     std::unique_ptr<Enemy> get(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Color& color)
     {

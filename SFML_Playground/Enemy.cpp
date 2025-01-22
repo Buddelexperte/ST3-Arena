@@ -5,14 +5,8 @@
 #include "Enemy.h"
 
 Enemy::Enemy(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Color& color)
-	: velocity(0.0f, 0.0f), gameInstance(&GI_Arena::getInstance()), manager(&EnemyManager::getInstance())
-{
-	shape.setPosition(pos);
-	position = pos;
-	shape.setSize(size);
-	shape.setOrigin(size.x / 2.0f, size.y / 2.0f);
-	shape.setFillColor(color);
-}
+	: renderInfo(), gameInstance(&GI_Arena::getInstance()), manager(&EnemyManager::getInstance())
+{}
 
 sf::Vector2f Enemy::getNewSpawnPos() const
 {
@@ -45,39 +39,31 @@ void Enemy::spawn(const sf::Vector2f& pos)
 
 void Enemy::tick(const float& deltaTime)
 {
-	velocity = (gameInstance->getPlayer()->getVelocity()); 
+	renderInfo.velocity = (gameInstance->getPlayer()->getVelocity() * random.floatInRange(0.5f, 1.5f)); 
 
-	position += velocity * deltaTime;
+	renderInfo.pos += renderInfo.velocity * deltaTime;
 }
 
 void Enemy::setPosition(const sf::Vector2f& pos)
 {
-	if (pos == shape.getPosition()) return;
+	if (pos == renderInfo.pos) return;
 	
-	shape.setPosition(pos);
-	position = pos;
+	renderInfo.pos = pos;
 	manager->callUpdate(enemyIndex);
 }
 
 void Enemy::setSize(const sf::Vector2f& size)
 {
-	if (size == shape.getSize()) return;
+	if (size == renderInfo.size) return;
 
-	shape.setSize(size);
-	shape.setOrigin(size.x / 2.0f, size.y / 2.0f);
+	renderInfo.size = size;
 	manager->callUpdate(enemyIndex);
 }
 
 void Enemy::setColor(const sf::Color& color)
 {
-	//if (color == shape.getFillColor()) return;
+	if (color == renderInfo.color) return;
 
-	shape.setFillColor(color);
-	manager->callUpdate(enemyIndex);
-}
-
-void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-	target.draw(shape, states);
+	renderInfo.color = color;
 	manager->callUpdate(enemyIndex);
 }

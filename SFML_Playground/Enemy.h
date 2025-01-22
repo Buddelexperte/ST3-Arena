@@ -6,8 +6,15 @@
 class GI_Arena;
 class EnemyManager;
 
-class Enemy : public sf::Drawable
+class Enemy
 {
+public:
+	struct EnemyRenderInfo {
+		sf::Vector2f pos = sf::Vector2f(0.0f, 0.0f);
+		sf::Vector2f size = sf::Vector2f(100.0f, 100.0f);
+		sf::Vector2f velocity = sf::Vector2f(0.0f, 0.0f);
+		sf::Color color = sf::Color::White;
+	};
 private:
 	GI_Arena* gameInstance;
 	EnemyManager* manager;
@@ -16,18 +23,10 @@ private:
 
 	RNG& random = RNG::getInstance();
 
-	sf::RectangleShape shape;
-	sf::Vector2f position;
-	sf::Vector2f velocity;
+	EnemyRenderInfo renderInfo;
 
 	sf::Vector2f getNewSpawnPos() const;
 public:
-	struct EnemyRenderInfo {
-		sf::Vector2f pos = sf::Vector2f(0.0f, 0.0f);
-		sf::Vector2f size = sf::Vector2f(0.0f, 0.0f);
-		sf::Vector2f velocity = sf::Vector2f(0.0f, 0.0f);
-		sf::Color color = sf::Color::Transparent;
-	};
 
 	Enemy(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Color& color);
 
@@ -39,18 +38,16 @@ public:
 	void tick(const float& deltaTime);
 
 	void setPosition(const sf::Vector2f& pos);
-	sf::Vector2f getPosition() const {return position;}
+	sf::Vector2f getPosition() const {return renderInfo.pos;}
 	void setSize(const sf::Vector2f& size);
-	sf::Vector2f getSize() const {return shape.getSize();}
+	sf::Vector2f getSize() const {return renderInfo.size;}
 	void setColor(const sf::Color& color);
-	sf::Color getColor() const {return shape.getFillColor();}
+	sf::Color getColor() const {return renderInfo.color;}
 
 	EnemyRenderInfo getRenderInfo() const
 	{
 		return EnemyRenderInfo(getPosition(), getSize(), sf::Vector2f(0.0f, 0.0f), getColor());
 	}
 
-	sf::Vector2f getVelocity() const { return velocity; }
-
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	sf::Vector2f getVelocity() const { return renderInfo.velocity; }
 };

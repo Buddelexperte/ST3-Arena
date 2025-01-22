@@ -19,7 +19,7 @@ void EnemyManager::spawnEnemy()
 void EnemyManager::spawnEnemy(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Color& color)
 {
     // Retrieve an enemy instance from the pool
-    const std::unique_ptr<Enemy> newEnemy = enemyPool.get(pos, size, color);
+    std::unique_ptr<Enemy> newEnemy = enemyPool.get(pos, size, color);
 
     // Extract render information and pass it to the renderer
     const Enemy::EnemyRenderInfo& renderInfo = newEnemy->getRenderInfo();
