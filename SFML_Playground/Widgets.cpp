@@ -557,8 +557,9 @@ void W_Gameplay::windowUpdate()
 	InputWidget::windowUpdate();
 
 	// This creates the parallax effect: background moves as the sf::View moves
-	backgroundPos.x = viewCenter.x * 1.0f;  // Adjust this factor for stronger/weaker parallax
-	backgroundPos.y = viewCenter.y * 1.0f;  // Adjust for vertical parallax as well
+	constexpr float parallaxStrength = 1.0f;
+	backgroundPos.x = viewCenter.x * parallaxStrength;  // Adjust this factor for stronger/weaker parallax
+	backgroundPos.y = viewCenter.y * parallaxStrength;  // Adjust for vertical parallax as well
 
 	// Background will cover the entire view area
 	background[0].position = sf::Vector2f(viewCenter.x - viewSize.x / 2.0f, viewCenter.y - viewSize.y / 2.0f);
