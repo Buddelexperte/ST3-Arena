@@ -39,8 +39,19 @@ void Enemy::spawn(const sf::Vector2f& pos)
 
 void Enemy::tick(const float& deltaTime)
 {
-	renderInfo.velocity = (gameInstance->getPlayer()->getVelocity() * random.floatInRange(0.5f, 1.5f)); 
+	// Get the player's position
+	sf::Vector2f playerPos = gameInstance->getPlayer()->getPos();
 
+	// Calculate the direction vector from the enemy to the player
+	sf::Vector2f direction = playerPos - renderInfo.pos;
+
+	// Avoid normalizing; directly scale by a fixed speed factor
+	float speed = random.floatInRange(100.0f, 200.0f); // Adjust speed range as needed
+
+	// To keep the movement consistent, scale the direction proportionally to the deltaTime
+	renderInfo.velocity = direction * (speed / (std::abs(direction.x) + std::abs(direction.y) + 1e-6f));
+
+	// Update the position based on velocity
 	renderInfo.pos += renderInfo.velocity * deltaTime;
 }
 

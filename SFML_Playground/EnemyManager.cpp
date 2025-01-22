@@ -1,9 +1,10 @@
 #pragma once
 #include <iostream>
+
 #include "EnemyManager.h"
 
 EnemyManager::EnemyManager()
-	: enemyPool(), enemyRenderer()
+	: enemyPool(), enemyRenderer(), gameInstance(GI_Arena::getInstance())
 {}
 
 int EnemyManager::getNumActiveEnemies() const
@@ -79,6 +80,9 @@ void EnemyManager::tick_enemies(const float& deltaTime)
 
 void EnemyManager::tick(const float& deltaTime)
 {
+    if (gameInstance.getIsPaused())
+        return;
+
     // Spawning behavior of Enemies
     tick_spawning(deltaTime);
 

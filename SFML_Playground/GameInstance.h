@@ -4,7 +4,6 @@
 #include "Functions.h"
 #include "SoundManager.h"
 #include "FontManager.h"
-#include "EnemyManager.h"
 #include "RandomNumbers.h"
 
 // Enum for handling gameStages in GameInstance
@@ -35,7 +34,6 @@ private:
 	// Manager instances
 	SoundManager& soundManager = SoundManager::getInstance();
 	FontManager& fontManager = FontManager::getInstance();
-	EnemyManager& enemyManager = EnemyManager::getInstance();
 	// SFML Viewport objects
 	sf::RenderWindow* window = nullptr;
 	sf::View* view = nullptr;

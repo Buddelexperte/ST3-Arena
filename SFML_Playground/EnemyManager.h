@@ -1,12 +1,13 @@
 #pragma once
 
+#include "GameInstance.h"
 #include "EnemyPool.h"
 #include "EnemyRenderer.h"
 
 class EnemyManager : public sf::Drawable
 {
 private:
-	GI_Arena* gameInstance = nullptr;
+	GI_Arena& gameInstance;
 
 	const float spawnInterval = 0.00001f;
 	const int maxEnemies = 1000; // Temporary safe guard, replace with actual spawning logic later

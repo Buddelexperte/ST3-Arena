@@ -4,7 +4,8 @@
 
 // W_MainMenu -------------------------------------------------------------------------------------
 
-W_MainMenu::W_MainMenu(InputWidget* parent) : InputWidget(parent), optionsMenu(this), levelMenu(this)
+W_MainMenu::W_MainMenu(InputWidget* parent)
+	: InputWidget(parent), optionsMenu(this), levelMenu(this)
 {
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100,	"ARENA",												sf::Color::White},
@@ -631,11 +632,11 @@ void W_Gameplay::lose()
 
 void W_Gameplay::update(const float& deltaTime)
 {
+	constexpr bool bDrawFlashlight = true;
 	InputWidget::update(deltaTime);
-	const bool drawFlashlight = true;
 
 	// Flashlight update
-	if (drawFlashlight)
+	if (bDrawFlashlight)
 	{
 		flashlightShader.update(deltaTime);
 		for (sf::Drawable* elem : shapes)
@@ -645,7 +646,8 @@ void W_Gameplay::update(const float& deltaTime)
 	}
 	
 	// Execute subWidgets
-	if (getWidgetAtIndex(widgetIndex) != this) getWidgetAtIndex(widgetIndex)->update(deltaTime);
+	if (getWidgetAtIndex(widgetIndex) != this) 
+		getWidgetAtIndex(widgetIndex)->update(deltaTime);
 
 	// If Gameplay is UnPaused
 	if (!gameInstance->getIsPaused())
@@ -662,21 +664,26 @@ void W_Gameplay::update(const float& deltaTime)
 
 bool W_Gameplay::input_esc()
 {
-	if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->input_esc();
-	setWidgetIndex(1)->construct(); // If no sub widget open, open optionsMenu
+	if (getWidgetAtIndex(widgetIndex) != this) 
+		return getWidgetAtIndex(widgetIndex)->input_esc();
+	// If no sub widget open, open optionsMenu
+	setWidgetIndex(1)->construct(); 
 	return true;
 }
 
 bool W_Gameplay::onMouseClickR()
 {
-	if (!gameInstance->getIsPaused())
-		flashlightShader.toggleMaskMode();
+	if (gameInstance->getIsPaused())
+		return false;
+
+	flashlightShader.toggleMaskMode();
 	return true;
 }
 
 bool W_Gameplay::isMouseOver(const bool& checkForClick = false)
 {
-	if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
+	if (getWidgetAtIndex(widgetIndex) != this)
+		return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
 
 	// Implement new click logic here (projectile direction etc)
 	return false;
@@ -684,7 +691,7 @@ bool W_Gameplay::isMouseOver(const bool& checkForClick = false)
 
 void W_Gameplay::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	for (const auto& elem : shapes)
+	for (const sf::Drawable* elem : shapes)
 	{
 		if (elem == &background)
 		{

@@ -24,16 +24,12 @@ public:
 
     void addEnemy(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Vector2f& velocity, const sf::Color& color)
     {
-        size_t index;
+        size_t index = numEnemies;
 
         // Check if we have any removed enemies (reusing slot)
-        if (numEnemies < enemies.getVertexCount() / 4) {
-            // Reuse an index if there are removed enemies
-            index = numEnemies;
-        }
-        else {
+        if (numEnemies >= enemies.getVertexCount() / 4)
+        {
             // Add a new enemy if we have no removed enemies to reuse
-            index = numEnemies;
             enemies.append(sf::Vertex());
             enemies.append(sf::Vertex());
             enemies.append(sf::Vertex());
@@ -129,8 +125,7 @@ public:
             // Swap vertices
             for (size_t i = 0; i < 4; i++)
             {
-                std::swap(enemies[index * 4 +
-                    i], enemies[lastIndex * 4 + i]);
+                std::swap(enemies[index * 4 + i], enemies[lastIndex * 4 + i]);
             }
 
             // Swap velocities
