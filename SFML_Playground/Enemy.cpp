@@ -36,22 +36,36 @@ void Enemy::spawn(const sf::Vector2f& pos)
 		setColor(sf::Color::Red);
 }
 
-void Enemy::tick_collision(const float& deltaTime)
+// Fast circle-circle collision check
+bool Enemy::isColliding(const sf::Vector2f& playerCenter, float playerRadius) const
 {
-
+	float dx = playerCenter.x - renderInfo.pos.x;
+	float dy = playerCenter.y - renderInfo.pos.y;
+	float distanceSquared = dx * dx + dy * dy;
+	float radiusSum = playerRadius + collisionRadius;
+	return distanceSquared <= (radiusSum * radiusSum);
 }
 
 void Enemy::tick_move(const float& deltaTime)
 {
 	// Get the player's position and subtract own position
 	sf::Vector2f playerPos = gameInstance->getPlayer()->getPos();
-	sf::Vector2f direction = playerPos - renderInfo.pos;
+	sf::Vector2f distance = playerPos - renderInfo.pos;
+	zeroPrecision(distance);
 
 	// Get Velocity by direction * (speed / normalized direction)
-	renderInfo.velocity = direction * (speed / (std::abs(direction.x) + std::abs(direction.y)));
+	renderInfo.velocity = distance * (speed / (std::abs(distance.x) + std::abs(distance.y)));
 
 	// Update the position based on velocity and scale by deltaTime
 	renderInfo.pos += renderInfo.velocity * deltaTime;
+
+	return;
+	// COLLISION
+	if (isColliding(playerPos, collisionRadius))
+	{
+		// TODO: Überarbeite deleteEnemy zuerst
+		die();
+	}
 }
 
 void Enemy::tick(const float& deltaTime)
@@ -63,7 +77,7 @@ void Enemy::tick(const float& deltaTime)
 
 void Enemy::die()
 {
-	manager->deleteEnemy(enemyIndex);
+	manager->callDelete(enemyIndex);
 }
 
 void Enemy::setPosition(const sf::Vector2f& pos)

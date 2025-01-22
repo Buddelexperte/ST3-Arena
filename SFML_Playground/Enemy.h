@@ -22,12 +22,13 @@ private:
 
 	size_t enemyIndex = -1;
 	EnemyRenderInfo renderInfo;
+	const float collisionRadius = 10.0f;
 
 	const float speed = 100.0f;
 
 	sf::Vector2f getNewSpawnPos() const;
 
-	void tick_collision(const float&);
+	bool isColliding(const sf::Vector2f&, float) const;
 	void tick_move(const float&);
 	void die();
 public:

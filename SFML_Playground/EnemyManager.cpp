@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <thread>
 
 #include "EnemyManager.h"
 
@@ -9,7 +10,7 @@ EnemyManager::EnemyManager()
 
 int EnemyManager::getNumActiveEnemies() const
 {
-	return activeEnemies.size();
+	return static_cast<int>(activeEnemies.size());
 }
 
 void EnemyManager::spawnEnemy()
@@ -35,11 +36,17 @@ void EnemyManager::spawnEnemy(const sf::Vector2f& pos, const sf::Vector2f& size,
     activeEnemies.back()->spawn();
 }
 
-void EnemyManager::deleteEnemy(const size_t& index)
+void EnemyManager::deleteEnemy(const size_t index)
 {
-	enemyPool.release(std::move(activeEnemies[index]));
-
+    enemyPool.release(std::move(activeEnemies[index]));
+    activeEnemies[index] = nullptr;
+    
 	enemyRenderer.removeEnemy(index);
+}
+
+void EnemyManager::callDelete(const size_t index)
+{
+    pendingKill.insert(index);
 }
 
 void EnemyManager::callUpdate(const size_t& index, const InfoType& updateFlags = InfoType::EMPTY_INFO)
@@ -55,6 +62,17 @@ void EnemyManager::callUpdate(const size_t& index, const InfoType& updateFlags =
     }
 }
 
+void EnemyManager::tick_kill(const float& deltaTime)
+{
+    for (const size_t index : pendingKill)
+    {
+        std::cout << index << std::endl;
+        if (index < activeEnemies.size())  // Check if the index is valid
+            deleteEnemy(index);
+    }
+    pendingKill.clear();
+}
+
 void EnemyManager::tick_spawning(const float& deltaTime)
 {
     // TODO: Move spawning logic to a dedicated class
@@ -65,7 +83,7 @@ void EnemyManager::tick_spawning(const float& deltaTime)
         return;
 
     // Decrease spawnTimer (Countdown)
-    timer -= deltaTime; 
+    timer -= deltaTime;
     // If the timer did not reach zero, cancel spawn attempt
     if (timer > 0.0f)
         return;
@@ -76,9 +94,11 @@ void EnemyManager::tick_spawning(const float& deltaTime)
 
 void EnemyManager::tick_enemies(const float& deltaTime)
 {
-    // Update the renderer with the velocity of each active enemy, for clean movement
     for (size_t i = 0; i < activeEnemies.size(); i++)
     {
+        if (!activeEnemies[i])
+            continue;
+
         activeEnemies[i]->tick(deltaTime);
         enemyRenderer.setVelocity(i, activeEnemies[i]->getVelocity());
     }
@@ -91,6 +111,9 @@ void EnemyManager::tick(const float& deltaTime)
 
     // Ticking of each enemy
     tick_enemies(deltaTime);
+
+    // Kill all pendingKill enemies
+    tick_kill(deltaTime);
 
     // Update the enemy renderer at last
     enemyRenderer.tick(deltaTime);

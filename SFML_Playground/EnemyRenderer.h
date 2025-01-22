@@ -104,16 +104,15 @@ public:
 
     void updateVertexQuad(size_t index, const InfoType& updateFlags)
     {
-
         // Quad vertices
         if (updateFlags & InfoType::POSITION || updateFlags & InfoType::SIZE)
         {
             const sf::Vector2f pos = infos[index].pos;
-            const sf::Vector2f size = infos[index].size;
-            enemies[index * 4 + 0].position = pos + sf::Vector2f(-size.x / 2.f, -size.y / 2.f);
-            enemies[index * 4 + 1].position = pos + sf::Vector2f(size.x / 2.f, -size.y / 2.f);
-            enemies[index * 4 + 2].position = pos + sf::Vector2f(size.x / 2.f, size.y / 2.f);
-            enemies[index * 4 + 3].position = pos + sf::Vector2f(-size.x / 2.f, size.y / 2.f);
+            const sf::Vector2f halfSize = infos[index].size / 2.0f;
+            enemies[index * 4 + 0].position = pos + sf::Vector2f(-halfSize.x, -halfSize.y);
+            enemies[index * 4 + 1].position = pos + sf::Vector2f(halfSize.x, -halfSize.y);
+            enemies[index * 4 + 2].position = pos + sf::Vector2f(halfSize.x, halfSize.y);
+            enemies[index * 4 + 3].position = pos + sf::Vector2f(-halfSize.x, halfSize.y);
         }
 
         // Color all vertices
@@ -149,35 +148,29 @@ public:
 
     void tick(const float& deltaTime)
     {
-        // Update only the changed indices
-        for (const std::pair<const size_t, InfoType> pair : updateMap)
-        {
-            updateVertexQuad(pair);
-        }
-
-        // Cache velocities to avoid redundant multiplications
-        std::vector<sf::Vector2f> offsets(numEnemies);
         for (size_t i = 0; i < numEnemies; i++)
         {
-            offsets[i] = infos[i].velocity * deltaTime;
-        }
-
-        // Apply the cached offsets to all vertices
-        for (size_t i = 0; i < numEnemies; i++)
-        {
-            const sf::Vector2f& offset = offsets[i];
+            const sf::Vector2f& offset = infos[i].velocity * deltaTime;
 
             // Skip stationary enemies
             if (offset == sf::Vector2f(0.0f, 0.0f))
                 continue;
 
+            infos[i].pos += offset;
+
             for (size_t j = 0; j < 4; j++)
             {
                 enemies[i * 4 + j].position += offset;
             }
+
         }
 
-        updateMap.clear();
+        // Update only the changed indices
+        for (std::pair<const size_t, InfoType>& pair : updateMap)
+        {
+            updateVertexQuad(pair);
+            updateMap[pair.first] = InfoType::EMPTY_INFO;
+        }
     }
 
     void draw(sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates::Default) const override

@@ -1,4 +1,5 @@
 #pragma once
+#include <unordered_set>
 
 #include "GameInstance.h"
 #include "EnemyPool.h"
@@ -10,19 +11,23 @@ private:
 	GI_Arena& gameInstance;
 
 	const float spawnInterval = 0.00001f;
-	const int maxEnemies = 5; // Temporary safe guard, replace with actual spawning logic later
+	const int maxEnemies = 50; // Temporary safe guard, replace with actual spawning logic later
 
 	EnemyPool enemyPool; // Manages memory
 	EnemyRenderer enemyRenderer; // Manages draw calls
 	std::vector<std::unique_ptr<Enemy>> activeEnemies; // Random Access to Enemies
+	std::unordered_set<size_t> pendingKill;
 
 	// SINGLETON
 	EnemyManager();
 	EnemyManager(const EnemyManager&) = delete;
 	EnemyManager& operator=(const EnemyManager&) = delete;
 
-	void tick_spawning(const float& deltaTime);
-	void tick_enemies(const float& deltaTime);
+	void tick_kill(const float&);
+	void tick_spawning(const float&);
+	void tick_enemies(const float&);
+
+	void deleteEnemy(const size_t);
 public:
 	static EnemyManager& getInstance()
 	{
@@ -31,11 +36,11 @@ public:
 	}
 
 	int getNumActiveEnemies() const;
+	void callDelete(const size_t);
 	void callUpdate(const size_t&, const InfoType&);
 
 	void spawnEnemy();
 	void spawnEnemy(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Color& color);
-	void deleteEnemy(const size_t& index);
 
 	void tick(const float& deltaTime);
 
