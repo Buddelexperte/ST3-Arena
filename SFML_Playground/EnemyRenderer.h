@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include <unordered_set>
+#include <unordered_map>
 #include "Enemy.h"
 
 class EnemyRenderer : public sf::Drawable
@@ -9,7 +9,7 @@ class EnemyRenderer : public sf::Drawable
 private:
     sf::VertexArray enemies; // Store enemies as quads
     std::vector<Enemy::EnemyRenderInfo> infos; // All enemy velocities
-    std::unordered_set<size_t> changedIndices;
+    std::unordered_map<size_t, InfoType> updateMap;
     size_t numEnemies = 0; // Track the number of active enemies
 
 public:
@@ -70,7 +70,7 @@ public:
         if (index < infos.size())
         {
             infos[index].pos = position;
-            changedIndices.insert(index);
+            updateMap[index] = static_cast<InfoType>(updateMap[index] | InfoType::POSITION);
         }
     }
     void setSize(size_t index, const sf::Vector2f& size)
@@ -78,7 +78,7 @@ public:
         if (index < infos.size())
         {
             infos[index].size = size;
-            changedIndices.insert(index);
+            updateMap[index] = static_cast<InfoType>(updateMap[index] | InfoType::SIZE);
         }
     }
     void setVelocity(size_t index, const sf::Vector2f& velocity)
@@ -93,27 +93,38 @@ public:
         if (index < infos.size())
         {
             infos[index].color = color;
-            changedIndices.insert(index);
+            updateMap[index] = static_cast<InfoType>(updateMap[index] | InfoType::COLOR);
         }
     }
 
-    void updateVertexQuad(size_t index)
+    void updateVertexQuad(const std::pair<const size_t, InfoType>& pair)
     {
-        const sf::Vector2f pos = infos[index].pos;
-        const sf::Vector2f size = infos[index].size;
-        const sf::Color color = infos[index].color;
+        updateVertexQuad(pair.first, pair.second);
+    }
+
+    void updateVertexQuad(size_t index, const InfoType& updateFlags)
+    {
 
         // Quad vertices
-        enemies[index * 4 + 0].position = pos + sf::Vector2f(-size.x / 2.f, -size.y / 2.f);
-        enemies[index * 4 + 1].position = pos + sf::Vector2f(size.x / 2.f, -size.y / 2.f);
-        enemies[index * 4 + 2].position = pos + sf::Vector2f(size.x / 2.f, size.y / 2.f);
-        enemies[index * 4 + 3].position = pos + sf::Vector2f(-size.x / 2.f, size.y / 2.f);
+        if (updateFlags & InfoType::POSITION || updateFlags & InfoType::SIZE)
+        {
+            const sf::Vector2f pos = infos[index].pos;
+            const sf::Vector2f size = infos[index].size;
+            enemies[index * 4 + 0].position = pos + sf::Vector2f(-size.x / 2.f, -size.y / 2.f);
+            enemies[index * 4 + 1].position = pos + sf::Vector2f(size.x / 2.f, -size.y / 2.f);
+            enemies[index * 4 + 2].position = pos + sf::Vector2f(size.x / 2.f, size.y / 2.f);
+            enemies[index * 4 + 3].position = pos + sf::Vector2f(-size.x / 2.f, size.y / 2.f);
+        }
 
         // Color all vertices
-        enemies[index * 4 + 0].color = color;
-        enemies[index * 4 + 1].color = color;
-        enemies[index * 4 + 2].color = color;
-        enemies[index * 4 + 3].color = color;
+        if (updateFlags & InfoType::COLOR)
+        {
+            const sf::Color color = infos[index].color;
+            enemies[index * 4 + 0].color = color;
+            enemies[index * 4 + 1].color = color;
+            enemies[index * 4 + 2].color = color;
+            enemies[index * 4 + 3].color = color;
+        }
     }
 
     void removeEnemy(size_t index)
@@ -139,9 +150,9 @@ public:
     void tick(const float& deltaTime)
     {
         // Update only the changed indices
-        for (size_t i : changedIndices)
+        for (const std::pair<const size_t, InfoType> pair : updateMap)
         {
-            updateVertexQuad(i);
+            updateVertexQuad(pair);
         }
 
         // Cache velocities to avoid redundant multiplications
@@ -166,7 +177,7 @@ public:
             }
         }
 
-        changedIndices.clear();
+        updateMap.clear();
     }
 
     void draw(sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates::Default) const override

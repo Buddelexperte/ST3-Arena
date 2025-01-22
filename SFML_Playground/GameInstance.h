@@ -1,22 +1,11 @@
 #pragma once
 #include <iostream>
+
 #include "BaseClasses.h"
 #include "Functions.h"
 #include "SoundManager.h"
 #include "FontManager.h"
 #include "RandomNumbers.h"
-
-// Enum for handling gameStages in GameInstance
-enum E_GameState {
-	QUIT = -1, // Not yet started or game has been interrupted
-	MENU_SCREEN = 0, // A Menu with clickable buttons
-	UNPAUSED, // From pause to not paused
-	GAME_PAUSED, // Freeze gamepay and show PauseMenu
-	GAME_OVER, // Game ended somehow, freezes and show GameOverMenu
-	GAME_LAUNCHING, // gameLoop should start and execute init functionality
-	IN_GAME // gameLoop should start
-};
-
 
 // Global Game Instance ---------------------------------------------------------------------------
 
@@ -27,10 +16,11 @@ private:
 	// Time calculation (deltaTime etc.)
 	sf::Clock clock;
 
-	// Privatize constructors and copy operators
+	// SINGELTON
 	GI_Arena();
 	GI_Arena(const GI_Arena&) = delete;
 	GI_Arena& operator=(const GI_Arena&) = delete; // Block the '=' operator to stop copies being made of this class
+	
 	// Manager instances
 	SoundManager& soundManager = SoundManager::getInstance();
 	FontManager& fontManager = FontManager::getInstance();
@@ -39,7 +29,7 @@ private:
 	sf::View* view = nullptr;
 	sf::RenderStates states;
 	// Custom GameState
-	E_GameState gameState = MENU_SCREEN;
+	GameState gameState = MENU_SCREEN;
 
 	// Widget variables
 	std::vector<std::shared_ptr<InputWidget>> widgets;
@@ -85,6 +75,6 @@ public:
 	bool handleEvent(sf::Event*);
 	sf::Vector2f getMousePos() { return window->mapPixelToCoords(sf::Mouse::getPosition(*window)); }
 	// GameState 
-	void setGameState(const E_GameState&);
-	E_GameState getGameState() const { return gameState; }
+	void setGameState(const GameState&);
+	GameState getGameState() const { return gameState; }
 };

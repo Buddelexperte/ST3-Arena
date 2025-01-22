@@ -534,7 +534,7 @@ void W_Gameplay::construct()
 {
 	InputWidget::construct();
 
-	E_GameState gameState = gameInstance->getGameState();
+	GameState gameState = gameInstance->getGameState();
 
 	if (gameState < GAME_LAUNCHING) return getWidgetAtIndex(widgetIndex)->construct();
 

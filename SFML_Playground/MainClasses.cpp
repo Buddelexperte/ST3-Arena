@@ -81,7 +81,7 @@ void GI_Arena::start()
 void GI_Arena::correctWidget()
 {
 	// If GameState changed in earlier loop, construct new activeMenu;
-	static E_GameState oldGS = QUIT;
+	static GameState oldGS = QUIT;
 
 	if (gameState == oldGS) return;
 
@@ -182,7 +182,7 @@ void GI_Arena::updateScreen()
 	window->display();
 }
 
-void GI_Arena::setGameState(const E_GameState& newGS)
+void GI_Arena::setGameState(const GameState& newGS)
 {
 	gameState = newGS;
 }

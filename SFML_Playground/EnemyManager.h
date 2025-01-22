@@ -10,7 +10,7 @@ private:
 	GI_Arena& gameInstance;
 
 	const float spawnInterval = 0.00001f;
-	const int maxEnemies = 1000; // Temporary safe guard, replace with actual spawning logic later
+	const int maxEnemies = 5; // Temporary safe guard, replace with actual spawning logic later
 
 	EnemyPool enemyPool; // Manages memory
 	EnemyRenderer enemyRenderer; // Manages draw calls
@@ -31,7 +31,7 @@ public:
 	}
 
 	int getNumActiveEnemies() const;
-	void callUpdate(const size_t&);
+	void callUpdate(const size_t&, const InfoType&);
 
 	void spawnEnemy();
 	void spawnEnemy(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Color& color);

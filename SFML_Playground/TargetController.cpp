@@ -24,8 +24,8 @@ void TargetController::newRandomConfig()
 
 void TargetController::update(const float& deltaTime)
 {
-	static float timer = spawnInterval;
 	WidgetElement::update(deltaTime);
+	static float timer = spawnInterval;
 	
 	if (gameInstance->getIsPaused()) return;
 

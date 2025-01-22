@@ -1,5 +1,6 @@
 #pragma once
 #include "Button.h"
+#include "BaseTypes.h"
 
 class GI_Arena;
 class InputWidget;

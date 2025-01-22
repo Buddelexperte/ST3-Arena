@@ -42,11 +42,17 @@ void EnemyManager::deleteEnemy(const size_t& index)
 	enemyRenderer.removeEnemy(index);
 }
 
-void EnemyManager::callUpdate(const size_t& index)
+void EnemyManager::callUpdate(const size_t& index, const InfoType& updateFlags = InfoType::EMPTY_INFO)
 {
-	enemyRenderer.setPosition(index, activeEnemies[index]->getPosition());
-	enemyRenderer.setSize(index, activeEnemies[index]->getSize());
-	enemyRenderer.setColor(index, activeEnemies[index]->getColor());
+    if (updateFlags & InfoType::POSITION) { // Check if POSITION flag is set
+        enemyRenderer.setPosition(index, activeEnemies[index]->getPosition());
+    }
+    if (updateFlags & InfoType::SIZE) { // Check if SIZE flag is set
+        enemyRenderer.setSize(index, activeEnemies[index]->getSize());
+    }
+    if (updateFlags & InfoType::COLOR) { // Check if COLOR flag is set
+        enemyRenderer.setColor(index, activeEnemies[index]->getColor());
+    }
 }
 
 void EnemyManager::tick_spawning(const float& deltaTime)
@@ -80,9 +86,6 @@ void EnemyManager::tick_enemies(const float& deltaTime)
 
 void EnemyManager::tick(const float& deltaTime)
 {
-    if (gameInstance.getIsPaused())
-        return;
-
     // Spawning behavior of Enemies
     tick_spawning(deltaTime);
 
