@@ -6,7 +6,14 @@
 
 Enemy::Enemy()
 	: renderInfo(), gameInstance(&GI_Arena::getInstance()), manager(&EnemyManager::getInstance())
-{}
+{
+	collisionRect = {
+		renderInfo.pos.x - (renderInfo.size.x * 0.5f),  // Top-left X
+		renderInfo.pos.y - (renderInfo.size.y * 0.5f),  // Top-left Y
+		renderInfo.size.x,                              // Width
+		renderInfo.size.y                               // Height
+	};
+}
 
 sf::Vector2f Enemy::getNewSpawnPos() const
 {
@@ -27,26 +34,23 @@ void Enemy::spawn()
 {
 	setPosition(getNewSpawnPos());
 
-	if (enemyIndex == 0)
+	if (!(enemyIndex % 3))
 		setColor(sf::Color::Red);
 }
 
 // Fast circle-circle collision check
-bool Enemy::isColliding(const sf::Vector2f& playerPos, const float playerRadius) const
+bool Enemy::isColliding(const sf::FloatRect& playerCollision) const
 {
-	float dx = playerPos.x - renderInfo.pos.x;
-	float dy = playerPos.y - renderInfo.pos.y;
-	float distanceSquared = dx * dx + dy * dy;
-	float radiusSum = playerRadius + collisionRadius;
-	return distanceSquared <= (radiusSum * radiusSum);
+	return collisionRect.intersects(playerCollision);
 }
 
 void Enemy::tick_move(const float& deltaTime)
 {
 	// Get the player's position and subtract own position
 	const Player* playerRef = gameInstance->getPlayer();
+
+	// TODO: PROTOTYPE MOVEMENT LOGIC
 	const sf::Vector2f playerPos = playerRef->getPos();
-	const float playerRadius = playerRef->getCollisionRadius();
 	sf::Vector2f distance = playerPos - renderInfo.pos;
 	zeroPrecision(distance);
 
@@ -54,11 +58,17 @@ void Enemy::tick_move(const float& deltaTime)
 	renderInfo.velocity = distance * (speed / (std::abs(distance.x) + std::abs(distance.y)));
 
 	// Update the position based on velocity and scale by deltaTime
-	renderInfo.pos += renderInfo.velocity * deltaTime;
-
+	const sf::Vector2f step = renderInfo.velocity * deltaTime;
+	renderInfo.pos += step;
+	
 	// COLLISION
-	if (isColliding(playerPos, playerRadius))
+	collisionRect.left += step.x;
+	collisionRect.top += step.y;
+
+	const sf::FloatRect playerCollisionRect = playerRef->getCollisionRect();
+	if (isColliding(playerCollisionRect))
 	{
+		// TODO: PROTOTYPE COLLISION LOGIC
 		die();
 	}
 }
@@ -75,13 +85,18 @@ void Enemy::die()
 	manager->callDelete(enemyIndex);
 }
 
-void Enemy::setPosition(const sf::Vector2f& pos)
+void Enemy::setPosition(const sf::Vector2f& newPos)
 {
-	if (pos == renderInfo.pos) return;
-	
-	renderInfo.pos = pos;
+	if (newPos == renderInfo.pos) return;
+
+	renderInfo.pos = newPos;
 	manager->callUpdate(enemyIndex, InfoType::POSITION);
+
+	// Collision rectangle update: subtract half size for both X and Y
+	collisionRect.left = newPos.x - (renderInfo.size.x / 2.0f);
+	collisionRect.top = newPos.y - (renderInfo.size.y / 2.0f);
 }
+
 
 void Enemy::setSize(const sf::Vector2f& size)
 {

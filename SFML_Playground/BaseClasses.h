@@ -49,8 +49,8 @@ public:
 	virtual void addRot(const float&) { return; }
 	virtual float getRot() const { return 0.0f; }
 	// Scale (NOT SIZE)
-	virtual void setScale(const sf::Vector2f&) { return; };
-	virtual sf::Vector2f getScale() const { return sf::Vector2f(0.0f, 0.0f); };
+	virtual void setSize(const sf::Vector2f&) { return; };
+	virtual sf::Vector2f getSize() const { return sf::Vector2f(0.0f, 0.0f); };
 
 	virtual void update(const float& deltaTime) { lastDeltaTime = deltaTime;  windowUpdate(); };
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -93,16 +93,17 @@ public:
 class Player : public InputWidget
 {
 private:
-	Button playerModel;
+	sf::Sprite playerSprite;
+
 	sf::Vector2f velocity = { 0.0f, 0.0f };
 	sf::Vector2f direction = { 0.0f, 0.0f };
 
-	const sf::FloatRect collisionRect = {;
+	sf::FloatRect collisionRect;
 
-	std::vector<sf::Texture> playerTexture = {};
-	int currentframe;
-	float animationAccu;
-	float animationSpeed;
+	std::vector<sf::Texture> playerTextures = {};
+	int currentFrame = 0;
+	float animationAccu = 0.0f;
+	float animationSpeed = 0.0f;
 
 	void calcMovement(const float&);
 protected:
@@ -117,9 +118,10 @@ public:
 	sf::Vector2f getPos() const override;
 	void setRot(const float&) override;
 	float getRot() const override;
+	void setSize(const sf::Vector2f&) override;
 	sf::Vector2f getVelocity() const { return velocity; };
 	sf::Vector2f getDirection() const { return direction; };
-	float getCollisionRadius() const { return collisionRadius; }
+	sf::FloatRect getCollisionRect() const { return collisionRect; }
 };
 
 
