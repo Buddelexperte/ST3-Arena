@@ -143,25 +143,20 @@ public:
         // Erase the mapping for the enemy to be removed.
         enemyKeyIndexMap.erase(it);
 
+        // If index to remove is not last, make it last by swapping
         if (indexToRemove != lastIndex)
         {
             // Get the key of the enemy that is currently last.
-            size_t swappedKey = enemyKeyList[lastIndex];
+            const size_t lastKey = enemyKeyList[lastIndex];
+            // Update the key-index mapping for the swapped enemy.
+            enemyKeyIndexMap[lastKey] = indexToRemove;
 
             // Swap the enemy key.
             enemyKeyList[indexToRemove] = enemyKeyList[lastIndex];
-            enemyKeyList.pop_back();
-
             // Swap the render info.
             enemyRenderInfos[indexToRemove] = enemyRenderInfos[lastIndex];
-            enemyRenderInfos.pop_back();
-
             // Swap the update flags.
             enemyUpdateFlags[indexToRemove] = enemyUpdateFlags[lastIndex];
-            enemyUpdateFlags.pop_back();
-
-            // Update the key-index mapping for the swapped enemy.
-            enemyKeyIndexMap[swappedKey] = indexToRemove;
 
             // Swap the vertex quads in the vertex array.
             size_t vertexStartRemove = indexToRemove * 4;
@@ -171,13 +166,10 @@ public:
                 std::swap(enemyVertices[vertexStartRemove + i], enemyVertices[vertexStartLast + i]);
             }
         }
-        else
-        {
-            // Removing the last enemy, just pop back.
-            enemyKeyList.pop_back();
-            enemyRenderInfos.pop_back();
-            enemyUpdateFlags.pop_back();
-        }
+        // Removing the last enemy, just pop back.
+        enemyKeyList.pop_back();
+        enemyRenderInfos.pop_back();
+        enemyUpdateFlags.pop_back();
         // Remove the last quad from the vertex array.
         enemyVertices.resize(enemyVertices.getVertexCount() - 4);
     }
@@ -203,7 +195,8 @@ public:
         // Process any queued update flags.
         for (size_t i = 0; i < enemyKeyList.size(); i++)
         {
-            if (enemyUpdateFlags[i] != InfoType::EMPTY_INFO)
+            // If the flag has any non-empty info, we process it.
+            if (enemyUpdateFlags[i] & ~InfoType::EMPTY_INFO)
             {
                 updateVertexQuad(i);
             }
