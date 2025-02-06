@@ -7,177 +7,212 @@
 class EnemyRenderer : public sf::Drawable
 {
 private:
-    sf::VertexArray enemies; // Store enemies as quads
-    std::vector<Enemy::EnemyRenderInfo> infos; // All enemy velocities
-    std::unordered_map<size_t, InfoType> updateMap;
-    size_t numEnemies = 0; // Track the number of active enemies
+    // Store all enemy quads (4 vertices per enemy)
+    sf::VertexArray enemies; // This array will always contain enemyKeys.size() * 4 vertices.
+
+    // Mapping from enemy key to its index in our vectors.
+    std::unordered_map<size_t, size_t> keyIndexMap;
+
+    // Vectors holding enemy data in a contiguous manner.
+    std::vector<size_t> enemyKeys;                // Index -> key (reverse mapping)
+    std::vector<Enemy::RenderInfo> infos;           // Index -> render info
+    std::vector<InfoType> updateFlags;              // Index -> update flags
 
 public:
-    EnemyRenderer()
-        : enemies(sf::Quads)
-    {}
+    EnemyRenderer() : enemies(sf::Quads) {}
 
-    void addEnemy(const Enemy::EnemyRenderInfo& info)
+    // Adds a new enemy and appends its quad to the vertex array.
+    void addEnemy(const Enemy::RenderInfo& info, const size_t& key)
     {
-        addEnemy(info.pos, info.size, info.velocity, info.color);
+        // New enemy index is the current count.
+        size_t index = enemyKeys.size();
+        enemyKeys.push_back(key);
+        infos.push_back(info);
+        updateFlags.push_back(InfoType::EMPTY_INFO);
+
+        // Store the mapping from key to index.
+        keyIndexMap[key] = index;
+
+        // Expand the vertex array by 4 vertices.
+        size_t prevVertexCount = enemies.getVertexCount();
+        enemies.resize(prevVertexCount + 4);
+
+        // Compute quad vertices.
+        sf::Vertex* quad = &enemies[prevVertexCount];
+        const sf::Vector2f pos = info.pos;
+        const sf::Vector2f halfSize = info.size / 2.f;
+
+        quad[0].position = pos + sf::Vector2f(-halfSize.x, -halfSize.y);
+        quad[1].position = pos + sf::Vector2f(halfSize.x, -halfSize.y);
+        quad[2].position = pos + sf::Vector2f(halfSize.x, halfSize.y);
+        quad[3].position = pos + sf::Vector2f(-halfSize.x, halfSize.y);
+
+        // Set the same color for all vertices.
+        for (int i = 0; i < 4; i++)
+        {
+            quad[i].color = info.color;
+        }
     }
 
-    void addEnemy(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Vector2f& velocity, const sf::Color& color)
+    void setPosition(const size_t key, const sf::Vector2f& position)
     {
-        size_t index = numEnemies;
+        auto it = keyIndexMap.find(key);
+        if (it == keyIndexMap.end())
+            return; // Key not found
 
-        // Check if we have any removed enemies (reusing slot)
-        if (numEnemies >= enemies.getVertexCount() / 4)
-        {
-            // Add a new enemy if we have no removed enemies to reuse
-            enemies.append(sf::Vertex());
-            enemies.append(sf::Vertex());
-            enemies.append(sf::Vertex());
-            enemies.append(sf::Vertex());
-            infos.push_back(Enemy::EnemyRenderInfo(pos, size, velocity, color));
-        }
+        size_t index = it->second;
+        infos[index].pos = position;
+        updateFlags[index] |= InfoType::POSITION;
+    }
 
-        // Set the position, size, and color for the new enemy
-        sf::Vertex v1, v2, v3, v4;
+    void setSize(const size_t key, const sf::Vector2f& size)
+    {
+        auto it = keyIndexMap.find(key);
+        if (it == keyIndexMap.end())
+            return;
 
-        // Quad vertices
-        v1.position = pos + sf::Vector2f(-size.x / 2.f, -size.y / 2.f);
-        v2.position = pos + sf::Vector2f(size.x / 2.f, -size.y / 2.f);
-        v3.position = pos + sf::Vector2f(size.x / 2.f, size.y / 2.f);
-        v4.position = pos + sf::Vector2f(-size.x / 2.f, size.y / 2.f);
-
-        // Color all vertices
-        v1.color = v2.color = v3.color = v4.color = color;
-
-        // Set the vertex positions
-        enemies[index * 4 + 0] = v1;
-        enemies[index * 4 + 1] = v2;
-        enemies[index * 4 + 2] = v3;
-        enemies[index * 4 + 3] = v4;
-
-        // Set Info for the enemy
-        infos[index].pos = pos;
+        size_t index = it->second;
         infos[index].size = size;
+        updateFlags[index] |= InfoType::SIZE;
+    }
+
+    void setVelocity(const size_t key, const sf::Vector2f& velocity)
+    {
+        auto it = keyIndexMap.find(key);
+        if (it == keyIndexMap.end())
+            return;
+
+        size_t index = it->second;
         infos[index].velocity = velocity;
+        // Velocity doesn't need an update flag since tick() directly applies it.
+    }
+
+    void setColor(const size_t key, const sf::Color& color)
+    {
+        auto it = keyIndexMap.find(key);
+        if (it == keyIndexMap.end())
+            return;
+
+        size_t index = it->second;
         infos[index].color = color;
-
-        // Increment the number of active enemies
-        numEnemies++;
+        updateFlags[index] |= InfoType::COLOR;
     }
 
-    void setPosition(size_t index, const sf::Vector2f& position)
+    // Updates the vertex quad at the specified index if needed.
+    void updateVertexQuad(size_t index)
     {
-        if (index < infos.size())
-        {
-            infos[index].pos = position;
-            updateMap[index] = static_cast<InfoType>(updateMap[index] | InfoType::POSITION);
-        }
-    }
-    void setSize(size_t index, const sf::Vector2f& size)
-    {
-        if (index < infos.size())
-        {
-            infos[index].size = size;
-            updateMap[index] = static_cast<InfoType>(updateMap[index] | InfoType::SIZE);
-        }
-    }
-    void setVelocity(size_t index, const sf::Vector2f& velocity)
-    {
-        if (index < infos.size())
-        {
-            infos[index].velocity = velocity;
-        }
-    }
-    void setColor(size_t index, const sf::Color& color)
-    {
-        if (index < infos.size())
-        {
-            infos[index].color = color;
-            updateMap[index] = static_cast<InfoType>(updateMap[index] | InfoType::COLOR);
-        }
-    }
+        InfoType flags = updateFlags[index];
+        size_t vertexStart = index * 4;
 
-    void updateVertexQuad(const std::pair<const size_t, InfoType>& pair)
-    {
-        updateVertexQuad(pair.first, pair.second);
-    }
-
-    void updateVertexQuad(size_t index, const InfoType& updateFlags)
-    {
-        // Quad vertices
-        if (updateFlags & InfoType::POSITION || updateFlags & InfoType::SIZE)
+        // Update positions if POSITION or SIZE flag is set.
+        if ((flags & InfoType::POSITION) != InfoType::EMPTY_INFO ||
+            (flags & InfoType::SIZE) != InfoType::EMPTY_INFO)
         {
             const sf::Vector2f pos = infos[index].pos;
-            const sf::Vector2f halfSize = infos[index].size / 2.0f;
-            enemies[index * 4 + 0].position = pos + sf::Vector2f(-halfSize.x, -halfSize.y);
-            enemies[index * 4 + 1].position = pos + sf::Vector2f(halfSize.x, -halfSize.y);
-            enemies[index * 4 + 2].position = pos + sf::Vector2f(halfSize.x, halfSize.y);
-            enemies[index * 4 + 3].position = pos + sf::Vector2f(-halfSize.x, halfSize.y);
+            const sf::Vector2f halfSize = infos[index].size / 2.f;
+            enemies[vertexStart + 0].position = pos + sf::Vector2f(-halfSize.x, -halfSize.y);
+            enemies[vertexStart + 1].position = pos + sf::Vector2f(halfSize.x, -halfSize.y);
+            enemies[vertexStart + 2].position = pos + sf::Vector2f(halfSize.x, halfSize.y);
+            enemies[vertexStart + 3].position = pos + sf::Vector2f(-halfSize.x, halfSize.y);
         }
 
-        // Color all vertices
-        if (updateFlags & InfoType::COLOR)
+        // Update color if COLOR flag is set.
+        if ((flags & InfoType::COLOR) != InfoType::EMPTY_INFO)
         {
             const sf::Color color = infos[index].color;
-            enemies[index * 4 + 0].color = color;
-            enemies[index * 4 + 1].color = color;
-            enemies[index * 4 + 2].color = color;
-            enemies[index * 4 + 3].color = color;
+            for (int i = 0; i < 4; i++)
+            {
+                enemies[vertexStart + i].color = color;
+            }
         }
+        // Reset update flag.
+        updateFlags[index] = InfoType::EMPTY_INFO;
     }
 
-    void removeEnemy(size_t index)
+    // Removes an enemy given its key by swapping with the last enemy.
+    void removeEnemy(const size_t& key)
     {
-        if (index < numEnemies) {
-            // Swap with the last active enemy
-            size_t lastIndex = numEnemies - 1;
+        auto it = keyIndexMap.find(key);
+        if (it == keyIndexMap.end())
+            return; // Enemy not found
 
-            // Swap vertices
+        size_t indexToRemove = it->second;
+        size_t lastIndex = enemyKeys.size() - 1;
+
+        // Erase the mapping for the enemy to be removed.
+        keyIndexMap.erase(it);
+
+        if (indexToRemove != lastIndex)
+        {
+            // Get the key of the enemy that is currently last.
+            size_t swappedKey = enemyKeys[lastIndex];
+
+            // Swap the enemy key.
+            enemyKeys[indexToRemove] = enemyKeys[lastIndex];
+            enemyKeys.pop_back();
+
+            // Swap the render info.
+            infos[indexToRemove] = infos[lastIndex];
+            infos.pop_back();
+
+            // Swap the update flags.
+            updateFlags[indexToRemove] = updateFlags[lastIndex];
+            updateFlags.pop_back();
+
+            // Update the key-index mapping for the swapped enemy.
+            keyIndexMap[swappedKey] = indexToRemove;
+
+            // Swap the vertex quads in the vertex array.
+            size_t vertexStartRemove = indexToRemove * 4;
+            size_t vertexStartLast = lastIndex * 4;
             for (size_t i = 0; i < 4; i++)
             {
-                std::swap(enemies[index * 4 + i], enemies[lastIndex * 4 + i]);
+                std::swap(enemies[vertexStartRemove + i], enemies[vertexStartLast + i]);
             }
-
-            // Swap velocities
-            std::swap(infos[index], infos[lastIndex]);
-
-            // Decrease the number of active enemies
-            numEnemies--;
+            // Remove the last quad from the vertex array.
+            enemies.resize(enemies.getVertexCount() - 4);
+        }
+        else
+        {
+            // Removing the last enemy, just pop back.
+            enemyKeys.pop_back();
+            infos.pop_back();
+            updateFlags.pop_back();
+            enemies.resize(enemies.getVertexCount() - 4);
         }
     }
 
+    // Tick: update enemy positions based on velocity and apply pending changes.
     void tick(const float& deltaTime)
     {
-        for (size_t i = 0; i < numEnemies; i++)
+        // Update positions using velocity.
+        for (size_t i = 0; i < enemyKeys.size(); i++)
         {
-            const sf::Vector2f& offset = infos[i].velocity * deltaTime;
-
-            // Skip stationary enemies
-            if (offset == sf::Vector2f(0.0f, 0.0f))
-                continue;
-
-            infos[i].pos += offset;
-
-            for (size_t j = 0; j < 4; j++)
+            sf::Vector2f offset = infos[i].velocity * deltaTime;
+            if (offset != sf::Vector2f(0.f, 0.f))
             {
-                enemies[i * 4 + j].position += offset;
+                infos[i].pos += offset;
+                size_t vertexStart = i * 4;
+                for (size_t j = 0; j < 4; j++)
+                {
+                    enemies[vertexStart + j].position += offset;
+                }
             }
-
         }
 
-        // Update only the changed indices
-        for (std::pair<const size_t, InfoType>& pair : updateMap)
+        // Process any queued update flags.
+        for (size_t i = 0; i < enemyKeys.size(); i++)
         {
-            updateVertexQuad(pair);
-            updateMap[pair.first] = InfoType::EMPTY_INFO;
+            if (updateFlags[i] != InfoType::EMPTY_INFO)
+            {
+                updateVertexQuad(i);
+            }
         }
     }
 
+    // Draws the complete vertex array at once.
     void draw(sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates::Default) const override
     {
-        for (size_t i = 0; i < numEnemies; i++)
-        {
-            target.draw(&enemies[i * 4], 4, sf::Quads, states);
-        }
+        target.draw(enemies, states);
     }
 };

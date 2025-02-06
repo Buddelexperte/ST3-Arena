@@ -97,6 +97,8 @@ private:
 	sf::Vector2f velocity = { 0.0f, 0.0f };
 	sf::Vector2f direction = { 0.0f, 0.0f };
 
+	const sf::FloatRect collisionRect = {;
+
 	std::vector<sf::Texture> playerTexture = {};
 	int currentframe;
 	float animationAccu;
@@ -117,6 +119,7 @@ public:
 	float getRot() const override;
 	sf::Vector2f getVelocity() const { return velocity; };
 	sf::Vector2f getDirection() const { return direction; };
+	float getCollisionRadius() const { return collisionRadius; }
 };
 
 

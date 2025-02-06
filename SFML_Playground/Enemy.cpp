@@ -4,7 +4,7 @@
 #include "EnemyManager.h"
 #include "Enemy.h"
 
-Enemy::Enemy(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Color& color)
+Enemy::Enemy()
 	: renderInfo(), gameInstance(&GI_Arena::getInstance()), manager(&EnemyManager::getInstance())
 {}
 
@@ -25,22 +25,17 @@ sf::Vector2f Enemy::getNewSpawnPos() const
 
 void Enemy::spawn()
 {
-	spawn(getNewSpawnPos());
-}
-
-void Enemy::spawn(const sf::Vector2f& pos)
-{
-	setPosition(pos);
+	setPosition(getNewSpawnPos());
 
 	if (enemyIndex == 0)
 		setColor(sf::Color::Red);
 }
 
 // Fast circle-circle collision check
-bool Enemy::isColliding(const sf::Vector2f& playerCenter, float playerRadius) const
+bool Enemy::isColliding(const sf::Vector2f& playerPos, const float playerRadius) const
 {
-	float dx = playerCenter.x - renderInfo.pos.x;
-	float dy = playerCenter.y - renderInfo.pos.y;
+	float dx = playerPos.x - renderInfo.pos.x;
+	float dy = playerPos.y - renderInfo.pos.y;
 	float distanceSquared = dx * dx + dy * dy;
 	float radiusSum = playerRadius + collisionRadius;
 	return distanceSquared <= (radiusSum * radiusSum);
@@ -49,7 +44,9 @@ bool Enemy::isColliding(const sf::Vector2f& playerCenter, float playerRadius) co
 void Enemy::tick_move(const float& deltaTime)
 {
 	// Get the player's position and subtract own position
-	sf::Vector2f playerPos = gameInstance->getPlayer()->getPos();
+	const Player* playerRef = gameInstance->getPlayer();
+	const sf::Vector2f playerPos = playerRef->getPos();
+	const float playerRadius = playerRef->getCollisionRadius();
 	sf::Vector2f distance = playerPos - renderInfo.pos;
 	zeroPrecision(distance);
 
@@ -59,11 +56,9 @@ void Enemy::tick_move(const float& deltaTime)
 	// Update the position based on velocity and scale by deltaTime
 	renderInfo.pos += renderInfo.velocity * deltaTime;
 
-	return;
 	// COLLISION
-	if (isColliding(playerPos, collisionRadius))
+	if (isColliding(playerPos, playerRadius))
 	{
-		// TODO: Überarbeite deleteEnemy zuerst
 		die();
 	}
 }
@@ -102,4 +97,9 @@ void Enemy::setColor(const sf::Color& color)
 
 	renderInfo.color = color;
 	manager->callUpdate(enemyIndex, InfoType::COLOR);
+}
+
+void Enemy::setRenderInfo(const RenderInfo& renderInfo)
+{
+	this->renderInfo = renderInfo;
 }
