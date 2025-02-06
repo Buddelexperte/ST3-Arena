@@ -58,12 +58,12 @@ void Enemy::tick_move(const float& deltaTime)
 	renderInfo.velocity = distance * (speed / (std::abs(distance.x) + std::abs(distance.y)));
 
 	// Update the position based on velocity and scale by deltaTime
-	const sf::Vector2f step = renderInfo.velocity * deltaTime;
-	renderInfo.pos += step;
+	const sf::Vector2f offset = renderInfo.velocity * deltaTime;
+	renderInfo.pos += offset;
 	
 	// COLLISION
-	collisionRect.left += step.x;
-	collisionRect.top += step.y;
+	collisionRect.left += offset.x;
+	collisionRect.top += offset.y;
 
 	const sf::FloatRect playerCollisionRect = playerRef->getCollisionRect();
 	if (isColliding(playerCollisionRect))
