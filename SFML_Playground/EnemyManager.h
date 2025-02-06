@@ -29,6 +29,7 @@ private:
 	void tick_enemies(const float&);
 
 	void deleteEnemy(const size_t&);
+
 public:
 	static EnemyManager& getInstance()
 	{
