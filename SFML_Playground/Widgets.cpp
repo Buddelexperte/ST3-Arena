@@ -632,7 +632,7 @@ void W_Gameplay::lose()
 
 void W_Gameplay::update(const float& deltaTime)
 {
-	constexpr bool bDrawFlashlight = false; // TODO: Change to true
+	constexpr bool bDrawFlashlight = true;
 	InputWidget::update(deltaTime);
 
 	// Flashlight update
