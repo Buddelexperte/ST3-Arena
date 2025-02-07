@@ -38,34 +38,6 @@ Player::Player(InputWidget* parent)
 
 }
 
-void Player::update(const float& deltaTime)
-{
-	InputWidget::update(deltaTime);
-	if (!gameInstance->getIsPaused()) calcMovement(deltaTime);
-
-	if (!playerTextures.empty())
-	{
-		animationAccu += deltaTime;
-		if (animationAccu >= animationSpeed)
-		{
-			currentFrame = (static_cast<size_t>(currentFrame + 1)) % playerTextures.size();
-			playerSprite.setTexture(playerTextures[currentFrame], true);
-			animationAccu -= animationSpeed;
-		}
-	}
-
-	sf::Event event;
-	while (window->pollEvent(event) && gameInstance->getGameState() != QUIT)
-	{
-		if (event.type == sf::Event::Closed)
-		{
-			window->close();
-			break;
-		}
-		handleInput(&event);
-	}
-}
-
 void Player::calcMovement(const float& deltaTime)
 {
 	constexpr float WALKING_SPEED = 350.0f;
@@ -101,6 +73,23 @@ void Player::calcMovement(const float& deltaTime)
 	{
 		const float ROT_LERP = LERP_SMOOTHNESS * 10.0f * multiplier;
 		setRot(lerp(rotation, targetRot, ROT_LERP));
+	}
+}
+
+void Player::update(const float& deltaTime)
+{
+	InputWidget::update(deltaTime);
+	if (!gameInstance->getIsPaused()) calcMovement(deltaTime);
+
+	if (!playerTextures.empty())
+	{
+		animationAccu += deltaTime;
+		if (animationAccu >= animationSpeed)
+		{
+			currentFrame = (static_cast<size_t>(currentFrame + 1)) % playerTextures.size();
+			playerSprite.setTexture(playerTextures[currentFrame], true);
+			animationAccu -= animationSpeed;
+		}
 	}
 }
 

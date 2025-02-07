@@ -55,6 +55,7 @@ bool GI_Arena::makePlayer()
 {
 	if (player) return false;
 	player = new Player(nullptr);
+	EnemyManager::getInstance().setPlayer(player);
 	return true;
 }
 
@@ -67,15 +68,7 @@ void GI_Arena::start()
 
 	std::cout << "\n### Starting Game ###\n" << std::endl;
 
-	// Main Game Loop
-	while (window->isOpen())
-	{
-		preTick();
-		// Calculate deltaTime for time corrected physics
-		const float deltaTime = clock.restart().asSeconds();
-		tick(deltaTime);
-		postTick();
-	}
+	tickLoop();
 }
 
 void GI_Arena::correctWidget()
@@ -121,6 +114,17 @@ void GI_Arena::tick(const float& deltaTime)
 
 	player->update(deltaTime);
 	activeMenu->update(deltaTime);
+
+	sf::Event event;
+	while (window->pollEvent(event) && gameState > QUIT)
+	{
+		if (event.type == sf::Event::Closed)
+		{
+			window->close();
+			break;
+		}
+		player->handleInput(&event);
+	}
 }
 
 void GI_Arena::postTick()
@@ -129,6 +133,19 @@ void GI_Arena::postTick()
 
 	// Draw new Menu to screen through GameInstance
 	updateScreen();
+}
+
+void GI_Arena::tickLoop()
+{
+	// Main Game Loop
+	while (window->isOpen())
+	{
+		preTick();
+		// Calculate deltaTime for time corrected physics
+		const float deltaTime = clock.restart().asSeconds();
+		tick(deltaTime);
+		postTick();
+	}
 }
 
 void GI_Arena::setViewPos(const sf::Vector2f& newPos)

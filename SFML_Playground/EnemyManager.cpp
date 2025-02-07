@@ -10,6 +10,14 @@ EnemyManager::EnemyManager()
 	: enemyPool(), enemyRenderer(), gameInstance(GI_Arena::getInstance())
 {}
 
+void EnemyManager::setPlayer(Player* newPlayer)
+{
+    for (auto& enemy : activeEnemies)
+    {
+        enemy.second->setPlayer(newPlayer);
+    }
+}
+
 int EnemyManager::getNumActiveEnemies() const
 {
 	return static_cast<int>(activeEnemies.size());

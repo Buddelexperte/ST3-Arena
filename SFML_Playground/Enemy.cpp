@@ -13,6 +13,13 @@ Enemy::Enemy()
 		renderInfo.size.x,                              // Width
 		renderInfo.size.y                               // Height
 	};
+
+	setPlayer(gameInstance->getPlayer());
+}
+
+void Enemy::setPlayer(Player* playerPtr)
+{
+	playerRef = playerPtr;
 }
 
 sf::Vector2f Enemy::getNewSpawnPos() const
@@ -39,34 +46,34 @@ void Enemy::spawn()
 }
 
 // Fast circle-circle collision check
-bool Enemy::isColliding(const sf::FloatRect& playerCollision) const
+bool Enemy::isCollidingWith(const sf::FloatRect& playerCollision) const
 {
 	return collisionRect.intersects(playerCollision);
 }
 
 void Enemy::tick_move(const float& deltaTime)
 {
-	// Get the player's position and subtract own position
-	const Player* playerRef = gameInstance->getPlayer();
-
 	// TODO: PROTOTYPE MOVEMENT LOGIC
 	const sf::Vector2f playerPos = playerRef->getPos();
 	sf::Vector2f distance = playerPos - renderInfo.pos;
 	zeroPrecision(distance);
 
-	// Get Velocity by direction * (speed / normalized direction)
-	renderInfo.velocity = distance * (speed / (std::abs(distance.x) + std::abs(distance.y)));
+	if (distance != sf::Vector2f(0.0f, 0.0f))
+	{
+		// Get Velocity by direction * (speed / normalized direction)
+		renderInfo.velocity = distance * (speed / (std::abs(distance.x) + std::abs(distance.y)));
 
-	// Update the position based on velocity and scale by deltaTime
-	const sf::Vector2f offset = renderInfo.velocity * deltaTime;
-	renderInfo.pos += offset;
+		// Update the position based on velocity and scale by deltaTime
+		const sf::Vector2f offset = renderInfo.velocity * deltaTime;
+		renderInfo.pos += offset;
 	
-	// COLLISION
-	collisionRect.left += offset.x;
-	collisionRect.top += offset.y;
+		// COLLISION
+		collisionRect.left += offset.x;
+		collisionRect.top += offset.y;
+	}
 
 	const sf::FloatRect playerCollisionRect = playerRef->getCollisionRect();
-	if (isColliding(playerCollisionRect))
+	if (isCollidingWith(playerCollisionRect))
 	{
 		// TODO: PROTOTYPE COLLISION LOGIC
 		die();

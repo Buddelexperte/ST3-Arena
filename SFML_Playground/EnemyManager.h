@@ -11,7 +11,7 @@ private:
 	GI_Arena& gameInstance;
 
 	const float spawnInterval = 0.00001f;
-	const int maxEnemies = 3; // Temporary safe guard, replace with actual spawning logic later
+	const int maxEnemies = 3000; // Temporary safe guard, replace with actual spawning logic later
 	static int enemyID;
 
 	EnemyPool enemyPool; // Manages memory
@@ -36,6 +36,8 @@ public:
 		static EnemyManager instance;
 		return instance;
 	}
+
+	void setPlayer(Player*);
 
 	int getNumActiveEnemies() const;
 	void callDelete(const size_t);

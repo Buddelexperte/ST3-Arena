@@ -52,6 +52,7 @@ public:
 	bool makePlayer();
 	void correctWidget();
 	// Ticks
+	void tickLoop();
 	void preTick(); // Logic before Player input (Checks for Inventory etc.)
 	void tick(const float&); // Player Input and window.draw()
 	void postTick(); // Logic after Player Input (Checks for game closing etc.)

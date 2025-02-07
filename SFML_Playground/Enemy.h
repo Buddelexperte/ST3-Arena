@@ -19,6 +19,7 @@ private:
 	GI_Arena* gameInstance;
 	EnemyManager* manager;
 	RNG& random = RNG::getInstance();
+	Player* playerRef = nullptr;
 
 	size_t enemyIndex = -1;
 	RenderInfo renderInfo;
@@ -29,12 +30,13 @@ private:
 
 	sf::Vector2f getNewSpawnPos() const;
 
-	bool isColliding(const sf::FloatRect&) const;
+	bool isCollidingWith(const sf::FloatRect&) const;
 	void tick_move(const float&);
 	void die();
 
 public:
 	Enemy();
+	void setPlayer(Player*);
 
 	void setID(const size_t& newIndex) { enemyIndex = newIndex; }
 

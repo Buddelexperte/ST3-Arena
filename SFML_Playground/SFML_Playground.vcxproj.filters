@@ -101,6 +101,9 @@
     <ClInclude Include="BaseTypes.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionQuadTree.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\openal32.dll" />
