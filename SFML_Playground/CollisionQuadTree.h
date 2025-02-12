@@ -1,55 +1,60 @@
 #pragma once
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include <memory>
 
-class QuadTreeCollisionElement
-{
+class QuadTreeCollisionElement {
 public:
-	virtual sf::FloatRect getBounds() const = 0;
+    virtual sf::FloatRect getBounds() const = 0;
 };
 
-class QuadTree
-{
+class QuadTree {
 private:
     sf::FloatRect boundary;
     std::vector<QuadTreeCollisionElement*> objects;
     bool divided;
-    QuadTree* children[4] = { nullptr, nullptr, nullptr, nullptr };
+    std::unique_ptr<QuadTree> children[4]; // Verwendung von smart pointers
 
-    // Subdivide this node into four children.
+    // Unterteile diesen Knoten in vier Kinder.
     void subdivide() {
         float x = boundary.left;
         float y = boundary.top;
         float w = boundary.width / 2.0f;
         float h = boundary.height / 2.0f;
 
-        children[0] = new QuadTree(sf::FloatRect(x, y, w, h));               // Top-left
-        children[1] = new QuadTree(sf::FloatRect(x + w, y, w, h));           // Top-right
-        children[2] = new QuadTree(sf::FloatRect(x, y + h, w, h));           // Bottom-left
-        children[3] = new QuadTree(sf::FloatRect(x + w, y + h, w, h));       // Bottom-right
+        children[0] = std::make_unique<QuadTree>(sf::FloatRect(x, y, w, h));        // Top-left
+        children[1] = std::make_unique<QuadTree>(sf::FloatRect(x + w, y, w, h));    // Top-right
+        children[2] = std::make_unique<QuadTree>(sf::FloatRect(x, y + h, w, h));    // Bottom-left
+        children[3] = std::make_unique<QuadTree>(sf::FloatRect(x + w, y + h, w, h)); // Bottom-right
 
         divided = true;
     }
 
 public:
-    // Maximum number of objects before subdividing
+    // Maximale Anzahl an Objekten bevor eine Unterteilung erfolgt
     static constexpr int DIV_THRESHOLD = 4;
 
     QuadTree(const sf::FloatRect& boundary)
-        : boundary(boundary), divided(false) {
+        : boundary(boundary), divided(false)
+    {
     }
 
-    ~QuadTree() {
-        // Clean up children if they were created
-        for (auto child : children) {
-            delete child;
+    // Leert den QuadTree rekursiv
+    void clear() {
+        objects.clear();
+        if (divided) {
+            for (int i = 0; i < 4; ++i) {
+                children[i]->clear();
+                children[i].reset();
+            }
+            divided = false;
         }
     }
 
-    // Insert an object into the quad tree.
+    // Fügt ein Objekt in den QuadTree ein.
     bool insert(QuadTreeCollisionElement* object) {
         if (!boundary.intersects(object->getBounds()))
-            return false; // The object doesn't belong in this node
+            return false; // Das Objekt gehört nicht in diesen Bereich
 
         if (objects.size() < DIV_THRESHOLD) {
             objects.push_back(object);
@@ -59,35 +64,33 @@ public:
         if (!divided)
             subdivide();
 
-        // Try to insert into one of the children.
-        for (auto child : children) {
-            if (child->insert(object))
+        // Versuche, das Objekt in einen der Kinder einzufügen.
+        for (int i = 0; i < 4; ++i) {
+            if (children[i]->insert(object))
                 return true;
         }
 
-        // In case the object spans multiple regions, you might store it in the current node.
+        // Falls das Objekt mehrere Bereiche überschneidet, speichern wir es im aktuellen Knoten.
         objects.push_back(object);
         return true;
     }
 
-    // Retrieve all objects that could collide with a given area.
+    // Sucht alle Objekte, die mit dem gegebenen Bereich kollidieren könnten.
     void query(const sf::FloatRect& range, std::vector<QuadTreeCollisionElement*>& found) {
         if (!boundary.intersects(range))
-            return; // No intersection, nothing to find
+            return; // Kein Schnitt, also nichts gefunden
 
-        // Check objects in this node
+        // Überprüfe Objekte in diesem Knoten
         for (auto object : objects) {
             if (range.intersects(object->getBounds()))
                 found.push_back(object);
         }
 
-        // Recursively check children if they exist
+        // Rekursiv in den Kindern suchen
         if (divided) {
-            for (auto child : children) {
-                child->query(range, found);
+            for (int i = 0; i < 4; ++i) {
+                children[i]->query(range, found);
             }
         }
     }
 };
-
-// TODO: FINISH IMPLEMENTATION

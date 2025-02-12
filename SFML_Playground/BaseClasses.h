@@ -7,7 +7,6 @@ class InputWidget;
 
 // WIDGETS ----------------------------------------------------------------------------------------
 
-
 class WidgetElement : public sf::Drawable
 {
 protected:
