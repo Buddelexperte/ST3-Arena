@@ -47,3 +47,5 @@ public:
 		return collisionRect.contains(otherPos);
 	}
 };
+
+// TODO: Add Implementation
