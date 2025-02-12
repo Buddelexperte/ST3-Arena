@@ -104,7 +104,7 @@
     <ClInclude Include="CollisionQuadTree.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="C_Collision.h">
+    <ClInclude Include="Collision.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

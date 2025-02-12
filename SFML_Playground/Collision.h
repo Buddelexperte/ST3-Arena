@@ -1,14 +1,26 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-class C_Collision
+// Collision Interface, works with CCollision (CollisionComponent)
+class ICollision abstract {
+public:
+	// Pure virtual function that must be implemented by any class using this interface.
+	virtual sf::FloatRect getCollisionBounds() const = 0;
+	virtual void onCollision(ICollision* other) = 0;
+
+	// Virtual destructor is important for proper cleanup.
+	virtual ~ICollision() = default;
+};
+
+// Collision Component, works with ICollision (Collision Interface)
+class CCollision
 {
 protected:
 	sf::FloatRect collisionRect;
 	sf::Vector2f pos;
 	sf::Vector2f size;
 public:
-	C_Collision(const sf::Vector2f& pos, const sf::Vector2f& size)
+	CCollision(const sf::Vector2f& pos, const sf::Vector2f& size)
 		: pos(pos), size(size)
 	{
 		collisionRect.top = pos.y - (size.y / 2.0f);
