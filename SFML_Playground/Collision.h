@@ -1,26 +1,27 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-// Collision Interface, works with CCollision (CollisionComponent)
-class ICollision abstract {
+// Collision Interface, works with CollisionBox (CollisionComponent)
+class ICollidable
+{
 public:
 	// Pure virtual function that must be implemented by any class using this interface.
 	virtual sf::FloatRect getCollisionBounds() const = 0;
-	virtual void onCollision(ICollision* other) = 0;
+	virtual void onCollision(ICollidable* other) = 0;
 
 	// Virtual destructor is important for proper cleanup.
-	virtual ~ICollision() = default;
+	virtual ~ICollidable() = default;
 };
 
 // Collision Component, works with ICollision (Collision Interface)
-class CCollision
+class CollisionBox : public ICollidable
 {
 protected:
 	sf::FloatRect collisionRect;
 	sf::Vector2f pos;
 	sf::Vector2f size;
 public:
-	CCollision(const sf::Vector2f& pos, const sf::Vector2f& size)
+	CollisionBox(const sf::Vector2f& pos, const sf::Vector2f& size)
 		: pos(pos), size(size)
 	{
 		collisionRect.top = pos.y - (size.y / 2.0f);
@@ -44,7 +45,7 @@ public:
 	}
 	sf::Vector2f getSize() const { return size; }
 	sf::Vector2f getPos() const { return pos; }
-	sf::FloatRect getBounds() const
+	sf::FloatRect getCollisionBounds() const override
 	{
 		return collisionRect;
 	}
@@ -58,6 +59,8 @@ public:
 	{
 		return collisionRect.contains(otherPos);
 	}
+
+	void onCollision(ICollidable* other) {}
 };
 
 // TODO: Add Implementation

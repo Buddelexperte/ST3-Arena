@@ -3,17 +3,14 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 
-class QuadTreeCollisionElement {
-public:
-    virtual sf::FloatRect getBounds() const = 0;
-};
+#include "Collision.h"
 
-class QuadTree {
+class CollisionQuadTree {
 private:
     sf::FloatRect boundary;
-    std::vector<QuadTreeCollisionElement*> objects;
+    std::vector<CollisionBox*> objects;
     bool divided;
-    std::unique_ptr<QuadTree> children[4]; // Verwendung von smart pointers
+    std::unique_ptr<CollisionQuadTree> children[4]; // Verwendung von smart pointers
 
     // Unterteile diesen Knoten in vier Kinder.
     void subdivide() {
@@ -22,10 +19,10 @@ private:
         float w = boundary.width / 2.0f;
         float h = boundary.height / 2.0f;
 
-        children[0] = std::make_unique<QuadTree>(sf::FloatRect(x, y, w, h));        // Top-left
-        children[1] = std::make_unique<QuadTree>(sf::FloatRect(x + w, y, w, h));    // Top-right
-        children[2] = std::make_unique<QuadTree>(sf::FloatRect(x, y + h, w, h));    // Bottom-left
-        children[3] = std::make_unique<QuadTree>(sf::FloatRect(x + w, y + h, w, h)); // Bottom-right
+        children[0] = std::make_unique<CollisionQuadTree>(sf::FloatRect(x, y, w, h));        // Top-left
+        children[1] = std::make_unique<CollisionQuadTree>(sf::FloatRect(x + w, y, w, h));    // Top-right
+        children[2] = std::make_unique<CollisionQuadTree>(sf::FloatRect(x, y + h, w, h));    // Bottom-left
+        children[3] = std::make_unique<CollisionQuadTree>(sf::FloatRect(x + w, y + h, w, h)); // Bottom-right
 
         divided = true;
     }
@@ -34,7 +31,7 @@ public:
     // Maximale Anzahl an Objekten bevor eine Unterteilung erfolgt
     static constexpr int DIV_THRESHOLD = 4;
 
-    QuadTree(const sf::FloatRect& boundary)
+    CollisionQuadTree(const sf::FloatRect& boundary)
         : boundary(boundary), divided(false)
     {
     }
@@ -52,7 +49,7 @@ public:
     }
 
     // Fügt ein Objekt in den QuadTree ein.
-    bool insert(QuadTreeCollisionElement* object) {
+    bool insert(CollisionBox* object) {
         if (!boundary.intersects(object->getBounds()))
             return false; // Das Objekt gehört nicht in diesen Bereich
 
@@ -76,7 +73,7 @@ public:
     }
 
     // Sucht alle Objekte, die mit dem gegebenen Bereich kollidieren könnten.
-    void query(const sf::FloatRect& range, std::vector<QuadTreeCollisionElement*>& found) {
+    void query(const sf::FloatRect& range, std::vector<CollisionBox*>& found) {
         if (!boundary.intersects(range))
             return; // Kein Schnitt, also nichts gefunden
 

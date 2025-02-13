@@ -2,11 +2,12 @@
 #include <SFML/Graphics.hpp>
 
 #include "RandomNumbers.h"
+#include "Collision.h"
 
 class GI_Arena;
 class EnemyManager;
 
-class Enemy
+class Enemy : public ICollidable
 {
 public:
 	struct RenderInfo {
@@ -20,6 +21,8 @@ private:
 	EnemyManager* manager;
 	RNG& random = RNG::getInstance();
 	Player* playerRef = nullptr;
+
+	CollisionBox collisionComp;
 
 	size_t enemyIndex = -1;
 	RenderInfo renderInfo;
