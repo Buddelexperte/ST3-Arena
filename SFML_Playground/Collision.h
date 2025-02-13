@@ -7,7 +7,11 @@ class ICollidable
 public:
 	// Pure virtual function that must be implemented by any class using this interface.
 	virtual sf::FloatRect getCollisionBounds() const = 0;
-	virtual void onCollision(ICollidable* other) = 0;
+	// Checking for Collision
+	virtual bool isColliding(const sf::FloatRect& otherBound) const = 0;
+	virtual bool isColliding(const sf::Vector2f& otherPos) const = 0;
+	// Actual event for onCollison logic
+	virtual bool onCollision(ICollidable* other) = 0;
 
 	// Virtual destructor is important for proper cleanup.
 	virtual ~ICollidable() = default;
@@ -45,22 +49,18 @@ public:
 	}
 	sf::Vector2f getSize() const { return size; }
 	sf::Vector2f getPos() const { return pos; }
-	sf::FloatRect getCollisionBounds() const override
+	// ICollidable
+	sf::FloatRect getCollisionBounds() const override { return collisionRect; }
+	bool isColliding(const sf::FloatRect& otherBound) const override
 	{
-		return collisionRect;
+		return getCollisionBounds().intersects(otherBound);
 	}
-	// Check for collision with another FloatRect (collisionRectangle)
-	bool isColliding(const sf::FloatRect& otherBound) const
+	bool isColliding(const sf::Vector2f& otherPos) const override
 	{
-		return collisionRect.intersects(otherBound);
-	}
-	// Check for collision with a point (2-Float Vector)
-	bool isColliding(const sf::Vector2f& otherPos) const
-	{
-		return collisionRect.contains(otherPos);
+		return getCollisionBounds().contains(otherPos);
 	}
 
-	void onCollision(ICollidable* other) {}
+	bool onCollision(ICollidable* other) {}
 };
 
 // TODO: Add Implementation

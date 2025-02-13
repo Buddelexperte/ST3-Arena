@@ -5,15 +5,11 @@
 #include "Enemy.h"
 
 Enemy::Enemy()
-	: renderInfo(), gameInstance(&GI_Arena::getInstance()), manager(&EnemyManager::getInstance())
+	: renderInfo(), 
+	gameInstance(&GI_Arena::getInstance()), 
+	manager(&EnemyManager::getInstance()),
+	collisionBox(renderInfo.pos, renderInfo.size)
 {
-	collisionRect = {
-		renderInfo.pos.x - (renderInfo.size.x * 0.5f),  // Top-left X
-		renderInfo.pos.y - (renderInfo.size.y * 0.5f),  // Top-left Y
-		renderInfo.size.x,                              // Width
-		renderInfo.size.y                               // Height
-	};
-
 	setPlayer(gameInstance->getPlayer());
 }
 
@@ -45,10 +41,19 @@ void Enemy::spawn()
 		setColor(sf::Color::Red);
 }
 
-// Fast circle-circle collision check
-bool Enemy::isCollidingWith(const sf::FloatRect& playerCollision) const
+bool Enemy::isColliding(const sf::FloatRect& otherBound) const
 {
-	return collisionRect.intersects(playerCollision);
+	return collisionBox.isColliding(otherBound);
+}
+
+bool Enemy::isColliding(const sf::Vector2f& otherPos) const
+{
+	return collisionBox.isColliding(otherPos);
+}
+
+bool Enemy::onCollision(ICollidable* other)
+{
+
 }
 
 void Enemy::tick_move(const float& deltaTime)
@@ -68,12 +73,11 @@ void Enemy::tick_move(const float& deltaTime)
 		renderInfo.pos += offset;
 	
 		// COLLISION
-		collisionRect.left += offset.x;
-		collisionRect.top += offset.y;
+		collisionBox.setPos(renderInfo.pos);
 	}
 
 	const sf::FloatRect playerCollisionRect = playerRef->getCollisionRect();
-	if (isCollidingWith(playerCollisionRect))
+	if (isColliding(playerCollisionRect))
 	{
 		// TODO: PROTOTYPE COLLISION LOGIC
 		die();
@@ -100,8 +104,7 @@ void Enemy::setPosition(const sf::Vector2f& newPos)
 	manager->callUpdate(enemyIndex, InfoType::POSITION);
 
 	// Collision rectangle update: subtract half size for both X and Y
-	collisionRect.left = newPos.x - (renderInfo.size.x / 2.0f);
-	collisionRect.top = newPos.y - (renderInfo.size.y / 2.0f);
+	collisionBox.setPos(renderInfo.pos);
 }
 
 

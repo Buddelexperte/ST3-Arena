@@ -22,30 +22,30 @@ private:
 	RNG& random = RNG::getInstance();
 	Player* playerRef = nullptr;
 
-	CollisionBox collisionComp;
+	CollisionBox collisionBox;
 
 	size_t enemyIndex = -1;
 	RenderInfo renderInfo;
-
-	sf::FloatRect collisionRect;
 
 	const float speed = 100.0f;
 
 	sf::Vector2f getNewSpawnPos() const;
 
-	bool isCollidingWith(const sf::FloatRect&) const;
 	void tick_move(const float&);
 	void die();
 
 public:
 	Enemy();
 	void setPlayer(Player*);
-
 	void setID(const size_t& newIndex) { enemyIndex = newIndex; }
 
 	void spawn();
-
 	void tick(const float&);
+
+	// Collision
+	bool isColliding(const sf::FloatRect& otherBound) const override;
+	bool isColliding(const sf::Vector2f& otherPos) const override;
+	virtual bool onCollision(ICollidable* other) override;
 
 	// Position
 	void setPosition(const sf::Vector2f& pos);
