@@ -112,8 +112,8 @@ void GI_Arena::tick(const float& deltaTime)
 {
 	tickView(deltaTime);
 
-	player->update(deltaTime);
-	activeMenu->update(deltaTime);
+	player->tick(deltaTime);
+	activeMenu->tick(deltaTime);
 
 	sf::Event event;
 	while (window->pollEvent(event) && gameState > QUIT)

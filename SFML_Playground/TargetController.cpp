@@ -22,9 +22,9 @@ void TargetController::newRandomConfig()
 	TARGET_CONFIG.pos = gridPos;
 }
 
-void TargetController::update(const float& deltaTime)
+void TargetController::tick(const float& deltaTime)
 {
-	WidgetElement::update(deltaTime);
+	WidgetElement::tick(deltaTime);
 	static float timer = spawnInterval;
 	
 	if (gameInstance->getIsPaused()) return;

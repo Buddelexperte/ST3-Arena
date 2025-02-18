@@ -68,7 +68,7 @@ protected:
 public:
 	W_LevelMenu(InputWidget*);
 	void construct() override;
-	void update(const float&) override;
+	void tick(const float&) override;
 	bool isMouseOver(const bool&) override;
 	
 	InputWidget* setWidgetIndex(const int& newIndex) override;
@@ -92,7 +92,7 @@ protected:
 public:
 	W_MainMenu(InputWidget*);
 	void construct() override;
-	void update(const float&) override;
+	void tick(const float&) override;
 	bool isMouseOver(const bool&) override;
 
 	InputWidget* setWidgetIndex(const int&) override;
@@ -112,7 +112,7 @@ protected:
 	void windowUpdate() override;
 public:
 	W_Paused(InputWidget*);
-	void update(const float&) override;
+	void tick(const float&) override;
 	bool input_esc() override;
 	InputWidget* setWidgetIndex(const int&) override;
 	InputWidget* getWidgetAtIndex(const int&) override;
@@ -163,7 +163,7 @@ protected:
 public:
 	W_Gameplay(InputWidget*);
 	void construct() override;
-	void update(const float& deltaTime) override;
+	void tick(const float& deltaTime) override;
 	bool isMouseOver(const bool&) override;
 	InputWidget* setWidgetIndex(const int&) override;
 	InputWidget* getWidgetAtIndex(const int&) override;

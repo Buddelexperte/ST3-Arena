@@ -1,6 +1,7 @@
 #pragma once
 #include "Button.h"
 #include "BaseTypes.h"
+#include "Collision.h"
 
 class GI_Arena;
 class InputWidget;
@@ -51,7 +52,7 @@ public:
 	virtual void setSize(const sf::Vector2f&) { return; };
 	virtual sf::Vector2f getSize() const { return sf::Vector2f(0.0f, 0.0f); };
 
-	virtual void update(const float& deltaTime) { lastDeltaTime = deltaTime;  windowUpdate(); };
+	virtual void tick(const float& deltaTime) { lastDeltaTime = deltaTime;  windowUpdate(); };
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 
@@ -89,15 +90,15 @@ public:
 
 // PLAYER -----------------------------------------------------------------------------------------
 
-class Player : public InputWidget
+class Player : public InputWidget, public ICollidable
 {
 private:
 	sf::Sprite playerSprite;
 
-	sf::Vector2f velocity = { 0.0f, 0.0f };
-	sf::Vector2f direction = { 0.0f, 0.0f };
+	CollisionBox collisionBox;
 
-	sf::FloatRect collisionRect;
+	RenderInfo renderInfo;
+	sf::Vector2f direction = { 0.0f, 0.0f };
 
 	std::vector<sf::Texture> playerTextures = {};
 	int currentFrame = 0;
@@ -111,16 +112,21 @@ protected:
 	float scrollInput(sf::Event*) override;
 public:
 	Player(InputWidget*);
-	void update(const float&) override;
+	void tick(const float&) override;
 	void setPos(const sf::Vector2f&) override;
 	void addPos(const sf::Vector2f&) override;
 	sf::Vector2f getPos() const override;
 	void setRot(const float&) override;
 	float getRot() const override;
 	void setSize(const sf::Vector2f&) override;
-	sf::Vector2f getVelocity() const { return velocity; };
+	sf::Vector2f getVelocity() const { return renderInfo.velocity; };
 	sf::Vector2f getDirection() const { return direction; };
-	sf::FloatRect getCollisionRect() const { return collisionRect; }
+	// Collision-Interface
+	sf::FloatRect getCollisionBounds() const override { return collisionBox.getCollisionBounds(); }
+	bool isColliding(const sf::FloatRect& otherBox) const override;
+	bool isColliding(const sf::Vector2f& otherPos) const override;
+	void tick_collision(const float& deltaTime) override;
+	void onCollision(ICollidable* other) override;
 };
 
 

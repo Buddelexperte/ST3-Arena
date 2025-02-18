@@ -22,7 +22,7 @@ private:
 public:
 	TargetController(InputWidget* parent) : WidgetElement(parent) {}
 	void initSpawner(); // Spawn first three targets, reset all old values
-	void update(const float&) override;
+	void tick(const float&) override;
 	bool isHovering();
 	bool clickedAny(); // Check if any button got clicked and erase it
 

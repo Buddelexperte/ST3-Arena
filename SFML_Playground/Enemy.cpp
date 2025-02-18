@@ -41,6 +41,45 @@ void Enemy::spawn()
 		setColor(sf::Color::Red);
 }
 
+void Enemy::tick_move(const float& deltaTime)
+{
+	// TODO: PROTOTYPE MOVEMENT LOGIC
+	const sf::Vector2f playerPos = playerRef->getPos();
+	sf::Vector2f distance = playerPos - renderInfo.pos;
+	zeroPrecision(distance);
+
+	// On target contact, no need for calculations, just set speed to zero
+	if (distance == sf::Vector2f(0.0f, 0.0f))
+	{
+		renderInfo.velocity = { 0.0f, 0.0f };
+		return;
+	}
+
+	// Get Velocity by direction * (speed / normalized direction)
+	renderInfo.velocity = distance * (speed / (std::abs(distance.x) + std::abs(distance.y)));
+
+	// Update the position based on velocity and scale by deltaTime
+	const sf::Vector2f offset = renderInfo.velocity * deltaTime;
+	renderInfo.pos += offset;
+	// COLLISION
+	collisionBox.setPos(collisionBox.getPos() + offset);
+}
+
+void Enemy::tick_collision(const float& deltaTime)
+{
+	const sf::FloatRect playerCollisionRect = playerRef->getCollisionBounds();
+	std::cout << "PLAYER COLLISION POS: " << playerCollisionRect.getPosition().x << " x " << playerCollisionRect.getPosition().y << " y" << std::endl;
+	std::cout << "PLAYER COLLISION SIZE: " << playerCollisionRect.getSize().x << " x " << playerCollisionRect.getSize().y << " y" << std::endl;
+	std::cout << "ENEMY COLLISION POS: " << collisionBox.getPos().x << " x " << collisionBox.getPos().y << " y" << std::endl;
+	std::cout << "ENEMY COLLISION SIZE: " << collisionBox.getSize().x << " x " << collisionBox.getSize().y << " y" << std::endl;
+	if (isColliding(playerCollisionRect))
+	{
+		std::cout << "COLLISION" << std::endl;
+		// TODO: PROTOTYPE COLLISION LOGIC
+		die();
+	}
+}
+
 bool Enemy::isColliding(const sf::FloatRect& otherBound) const
 {
 	return collisionBox.isColliding(otherBound);
@@ -51,42 +90,17 @@ bool Enemy::isColliding(const sf::Vector2f& otherPos) const
 	return collisionBox.isColliding(otherPos);
 }
 
-bool Enemy::onCollision(ICollidable* other)
+void Enemy::onCollision(ICollidable* other)
 {
 
-}
-
-void Enemy::tick_move(const float& deltaTime)
-{
-	// TODO: PROTOTYPE MOVEMENT LOGIC
-	const sf::Vector2f playerPos = playerRef->getPos();
-	sf::Vector2f distance = playerPos - renderInfo.pos;
-	zeroPrecision(distance);
-
-	if (distance != sf::Vector2f(0.0f, 0.0f))
-	{
-		// Get Velocity by direction * (speed / normalized direction)
-		renderInfo.velocity = distance * (speed / (std::abs(distance.x) + std::abs(distance.y)));
-
-		// Update the position based on velocity and scale by deltaTime
-		const sf::Vector2f offset = renderInfo.velocity * deltaTime;
-		renderInfo.pos += offset;
-	
-		// COLLISION
-		collisionBox.setPos(renderInfo.pos);
-	}
-
-	const sf::FloatRect playerCollisionRect = playerRef->getCollisionRect();
-	if (isColliding(playerCollisionRect))
-	{
-		// TODO: PROTOTYPE COLLISION LOGIC
-		die();
-	}
 }
 
 void Enemy::tick(const float& deltaTime)
 {
+
 	tick_move(deltaTime);
+
+	tick_collision(deltaTime);
 
 	return;
 }
@@ -104,7 +118,7 @@ void Enemy::setPosition(const sf::Vector2f& newPos)
 	manager->callUpdate(enemyIndex, InfoType::POSITION);
 
 	// Collision rectangle update: subtract half size for both X and Y
-	collisionBox.setPos(renderInfo.pos);
+	collisionBox.setPos(newPos);
 }
 
 
@@ -114,6 +128,8 @@ void Enemy::setSize(const sf::Vector2f& size)
 
 	renderInfo.size = size;
 	manager->callUpdate(enemyIndex, InfoType::SIZE);
+
+	collisionBox.setSize(size);
 }
 
 void Enemy::setColor(const sf::Color& color)
@@ -127,4 +143,6 @@ void Enemy::setColor(const sf::Color& color)
 void Enemy::setRenderInfo(const RenderInfo& renderInfo)
 {
 	this->renderInfo = renderInfo;
+	collisionBox.setPos(renderInfo.pos);
+	collisionBox.setSize(renderInfo.size);
 }

@@ -176,9 +176,9 @@ public:
 
     virtual void construct() override { return; }
 
-    void update(const float& deltaTime) override
+    void tick(const float& deltaTime) override
     {
-        WidgetElement::update(deltaTime);
+        WidgetElement::tick(deltaTime);
 
         sf::Vector2f viewSize = gameInstance->getView()->getSize();
 

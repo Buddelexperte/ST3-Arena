@@ -5,13 +5,21 @@
 class ICollidable
 {
 public:
+	struct RenderInfo {
+		sf::Vector2f pos = sf::Vector2f(0.0f, 0.0f);
+		sf::Vector2f size = sf::Vector2f(100.0f, 100.0f);
+		sf::Vector2f velocity = sf::Vector2f(0.0f, 0.0f);
+		sf::Color color = sf::Color::White;
+	};
 	// Pure virtual function that must be implemented by any class using this interface.
 	virtual sf::FloatRect getCollisionBounds() const = 0;
 	// Checking for Collision
 	virtual bool isColliding(const sf::FloatRect& otherBound) const = 0;
 	virtual bool isColliding(const sf::Vector2f& otherPos) const = 0;
+	// Collision tick prefab
+	virtual void tick_collision(const float& deltaTime) = 0;
 	// Actual event for onCollison logic
-	virtual bool onCollision(ICollidable* other) = 0;
+	virtual void onCollision(ICollidable* other) = 0;
 
 	// Virtual destructor is important for proper cleanup.
 	virtual ~ICollidable() = default;
@@ -51,8 +59,9 @@ public:
 	sf::Vector2f getPos() const { return pos; }
 	// ICollidable
 	sf::FloatRect getCollisionBounds() const override { return collisionRect; }
+	void tick_collision(const float& deltaTime) override {};
 	bool isColliding(const sf::FloatRect& otherBound) const override
-	{
+	{	
 		return getCollisionBounds().intersects(otherBound);
 	}
 	bool isColliding(const sf::Vector2f& otherPos) const override
@@ -60,7 +69,7 @@ public:
 		return getCollisionBounds().contains(otherPos);
 	}
 
-	bool onCollision(ICollidable* other) {}
+	void onCollision(ICollidable* other) {}
 };
 
 // TODO: Add Implementation

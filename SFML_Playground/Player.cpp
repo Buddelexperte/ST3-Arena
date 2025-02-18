@@ -2,13 +2,17 @@
 #include "SFML_Arena.h"
 
 Player::Player(InputWidget* parent)
-	: InputWidget(parent)
+	: InputWidget(parent),
+	collisionBox(renderInfo.pos, renderInfo.size)
 {
-	const sf::Vector2f spriteSize = { 100.0f, 100.0f };
 
 	// Player Sprite Initialization
-	playerSprite.setPosition(windowCenter);
-	playerSprite.setColor(sf::Color::White);
+	renderInfo.pos = windowCenter;
+	playerSprite.setPosition(renderInfo.pos);
+	collisionBox.setPos(renderInfo.pos);
+
+	renderInfo.color = sf::Color::White;
+	playerSprite.setColor(renderInfo.color);
 
 	for (int i = 4; i <= 6; i++)
 	{
@@ -26,6 +30,8 @@ Player::Player(InputWidget* parent)
 
 	if (!playerTextures.empty())
 	{
+		const sf::Vector2f spriteSize = { 100.0f, 100.0f };
+
 		playerSprite.setTexture(playerTextures[0], true);
 		animationSpeed = 0.2f;
 
@@ -40,6 +46,8 @@ Player::Player(InputWidget* parent)
 
 void Player::calcMovement(const float& deltaTime)
 {
+	// Movement
+
 	constexpr float WALKING_SPEED = 350.0f;
 	constexpr float LERP_SMOOTHNESS = 0.01f;
 
@@ -53,15 +61,18 @@ void Player::calcMovement(const float& deltaTime)
 	if (sf::Keyboard::isKeyPressed(KEY_D)) x += WALKING_SPEED;
 
 	sf::Vector2f targetVelo = sf::Vector2f{ x, y } *multiplier;
-	zeroPrecision(velocity);
+	zeroPrecision(renderInfo.velocity);
 
-	if (!shouldZero(targetVelo - velocity))
-		velocity = lerp(velocity, targetVelo, LERP_SMOOTHNESS);
+	if (!shouldZero(targetVelo - renderInfo.velocity))
+		renderInfo.velocity = lerp(renderInfo.velocity, targetVelo, LERP_SMOOTHNESS);
 	else
-		velocity = targetVelo;
+		renderInfo.velocity = targetVelo;
 
-	direction = { velocity.x / WALKING_SPEED, velocity.y / WALKING_SPEED };
-	addPos(velocity * deltaTime);
+	direction = { renderInfo.velocity.x / WALKING_SPEED, renderInfo.velocity.y / WALKING_SPEED };
+	const sf::Vector2f delta = renderInfo.velocity * deltaTime;
+	addPos(delta);
+
+	 // Rotation
 
 	const sf::Vector2f playerPos = getPos();
 	const sf::Vector2f mousePos = gameInstance->getMousePos();
@@ -76,10 +87,11 @@ void Player::calcMovement(const float& deltaTime)
 	}
 }
 
-void Player::update(const float& deltaTime)
+void Player::tick(const float& deltaTime)
 {
-	InputWidget::update(deltaTime);
-	if (!gameInstance->getIsPaused()) calcMovement(deltaTime);
+	InputWidget::tick(deltaTime);
+	if (!gameInstance->getIsPaused()) 
+		calcMovement(deltaTime);
 
 	if (!playerTextures.empty())
 	{
@@ -120,16 +132,14 @@ void Player::setPos(const sf::Vector2f& newPos)
 {
 	playerSprite.setPosition(newPos);
 	// Update the collision rectangle to reflect the new position
-	collisionRect.left = newPos.x - collisionRect.width / 2.0f;
-	collisionRect.top = newPos.y - collisionRect.height / 2.0f;
+	collisionBox.setPos(newPos);
 }
 
 void Player::addPos(const sf::Vector2f& delta)
 {
 	playerSprite.move(delta);
 	// Update the collision rectangle to reflect the movement
-	collisionRect.left = playerSprite.getPosition().x - collisionRect.width / 2.0f;
-	collisionRect.top = playerSprite.getPosition().y - collisionRect.height / 2.0f;
+	collisionBox.setPos(collisionBox.getPos() + delta);
 }
 
 sf::Vector2f Player::getPos() const
@@ -158,12 +168,25 @@ void Player::setSize(const sf::Vector2f& newSize)
 	playerSprite.setOrigin(originalSize.x / 2.0f, originalSize.y / 2.0f);
 	playerSprite.setScale((newSize.x * 2.0f) / originalSize.x, (newSize.y * 2.0f) / originalSize.y);
 	
-	const sf::Vector2f pos = getPos();
+	collisionBox.setSize(newSize);
+}
 
-	collisionRect = {
-		pos.x - (newSize.x / 2.0f),
-		pos.y - (newSize.y / 2.0f), 
-		newSize.x,
-		newSize.y 
-	};
+void Player::tick_collision(const float& deltaTime)
+{
+	return;
+}
+
+bool Player::isColliding(const sf::FloatRect& otherBox) const
+{
+	return collisionBox.isColliding(otherBox);
+}
+
+bool Player::isColliding(const sf::Vector2f& otherPos) const
+{
+	return collisionBox.isColliding(otherPos);
+}
+
+void Player::onCollision(ICollidable* other)
+{
+	return;
 }

@@ -64,10 +64,10 @@ InputWidget* W_MainMenu::setWidgetIndex(const int& newIndex)
 	return getWidgetAtIndex(widgetIndex);
 }
 
-void W_MainMenu::update(const float& deltaTime)
+void W_MainMenu::tick(const float& deltaTime)
 {
-	InputWidget::update(deltaTime);
-	if (getWidgetAtIndex(widgetIndex) != this) getWidgetAtIndex(widgetIndex)->update(deltaTime);
+	InputWidget::tick(deltaTime);
+	if (getWidgetAtIndex(widgetIndex) != this) getWidgetAtIndex(widgetIndex)->tick(deltaTime);
 }
 
 void W_MainMenu::windowUpdate()
@@ -348,7 +348,7 @@ void W_LevelMenu::construct()
 	setWidgetIndex(0);
 }
 
-void W_LevelMenu::update(const float& deltaTime)
+void W_LevelMenu::tick(const float& deltaTime)
 {
 	return;
 }
@@ -424,10 +424,10 @@ InputWidget* W_Paused::setWidgetIndex(const int& newIndex)
 	return getWidgetAtIndex(widgetIndex);
 }
 
-void W_Paused::update(const float& deltaTime)
+void W_Paused::tick(const float& deltaTime)
 {
-	if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->update(deltaTime);
-	InputWidget::update(deltaTime);
+	if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->tick(deltaTime);
+	InputWidget::tick(deltaTime);
 }
 
 void W_Paused::windowUpdate()
@@ -630,15 +630,15 @@ void W_Gameplay::lose()
 	SaveGame::saveData(); // Save highscore value (didn't change if no greater was achieved)
 }
 
-void W_Gameplay::update(const float& deltaTime)
+void W_Gameplay::tick(const float& deltaTime)
 {
 	constexpr bool bDrawFlashlight = true;
-	InputWidget::update(deltaTime);
+	InputWidget::tick(deltaTime);
 
 	// Flashlight update
 	if (bDrawFlashlight)
 	{
-		flashlightShader.update(deltaTime);
+		flashlightShader.tick(deltaTime);
 		for (sf::Drawable* elem : shapes)
 		{
 			flashlightShader.drawOtherScene(elem);
@@ -647,7 +647,7 @@ void W_Gameplay::update(const float& deltaTime)
 	
 	// Execute subWidgets
 	if (getWidgetAtIndex(widgetIndex) != this) 
-		getWidgetAtIndex(widgetIndex)->update(deltaTime);
+		getWidgetAtIndex(widgetIndex)->tick(deltaTime);
 
 	// If Gameplay is UnPaused
 	if (!gameInstance->getIsPaused())
@@ -655,7 +655,7 @@ void W_Gameplay::update(const float& deltaTime)
 		enemyManager.tick(deltaTime);
 	}
 
-	healthBar.update(deltaTime);
+	healthBar.tick(deltaTime);
 	if (gameInstance->getGameState() >= IN_GAME)
 	{
 		if (healthBar.isFinished()) lose();

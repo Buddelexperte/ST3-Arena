@@ -9,13 +9,6 @@ class EnemyManager;
 
 class Enemy : public ICollidable
 {
-public:
-	struct RenderInfo {
-		sf::Vector2f pos = sf::Vector2f(0.0f, 0.0f);
-		sf::Vector2f size = sf::Vector2f(100.0f, 100.0f);
-		sf::Vector2f velocity = sf::Vector2f(0.0f, 0.0f);
-		sf::Color color = sf::Color::White;
-	};
 private:
 	GI_Arena* gameInstance;
 	EnemyManager* manager;
@@ -43,9 +36,11 @@ public:
 	void tick(const float&);
 
 	// Collision
+	sf::FloatRect getCollisionBounds() const override { return collisionBox.getCollisionBounds(); }
+	void tick_collision(const float& deltaTime) override;
 	bool isColliding(const sf::FloatRect& otherBound) const override;
 	bool isColliding(const sf::Vector2f& otherPos) const override;
-	virtual bool onCollision(ICollidable* other) override;
+	virtual void onCollision(ICollidable* other) override;
 
 	// Position
 	void setPosition(const sf::Vector2f& pos);

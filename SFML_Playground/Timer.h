@@ -19,7 +19,7 @@ public:
         timerBar.setOrigin(barWidth / 2.0f, barHeight / 2.0f); // Center timerBar on viewport
     }
 
-    void update(const float&) override; // update timeLeft using deltaTime
+    void tick(const float&) override; // update timeLeft using deltaTime
     void windowUpdate() override;
     float getCurrentTime() const; // get TimeLeft
     void setCurrentTime(const float&); // set MaxTime
