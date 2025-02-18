@@ -68,13 +68,8 @@ void Enemy::tick_move(const float& deltaTime)
 void Enemy::tick_collision(const float& deltaTime)
 {
 	const sf::FloatRect playerCollisionRect = playerRef->getCollisionBounds();
-	std::cout << "PLAYER COLLISION POS: " << playerCollisionRect.getPosition().x << " x " << playerCollisionRect.getPosition().y << " y" << std::endl;
-	std::cout << "PLAYER COLLISION SIZE: " << playerCollisionRect.getSize().x << " x " << playerCollisionRect.getSize().y << " y" << std::endl;
-	std::cout << "ENEMY COLLISION POS: " << collisionBox.getPos().x << " x " << collisionBox.getPos().y << " y" << std::endl;
-	std::cout << "ENEMY COLLISION SIZE: " << collisionBox.getSize().x << " x " << collisionBox.getSize().y << " y" << std::endl;
 	if (isColliding(playerCollisionRect))
 	{
-		std::cout << "COLLISION" << std::endl;
 		// TODO: PROTOTYPE COLLISION LOGIC
 		die();
 	}
