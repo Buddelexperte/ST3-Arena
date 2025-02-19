@@ -139,7 +139,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="..\openal32.dll" />
     <CopyFileToFolders Include="SaveGame.txt" />
+    <CopyFileToFolders Include="..\openal32.dll">
+      <Filter>Ressources</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>
