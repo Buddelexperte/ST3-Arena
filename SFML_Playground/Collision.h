@@ -4,6 +4,9 @@
 // Collision Interface, works with CollisionBox (CollisionComponent)
 class ICollidable
 {
+private:
+	// Collision tick prefab
+	virtual void tick_collision(const float& deltaTime) = 0;
 public:
 	struct RenderInfo {
 		sf::Vector2f pos = sf::Vector2f(0.0f, 0.0f);
@@ -16,8 +19,6 @@ public:
 	// Checking for Collision
 	virtual bool isColliding(const sf::FloatRect& otherBound) const = 0;
 	virtual bool isColliding(const sf::Vector2f& otherPos) const = 0;
-	// Collision tick prefab
-	virtual void tick_collision(const float& deltaTime) = 0;
 	// Actual event for onCollison logic
 	virtual void onCollision(ICollidable* other) = 0;
 

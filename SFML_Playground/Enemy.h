@@ -24,7 +24,8 @@ private:
 
 	sf::Vector2f getNewSpawnPos() const;
 
-	void tick_move(const float&);
+	void tick_move(const float&, const RenderInfo&);
+	void tick_collision(const float& deltaTime) override;
 	void die();
 
 public:
@@ -33,11 +34,10 @@ public:
 	void setID(const size_t& newIndex) { enemyIndex = newIndex; }
 
 	void spawn();
-	void tick(const float&);
+	void tick(const float&, const RenderInfo& playerRenderInfo);
 
 	// Collision
 	sf::FloatRect getCollisionBounds() const override { return collisionBox.getCollisionBounds(); }
-	void tick_collision(const float& deltaTime) override;
 	bool isColliding(const sf::FloatRect& otherBound) const override;
 	bool isColliding(const sf::Vector2f& otherPos) const override;
 	virtual void onCollision(ICollidable* other) override;

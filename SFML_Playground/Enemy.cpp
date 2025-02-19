@@ -41,11 +41,21 @@ void Enemy::spawn()
 		setColor(sf::Color::Red);
 }
 
-void Enemy::tick_move(const float& deltaTime)
+void Enemy::tick(const float& deltaTime, const RenderInfo& playerRenderInfo)
+{
+	// Calculate movement and apply i
+	tick_move(deltaTime, playerRenderInfo);
+
+	// Check for collision updates
+	tick_collision(deltaTime);
+
+	return;
+}
+
+void Enemy::tick_move(const float& deltaTime, const RenderInfo& playerRenderInfo)
 {
 	// TODO: PROTOTYPE MOVEMENT LOGIC
-	const sf::Vector2f playerPos = playerRef->getPos();
-	sf::Vector2f distance = playerPos - renderInfo.pos;
+	sf::Vector2f distance = playerRenderInfo.pos - renderInfo.pos;
 	zeroPrecision(distance);
 
 	// On target contact, no need for calculations, just set speed to zero
@@ -56,7 +66,9 @@ void Enemy::tick_move(const float& deltaTime)
 	}
 
 	// Get Velocity by direction * (speed / normalized direction)
-	renderInfo.velocity = distance * (speed / (std::abs(distance.x) + std::abs(distance.y)));
+	const float norm = std::abs(distance.x) + std::abs(distance.y);
+	// Calculate velocity: scale the direction vector by speed/normalized length.
+	renderInfo.velocity = distance * (speed / norm);
 
 	// Update the position based on velocity and scale by deltaTime
 	const sf::Vector2f offset = renderInfo.velocity * deltaTime;
@@ -88,16 +100,6 @@ bool Enemy::isColliding(const sf::Vector2f& otherPos) const
 void Enemy::onCollision(ICollidable* other)
 {
 
-}
-
-void Enemy::tick(const float& deltaTime)
-{
-
-	tick_move(deltaTime);
-
-	tick_collision(deltaTime);
-
-	return;
 }
 
 void Enemy::die()

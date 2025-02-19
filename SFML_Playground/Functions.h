@@ -19,28 +19,31 @@ std::shared_ptr<T> lockWeakPtr(const std::weak_ptr<T>& weakPtr) {
 	if (auto lockedPtr = weakPtr.lock()) {
 		return lockedPtr;
 	}
-	std::cerr << "Widget has expired and is unavailable!\n";
+	std::cerr << "Weak pointer has expired and is unavailable!\n";
 	return nullptr;  // Or handle the expired object case appropriately
 }
 
-inline bool shouldZero(const float& value, const float& precision = 1e-6f)
+
+constexpr float SMALLEST_PRECISION = 1e-3f;
+
+inline bool shouldZero(const float& value, const float& precision = SMALLEST_PRECISION)
 {
 	const float epsilon = precision;
 	return (std::abs(value) < epsilon);
 }
 
-inline bool shouldZero(const sf::Vector2f& value, const float& precision = 1e-6f)
+inline bool shouldZero(const sf::Vector2f& value, const float& precision = SMALLEST_PRECISION)
 {
 	return (shouldZero(value.x, precision) && shouldZero(value.y, precision));
 }
 
 // Clamp "too small" float values to 0.0f
-inline void zeroPrecision(float& value, const float& precision = 1e-6f)
+inline void zeroPrecision(float& value, const float& precision = SMALLEST_PRECISION)
 {
 	if (shouldZero(value, precision)) value = 0.0f;
 }
 
-inline void zeroPrecision(sf::Vector2f& value, const float& precision = 1e-6f)
+inline void zeroPrecision(sf::Vector2f& value, const float& precision = SMALLEST_PRECISION)
 {
 	zeroPrecision(value.x, precision);
 	zeroPrecision(value.y, precision);

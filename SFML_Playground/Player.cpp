@@ -131,6 +131,7 @@ float Player::scrollInput(sf::Event* eventRef)
 void Player::setPos(const sf::Vector2f& newPos)
 {
 	playerSprite.setPosition(newPos);
+	renderInfo.pos = newPos;
 	// Update the collision rectangle to reflect the new position
 	collisionBox.setPos(newPos);
 }
@@ -138,6 +139,7 @@ void Player::setPos(const sf::Vector2f& newPos)
 void Player::addPos(const sf::Vector2f& delta)
 {
 	playerSprite.move(delta);
+	renderInfo.pos += delta;
 	// Update the collision rectangle to reflect the movement
 	collisionBox.setPos(collisionBox.getPos() + delta);
 }

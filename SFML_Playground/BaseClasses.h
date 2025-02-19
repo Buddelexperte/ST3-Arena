@@ -105,6 +105,7 @@ private:
 	float animationAccu = 0.0f;
 	float animationSpeed = 0.0f;
 
+	void tick_collision(const float& deltaTime) override;
 	void calcMovement(const float&);
 protected:
 	sf::Keyboard::Key keyboardInput(sf::Event*) override;
@@ -121,11 +122,12 @@ public:
 	void setSize(const sf::Vector2f&) override;
 	sf::Vector2f getVelocity() const { return renderInfo.velocity; };
 	sf::Vector2f getDirection() const { return direction; };
+
+	RenderInfo getRenderInfo() const { return renderInfo; }
 	// Collision-Interface
 	sf::FloatRect getCollisionBounds() const override { return collisionBox.getCollisionBounds(); }
 	bool isColliding(const sf::FloatRect& otherBox) const override;
 	bool isColliding(const sf::Vector2f& otherPos) const override;
-	void tick_collision(const float& deltaTime) override;
 	void onCollision(ICollidable* other) override;
 };
 
