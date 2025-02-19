@@ -1,111 +1,141 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Quelldateien">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Headerdateien">
+    <Filter Include="Header">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Ressourcendateien">
+    <Filter Include="Header\Widgets">
+      <UniqueIdentifier>{6310f2aa-1b9f-45af-9a58-26da671dcfed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header\Actors">
+      <UniqueIdentifier>{43614117-ec53-4ebc-bc09-92f34949e4f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header\DataStructures">
+      <UniqueIdentifier>{bfbfda43-b28c-4537-84cc-1ee26b307327}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header\Managers">
+      <UniqueIdentifier>{01352f2e-ac37-4d7e-89da-344ad975ad00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header\Helper">
+      <UniqueIdentifier>{0abe8223-59df-4285-890a-6ff7f52e0dac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source\Widgets">
+      <UniqueIdentifier>{768c09ac-d6fa-4f9e-b491-e337e312c543}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Actors">
+      <UniqueIdentifier>{18865e06-ae9a-4d8c-82d1-3e867b84f9d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="zDeprecated">
+      <UniqueIdentifier>{c66aa173-4673-49a6-af36-9bbb5e0cdd79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Managers">
+      <UniqueIdentifier>{5c33fe16-38ee-4bb2-be71-cafc997e4cba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ressources">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="TargetController.cpp">
-      <Filter>Quelldateien</Filter>
+      <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="MainClasses.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="Widgets.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="Slider.cpp">
-      <Filter>Quelldateien</Filter>
+      <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="FontManager.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Header\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyManager.cpp">
-      <Filter>Quelldateien</Filter>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source\Widgets</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
-      <Filter>Quelldateien</Filter>
+      <Filter>Source\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="Slider.cpp">
+      <Filter>Source\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Source\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="Widgets.cpp">
+      <Filter>Source\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="TargetController.cpp">
+      <Filter>zDeprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManager.cpp">
+      <Filter>Source\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source\Actors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Button.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="TargetController.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="SFML_Arena.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="Widgets.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="GameInstance.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="Flashlight.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="Functions.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="Slider.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="BaseClasses.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="RandomNumbers.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundManager.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyManager.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyPool.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyRenderer.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="BaseTypes.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Widgets.h">
+      <Filter>Header\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Header\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header\Actors</Filter>
     </ClInclude>
     <ClInclude Include="CollisionQuadTree.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Header\DataStructures</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Slider.h">
+      <Filter>Header\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Header\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyManager.h">
+      <Filter>Header\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyRenderer.h">
+      <Filter>Header\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyPool.h">
+      <Filter>Header\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Flashlight.h">
+      <Filter>Header\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Collision.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Header\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="TargetController.h">
+      <Filter>zDeprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Header\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Functions.h">
+      <Filter>Header\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomNumbers.h">
+      <Filter>Header\Helper</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

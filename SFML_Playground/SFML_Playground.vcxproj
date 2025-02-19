@@ -169,6 +169,7 @@
     <ClInclude Include="GameInstance.h" />
     <ClInclude Include="Flashlight.h" />
     <ClInclude Include="Functions.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="RandomNumbers.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="SoundManager.h" />
