@@ -1,5 +1,7 @@
 #pragma once
-#include "SFML_Arena.h"
+#include "BaseClasses.h" // Header File
+#include "GameInstance.h"
+#include "Functions.h"
 
 Player::Player(InputWidget* parent)
 	: InputWidget(parent),

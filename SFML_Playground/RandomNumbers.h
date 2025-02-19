@@ -42,7 +42,7 @@ public:
 
 		return sf::Vector2f(x, y);
 	}
-	sf::Vector2f posInDistance(const sf::Vector2f& center, const float& dist)
+	sf::Vector2f posInDistanceFrom(const sf::Vector2f& center, const float& dist)
 	{
 		float angle = floatInRange(0.0f, 2.0f * static_cast<float>(pi));
 

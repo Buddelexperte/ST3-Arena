@@ -2,7 +2,7 @@
 #include <iostream>
 #include <thread>
 
-#include "EnemyManager.h"
+#include "EnemyManager.h" // Header File
 
 int EnemyManager::enemyID = 0;
 
@@ -80,7 +80,6 @@ void EnemyManager::tick_kill(const float& deltaTime)
 
 void EnemyManager::tick_spawning(const float& deltaTime)
 {
-    // TODO: Move spawning logic to a dedicated class
     static float timer = spawnInterval; // Static variable to track time between enemy spawns.
 
     // If the number of active enemies would exceed the maximum allowed cancel any spawning attempt

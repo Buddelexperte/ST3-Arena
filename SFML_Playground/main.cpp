@@ -1,5 +1,6 @@
 #pragma once
-#include "SFML_Arena.h"
+
+#include "SFML_Arena.h" // All includes
 
 int main()
 {

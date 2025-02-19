@@ -25,10 +25,7 @@ sf::Vector2f Enemy::getNewSpawnPos() const
 
 	// Generating the random position
 	float distance = random.floatInRange(200.0f, 1000.0f);
-	sf::Vector2f generatedPos = random.posInDistance(playerPos, distance);
-
-	// TODO: Take velocity into calculation for "movement prediction"
-	sf::Vector2f velocity = gameInstance->getPlayer()->getVelocity();
+	sf::Vector2f generatedPos = random.posInDistanceFrom(playerPos, distance);
 
 	return generatedPos;
 }

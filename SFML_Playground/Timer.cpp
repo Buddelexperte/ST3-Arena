@@ -1,4 +1,6 @@
-#include "Timer.h" // Own header file
+#pragma once
+
+#include "Timer.h" // Header File
 #include "GameInstance.h"
 
 void Timer::tick(const float& deltaTime)

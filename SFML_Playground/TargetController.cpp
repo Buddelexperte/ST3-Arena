@@ -11,7 +11,7 @@ void TargetController::newRandomConfig()
 	float distance = rng.floatInRange(600.0f, 1000.0f);
 
 	// Generating the random position
-	sf::Vector2f generatedPos = rng.posInDistance(playerPos, distance);
+	sf::Vector2f generatedPos = rng.posInDistanceFrom(playerPos, distance);
 	sf::Vector2f velocity = gameInstance->getPlayer()->getVelocity();
 	generatedPos += velocity * 10.0f; // Take velocity into calculation for "movement prediction"
 	

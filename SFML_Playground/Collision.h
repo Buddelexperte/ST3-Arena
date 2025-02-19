@@ -72,5 +72,3 @@ public:
 
 	void onCollision(ICollidable* other) {}
 };
-
-// TODO: Add Implementation
