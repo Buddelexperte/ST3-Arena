@@ -6,7 +6,7 @@ class ICollidable
 {
 private:
 	// Collision tick prefab
-	virtual void tick_collision(const float& deltaTime) = 0;
+	virtual void tick_collision(const float& deltaTime) {};
 public:
 	struct RenderInfo {
 		sf::Vector2f pos = sf::Vector2f(0.0f, 0.0f);
@@ -15,12 +15,22 @@ public:
 		sf::Color color = sf::Color::White;
 	};
 	// Pure virtual function that must be implemented by any class using this interface.
-	virtual sf::FloatRect getCollisionBounds() const = 0;
+	virtual ICollidable* getCollision() = 0;
+	virtual sf::FloatRect getCollisionBounds()
+	{
+		return getCollision()->getCollisionBounds();
+	}
 	// Checking for Collision
-	virtual bool isColliding(const sf::FloatRect& otherBound) const = 0;
-	virtual bool isColliding(const sf::Vector2f& otherPos) const = 0;
+	virtual bool isColliding(const sf::FloatRect& otherBound)
+	{
+		return getCollision()->isColliding(otherBound);
+	}
+	virtual bool isColliding(const sf::Vector2f& otherPos)
+	{
+		return getCollision()->isColliding(otherPos);
+	}
 	// Actual event for onCollison logic
-	virtual void onCollision(ICollidable* other) = 0;
+	virtual void onCollision(ICollidable* other) {};
 
 	// Virtual destructor is important for proper cleanup.
 	virtual ~ICollidable() = default;
@@ -59,16 +69,14 @@ public:
 	sf::Vector2f getSize() const { return size; }
 	sf::Vector2f getPos() const { return pos; }
 	// ICollidable
-	sf::FloatRect getCollisionBounds() const override { return collisionRect; }
-	void tick_collision(const float& deltaTime) override {};
-	bool isColliding(const sf::FloatRect& otherBound) const override
+	ICollidable* getCollision() override { return nullptr; }
+	sf::FloatRect getCollisionBounds() override { return collisionRect; }
+	bool isColliding(const sf::FloatRect& otherBound) override
 	{	
-		return getCollisionBounds().intersects(otherBound);
+		return collisionRect.intersects(otherBound);
 	}
-	bool isColliding(const sf::Vector2f& otherPos) const override
+	bool isColliding(const sf::Vector2f& otherPos) override
 	{
-		return getCollisionBounds().contains(otherPos);
+		return collisionRect.contains(otherPos);
 	}
-
-	void onCollision(ICollidable* other) {}
 };

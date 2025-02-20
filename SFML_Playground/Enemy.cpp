@@ -84,16 +84,7 @@ void Enemy::tick_collision(const float& deltaTime)
 	}
 }
 
-bool Enemy::isColliding(const sf::FloatRect& otherBound) const
-{
-	return collisionBox.isColliding(otherBound);
-}
-
-bool Enemy::isColliding(const sf::Vector2f& otherPos) const
-{
-	return collisionBox.isColliding(otherPos);
-}
-
+// TODO: Implement onCollision instead of constant checking in the loop
 void Enemy::onCollision(ICollidable* other)
 {
 
