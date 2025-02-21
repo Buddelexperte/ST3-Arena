@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 
-#include "BaseClasses.h"
+#include "Player.h"
 #include "Functions.h"
 #include "SoundManager.h"
 #include "FontManager.h"

@@ -1,7 +1,6 @@
 #pragma once
 #include "Button.h"
 #include "BaseTypes.h"
-#include "Player.h"
 #include "Collision.h"
 
 class GI_Arena;

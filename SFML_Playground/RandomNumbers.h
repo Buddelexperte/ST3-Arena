@@ -2,6 +2,7 @@
 #include <random>
 #include <cmath>
 #include <SFML/Graphics.hpp>
+
 #include "Functions.h"
 
 class RNG
