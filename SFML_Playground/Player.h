@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BaseClasses.h"
+#include "Collision.h"
 
 // PLAYER -----------------------------------------------------------------------------------------
 
@@ -39,8 +40,6 @@ public:
 
 	RenderInfo getRenderInfo() const { return renderInfo; }
 	// Collision-Interface
-	sf::FloatRect getCollisionBounds() const override { return collisionBox.getCollisionBounds(); }
-	bool isColliding(const sf::FloatRect& otherBox) const override;
-	bool isColliding(const sf::Vector2f& otherPos) const override;
+	ICollidable* getCollision() override { return &collisionBox; }
 	void onCollision(ICollidable* other) override;
 };

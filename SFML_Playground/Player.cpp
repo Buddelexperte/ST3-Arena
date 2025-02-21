@@ -180,16 +180,6 @@ void Player::tick_collision(const float& deltaTime)
 	return;
 }
 
-bool Player::isColliding(const sf::FloatRect& otherBox) const
-{
-	return collisionBox.isColliding(otherBox);
-}
-
-bool Player::isColliding(const sf::Vector2f& otherPos) const
-{
-	return collisionBox.isColliding(otherPos);
-}
-
 void Player::onCollision(ICollidable* other)
 {
 	return;

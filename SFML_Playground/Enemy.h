@@ -37,9 +37,7 @@ public:
 	void tick(const float&, const RenderInfo& playerRenderInfo);
 
 	// Collision
-	sf::FloatRect getCollisionBounds() const override { return collisionBox.getCollisionBounds(); }
-	bool isColliding(const sf::FloatRect& otherBound) const override;
-	bool isColliding(const sf::Vector2f& otherPos) const override;
+	ICollidable* getCollision() override { return &collisionBox; }
 	virtual void onCollision(ICollidable* other) override;
 
 	// Position
