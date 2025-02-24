@@ -99,15 +99,16 @@ void EnemyManager::tick_spawning(const float& deltaTime)
 void EnemyManager::tick_enemies(const float& deltaTime)
 {
     const ICollidable::RenderInfo playerRenderInfo = gameInstance.getPlayer()->getRenderInfo();
-
+    
     for (const auto& pair : activeEnemies)
     {
-        if (!pair.second)
+        if (pair.second)
             continue;
 
         pair.second->tick(deltaTime, playerRenderInfo);
         enemyRenderer.setVelocity(pair.first, pair.second->getVelocity());
     }
+
 }
 
 void EnemyManager::tick(const float& deltaTime)
