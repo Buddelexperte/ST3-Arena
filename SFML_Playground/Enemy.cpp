@@ -80,7 +80,6 @@ void Enemy::tick_move(const float& deltaTime, const RenderInfo& playerRenderInfo
 	zeroPrecision(rotation);
 	if (rotation != targetRot)
 	{
-		constexpr float ROT_LERP = LERP_SMOOTHNESS * 0.6f;
 		setRotation(lerp(rotation, targetRot, ROT_LERP));
 	}
 }
