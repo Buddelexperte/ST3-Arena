@@ -10,8 +10,8 @@ class EnemyManager : public sf::Drawable
 private:
 	GI_Arena& gameInstance;
 
-	const float spawnInterval = 0.00001f;
-	const int maxEnemies = 100; // Temporary safe guard, replace with actual spawning logic later
+	const float spawnInterval = SMALLEST_PRECISION;
+	const int maxEnemies = 9; // Temporary safe guard, replace with actual spawning logic later
 	static int enemyID;
 
 	EnemyPool enemyPool; // Manages memory
