@@ -1,11 +1,14 @@
 #pragma once
 
+constexpr float LERP_SMOOTHNESS = 0.01f;
+
 enum InfoType {
-	EMPTY_INFO = 0,		// No info
-	POSITION = 1 << 1,	// 0001: Position
-	SIZE = 1 << 2,	// 0010: Size
-	VELOCITY = 1 << 3,	// 0100: Velocity
-	COLOR = 1 << 4	// 1000: Color
+	EMPTY_INFO	= 0,		// No info
+	POSITION	= 1 << 0,	// 00001: Position
+	SIZE		= 1 << 1,	// 00010: Size
+	VELOCITY	= 1 << 2,	// 00100: Velocity
+	COLOR		= 1 << 3,	// 01000: Color
+	ROTATION	= 1 << 4	// 10000: Rotation
 };
 
 // Overload bitwise operators for InfoType if necessary:

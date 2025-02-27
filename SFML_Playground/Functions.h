@@ -19,7 +19,7 @@ std::shared_ptr<T> lockWeakPtr(const std::weak_ptr<T>& weakPtr) {
 	if (auto lockedPtr = weakPtr.lock()) {
 		return lockedPtr;
 	}
-	std::cerr << "Weak pointer has expired and is unavailable!\n";
+	// std::cerr << "Weak pointer has expired and is unavailable!\n"; // Somehow doesn't recognize std:: namespace
 	return nullptr;  // Or handle the expired object case appropriately
 }
 

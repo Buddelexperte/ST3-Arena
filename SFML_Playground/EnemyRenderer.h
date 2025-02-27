@@ -99,22 +99,62 @@ public:
         enemyUpdateFlags[index] |= InfoType::COLOR;
     }
 
+    // rotation is in degrees.
+    void setRotation(const size_t key, float rotation)
+    {
+        auto it = enemyKeyIndexMap.find(key);
+        if (it == enemyKeyIndexMap.end())
+            return;
+
+        size_t index = it->second;
+        enemyRenderInfos[index].rot = rotation;
+        enemyUpdateFlags[index] |= InfoType::ROTATION;
+    }
+
     // Updates the vertex quad at the specified index if needed.
     void updateVertexQuad(size_t index)
     {
         const InfoType flags = enemyUpdateFlags[index];
         const size_t vertexStart = index * 4;
 
+        // Check if any of POSITION, SIZE, or ROTATION flags are set.
+        if ((enemyUpdateFlags[index] & (InfoType::POSITION | InfoType::SIZE | InfoType::ROTATION)) == InfoType::EMPTY_INFO 
+            && (enemyUpdateFlags[index] & InfoType::COLOR) == InfoType::EMPTY_INFO)
+            return; // No update needed.
+
         // Update quad positions if POSITION or SIZE flag is set.
-        if ((flags & InfoType::POSITION) != InfoType::EMPTY_INFO ||
-            (flags & InfoType::SIZE) != InfoType::EMPTY_INFO)
+        if ((flags & (InfoType::POSITION | InfoType::ROTATION | InfoType::SIZE)) != InfoType::EMPTY_INFO)
         {
+            const size_t vertexStart = index * 4;
             const sf::Vector2f pos = enemyRenderInfos[index].pos;
             const sf::Vector2f halfSize = enemyRenderInfos[index].size / 2.f;
-            enemyVertices[vertexStart + 0].position = pos + sf::Vector2f(-halfSize.x, -halfSize.y);
-            enemyVertices[vertexStart + 1].position = pos + sf::Vector2f(halfSize.x, -halfSize.y);
-            enemyVertices[vertexStart + 2].position = pos + sf::Vector2f(halfSize.x, halfSize.y);
-            enemyVertices[vertexStart + 3].position = pos + sf::Vector2f(-halfSize.x, halfSize.y);
+
+            // Define the four local corners (unrotated).
+            sf::Vector2f corners[4] = {
+                sf::Vector2f(-halfSize.x, -halfSize.y),  // top-left
+                sf::Vector2f(halfSize.x, -halfSize.y),    // top-right
+                sf::Vector2f(halfSize.x,  halfSize.y),    // bottom-right
+                sf::Vector2f(-halfSize.x,  halfSize.y)     // bottom-left
+            };
+            
+            if ((flags & InfoType::ROTATION) != InfoType::EMPTY_INFO)
+            {
+                float rotation = enemyRenderInfos[index].rot; // in degrees
+
+                // Convert rotation to radians.
+                float rad = rotation * pi / 180.f;
+                float cosA = std::cos(rad);
+                float sinA = std::sin(rad);
+
+                // Rotate each corner around the origin (0,0) and then translate to pos.
+                for (int i = 0; i < 4; i++)
+                {
+                    sf::Vector2f rotatedOffset;
+                    rotatedOffset.x = corners[i].x * cosA - corners[i].y * sinA;
+                    rotatedOffset.y = corners[i].x * sinA + corners[i].y * cosA;
+                    enemyVertices[vertexStart + i].position = pos + rotatedOffset;
+                }
+            }
         }
 
         // Update color if COLOR flag is set.

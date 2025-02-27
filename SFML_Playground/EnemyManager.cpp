@@ -107,6 +107,7 @@ void EnemyManager::tick_enemies(const float& deltaTime)
 
         pair.second->tick(deltaTime, playerRenderInfo);
         enemyRenderer.setVelocity(pair.first, pair.second->getVelocity());
+        enemyRenderer.setRotation(pair.first, pair.second->getRotation());
     }
 
 }

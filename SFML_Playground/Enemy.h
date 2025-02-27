@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 
 #include "RandomNumbers.h"
+#include "Player.h"
+// Parent Classes
 #include "Collision.h"
 #include "RenderInfo.h"
 
@@ -13,8 +15,8 @@ class Enemy : public ICollidable, public IMovable
 private:
 	GI_Arena* gameInstance;
 	EnemyManager* manager;
-	RNG& random = RNG::getInstance();
 	Player* playerRef = nullptr;
+	RNG& random = RNG::getInstance();
 
 	CollisionBox collisionBox;
 

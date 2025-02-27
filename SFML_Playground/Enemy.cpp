@@ -1,8 +1,8 @@
 #pragma once
 
+#include "Enemy.h" // Own Header File
 #include "GameInstance.h"
 #include "EnemyManager.h"
-#include "Enemy.h"
 
 Enemy::Enemy()
 	: 
@@ -70,6 +70,19 @@ void Enemy::tick_move(const float& deltaTime, const RenderInfo& playerRenderInfo
 
 	addPosition(offset);
 	setVelocity(newVelo);
+
+	// Rotation
+
+	const sf::Vector2f pos = getPosition();
+	const float targetRot = getLookAtRot(playerRenderInfo.pos, pos);
+	float rotation = getRotation();
+
+	zeroPrecision(rotation);
+	if (rotation != targetRot)
+	{
+		constexpr float ROT_LERP = LERP_SMOOTHNESS * 0.6f;
+		setRotation(lerp(rotation, targetRot, ROT_LERP));
+	}
 }
 
 void Enemy::tick_collision(const float& deltaTime)
