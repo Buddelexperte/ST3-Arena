@@ -5,10 +5,10 @@
 #include "Enemy.h"
 
 Enemy::Enemy()
-	: renderInfo(), 
+	: 
 	gameInstance(&GI_Arena::getInstance()), 
 	manager(&EnemyManager::getInstance()),
-	collisionBox(renderInfo.pos, renderInfo.size)
+	collisionBox(getPosition(), getSize())
 {
 	setPlayer(gameInstance->getPlayer());
 }
@@ -21,7 +21,7 @@ void Enemy::setPlayer(Player* playerPtr)
 sf::Vector2f Enemy::getNewSpawnPos() const
 {
 	// Getting values for generating a position
-	sf::Vector2f playerPos = gameInstance->getPlayer()->getPos();
+	sf::Vector2f playerPos = gameInstance->getPlayer()->getPosition();
 
 	// Generating the random position
 	float distance = random.floatInRange(200.0f, 1000.0f);
@@ -52,26 +52,24 @@ void Enemy::tick(const float& deltaTime, const RenderInfo& playerRenderInfo)
 void Enemy::tick_move(const float& deltaTime, const RenderInfo& playerRenderInfo)
 {
 	// TODO: PROTOTYPE MOVEMENT LOGIC
-	sf::Vector2f distance = playerRenderInfo.pos - renderInfo.pos;
+	sf::Vector2f distance = playerRenderInfo.pos - getPosition();
 	zeroPrecision(distance);
 
 	// On target contact, no need for calculations, just set speed to zero
 	if (distance == sf::Vector2f(0.0f, 0.0f))
 	{
-		renderInfo.velocity = { 0.0f, 0.0f };
+		setVelocity({ 0.0f, 0.0f });
 		return;
 	}
 
 	// Get Velocity by direction * (speed / normalized direction)
 	const float norm = std::abs(distance.x) + std::abs(distance.y);
 	// Calculate velocity: scale the direction vector by speed/normalized length.
-	renderInfo.velocity = distance * (speed / norm);
+	setVelocity(distance * (speed / norm));
 
 	// Update the position based on velocity and scale by deltaTime
-	const sf::Vector2f offset = renderInfo.velocity * deltaTime;
-	renderInfo.pos += offset;
-	// COLLISION
-	collisionBox.setPos(collisionBox.getPos() + offset);
+	const sf::Vector2f offset = getVelocity() * deltaTime;
+	addPosition(offset);
 }
 
 void Enemy::tick_collision(const float& deltaTime)
@@ -95,39 +93,38 @@ void Enemy::die()
 	manager->callDelete(enemyIndex);
 }
 
-void Enemy::setPosition(const sf::Vector2f& newPos)
+void Enemy::setPosition(const sf::Vector2f& pos)
 {
-	if (newPos == renderInfo.pos) return;
-
-	renderInfo.pos = newPos;
+	if (pos == getPosition()) return;
+	IMovable::setPosition(pos);
 	manager->callUpdate(enemyIndex, InfoType::POSITION);
-
-	// Collision rectangle update: subtract half size for both X and Y
-	collisionBox.setPos(newPos);
+	collisionBox.setPos(pos);
 }
 
+void Enemy::addPosition(const sf::Vector2f& delta)
+{
+	IMovable::addPosition(delta);
+	collisionBox.setPos(collisionBox.getPos() + delta);
+}
 
 void Enemy::setSize(const sf::Vector2f& size)
 {
-	if (size == renderInfo.size) return;
-
-	renderInfo.size = size;
+	if (size == getSize()) return;
+	IMovable::setSize(size);
 	manager->callUpdate(enemyIndex, InfoType::SIZE);
-
 	collisionBox.setSize(size);
 }
 
 void Enemy::setColor(const sf::Color& color)
 {
-	if (color == renderInfo.color) return;
-
-	renderInfo.color = color;
+	if (color == getColor()) return;
+	IMovable::setColor(color);
 	manager->callUpdate(enemyIndex, InfoType::COLOR);
 }
 
-void Enemy::setRenderInfo(const RenderInfo& renderInfo)
+void Enemy::setRenderInfo(const RenderInfo& newRenderInfo)
 {
-	this->renderInfo = renderInfo;
-	collisionBox.setPos(renderInfo.pos);
-	collisionBox.setSize(renderInfo.size);
+	IMovable::setRenderInfo(newRenderInfo);
+	collisionBox.setPos(getPosition());
+	collisionBox.setSize(getSize());
 }

@@ -1,8 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-
-
 // Collision Interface, works with CollisionBox (CollisionComponent)
 class ICollidable
 {
@@ -10,12 +8,6 @@ private:
 	// Collision tick prefab
 	virtual void tick_collision(const float& deltaTime) {};
 public:
-	struct RenderInfo {
-		sf::Vector2f pos = sf::Vector2f(0.0f, 0.0f);
-		sf::Vector2f size = sf::Vector2f(100.0f, 100.0f);
-		sf::Vector2f velocity = sf::Vector2f(0.0f, 0.0f);
-		sf::Color color = sf::Color::White;
-	};
 	// Pure virtual function that must be implemented by any class using this interface.
 	virtual ICollidable* getCollision() = 0;
 	virtual sf::FloatRect getCollisionBounds()
@@ -54,6 +46,13 @@ public:
 		collisionRect.width = size.x;
 		collisionRect.height = size.y;
 	}
+
+	void setPos(const sf::Vector2f& newPos)
+	{
+		pos = newPos;
+		collisionRect.top = pos.y - (size.y / 2.0f);
+		collisionRect.left = pos.x - (size.x / 2.0f);
+	}
 	void setSize(const sf::Vector2f& newSize)
 	{
 		size = newSize;
@@ -61,12 +60,6 @@ public:
 		collisionRect.left = pos.x - (size.x / 2.0f);
 		collisionRect.width = size.x;
 		collisionRect.height = size.y;
-	}
-	void setPos(const sf::Vector2f& newPos)
-	{
-		pos = newPos;
-		collisionRect.top = pos.y - (size.y / 2.0f);
-		collisionRect.left = pos.x - (size.x / 2.0f);
 	}
 	sf::Vector2f getSize() const { return size; }
 	sf::Vector2f getPos() const { return pos; }

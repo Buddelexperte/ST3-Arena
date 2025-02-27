@@ -286,7 +286,7 @@ public:
 
     }
 
-    sf::Vector2f getPos() const
+    sf::Vector2f getPosition() const
     {
         return flashlightSprite.getPosition();
     }

@@ -1,13 +1,14 @@
 #pragma once
 #include "Button.h"
 #include "BaseTypes.h"
+#include "RenderInfo.h"
 
 class GI_Arena;
 class InputWidget;
 
 // WIDGETS ----------------------------------------------------------------------------------------
 
-class WidgetElement : public sf::Drawable
+class WidgetElement : public sf::Drawable, public IMovable
 {
 protected:
 	float lastDeltaTime = 0.0f;
@@ -39,17 +40,6 @@ public:
 	virtual void construct() { windowUpdate(); };
 
 	InputWidget* getParent() const { return parent; }
-	// Position
-	virtual void setPos(const sf::Vector2f&) { return; }
-	virtual void addPos(const sf::Vector2f&) { return; }
-	virtual sf::Vector2f getPos() const { return sf::Vector2f(0.0f, 0.0f); };
-	// Rotation
-	virtual void setRot(const float&) { return; }
-	virtual void addRot(const float&) { return; }
-	virtual float getRot() const { return 0.0f; }
-	// Scale (NOT SIZE)
-	virtual void setSize(const sf::Vector2f&) { return; };
-	virtual sf::Vector2f getSize() const { return sf::Vector2f(0.0f, 0.0f); };
 
 	virtual void tick(const float& deltaTime) { lastDeltaTime = deltaTime;  windowUpdate(); };
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

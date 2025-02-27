@@ -157,7 +157,7 @@ void GI_Arena::setViewPos(const sf::Vector2f& newPos)
 // ReCenter sf::View position on current Player position and set prevCamPos
 void GI_Arena::resetViewPos()
 {
-	setViewPos(getPlayer()->getPos());
+	setViewPos(getPlayer()->getPosition());
 	prevCamPos = view->getCenter();
 }
 
@@ -169,7 +169,7 @@ void GI_Arena::tickView(const float& deltaTime)
 
 	// Get current camera and player positions
 	const sf::Vector2f& camPos = view->getCenter();
-	const sf::Vector2f& playerPos = getPlayer()->getPos();
+	const sf::Vector2f& playerPos = getPlayer()->getPosition();
 
 	// Calculate distance between both positions (x and y)
 	sf::Vector2f distance = camPos - playerPos;

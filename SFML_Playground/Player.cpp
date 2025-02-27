@@ -5,16 +5,16 @@
 
 Player::Player(InputWidget* parent)
 	: InputWidget(parent),
-	collisionBox(renderInfo.pos, renderInfo.size)
+	collisionBox(getPosition(), getSize())
 {
 
 	// Player Sprite Initialization
-	renderInfo.pos = windowCenter;
-	playerSprite.setPosition(renderInfo.pos);
-	collisionBox.setPos(renderInfo.pos);
+	IMovable::setPosition(windowCenter);
+	playerSprite.setPosition(windowCenter);
+	collisionBox.setPos(windowCenter);
 
-	renderInfo.color = sf::Color::White;
-	playerSprite.setColor(renderInfo.color);
+	IMovable::setColor(sf::Color::White);
+	playerSprite.setColor(sf::Color::White);
 
 	for (int i = 4; i <= 6; i++)
 	{
@@ -63,29 +63,31 @@ void Player::calcMovement(const float& deltaTime)
 	if (sf::Keyboard::isKeyPressed(KEY_D)) x += WALKING_SPEED;
 
 	sf::Vector2f targetVelo = sf::Vector2f{ x, y } *multiplier;
-	zeroPrecision(renderInfo.velocity);
+	sf::Vector2f currVelo = getVelocity();
+	zeroPrecision(currVelo);
 
-	if (!shouldZero(targetVelo - renderInfo.velocity))
-		renderInfo.velocity = lerp(renderInfo.velocity, targetVelo, LERP_SMOOTHNESS);
+	if (!shouldZero(targetVelo - currVelo))
+		currVelo = (lerp(currVelo, targetVelo, LERP_SMOOTHNESS));
 	else
-		renderInfo.velocity = targetVelo;
+		currVelo = (targetVelo);
 
-	direction = { renderInfo.velocity.x / WALKING_SPEED, renderInfo.velocity.y / WALKING_SPEED };
-	const sf::Vector2f delta = renderInfo.velocity * deltaTime;
-	addPos(delta);
+	direction = { currVelo.x / WALKING_SPEED, currVelo.y / WALKING_SPEED };
+	const sf::Vector2f delta = currVelo * deltaTime;
+	addPosition(delta);
+	setVelocity(currVelo);
 
 	 // Rotation
 
-	const sf::Vector2f playerPos = getPos();
+	const sf::Vector2f playerPos = getPosition();
 	const sf::Vector2f mousePos = gameInstance->getMousePos();
 	const float targetRot = getLookAtRot(playerPos, mousePos);
-	float rotation = getRot();
+	float rotation = getRotation();
 
 	zeroPrecision(rotation);
 	if (rotation != targetRot)
 	{
 		const float ROT_LERP = LERP_SMOOTHNESS * 10.0f * multiplier;
-		setRot(lerp(rotation, targetRot, ROT_LERP));
+		setRotation(lerp(rotation, targetRot, ROT_LERP));
 	}
 }
 
@@ -130,40 +132,30 @@ float Player::scrollInput(sf::Event* eventRef)
 
 // Setter and Getter methods
 
-void Player::setPos(const sf::Vector2f& newPos)
+void Player::setPosition(const sf::Vector2f& newPos)
 {
+	IMovable::setPosition(newPos);
 	playerSprite.setPosition(newPos);
-	renderInfo.pos = newPos;
-	// Update the collision rectangle to reflect the new position
 	collisionBox.setPos(newPos);
 }
 
-void Player::addPos(const sf::Vector2f& delta)
+void Player::addPosition(const sf::Vector2f& deltaPos)
 {
-	playerSprite.move(delta);
-	renderInfo.pos += delta;
-	// Update the collision rectangle to reflect the movement
-	collisionBox.setPos(collisionBox.getPos() + delta);
+	IMovable::addPosition(deltaPos);
+	playerSprite.move(deltaPos);
+	collisionBox.setPos(collisionBox.getPos() + deltaPos);
 }
 
-sf::Vector2f Player::getPos() const
+void Player::setRotation(const float& newRot)
 {
-	return playerSprite.getPosition();
-}
-
-void Player::setRot(const float& newRot)
-{
+	IMovable::setRotation(newRot);
 	playerSprite.setRotation(newRot - 90.0f);
-}
-
-float Player::getRot() const
-{
-	return playerSprite.getRotation() + 90.0f;
 }
 
 void Player::setSize(const sf::Vector2f& newSize)
 {
 	if (!playerSprite.getTexture()) return;
+	IMovable::setSize(newSize);
 
 	const sf::Vector2u textureSize = playerSprite.getTexture()->getSize();
 	const sf::Vector2f originalSize(textureSize.x, textureSize.y);

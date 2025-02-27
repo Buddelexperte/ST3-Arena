@@ -3,11 +3,12 @@
 
 #include "RandomNumbers.h"
 #include "Collision.h"
+#include "RenderInfo.h"
 
 class GI_Arena;
 class EnemyManager;
 
-class Enemy : public ICollidable
+class Enemy : public ICollidable, public IMovable
 {
 private:
 	GI_Arena* gameInstance;
@@ -18,9 +19,10 @@ private:
 	CollisionBox collisionBox;
 
 	size_t enemyIndex = -1;
-	RenderInfo renderInfo;
 
 	const float speed = 100.0f;
+
+	using IMovable::setVelocity; // Make this function private for safety reasons
 
 	sf::Vector2f getNewSpawnPos() const;
 
@@ -40,18 +42,13 @@ public:
 	ICollidable* getCollision() override { return &collisionBox; }
 	virtual void onCollision(ICollidable* other) override;
 
+	// RenderInfo general
+	void setRenderInfo(const RenderInfo& newRenderInfo) override;
 	// Position
-	void setPosition(const sf::Vector2f& pos);
-	sf::Vector2f getPosition() const { return renderInfo.pos; }
+	void setPosition(const sf::Vector2f& pos) override;
+	void addPosition(const sf::Vector2f& delta) override;
 	// Size
-	void setSize(const sf::Vector2f& size);
-	sf::Vector2f getSize() const { return renderInfo.size; }
+	void setSize(const sf::Vector2f& size) override;
 	// Color
-	void setColor(const sf::Color& color);
-	sf::Color getColor() const { return renderInfo.color; }
-	// Velocity (only get)
-	sf::Vector2f getVelocity() const { return renderInfo.velocity; }
-
-	void setRenderInfo(const RenderInfo&);
-	RenderInfo getRenderInfo() const { return renderInfo; }
+	void setColor(const sf::Color& color) override;
 };

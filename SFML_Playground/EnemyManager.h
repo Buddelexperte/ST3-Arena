@@ -31,6 +31,8 @@ private:
 
 	void deleteEnemy(const size_t&);
 
+	const IMovable::RenderInfo standardRenderInfo = { {0.0f, 0.0f}, {100.0f, 100.0f}, 0.0f, {0.0f, 0.0f}, sf::Color::White };
+
 public:
 	static EnemyManager& getInstance()
 	{
@@ -44,7 +46,8 @@ public:
 	void callDelete(const size_t);
 	void callUpdate(const size_t&, const InfoType&);
 
-	void spawnEnemy(const Enemy::RenderInfo& = { {0.0f, 0.0f}, {100.0f, 100.0f}, {0.0f, 0.0f}, sf::Color::White });
+	// TODO: Implemenz teh standard RenderInfo into all isntances of this function
+	void spawnEnemy(const IMovable::RenderInfo renderInfo);
 
 	void tick(const float& deltaTime);
 

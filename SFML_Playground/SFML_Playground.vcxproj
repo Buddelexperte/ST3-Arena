@@ -148,6 +148,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="FontManager.h" />
+    <ClCompile Include="RenderInfo.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="MainClasses.cpp" />

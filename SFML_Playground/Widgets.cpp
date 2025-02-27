@@ -540,7 +540,7 @@ void W_Gameplay::construct()
 
 	if (gameState == GAME_LAUNCHING)
 	{
-		gameInstance->getPlayer()->setPos((sf::Vector2f(0.0f, 0.0f) + windowCenter));
+		gameInstance->getPlayer()->setPosition((sf::Vector2f(0.0f, 0.0f) + windowCenter));
 		gameInstance->resetViewPos();
 		// Reset values to game start values
 		hitTargets = 0;

@@ -12,13 +12,14 @@ private:
 
 	CollisionBox collisionBox;
 
-	RenderInfo renderInfo;
 	sf::Vector2f direction = { 0.0f, 0.0f };
 
 	std::vector<sf::Texture> playerTextures = {};
 	int currentFrame = 0;
 	float animationAccu = 0.0f;
 	float animationSpeed = 0.0f;
+
+	using IMovable::setVelocity; // Make this function private
 
 	void tick_collision(const float& deltaTime) override;
 	void calcMovement(const float&);
@@ -29,16 +30,12 @@ protected:
 public:
 	Player(InputWidget*);
 	void tick(const float&) override;
-	void setPos(const sf::Vector2f&) override;
-	void addPos(const sf::Vector2f&) override;
-	sf::Vector2f getPos() const override;
-	void setRot(const float&) override;
-	float getRot() const override;
+	// Movable Interface
+	void setPosition(const sf::Vector2f&) override;
+	void addPosition(const sf::Vector2f&) override;
+	void setRotation(const float&) override;
 	void setSize(const sf::Vector2f&) override;
-	sf::Vector2f getVelocity() const { return renderInfo.velocity; };
 	sf::Vector2f getDirection() const { return direction; };
-
-	RenderInfo getRenderInfo() const { return renderInfo; }
 	// Collision-Interface
 	ICollidable* getCollision() override { return &collisionBox; }
 	void onCollision(ICollidable* other) override;
