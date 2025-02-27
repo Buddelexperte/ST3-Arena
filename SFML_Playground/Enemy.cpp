@@ -40,6 +40,7 @@ void Enemy::spawn()
 
 void Enemy::tick(const float& deltaTime, const RenderInfo& playerRenderInfo)
 {
+	std::cout << "Enemy tick" << std::endl;
 	// Calculate movement and apply i
 	tick_move(deltaTime, playerRenderInfo);
 
@@ -53,10 +54,9 @@ void Enemy::tick_move(const float& deltaTime, const RenderInfo& playerRenderInfo
 {
 	// TODO: PROTOTYPE MOVEMENT LOGIC
 	sf::Vector2f distance = playerRenderInfo.pos - getPosition();
-	zeroPrecision(distance);
 
 	// On target contact, no need for calculations, just set speed to zero
-	if (distance == sf::Vector2f(0.0f, 0.0f))
+	if (shouldZero(distance))
 	{
 		setVelocity({ 0.0f, 0.0f });
 		return;
@@ -65,11 +65,14 @@ void Enemy::tick_move(const float& deltaTime, const RenderInfo& playerRenderInfo
 	// Get Velocity by direction * (speed / normalized direction)
 	const float norm = std::abs(distance.x) + std::abs(distance.y);
 	// Calculate velocity: scale the direction vector by speed/normalized length.
-	setVelocity(distance * (speed / norm));
-
+	sf::Vector2f newVelo = (distance * (speed / norm));
 	// Update the position based on velocity and scale by deltaTime
-	const sf::Vector2f offset = getVelocity() * deltaTime;
+	sf::Vector2f offset = newVelo * deltaTime;
+
 	addPosition(offset);
+	setVelocity(newVelo);
+
+	std::cout << newVelo.x << " x " << newVelo.y << " y" << std::endl;
 }
 
 void Enemy::tick_collision(const float& deltaTime)
@@ -103,6 +106,7 @@ void Enemy::setPosition(const sf::Vector2f& pos)
 
 void Enemy::addPosition(const sf::Vector2f& delta)
 {
+	if (shouldZero(delta)) return;
 	IMovable::addPosition(delta);
 	collisionBox.setPos(collisionBox.getPos() + delta);
 }
@@ -125,6 +129,6 @@ void Enemy::setColor(const sf::Color& color)
 void Enemy::setRenderInfo(const RenderInfo& newRenderInfo)
 {
 	IMovable::setRenderInfo(newRenderInfo);
-	collisionBox.setPos(getPosition());
-	collisionBox.setSize(getSize());
+	collisionBox.setPos(newRenderInfo.pos);
+	collisionBox.setSize(newRenderInfo.size);
 }

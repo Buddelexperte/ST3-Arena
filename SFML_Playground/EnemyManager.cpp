@@ -23,7 +23,7 @@ int EnemyManager::getNumActiveEnemies() const
 	return static_cast<int>(activeEnemies.size());
 }
 
-void EnemyManager::spawnEnemy(const IMovable::RenderInfo renderInfo)
+void EnemyManager::spawnEnemy(const IMovable::RenderInfo& renderInfo)
 {
     // Retrieve an enemy instance from the pool
     std::unique_ptr<Enemy> newEnemy = enemyPool.get();
@@ -51,7 +51,7 @@ void EnemyManager::deleteEnemy(const size_t& key)
     enemyRenderer.removeEnemy(key);
 }
 
-void EnemyManager::callDelete(const size_t key)
+void EnemyManager::callDelete(const size_t& key)
 {
     pendingKill.insert(key);
 }
@@ -93,13 +93,13 @@ void EnemyManager::tick_spawning(const float& deltaTime)
         return;
 
     timer += spawnInterval; // Reset the timer to the configured spawn interval
-    spawnEnemy();
+    spawnEnemy(standardRenderInfo);
 }
 
 void EnemyManager::tick_enemies(const float& deltaTime)
 {
     const IMovable::RenderInfo playerRenderInfo = gameInstance.getPlayer()->getRenderInfo();
-    
+ 
     for (const auto& pair : activeEnemies)
     {
         if (pair.second)

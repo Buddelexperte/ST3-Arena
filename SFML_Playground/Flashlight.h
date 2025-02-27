@@ -201,7 +201,7 @@ public:
         // Update flashlight position and rotation
         static sf::Vector2f lastPos;
         static float lastRot;
-        sf::Vector2f newPos = gameInstance->getPlayer()->getPos();
+        sf::Vector2f newPos = gameInstance->getPlayer()->getPosition();
         if (newPos != lastPos) {
             flashlightSprite.setPosition(newPos);
             lastPos = newPos;

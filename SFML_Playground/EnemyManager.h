@@ -12,7 +12,7 @@ private:
 	GI_Arena& gameInstance;
 
 	const float spawnInterval = 0.00001f;
-	const int maxEnemies = 3000; // Temporary safe guard, replace with actual spawning logic later
+	const int maxEnemies = 1; // Temporary safe guard, replace with actual spawning logic later
 	static int enemyID;
 
 	EnemyPool enemyPool; // Manages memory
@@ -43,11 +43,10 @@ public:
 	void setPlayer(Player*);
 
 	int getNumActiveEnemies() const;
-	void callDelete(const size_t);
+	void callDelete(const size_t&);
 	void callUpdate(const size_t&, const InfoType&);
 
-	// TODO: Implemenz teh standard RenderInfo into all isntances of this function
-	void spawnEnemy(const IMovable::RenderInfo renderInfo);
+	void spawnEnemy(const IMovable::RenderInfo& renderInfo);
 
 	void tick(const float& deltaTime);
 
