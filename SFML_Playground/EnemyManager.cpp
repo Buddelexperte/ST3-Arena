@@ -102,7 +102,7 @@ void EnemyManager::tick_enemies(const float& deltaTime)
  
     for (const auto& pair : activeEnemies)
     {
-        if (pair.second)
+        if (!pair.second)
             continue;
 
         pair.second->tick(deltaTime, playerRenderInfo);

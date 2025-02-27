@@ -40,7 +40,6 @@ void Enemy::spawn()
 
 void Enemy::tick(const float& deltaTime, const RenderInfo& playerRenderInfo)
 {
-	std::cout << "Enemy tick" << std::endl;
 	// Calculate movement and apply i
 	tick_move(deltaTime, playerRenderInfo);
 
@@ -71,8 +70,6 @@ void Enemy::tick_move(const float& deltaTime, const RenderInfo& playerRenderInfo
 
 	addPosition(offset);
 	setVelocity(newVelo);
-
-	std::cout << newVelo.x << " x " << newVelo.y << " y" << std::endl;
 }
 
 void Enemy::tick_collision(const float& deltaTime)
