@@ -81,6 +81,9 @@
     <ClCompile Include="RenderInfo.h">
       <Filter>Header\Actors\Abstracts</Filter>
     </ClCompile>
+    <ClCompile Include="Inventory.cpp">
+      <Filter>Source\Actors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SFML_Arena.h">
@@ -142,6 +145,12 @@
     </ClInclude>
     <ClInclude Include="Collision.h">
       <Filter>Header\Actors\Abstracts</Filter>
+    </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>Header\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Header\Actors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

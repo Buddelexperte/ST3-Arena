@@ -148,6 +148,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="FontManager.h" />
+    <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="RenderInfo.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -170,6 +171,8 @@
     <ClInclude Include="GameInstance.h" />
     <ClInclude Include="Flashlight.h" />
     <ClInclude Include="Functions.h" />
+    <ClInclude Include="Inventory.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RandomNumbers.h" />
     <ClInclude Include="Slider.h" />

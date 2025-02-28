@@ -6,7 +6,7 @@
 
 Enemy::Enemy()
 	: 
-	gameInstance(&GI_Arena::getInstance()), 
+	gameInstance(&GI_Arena::getInstance()),
 	manager(&EnemyManager::getInstance()),
 	collisionBox(getPosition(), getSize())
 {
