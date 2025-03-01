@@ -173,6 +173,7 @@
     <ClInclude Include="Functions.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="ItemPool.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RandomNumbers.h" />
     <ClInclude Include="Slider.h" />

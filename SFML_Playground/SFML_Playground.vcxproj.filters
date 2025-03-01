@@ -152,6 +152,9 @@
     <ClInclude Include="Item.h">
       <Filter>Header\Actors</Filter>
     </ClInclude>
+    <ClInclude Include="ItemPool.h">
+      <Filter>Header\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="SaveGame.txt" />

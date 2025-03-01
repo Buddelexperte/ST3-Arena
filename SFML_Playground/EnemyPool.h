@@ -2,8 +2,6 @@
 #include <memory>
 #include <queue>
 
-#include <iostream>
-
 #include "Enemy.h"
 
 class EnemyPool
