@@ -54,7 +54,7 @@ void Enemy::tick_move(const float& deltaTime, const RenderInfo& playerRenderInfo
 	// TODO: PROTOTYPE MOVEMENT LOGIC
 	sf::Vector2f distance = playerRenderInfo.pos - getPosition();
 
-	// On target contact, no need for calculations, just set speed to zero
+	// On target contact, no need for calculations, just set speed to zero and stop calculations
 	if (shouldZero(distance))
 	{
 		setVelocity({ 0.0f, 0.0f });
@@ -62,9 +62,9 @@ void Enemy::tick_move(const float& deltaTime, const RenderInfo& playerRenderInfo
 	}
 
 	// Get Velocity by direction * (speed / normalized direction)
-	const float norm = std::abs(distance.x) + std::abs(distance.y);
+	float norm = std::abs(distance.x) + std::abs(distance.y);
 	// Calculate velocity: scale the direction vector by speed/normalized length.
-	sf::Vector2f newVelo = (distance * (speed / norm));
+	sf::Vector2f newVelo = (distance * (WALK_SPEED / norm));
 	// Update the position based on velocity and scale by deltaTime
 	sf::Vector2f offset = newVelo * deltaTime;
 

@@ -73,7 +73,7 @@ void Player::calcMovement(const float& deltaTime)
 		currVelo = (targetVelo);
 
 	direction = { currVelo.x / WALKING_SPEED, currVelo.y / WALKING_SPEED };
-	const sf::Vector2f offset = currVelo * deltaTime;
+	sf::Vector2f offset = currVelo * deltaTime;
 
 	addPosition(offset);
 	setVelocity(currVelo);
