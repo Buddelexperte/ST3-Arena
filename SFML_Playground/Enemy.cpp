@@ -34,7 +34,7 @@ void Enemy::spawn()
 {
 	setPosition(getNewSpawnPos());
 
-	if (!(enemyIndex % 3))
+	if (enemyIndex == 0)
 		setColor(sf::Color::Red);
 }
 
@@ -74,11 +74,10 @@ void Enemy::tick_move(const float& deltaTime, const RenderInfo& playerRenderInfo
 	// Rotation
 
 	const sf::Vector2f pos = getPosition();
-	const float targetRot = getLookAtRot(playerRenderInfo.pos, pos);
 	float rotation = getRotation();
+	const float targetRot = getLookAtRot(playerRenderInfo.pos, pos);
 
-	zeroPrecision(rotation);
-	if (rotation != targetRot)
+	if (!(shouldZero(rotation - targetRot)))
 	{
 		setRotation(lerp(rotation, targetRot, ROT_LERP));
 	}

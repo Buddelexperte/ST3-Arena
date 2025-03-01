@@ -1,5 +1,7 @@
 #include "Inventory.h"
 
+size_t Inventory::itemID = 0;
+
 Inventory::Inventory(std::unique_ptr<Item> initItem)
 	: Inventory()
 { 
@@ -8,7 +10,7 @@ Inventory::Inventory(std::unique_ptr<Item> initItem)
 
 Inventory::Inventory()
 {
-	Inventory::itemID = 0;
+
 }
 
 void Inventory::addItem(std::unique_ptr<Item> newItem)

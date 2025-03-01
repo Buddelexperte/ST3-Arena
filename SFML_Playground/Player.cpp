@@ -54,6 +54,7 @@ void Player::calcMovement(const float& deltaTime)
 	constexpr float LERP_SMOOTHNESS = 0.01f;
 
 	float x = 0.0f, y = 0.0f, multiplier = 1.0f;
+
 	if (sf::Keyboard::isKeyPressed(KEY_LSHIFT))
 		multiplier *= 1.7f;
 
@@ -62,7 +63,7 @@ void Player::calcMovement(const float& deltaTime)
 	if (sf::Keyboard::isKeyPressed(KEY_S)) y += WALKING_SPEED;
 	if (sf::Keyboard::isKeyPressed(KEY_D)) x += WALKING_SPEED;
 
-	sf::Vector2f targetVelo = sf::Vector2f{ x, y } *multiplier;
+	sf::Vector2f targetVelo = sf::Vector2f{ x, y } * multiplier;
 	sf::Vector2f currVelo = getVelocity();
 	zeroPrecision(currVelo);
 
@@ -72,19 +73,19 @@ void Player::calcMovement(const float& deltaTime)
 		currVelo = (targetVelo);
 
 	direction = { currVelo.x / WALKING_SPEED, currVelo.y / WALKING_SPEED };
-	const sf::Vector2f delta = currVelo * deltaTime;
-	addPosition(delta);
+	const sf::Vector2f offset = currVelo * deltaTime;
+
+	addPosition(offset);
 	setVelocity(currVelo);
 
 	 // Rotation
 
 	const sf::Vector2f playerPos = getPosition();
 	const sf::Vector2f mousePos = gameInstance->getMousePos();
-	const float targetRot = getLookAtRot(playerPos, mousePos);
 	float rotation = getRotation();
+	const float targetRot = getLookAtRot(playerPos, mousePos);
 
-	zeroPrecision(rotation);
-	if (rotation != targetRot)
+	if (!shouldZero(rotation - targetRot))
 	{
 		const float ROT_LERP = LERP_SMOOTHNESS * 10.0f * multiplier;
 		setRotation(lerp(rotation, targetRot, ROT_LERP));
