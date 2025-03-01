@@ -23,7 +23,7 @@ This project may contain **copyrighted images, audio, or other assets** that are
 
 ---
 
-## 🎯 Features  
+## 🎯 Features  (Work in Progress)
 ✔ **Classic arcade-style** top-down shooter gameplay  
 ✔ **Wave-based enemy spawning** with increasing difficulty  
 ✔ **Multiple weapons and power-ups**  
