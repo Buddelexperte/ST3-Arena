@@ -12,7 +12,7 @@ This project may contain **copyrighted images, audio, or other assets** that are
 
 - All rights to third-party assets belong to their respective owners.  
 - No copyright infringement is intended.  
-- If you are a rights holder and have concerns, please contact **[your contact email or GitHub]**, and we will address any issues promptly.
+- If you are a rights holder and have concerns, please contact **buddelexperte@gmail.com or Buddelexperte on GitHub**, and we will address any issues promptly.
 
 ---
 
@@ -37,5 +37,4 @@ We recognize and appreciate the work of all **asset creators** and **original co
 
 ---
 
-### 🕹 Made with ❤️ using **C++ & SFML**  
-
+### 🕹 Made with ❤️ using **C++ & SFML**
