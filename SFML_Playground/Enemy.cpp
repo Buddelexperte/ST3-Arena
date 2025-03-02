@@ -64,8 +64,8 @@ void Enemy::tick_move(const float& deltaTime, const RenderInfo& playerRenderInfo
 	// Get Velocity by direction * (speed / normalized direction)
 	float norm = std::abs(distance.x) + std::abs(distance.y);
 	// Calculate velocity: scale the direction vector by speed/normalized length.
-	sf::Vector2f newVelo = (distance * (WALK_SPEED / norm));
-	// Update the position based on velocity and scale by deltaTime
+	sf::Vector2f targetVelo = distance * (WALK_SPEED / norm);
+	sf::Vector2f newVelo = lerp(getVelocity(), targetVelo, LERP_SMOOTHNESS);
 	sf::Vector2f offset = newVelo * deltaTime;
 
 	addPosition(offset);
@@ -75,11 +75,12 @@ void Enemy::tick_move(const float& deltaTime, const RenderInfo& playerRenderInfo
 
 	const sf::Vector2f pos = getPosition();
 	float rotation = getRotation();
-	const float targetRot = getLookAtRot(playerRenderInfo.pos, pos);
+	float targetRot = getLookAtRot(playerRenderInfo.pos, pos);
 
 	if (!(shouldZero(rotation - targetRot)))
 	{
-		setRotation(lerp(rotation, targetRot, ROT_LERP));
+		float newRot = lerp(rotation, targetRot, ROT_LERP);
+		setRotation(newRot);
 	}
 }
 
