@@ -40,7 +40,6 @@ public:
 	}
 
 	void setPlayer(Player*);
-	// TODO check update of enemy velocity
 	int getNumActiveEnemies() const;
 	void callDelete(const size_t&);
 	void callUpdate(const size_t&, const InfoType&);
