@@ -1,12 +1,21 @@
 #pragma once
-#include "BaseClasses.h" // Header File
+#include "Player.h" // Header File
 #include "GameInstance.h"
 #include "Functions.h"
 
 Player::Player(InputWidget* parent)
 	: InputWidget(parent),
+	inventory(std::make_unique<Weapon>(Item::ItemInfo("Start Weapon"))), // TODO: Implement Start Weapon loading
 	collisionBox(getPosition(), getSize())
 {
+	std::cout << "Start Weapon: " << inventory.getActiveWeapon()->getItemInfo().name << std::endl;
+
+	inventory.addWeapon(std::make_unique<Weapon>(Item::ItemInfo("Weapon 2")));
+	std::cout << "Active Weapon: " << inventory.getActiveWeapon()->getItemInfo().name << std::endl;
+	inventory.switchWeapon(inventory.getNumWeapons() - 1);
+	std::cout << "New active Weapon: " << inventory.getActiveWeapon()->getItemInfo().name << std::endl;
+	inventory.removeWeapon(inventory.getNumWeapons() - 1);
+	std::cout << "New active Weapon: " << inventory.getActiveWeapon()->getItemInfo().name << std::endl;
 
 	// Player Sprite Initialization
 	IMovable::setPosition(windowCenter);
@@ -26,7 +35,6 @@ Player::Player(InputWidget* parent)
 		}
 		playerTextures.push_back(newTexture);
 	}
-
 
 	shapes = { &playerSprite };
 

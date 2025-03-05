@@ -63,7 +63,7 @@ void Enemy::tick_move(const float& deltaTime, const RenderInfo& playerRenderInfo
 
 	// Get Velocity by direction * (speed / normalized direction)
 	float norm = std::abs(distance.x) + std::abs(distance.y);
-	// Calculate velocity: scale the direction vector by speed/normalized length.
+	// Calculate velocity: scale the direction vector by speed/normalized length
 	sf::Vector2f targetVelo = distance * (WALK_SPEED / norm);
 	sf::Vector2f newVelo = lerp(getVelocity(), targetVelo, LERP_SMOOTHNESS);
 	sf::Vector2f offset = newVelo * deltaTime;

@@ -43,6 +43,15 @@
     <Filter Include="Header\Actors\Abstracts">
       <UniqueIdentifier>{9e8353a4-a43b-4f51-89e8-cf742906a696}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header\Actors\Items">
+      <UniqueIdentifier>{c0065e4b-c57f-4090-8cc9-9a25e95836fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header\Actors\Items\Weapons">
+      <UniqueIdentifier>{df0db31a-ea99-4aaa-9e44-9c80f9e52938}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header\Actors\Items\Perks">
+      <UniqueIdentifier>{8ae4b029-bf6c-4b2b-aac2-7a611b3788d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -80,9 +89,6 @@
     </ClCompile>
     <ClCompile Include="RenderInfo.h">
       <Filter>Header\Actors\Abstracts</Filter>
-    </ClCompile>
-    <ClCompile Include="Inventory.cpp">
-      <Filter>Source\Actors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -146,14 +152,14 @@
     <ClInclude Include="Collision.h">
       <Filter>Header\Actors\Abstracts</Filter>
     </ClInclude>
-    <ClInclude Include="Inventory.h">
-      <Filter>Header\Actors</Filter>
-    </ClInclude>
-    <ClInclude Include="Item.h">
-      <Filter>Header\Actors</Filter>
-    </ClInclude>
     <ClInclude Include="ItemPool.h">
       <Filter>Header\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemBaseClasses.h">
+      <Filter>Header\Actors\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>Header\Actors\Items</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

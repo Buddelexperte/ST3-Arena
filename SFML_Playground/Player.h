@@ -2,6 +2,7 @@
 
 #include "BaseClasses.h"
 #include "Collision.h"
+#include "Inventory.h"
 
 // PLAYER -----------------------------------------------------------------------------------------
 
@@ -11,6 +12,8 @@ private:
 	sf::Sprite playerSprite;
 
 	CollisionBox collisionBox;
+
+	Inventory inventory;
 
 	sf::Vector2f direction = { 0.0f, 0.0f };
 
@@ -29,6 +32,7 @@ protected:
 	float scrollInput(sf::Event*) override;
 public:
 	Player(InputWidget*);
+
 	void tick(const float&) override;
 	// Movable Interface
 	void setPosition(const sf::Vector2f&) override;
