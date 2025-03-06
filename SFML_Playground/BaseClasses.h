@@ -52,12 +52,16 @@ protected:
 
 	int widgetIndex = 0;
 
-	virtual sf::Keyboard::Key keyboardInput(sf::Event*);
-	virtual sf::Mouse::Button mouseInput(sf::Event*);
-	virtual float scrollInput(sf::Event*);
-	virtual bool onMouseClickL() { return isMouseOver(true); };
-	virtual bool onMouseClickR() { return true; };
-	virtual bool onMouseClickM() { return true; };
+	virtual sf::Keyboard::Key onKeyPressed(sf::Event*);
+	virtual sf::Mouse::Button onMouseButtonPressed(sf::Event*);
+	virtual sf::Mouse::Button onMouseButtonReleased(sf::Event*);
+	virtual float onMouseScrolled(sf::Event*);
+	virtual bool onMouseClickL(sf::Event*) { return isMouseOver(true); };
+	virtual bool onMouseClickR(sf::Event*) { return true; };
+	virtual bool onMouseClickM(sf::Event*) { return true; };
+	virtual bool onMouseReleaseL(sf::Event*) { return true; };
+	virtual bool onMouseReleaseR(sf::Event*) { return true; };
+	virtual bool onMouseReleaseM(sf::Event*) { return true; };
 public:
 	InputWidget(InputWidget* parent) : WidgetElement(parent) {};
 

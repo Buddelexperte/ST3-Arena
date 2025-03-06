@@ -671,7 +671,7 @@ bool W_Gameplay::input_esc()
 	return true;
 }
 
-bool W_Gameplay::onMouseClickR()
+bool W_Gameplay::onMouseClickR(sf::Event* eventRef)
 {
 	if (gameInstance->getIsPaused())
 		return false;

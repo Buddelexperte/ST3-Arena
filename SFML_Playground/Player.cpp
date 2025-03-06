@@ -118,7 +118,7 @@ void Player::tick(const float& deltaTime)
 	}
 }
 
-sf::Keyboard::Key Player::keyboardInput(sf::Event* eventRef)
+sf::Keyboard::Key Player::onKeyPressed(sf::Event* eventRef)
 {
 	const sf::Keyboard::Key inputKey = eventRef->key.code;
 	if (inputKey == sf::Keyboard::Escape)
@@ -126,15 +126,25 @@ sf::Keyboard::Key Player::keyboardInput(sf::Event* eventRef)
 	return inputKey;
 }
 
-sf::Mouse::Button Player::mouseInput(sf::Event* eventRef)
+bool Player::onMouseClickL(sf::Event* eventRef)
 {
-	const sf::Mouse::Button mouseInput = eventRef->mouseButton.button;
-	if (mouseInput == sf::Mouse::Left || mouseInput == sf::Mouse::Right)
-		gameInstance->handleEvent(eventRef);
-	return mouseInput;
+	if (gameInstance->getIsPaused())
+		return gameInstance->handleEvent(eventRef);
+	else
+		return (inventory.getActiveWeapon()->activate(ItemUse::ATTACK) >= UseResult::SUCCESS);
 }
 
-float Player::scrollInput(sf::Event* eventRef)
+bool Player::onMouseReleaseL(sf::Event* eventRef)
+{
+	if (!gameInstance->getIsPaused())
+	{
+		inventory.getActiveWeapon()->activate(ItemUse::CANCEL_LOAD);
+		return true;
+	}
+	return false;
+}
+
+float Player::onMouseScrolled(sf::Event* eventRef)
 {
 	return eventRef->mouseWheelScroll.delta;
 }

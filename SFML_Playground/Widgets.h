@@ -157,7 +157,7 @@ private:
 
 	void lose();
 	bool input_esc() override;
-	bool onMouseClickR() override;
+	bool onMouseClickR(sf::Event*) override;
 protected:
 	void windowUpdate() override;
 public:

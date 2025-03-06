@@ -251,13 +251,15 @@ bool InputWidget::handleInput(sf::Event* eventRef)
 	{
 	case sf::Event::KeyPressed:
 		//std::cout << "[Keyboard Event]" << std::endl;
-		return keyboardInput(eventRef);
+		return onKeyPressed(eventRef);
 	case sf::Event::MouseButtonPressed:
 		//std::cout << "[Mouse Event]" << std::endl;
-		return mouseInput(eventRef);
+		return onMouseButtonPressed(eventRef);
 	case sf::Event::MouseWheelScrolled:
 		//std::cout << "[Mouse Wheel Event]" << std::endl;
-		return scrollInput(eventRef);
+		return onMouseScrolled(eventRef);
+	case sf::Event::MouseButtonReleased:
+		return onMouseButtonReleased(eventRef);
 	default:
 		break;
 	}
@@ -279,7 +281,7 @@ InputWidget* InputWidget::setWidgetIndex(const int& toIndex)
 	return getWidgetAtIndex(toIndex);
 }
 
-sf::Keyboard::Key InputWidget::keyboardInput(sf::Event* eventRef)
+sf::Keyboard::Key InputWidget::onKeyPressed(sf::Event* eventRef)
 {
 	switch (eventRef->key.code)
 	{
@@ -292,20 +294,20 @@ sf::Keyboard::Key InputWidget::keyboardInput(sf::Event* eventRef)
 	return eventRef->key.code;
 }
 
-sf::Mouse::Button InputWidget::mouseInput(sf::Event* eventRef)
+sf::Mouse::Button InputWidget::onMouseButtonPressed(sf::Event* eventRef)
 {
 	const sf::Mouse::Button mouseInput = eventRef->mouseButton.button;
 
 	switch (mouseInput)
 	{
 	case sf::Mouse::Left:
-		onMouseClickL();
+		onMouseClickL(eventRef);
 		break;
 	case sf::Mouse::Right:
-		onMouseClickR();
+		onMouseClickR(eventRef);
 		break;
 	case sf::Mouse::Middle:
-		onMouseClickR();
+		onMouseClickM(eventRef);
 		break;
 	default:
 		break;
@@ -313,7 +315,28 @@ sf::Mouse::Button InputWidget::mouseInput(sf::Event* eventRef)
 	return mouseInput;
 }
 
-float InputWidget::scrollInput(sf::Event* eventRef)
+sf::Mouse::Button InputWidget::onMouseButtonReleased(sf::Event* eventRef)
+{
+	const sf::Mouse::Button mouseInput = eventRef->mouseButton.button;
+
+	switch (mouseInput)
+	{
+	case sf::Mouse::Left:
+		onMouseReleaseL(eventRef);
+		break;
+	case sf::Mouse::Right:
+		onMouseReleaseR(eventRef);
+		break;
+	case sf::Mouse::Middle:
+		onMouseReleaseM(eventRef);
+		break;
+	default:
+		break;
+	}
+	return mouseInput;
+}
+
+float InputWidget::onMouseScrolled(sf::Event* eventRef)
 {
 	if (event->mouseWheelScroll.wheel != sf::Mouse::VerticalWheel) return 0.0f;
 	return eventRef->mouseWheelScroll.delta;

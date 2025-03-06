@@ -27,9 +27,10 @@ private:
 	void tick_collision(const float& deltaTime) override;
 	void calcMovement(const float&);
 protected:
-	sf::Keyboard::Key keyboardInput(sf::Event*) override;
-	sf::Mouse::Button mouseInput(sf::Event*) override;
-	float scrollInput(sf::Event*) override;
+	sf::Keyboard::Key onKeyPressed(sf::Event*) override;
+	bool onMouseClickL(sf::Event*) override;
+	bool onMouseReleaseL(sf::Event*) override;
+	float onMouseScrolled(sf::Event*) override;
 public:
 	Player(InputWidget*);
 
