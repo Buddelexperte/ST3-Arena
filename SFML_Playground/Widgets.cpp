@@ -67,7 +67,8 @@ InputWidget* W_MainMenu::setWidgetIndex(const int& newIndex)
 void W_MainMenu::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
-	if (getWidgetAtIndex(widgetIndex) != this) getWidgetAtIndex(widgetIndex)->tick(deltaTime);
+	if (isChildActive())
+		getWidgetAtIndex(widgetIndex)->tick(deltaTime);
 }
 
 void W_MainMenu::windowUpdate()
@@ -82,8 +83,8 @@ void W_MainMenu::windowUpdate()
 
 bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 {
-	if (getWidgetAtIndex(widgetIndex) != this)
-	return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
+	if (isChildActive())
+		return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
 
 	sf::Vector2f mousePos = gameInstance->getMousePos();
 
@@ -358,12 +359,12 @@ bool W_LevelMenu::isMouseOver(const bool& checkForClick = false)
 	if (level1_Button.isMouseOver(checkForClick) || level2_Button.isMouseOver(checkForClick) || level3_Button.isMouseOver(checkForClick))
 	{
 		if (checkForClick) gameInstance->setGameState(GAME_LAUNCHING);
-		return true;
+			return true;
 	}
 	if (return_Button.isMouseOver(checkForClick))
 	{
 		if (checkForClick) input_esc();
-		return true;
+			return true;
 	}
 	return false;
 }
@@ -426,7 +427,8 @@ InputWidget* W_Paused::setWidgetIndex(const int& newIndex)
 
 void W_Paused::tick(const float& deltaTime)
 {
-	if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->tick(deltaTime);
+	if (isChildActive())
+		return getWidgetAtIndex(widgetIndex)->tick(deltaTime);
 	InputWidget::tick(deltaTime);
 }
 
@@ -441,8 +443,8 @@ void W_Paused::windowUpdate()
 
 bool W_Paused::isMouseOver(const bool& checkForClick = false)
 {
-	if (getWidgetAtIndex(widgetIndex) != this) 
-	return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
+	if (isChildActive())
+		return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
 
 	if (pause_resumeButton.isMouseOver(checkForClick))
 	{
@@ -465,8 +467,10 @@ bool W_Paused::isMouseOver(const bool& checkForClick = false)
 
 bool W_Paused::input_esc()
 {
-	if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->input_esc();
-	if (parent != nullptr) parent->setWidgetIndex(0)->construct();
+	if (isChildActive())
+		return getWidgetAtIndex(widgetIndex)->input_esc();
+	if (parent != nullptr)
+		parent->setWidgetIndex(0)->construct();
 	return true;
 }
 
@@ -646,7 +650,7 @@ void W_Gameplay::tick(const float& deltaTime)
 	}
 	
 	// Execute subWidgets
-	if (getWidgetAtIndex(widgetIndex) != this) 
+	if (isChildActive())
 		getWidgetAtIndex(widgetIndex)->tick(deltaTime);
 
 	// If Gameplay is UnPaused
@@ -664,7 +668,7 @@ void W_Gameplay::tick(const float& deltaTime)
 
 bool W_Gameplay::input_esc()
 {
-	if (getWidgetAtIndex(widgetIndex) != this) 
+	if (isChildActive())
 		return getWidgetAtIndex(widgetIndex)->input_esc();
 	// If no sub widget open, open optionsMenu
 	setWidgetIndex(1)->construct(); 
@@ -682,7 +686,7 @@ bool W_Gameplay::onMouseClickR(sf::Event* eventRef)
 
 bool W_Gameplay::isMouseOver(const bool& checkForClick = false)
 {
-	if (getWidgetAtIndex(widgetIndex) != this)
+	if (isChildActive())
 		return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
 
 	// Implement new click logic here (projectile direction etc)

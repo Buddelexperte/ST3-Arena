@@ -68,6 +68,7 @@ public:
 	virtual InputWidget* setWidgetIndex(const int&);
 	virtual InputWidget* getWidgetAtIndex(const int& atIndex) { return (atIndex == 0 ? this : nullptr); };
 	int getWidgetIndex() const { return widgetIndex; }
+	bool isChildActive() { return (getWidgetAtIndex(widgetIndex) != this); }
 
 	virtual bool input_esc()
 	{
