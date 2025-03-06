@@ -521,7 +521,7 @@ bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 // W_Gameplay -------------------------------------------------------------------------------------
 
 W_Gameplay::W_Gameplay(InputWidget* parent) 
-	: InputWidget(parent), flashlightShader(this), pauseMenu(this), gameOverScreen(this), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f), background(sf::Quads, 4)
+	: InputWidget(parent), pauseMenu(this), gameOverScreen(this), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f), background(sf::Quads, 4)
 {
 	// Load texture
 	if (!backgroundTexture.loadFromFile("Content/Textures/cobblestone_mossy.png"))
@@ -600,7 +600,7 @@ InputWidget* W_Gameplay::getWidgetAtIndex(const int& atIndex)
 
 InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 {
-	shapes = { &background, &enemyManager, &flashlightShader, player, &healthBar };
+	shapes = { &background, &enemyManager, player, &healthBar };
 
 	switch (widgetIndex = toIndex)
 	{
@@ -636,22 +636,18 @@ void W_Gameplay::lose()
 
 void W_Gameplay::tick(const float& deltaTime)
 {
-	constexpr bool bDrawFlashlight = true;
 	InputWidget::tick(deltaTime);
-
-	// Flashlight update
-	if (bDrawFlashlight)
-	{
-		flashlightShader.tick(deltaTime);
-		for (sf::Drawable* elem : shapes)
-		{
-			flashlightShader.drawOtherScene(elem);
-		}
-	}
 	
 	// Execute subWidgets
 	if (isChildActive())
 		getWidgetAtIndex(widgetIndex)->tick(deltaTime);
+
+	// Make sure flashlight draws shader onto environment
+	for (sf::Drawable* elem : shapes)
+	{
+		player->getFlashlight().drawOtherScene(elem);
+	}
+	
 
 	// If Gameplay is UnPaused
 	if (!gameInstance->getIsPaused())
@@ -680,7 +676,6 @@ bool W_Gameplay::onMouseClickR(sf::Event* eventRef)
 	if (gameInstance->getIsPaused())
 		return false;
 
-	flashlightShader.toggleMaskMode();
 	return true;
 }
 

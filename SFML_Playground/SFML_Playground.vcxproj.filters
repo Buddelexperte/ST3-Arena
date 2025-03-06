@@ -90,6 +90,9 @@
     <ClCompile Include="RenderInfo.h">
       <Filter>Header\Actors\Abstracts</Filter>
     </ClCompile>
+    <ClCompile Include="Flashlight.cpp">
+      <Filter>Source\Actors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SFML_Arena.h">
@@ -134,9 +137,6 @@
     <ClInclude Include="EnemyPool.h">
       <Filter>Header\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Flashlight.h">
-      <Filter>Header\Widgets</Filter>
-    </ClInclude>
     <ClInclude Include="TargetController.h">
       <Filter>zDeprecated</Filter>
     </ClInclude>
@@ -159,6 +159,9 @@
       <Filter>Header\Actors\Items</Filter>
     </ClInclude>
     <ClInclude Include="Inventory.h">
+      <Filter>Header\Actors\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Flashlight.h">
       <Filter>Header\Actors\Items</Filter>
     </ClInclude>
   </ItemGroup>

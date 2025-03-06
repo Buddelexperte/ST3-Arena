@@ -5,6 +5,7 @@
 
 Player::Player(InputWidget* parent)
 	: InputWidget(parent),
+	flashlight(this),
 	inventory(std::make_unique<Weapon>(Item::ItemInfo("Start Weapon"))), // TODO: Implement Start Weapon loading
 	collisionBox(getPosition(), getSize())
 {
@@ -36,7 +37,7 @@ Player::Player(InputWidget* parent)
 		playerTextures.push_back(newTexture);
 	}
 
-	shapes = { &playerSprite };
+	shapes = { &flashlight, &playerSprite };
 
 	if (!playerTextures.empty())
 	{
@@ -102,9 +103,21 @@ void Player::calcMovement(const float& deltaTime)
 
 void Player::tick(const float& deltaTime)
 {
+	constexpr bool bDrawFlashlight = true;
+	
 	InputWidget::tick(deltaTime);
-	if (!gameInstance->getIsPaused()) 
+	if (!gameInstance->getIsPaused())
 		calcMovement(deltaTime);
+
+	// Flashlight update
+	if (bDrawFlashlight)
+	{
+		flashlight.tick(deltaTime);
+		for (sf::Drawable* elem : shapes)
+		{
+			flashlight.drawOtherScene(elem);
+		}
+	}
 
 	if (!playerTextures.empty())
 	{
@@ -118,6 +131,15 @@ void Player::tick(const float& deltaTime)
 	}
 }
 
+bool Player::handleEvent(sf::Event* eventRef)
+{
+	// If gameplay is paused, use gameInstance to relay event to activeWidget
+	if (gameInstance->getIsPaused())
+		return gameInstance->handleEvent(eventRef);
+	// if not, just continue with normal distributing of events
+	return InputWidget::handleEvent(eventRef);
+}
+
 sf::Keyboard::Key Player::onKeyPressed(sf::Event* eventRef)
 {
 	const sf::Keyboard::Key inputKey = eventRef->key.code;
@@ -128,20 +150,18 @@ sf::Keyboard::Key Player::onKeyPressed(sf::Event* eventRef)
 
 bool Player::onMouseClickL(sf::Event* eventRef)
 {
-	if (gameInstance->getIsPaused())
-		return gameInstance->handleEvent(eventRef);
-	else
-		return (inventory.getActiveWeapon()->activate(ItemUse::ATTACK) >= UseResult::SUCCESS);
+	return (inventory.getActiveWeapon()->activate(ItemUse::ATTACK) >= UseResult::SUCCESS);
+}
+
+bool Player::onMouseClickR(sf::Event* eventRef)
+{
+	flashlight.toggleMaskMode();
+	return true;
 }
 
 bool Player::onMouseReleaseL(sf::Event* eventRef)
 {
-	if (!gameInstance->getIsPaused())
-	{
-		inventory.getActiveWeapon()->activate(ItemUse::CANCEL_LOAD);
-		return true;
-	}
-	return false;
+	return (inventory.getActiveWeapon()->activate(ItemUse::CANCEL_LOAD) == UseResult::SUCCESS);
 }
 
 float Player::onMouseScrolled(sf::Event* eventRef)

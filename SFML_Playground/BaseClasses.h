@@ -77,7 +77,7 @@ public:
 		else return false;
 		return true;
 	}
-	virtual bool handleInput(sf::Event* eventRef);
+	virtual bool handleEvent(sf::Event* eventRef);
 	virtual bool isMouseOver(const bool& = false) { return false; }
 };
 

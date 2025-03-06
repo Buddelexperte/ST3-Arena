@@ -2,6 +2,7 @@
 
 #include "BaseClasses.h"
 #include "Collision.h"
+#include "Flashlight.h"
 #include "Inventory.h"
 
 // PLAYER -----------------------------------------------------------------------------------------
@@ -13,6 +14,7 @@ private:
 
 	CollisionBox collisionBox;
 
+	Flashlight flashlight;
 	Inventory inventory;
 
 	sf::Vector2f direction = { 0.0f, 0.0f };
@@ -29,12 +31,19 @@ private:
 protected:
 	sf::Keyboard::Key onKeyPressed(sf::Event*) override;
 	bool onMouseClickL(sf::Event*) override;
+	bool onMouseClickR(sf::Event*) override;
 	bool onMouseReleaseL(sf::Event*) override;
 	float onMouseScrolled(sf::Event*) override;
 public:
 	Player(InputWidget*);
 
 	void tick(const float&) override;
+
+	bool handleEvent(sf::Event* eventRef) override;
+
+	Inventory& getInventory() { return inventory; }
+	Flashlight& getFlashlight() { return flashlight; }
+
 	// Movable Interface
 	void setPosition(const sf::Vector2f&) override;
 	void addPosition(const sf::Vector2f&) override;

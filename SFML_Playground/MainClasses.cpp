@@ -123,7 +123,7 @@ void GI_Arena::tick(const float& deltaTime)
 			window->close();
 			break;
 		}
-		player->handleInput(&event);
+		player->handleEvent(&event);
 	}
 }
 
@@ -211,7 +211,7 @@ Player* GI_Arena::getPlayer()
 
 bool GI_Arena::handleEvent(sf::Event* eventRef)
 {
-	return activeMenu->handleInput(eventRef);
+	return activeMenu->handleEvent(eventRef);
 }
 
 
@@ -245,7 +245,7 @@ void WidgetElement::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 
 // InputWidget ------------------------------------------------------------------------------------
 
-bool InputWidget::handleInput(sf::Event* eventRef)
+bool InputWidget::handleEvent(sf::Event* eventRef)
 {
 	switch (eventRef->type)
 	{
