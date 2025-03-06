@@ -138,7 +138,7 @@ class W_Gameplay : public InputWidget // Gameplay Widget -----------------------
 private:
 	const float TIMER_DEFAULT = 10.0f;
 	const float minTimer = 1.0f;
-	int hitTargets = 0;
+	int hitTargets = 0; // TODO: Reimplement score counter to new Enemy system
 	Timer healthBar;
 	EnemyManager& enemyManager = EnemyManager::getInstance();
 
@@ -146,7 +146,6 @@ private:
 	W_GameOver gameOverScreen;
 
 	Player* player = gameInstance->getPlayer();
-	sf::Vector2f playerPos;
 
 	sf::Vector2f backgroundPos;
 	const float TILING_SCALE = 0.1f; // Larger = more tiling
