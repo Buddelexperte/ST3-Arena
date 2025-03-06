@@ -181,6 +181,7 @@
     <ClInclude Include="TargetController.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="SFML_Arena.h" />
+    <ClInclude Include="Wepaon_Pistol.h" />
     <ClInclude Include="Widgets.h" />
   </ItemGroup>
   <ItemGroup>

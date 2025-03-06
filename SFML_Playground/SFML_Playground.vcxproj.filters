@@ -164,6 +164,9 @@
     <ClInclude Include="Flashlight.h">
       <Filter>Header\Actors\Items</Filter>
     </ClInclude>
+    <ClInclude Include="Wepaon_Pistol.h">
+      <Filter>Header\Actors\Items\Weapons</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="SaveGame.txt" />

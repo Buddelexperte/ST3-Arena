@@ -1,0 +1,20 @@
+#pragma once
+
+#include "ItemBaseClasses.h"
+
+// TODO: Make WeaponInterfaces for shooting, melee and hitboxes
+
+class Pistol : public Weapon
+{
+public:
+	Pistol()
+		: Weapon(ItemInfo("Pistol"))
+	{}
+
+	UseResult activate(ItemUse use) override
+	{
+		Weapon::activate(use);
+
+
+	}
+};
