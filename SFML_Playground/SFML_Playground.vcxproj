@@ -149,6 +149,8 @@
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Flashlight.cpp" />
     <ClCompile Include="FontManager.h" />
+    <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="ProjectileManager.cpp" />
     <ClCompile Include="RenderInfo.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -159,6 +161,8 @@
     <ClCompile Include="Widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AllPerks.h" />
+    <ClInclude Include="AllWeapons.h" />
     <ClInclude Include="BaseClasses.h" />
     <ClInclude Include="BaseTypes.h" />
     <ClInclude Include="Button.h" />
@@ -175,13 +179,17 @@
     <ClInclude Include="ItemBaseClasses.h" />
     <ClInclude Include="ItemPool.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Projectile.h" />
+    <ClInclude Include="ProjectileManager.h" />
+    <ClInclude Include="ProjectilePool.h" />
+    <ClInclude Include="ProjectileRenderer.h" />
     <ClInclude Include="RandomNumbers.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="TargetController.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="SFML_Arena.h" />
-    <ClInclude Include="Wepaon_Pistol.h" />
+    <ClInclude Include="Weapon_Pistol.h" />
     <ClInclude Include="Widgets.h" />
   </ItemGroup>
   <ItemGroup>

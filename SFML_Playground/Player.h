@@ -27,7 +27,7 @@ private:
 	using IMovable::setVelocity; // Make this function private
 
 	void tick_collision(const float& deltaTime) override;
-	void calcMovement(const float&);
+	void tick_move(const float&) override;
 protected:
 	sf::Keyboard::Key onKeyPressed(sf::Event*) override;
 	bool onMouseClickL(sf::Event*) override;
@@ -36,6 +36,8 @@ protected:
 	float onMouseScrolled(sf::Event*) override;
 public:
 	Player(InputWidget*);
+
+	Player* spawn(const sf::Vector2f& = (sf::Vector2f(0.0f, 0.0f)));
 
 	void tick(const float&) override;
 

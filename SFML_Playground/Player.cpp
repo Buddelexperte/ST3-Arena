@@ -3,21 +3,14 @@
 #include "GameInstance.h"
 #include "Functions.h"
 
+#include "AllWeapons.h"
+
 Player::Player(InputWidget* parent)
 	: InputWidget(parent),
 	flashlight(this),
-	inventory(std::make_unique<Weapon>(Item::ItemInfo("Start Weapon"))), // TODO: Implement Start Weapon loading
+	// TODO: Implement Start Weapon loading
 	collisionBox(getPosition(), getSize())
 {
-	std::cout << "Start Weapon: " << inventory.getActiveWeapon()->getItemInfo().name << std::endl;
-
-	inventory.addWeapon(std::make_unique<Weapon>(Item::ItemInfo("Weapon 2")));
-	std::cout << "Active Weapon: " << inventory.getActiveWeapon()->getItemInfo().name << std::endl;
-	inventory.switchWeapon(inventory.getNumWeapons() - 1);
-	std::cout << "New active Weapon: " << inventory.getActiveWeapon()->getItemInfo().name << std::endl;
-	inventory.removeWeapon(inventory.getNumWeapons() - 1);
-	std::cout << "New active Weapon: " << inventory.getActiveWeapon()->getItemInfo().name << std::endl;
-
 	// Player Sprite Initialization
 	IMovable::setPosition(windowCenter);
 	playerSprite.setPosition(windowCenter);
@@ -55,7 +48,19 @@ Player::Player(InputWidget* parent)
 
 }
 
-void Player::calcMovement(const float& deltaTime)
+Player* Player::spawn(const sf::Vector2f& spawnPos)
+{
+	inventory.clear();
+
+	inventory.addWeapon(std::make_unique<Pistol>());
+
+	setPosition(spawnPos);
+	gameInstance->resetViewPos();
+
+	return this;
+}
+
+void Player::tick_move(const float& deltaTime)
 {
 	// Movement
 
@@ -107,7 +112,7 @@ void Player::tick(const float& deltaTime)
 	
 	InputWidget::tick(deltaTime);
 	if (!gameInstance->getIsPaused())
-		calcMovement(deltaTime);
+		tick_move(deltaTime);
 
 	// Flashlight update
 	if (bDrawFlashlight)

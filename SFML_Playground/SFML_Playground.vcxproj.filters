@@ -93,6 +93,12 @@
     <ClCompile Include="Flashlight.cpp">
       <Filter>Source\Actors</Filter>
     </ClCompile>
+    <ClCompile Include="ProjectileManager.cpp">
+      <Filter>Source\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Source\Actors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SFML_Arena.h">
@@ -164,8 +170,26 @@
     <ClInclude Include="Flashlight.h">
       <Filter>Header\Actors\Items</Filter>
     </ClInclude>
-    <ClInclude Include="Wepaon_Pistol.h">
+    <ClInclude Include="Weapon_Pistol.h">
       <Filter>Header\Actors\Items\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="AllWeapons.h">
+      <Filter>Header\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="AllPerks.h">
+      <Filter>Header\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileRenderer.h">
+      <Filter>Header\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Header\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileManager.h">
+      <Filter>Header\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectilePool.h">
+      <Filter>Header\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

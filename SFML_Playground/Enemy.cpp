@@ -38,10 +38,10 @@ void Enemy::spawn()
 		setColor(sf::Color::Red);
 }
 
-void Enemy::tick(const float& deltaTime, const RenderInfo& playerRenderInfo)
+void Enemy::tick(const float& deltaTime)
 {
 	// Calculate movement and apply i
-	tick_move(deltaTime, playerRenderInfo);
+	tick_move(deltaTime);
 
 	// Check for collision updates
 	tick_collision(deltaTime);
@@ -49,10 +49,11 @@ void Enemy::tick(const float& deltaTime, const RenderInfo& playerRenderInfo)
 	return;
 }
 
-void Enemy::tick_move(const float& deltaTime, const RenderInfo& playerRenderInfo)
+void Enemy::tick_move(const float& deltaTime)
 {
 	// TODO: PROTOTYPE MOVEMENT LOGIC
-	sf::Vector2f distance = playerRenderInfo.pos - getPosition();
+	sf::Vector2f playerPos = playerRef->getPosition();
+	sf::Vector2f distance = playerPos - getPosition();
 
 	// On target contact, no need for calculations, just set speed to zero and stop calculations
 	if (shouldZero(distance))
@@ -72,10 +73,10 @@ void Enemy::tick_move(const float& deltaTime, const RenderInfo& playerRenderInfo
 	setVelocity(newVelo);
 
 	// Rotation
-
+	
 	const sf::Vector2f pos = getPosition();
 	float rotation = getRotation();
-	float targetRot = getLookAtRot(playerRenderInfo.pos, pos);
+	float targetRot = getLookAtRot(playerPos, pos);
 
 	if (!(shouldZero(rotation - targetRot)))
 	{

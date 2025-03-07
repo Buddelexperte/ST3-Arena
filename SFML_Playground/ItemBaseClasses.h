@@ -6,6 +6,8 @@
 #include <iostream>
 #include <algorithm>
 
+#include "Projectile.h"
+
 // Enums for item usage and results
 enum class ItemUse
 {

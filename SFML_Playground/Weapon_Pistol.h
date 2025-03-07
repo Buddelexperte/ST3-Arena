@@ -6,6 +6,8 @@
 
 class Pistol : public Weapon
 {
+private:
+	ProjectileSpawner projSpawner;
 public:
 	Pistol()
 		: Weapon(ItemInfo("Pistol"))
@@ -14,7 +16,8 @@ public:
 	UseResult activate(ItemUse use) override
 	{
 		Weapon::activate(use);
-
-
+		if (use == ItemUse::ATTACK)
+			projSpawner.spawnProjectile();
+		return UseResult::SUCCESS;
 	}
 };

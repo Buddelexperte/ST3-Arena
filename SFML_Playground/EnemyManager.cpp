@@ -1,13 +1,11 @@
 #pragma once
-#include <iostream>
-#include <thread>
 
 #include "EnemyManager.h" // Header File
 
 int EnemyManager::enemyID = 0;
 
 EnemyManager::EnemyManager()
-	: enemyPool(), enemyRenderer(), gameInstance(GI_Arena::getInstance())
+	: enemyPool(), enemyRenderer()
 {}
 
 void EnemyManager::setPlayer(Player* newPlayer)
@@ -98,18 +96,16 @@ void EnemyManager::tick_spawning(const float& deltaTime)
 
 void EnemyManager::tick_enemies(const float& deltaTime)
 {
-    const IMovable::RenderInfo playerRenderInfo = gameInstance.getPlayer()->getRenderInfo();
- 
     for (const auto& pair : activeEnemies)
     {
         if (!pair.second)
             continue;
 
-        pair.second->tick(deltaTime, playerRenderInfo);
+        pair.second->tick(deltaTime);
         enemyRenderer.setVelocity(pair.first, pair.second->getVelocity());
         enemyRenderer.setRotation(pair.first, pair.second->getRotation());
     }
-
+    // TODO: add projectile collision
 }
 
 void EnemyManager::tick(const float& deltaTime)

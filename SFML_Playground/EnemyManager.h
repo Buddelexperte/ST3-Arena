@@ -4,11 +4,13 @@
 #include "GameInstance.h"
 #include "EnemyPool.h"
 #include "EnemyRenderer.h"
+#include "ProjectileManager.h" // For projectile collision
 
 class EnemyManager : public sf::Drawable
 {
 private:
-	GI_Arena& gameInstance;
+	GI_Arena& gameInstance = GI_Arena::getInstance();
+	ProjectileManager& projectileManager = ProjectileManager::getInstance();
 
 	const float spawnInterval = SMALLEST_PRECISION;
 	const int maxEnemies = 9; // Temporary safe guard, replace with actual spawning logic later

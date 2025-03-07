@@ -113,6 +113,23 @@ public:
         perks.erase(perks.begin() + index);
         return removedPerk;
     }
+    
+    void clear_weapons()
+    {
+        weapons.clear();
+    }
+
+    void clear_perks()
+    {
+        perks.clear();
+    }
+
+    void clear()
+    {
+        clear_perks();
+        clear_weapons();
+        activeWeaponIndex = -1;
+    }
 
     // Optional: an update function to process inventory-related logic each frame.
     void update()

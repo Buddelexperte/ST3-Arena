@@ -13,7 +13,10 @@ public:
 	};
 private:
 	RenderInfo renderInfo;
+	virtual void tick_move(const float&)
+		{}
 public:
+
 	// RenderInfo
 	virtual void setRenderInfo(const RenderInfo& newRenderInfo)
 		{ renderInfo = newRenderInfo; }

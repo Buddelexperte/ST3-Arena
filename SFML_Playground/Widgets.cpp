@@ -544,12 +544,10 @@ void W_Gameplay::construct()
 
 	if (gameState == GAME_LAUNCHING)
 	{
-		gameInstance->getPlayer()->setPosition((sf::Vector2f(0.0f, 0.0f) + windowCenter));
-		gameInstance->resetViewPos();
+		gameInstance->makePlayer()->spawn(sf::Vector2f(0.0f, 0.0f) + windowCenter);
 		// Reset values to game start values
 		hitTargets = 0;
 		healthBar.setMaxTime(TIMER_DEFAULT, true);
-
 		// Add Gameplay objects to shapes vector to draw them
 		gameInstance->setGameState(IN_GAME);
 	}
@@ -600,7 +598,7 @@ InputWidget* W_Gameplay::getWidgetAtIndex(const int& atIndex)
 
 InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 {
-	shapes = { &background, &enemyManager, player, &healthBar };
+	shapes = { &background, &enemyManager, player, &projectileManager, &healthBar };
 
 	switch (widgetIndex = toIndex)
 	{

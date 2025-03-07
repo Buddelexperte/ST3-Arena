@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <unordered_map>
+
 #include "Enemy.h"
 
 class EnemyRenderer : public sf::Drawable
@@ -15,14 +16,15 @@ private:
 
     // Vectors holding enemy data in a contiguous manner.
     std::vector<size_t> enemyKeyList; // Index -> key (reverse mapping)
-    std::vector<Enemy::RenderInfo> enemyRenderInfos; // Index -> render info
+    std::vector<IMovable::RenderInfo> enemyRenderInfos; // Index -> render info
     std::vector<InfoType> enemyUpdateFlags; // Index -> update flags
 
 public:
-    EnemyRenderer() : enemyVertices(sf::Quads) {}
+    EnemyRenderer() : enemyVertices(sf::Quads) 
+        {}
 
     // Adds a new enemy and appends its quad to the vertex array.
-    void addEnemy(const Enemy::RenderInfo& info, const size_t& key)
+    void addEnemy(const IMovable::RenderInfo& info, const size_t& key)
     {
         // New enemy index is the current count.
         const size_t index = enemyKeyList.size();
@@ -118,14 +120,13 @@ public:
         const size_t vertexStart = index * 4;
 
         // Check if any of POSITION, SIZE, or ROTATION flags are set.
-        if ((enemyUpdateFlags[index] & (InfoType::POSITION | InfoType::SIZE | InfoType::ROTATION)) == InfoType::EMPTY_INFO 
-            && (enemyUpdateFlags[index] & InfoType::COLOR) == InfoType::EMPTY_INFO)
+        if ((flags & (POSITION | SIZE | ROTATION)) == EMPTY_INFO
+            && (flags & COLOR) == EMPTY_INFO)
             return; // No update needed.
 
         // Update quad positions if POSITION or SIZE flag is set.
-        if ((flags & (InfoType::POSITION | InfoType::ROTATION | InfoType::SIZE)) != InfoType::EMPTY_INFO)
+        if ((flags & (POSITION | ROTATION | SIZE)) != EMPTY_INFO)
         {
-            const size_t vertexStart = index * 4;
             const sf::Vector2f pos = enemyRenderInfos[index].pos;
             const sf::Vector2f halfSize = enemyRenderInfos[index].size / 2.f;
 
@@ -137,7 +138,7 @@ public:
                 sf::Vector2f(-halfSize.x,  halfSize.y)     // bottom-left
             };
             
-            if ((flags & InfoType::ROTATION) != InfoType::EMPTY_INFO)
+            if (flags & ROTATION)
             {
                 float rotation = enemyRenderInfos[index].rot; // in degrees
 
@@ -155,10 +156,18 @@ public:
                     enemyVertices[vertexStart + i].position = pos + rotatedOffset;
                 }
             }
+            else
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    // Without rotation, update quad positions directly.
+                    enemyVertices[vertexStart + i].position = pos + corners[i];
+                }
+            }
         }
 
         // Update color if COLOR flag is set.
-        if ((flags & InfoType::COLOR) != InfoType::EMPTY_INFO)
+        if (flags & InfoType::COLOR)
         {
             const sf::Color color = enemyRenderInfos[index].color;
             for (int i = 0; i < 4; i++)
@@ -206,7 +215,7 @@ public:
                 std::swap(enemyVertices[vertexStartRemove + i], enemyVertices[vertexStartLast + i]);
             }
         }
-        // Removing the last enemy, just pop back.
+        // Removing the last enemy, just pop_back.
         enemyKeyList.pop_back();
         enemyRenderInfos.pop_back();
         enemyUpdateFlags.pop_back();
@@ -224,7 +233,7 @@ public:
             if (offset != sf::Vector2f(0.f, 0.f))
             {
                 enemyRenderInfos[i].pos += offset;
-                size_t vertexStart = i * 4;
+                const size_t vertexStart = i * 4;
                 for (size_t j = 0; j < 4; j++)
                 {
                     enemyVertices[vertexStart + j].position += offset;
@@ -236,10 +245,8 @@ public:
         for (size_t i = 0; i < enemyKeyList.size(); i++)
         {
             // If the flag has any non-empty info, we process it.
-            if (enemyUpdateFlags[i] & ~InfoType::EMPTY_INFO)
-            {
+            if (enemyUpdateFlags[i] != EMPTY_INFO)
                 updateVertexQuad(i);
-            }
         }
     }
 

@@ -51,12 +51,18 @@ bool GI_Arena::initWidgets()
 	return true;
 }
 
-bool GI_Arena::makePlayer()
+Player* GI_Arena::makePlayer()
 {
-	if (player) return false;
-	player = new Player(nullptr);
-	EnemyManager::getInstance().setPlayer(player);
-	return true;
+	if (player)
+	{
+		return player->spawn();
+	}
+	else
+	{
+		player = new Player(nullptr);
+		EnemyManager::getInstance().setPlayer(player);
+		return player;
+	}
 }
 
 void GI_Arena::start()

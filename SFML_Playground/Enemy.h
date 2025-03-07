@@ -30,8 +30,8 @@ private:
 
 	sf::Vector2f getNewSpawnPos() const;
 
-	void tick_move(const float&, const RenderInfo&);
-	void tick_collision(const float& deltaTime) override;
+	void tick_move(const float&) override;
+	void tick_collision(const float&) override;
 	void die();
 
 public:
@@ -40,7 +40,7 @@ public:
 	void setID(const size_t& newIndex) { enemyIndex = newIndex; }
 
 	void spawn();
-	void tick(const float&, const RenderInfo& playerRenderInfo);
+	void tick(const float&);
 
 	// Collision
 	ICollidable* getCollision() override { return &collisionBox; }

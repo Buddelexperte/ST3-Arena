@@ -49,7 +49,7 @@ public:
 	// Basics
 	void start(); // Function to call from main()
 	bool initWidgets();
-	bool makePlayer();
+	Player* makePlayer();
 	void correctWidget();
 	// Ticks
 	void tickLoop();

@@ -4,6 +4,7 @@
 #include "Timer.h"
 //#include "TargetController.h" // Old EnemyManager
 #include "EnemyManager.h" // New EnemyManager
+#include "ProjectileManager.h"
 #include "Flashlight.h"
 
 const std::string WIDGET_EXP = "Widget is no longer available.\n";
@@ -141,6 +142,7 @@ private:
 	int hitTargets = 0; // TODO: Reimplement score counter to new Enemy system
 	Timer healthBar;
 	EnemyManager& enemyManager = EnemyManager::getInstance();
+	ProjectileManager& projectileManager = ProjectileManager::getInstance();
 
 	W_Paused pauseMenu;
 	W_GameOver gameOverScreen;
