@@ -27,9 +27,13 @@ enum class UseResult
     SUCCESS
 };
 
+class Inventory; // Forward declaration
+
 // Base class for all items
-class Item
+class Item : public IMovable
 {
+private:
+    Inventory* owningInventory = nullptr; // Maybe useless now, could be used later;
 public:
     struct ItemInfo
     {
@@ -48,13 +52,19 @@ public:
     Item(const ItemInfo& itemInfo) : info(itemInfo) {}
     virtual ~Item() = default;
 
+    void setOwningInventory(Inventory* newInv)
+        { owningInventory = newInv; }
+
     bool isReady() const 
         { return bReady; }
+    
     ItemInfo getItemInfo() const 
         { return info; }
 
     // Virtual function to "activate" the item – behavior depends on the item type.
     virtual UseResult activate(ItemUse use) = 0;
+
+
 };
 
 // =============================== WEAPON ===============================
@@ -62,6 +72,8 @@ public:
 // Weapon: active item that can perform actions (e.g., firing)
 class Weapon : public Item
 {
+protected:
+    ProjectileSpawner projSpawner;
 public:
     Weapon(const ItemInfo& info) 
         : Item(info)
@@ -82,6 +94,37 @@ public:
             return UseResult::SUCCESS;
         }
         return UseResult::FAILURE;
+    }
+
+    // Render Info extension for ProjectileSpawners
+    void setPosition(const sf::Vector2f& newPos) override
+    {
+        IMovable::setPosition(newPos);
+        projSpawner.setPosition(newPos);
+    }
+
+    void addPosition(const sf::Vector2f& delta) override
+    {
+        IMovable::addPosition(delta);
+        projSpawner.addPosition(delta);
+    }
+
+    void setRotation(const float& newRot) override
+    {
+        IMovable::setRotation(newRot);
+        projSpawner.setRotation(newRot);
+    }
+
+    void setSize(const sf::Vector2f& newSize) override
+    {
+        IMovable::setSize(newSize);
+        projSpawner.setSize(newSize);
+    }
+
+    void setRenderInfo(const RenderInfo& newRenderInfo) override
+    {
+        IMovable::setRenderInfo(newRenderInfo);
+        projSpawner.setRenderInfo(newRenderInfo);
     }
 
     // Additional weapon-specific methods could be added (e.g., reload, update)

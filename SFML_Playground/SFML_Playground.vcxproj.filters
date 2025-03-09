@@ -52,6 +52,9 @@
     <Filter Include="Header\Actors\Items\Perks">
       <UniqueIdentifier>{8ae4b029-bf6c-4b2b-aac2-7a611b3788d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Actors\Items">
+      <UniqueIdentifier>{e6060964-9bde-4dcd-adf3-38ccd8597606}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -98,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="Projectile.cpp">
       <Filter>Source\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="Inventory.cpp">
+      <Filter>Source\Actors\Items</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

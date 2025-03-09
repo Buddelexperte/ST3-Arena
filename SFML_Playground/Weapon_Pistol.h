@@ -6,8 +6,6 @@
 
 class Pistol : public Weapon
 {
-private:
-	ProjectileSpawner projSpawner;
 public:
 	Pistol()
 		: Weapon(ItemInfo("Pistol"))

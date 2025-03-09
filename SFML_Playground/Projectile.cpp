@@ -18,10 +18,10 @@ void ProjectileSpawner::spawnProjectile()
 		projectileInfo.pos = getPosition(),
 		projectileInfo.size = baseInfo.size,
 		projectileInfo.rot = getRotation() + baseInfo.rot,
-		projectileInfo.velocity = dirFromRot(getRotation()) * baseInfo.velocity,
+		projectileInfo.velocity = dirFromRot(getRotation()) * baseInfo.velocity * 100.0f,
 		projectileInfo.color = baseInfo.color
 	};
-
+	
 	manager->shootProjectile(projectileInfo);
 }
 

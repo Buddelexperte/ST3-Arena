@@ -47,6 +47,7 @@ public:
 	Flashlight& getFlashlight() { return flashlight; }
 
 	// Movable Interface
+	void setRenderInfo(const RenderInfo&) override;
 	void setPosition(const sf::Vector2f&) override;
 	void addPosition(const sf::Vector2f&) override;
 	void setRotation(const float&) override;

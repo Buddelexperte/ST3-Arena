@@ -8,6 +8,7 @@
 Player::Player(InputWidget* parent)
 	: InputWidget(parent),
 	flashlight(this),
+	inventory(),
 	// TODO: Implement Start Weapon loading
 	collisionBox(getPosition(), getSize())
 {
@@ -176,11 +177,27 @@ float Player::onMouseScrolled(sf::Event* eventRef)
 
 // Setter and Getter methods
 
+void Player::setRenderInfo(const RenderInfo& newRenderInfo)
+{
+	IMovable::setRenderInfo(newRenderInfo);
+
+	playerSprite.setPosition(newRenderInfo.pos);
+	playerSprite.setRotation(newRenderInfo.rot);
+
+	collisionBox.setPos(newRenderInfo.pos);
+	collisionBox.setSize(newRenderInfo.size);
+
+	if (inventory.getActiveWeapon())
+		inventory.getActiveWeapon()->setRenderInfo(newRenderInfo);
+}
+
 void Player::setPosition(const sf::Vector2f& newPos)
 {
 	IMovable::setPosition(newPos);
 	playerSprite.setPosition(newPos);
 	collisionBox.setPos(newPos);
+	if (inventory.getActiveWeapon())
+		inventory.getActiveWeapon()->setPosition(newPos);
 }
 
 void Player::addPosition(const sf::Vector2f& deltaPos)
@@ -188,12 +205,17 @@ void Player::addPosition(const sf::Vector2f& deltaPos)
 	IMovable::addPosition(deltaPos);
 	playerSprite.move(deltaPos);
 	collisionBox.setPos(collisionBox.getPos() + deltaPos);
+	if (inventory.getActiveWeapon())
+		inventory.getActiveWeapon()->addPosition(deltaPos);
+
 }
 
 void Player::setRotation(const float& newRot)
 {
 	IMovable::setRotation(newRot);
 	playerSprite.setRotation(newRot - 90.0f);
+	if (inventory.getActiveWeapon())
+		inventory.getActiveWeapon()->setRotation(newRot);
 }
 
 void Player::setSize(const sf::Vector2f& newSize)
@@ -209,6 +231,10 @@ void Player::setSize(const sf::Vector2f& newSize)
 	playerSprite.setScale((newSize.x * 2.0f) / originalSize.x, (newSize.y * 2.0f) / originalSize.y);
 	
 	collisionBox.setSize(newSize);
+
+	if (inventory.getActiveWeapon())
+		inventory.getActiveWeapon()->setSize(newSize);
+
 }
 
 void Player::tick_collision(const float& deltaTime)

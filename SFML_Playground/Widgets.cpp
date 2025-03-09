@@ -651,6 +651,7 @@ void W_Gameplay::tick(const float& deltaTime)
 	if (!gameInstance->getIsPaused())
 	{
 		enemyManager.tick(deltaTime);
+		projectileManager.tick(deltaTime);
 	}
 
 	healthBar.tick(deltaTime);

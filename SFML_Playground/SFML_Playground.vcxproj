@@ -149,6 +149,7 @@
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Flashlight.cpp" />
     <ClCompile Include="FontManager.h" />
+    <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ProjectileManager.cpp" />
     <ClCompile Include="RenderInfo.h" />

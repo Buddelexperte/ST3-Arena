@@ -17,14 +17,21 @@ private:
     ProjectileManager* manager;
     RNG& random = RNG::getInstance();
 
-    RenderInfo baseInfo;
+    const RenderInfo baseInfo = {
+        {0.0f, 0.0f}, // Default offset
+        {50.0f, 50.0f}, // Default projectile size
+        0.0f, // Default rotation offset
+        {1.0, 1.0f}, // Default projectile velocity
+        sf::Color::White // Default projectile Color
+    };
+
 public:
     ProjectileSpawner();
     
     virtual void spawnProjectile();
 };
 
-// The Projectile class now inherits from IMovable and ICollidable.
+// The Projectile class now inherits from IMovable and ICollidable
 class Projectile : public IMovable, public ICollidable
 {
 private:
