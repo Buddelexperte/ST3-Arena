@@ -47,12 +47,6 @@ void Projectile::kill_self() const
 	ProjectileManager::getInstance().callDelete(projectileID);
 }
 
-void Projectile::onCollision(Collidable* other)
-{
-	GI_Arena::getInstance().getPlayer()->getInventory().triggerPerks(PerkTrigger::OnWeaponHit);
-	// If other is enemy kill_self() and trigger onEnemyHit
-}
-
 void Projectile::tick_move(const float& deltaTime)
 {
 	sf::Vector2f delta = getVelocity() * deltaTime;
@@ -65,4 +59,15 @@ void Projectile::tick_lifetime(const float& deltaTime)
 
 	if (lifetimeLeft < SMALLEST_PRECISION)
 		kill_self();
+}
+
+void Projectile::onCollision(IHasCollision* other)
+{
+	other->collideWithProjectile(*this);
+}
+
+void Projectile::collideWithEnemy(Enemy& enemy)
+{
+	GI_Arena::getInstance().getPlayer()->getInventory().triggerPerks(PerkTrigger::OnEnemyHit);
+	kill_self();
 }

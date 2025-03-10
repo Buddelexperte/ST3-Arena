@@ -88,13 +88,6 @@ void Enemy::tick_move(const float& deltaTime)
 	}
 }
 
-// TODO: Implement onCollision instead of constant checking in the loop
-void Enemy::onCollision(Collidable* other)
-{
-	//kill_self();
-	// If other is bullet, kill self
-}
-
 void Enemy::kill_self()
 {
 	manager->callDelete(enemyIndex);
@@ -135,4 +128,22 @@ void Enemy::setRenderInfo(const RenderInfo& newRenderInfo)
 	IMovable::setRenderInfo(newRenderInfo);
 	collisionBox.setPos(newRenderInfo.pos);
 	collisionBox.setSize(newRenderInfo.size);
+}
+
+// TODO: Implement onCollision instead of constant checking in the loop
+void Enemy::onCollision(IHasCollision* other)
+{
+	other->collideWithEnemy(*this);
+	//kill_self();
+	// If other is bullet, kill self
+}
+
+void Enemy::collideWithPlayer(Player& player)
+{
+	kill_self();
+}
+
+void Enemy::collideWithProjectile(Projectile& projectile)
+{
+	kill_self();
 }

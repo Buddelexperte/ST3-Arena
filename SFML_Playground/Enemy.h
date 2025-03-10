@@ -43,11 +43,6 @@ public:
 	void spawn();
 	void tick(const float&);
 
-	// Collision
-	Collidable* getCollision() override 
-		{ return &collisionBox; }
-	virtual void onCollision(Collidable* other) override;
-
 	// RenderInfo general
 	void setRenderInfo(const RenderInfo& newRenderInfo) override;
 	// Position
@@ -57,4 +52,13 @@ public:
 	void setSize(const sf::Vector2f& size) override;
 	// Color
 	void setColor(const sf::Color& color) override;
+
+	// Collision
+	Collidable* getCollision() override
+		{ return &collisionBox; }
+
+	virtual void onCollision(IHasCollision* other) override;
+
+	void collideWithPlayer(Player& player) override;
+	void collideWithProjectile(Projectile& projectile) override;
 };

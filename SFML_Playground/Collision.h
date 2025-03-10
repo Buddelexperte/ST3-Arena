@@ -3,6 +3,9 @@
 
 
 class Collidable;
+class Enemy;
+class Player;
+class Projectile;
 
 // Collision interface Class for actors
 class IHasCollision
@@ -11,8 +14,13 @@ public:
 	virtual Collidable* getCollision() = 0;
 
 	// Actual event for onCollison logic
-	virtual void onCollision(Collidable* other)
+	virtual void onCollision(IHasCollision* other)
 		{}
+
+	// Collision responses when the other object is of a specific type.
+	virtual void collideWithEnemy(Enemy& enemy) {};
+	virtual void collideWithPlayer(Player& player) {};
+	virtual void collideWithProjectile(Projectile& projectile) {};
 };
 
 // Collision base class
@@ -49,7 +57,7 @@ public:
 
 	void onCollision(Collidable* other)
 	{
-		owner->onCollision(other);
+		owner->onCollision(other->owner);
 	}
 
 	// Virtual destructor is important for proper cleanup.

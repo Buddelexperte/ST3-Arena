@@ -59,7 +59,9 @@ public:
     Collidable* getCollision() override
         { return &collisionBox; }
 
-    void onCollision(Collidable* other) override;
+    void onCollision(IHasCollision* other) override;
+
+    void collideWithEnemy(Enemy& enemy) override;
 
     void spawn()
     {

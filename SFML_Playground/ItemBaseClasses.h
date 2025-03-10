@@ -138,7 +138,7 @@ enum class PerkTrigger
     OnEnemyContact,
     OnPlayerDamaged,
     OnWeaponShot,
-    OnWeaponHit
+    OnEnemyHit
     // Extend with additional triggers as needed.
 };
 
@@ -187,7 +187,7 @@ public:
             case PerkTrigger::OnWeaponShot:
                 std::cout << "OnWeaponShot";
                 break;
-            case PerkTrigger::OnWeaponHit:     
+            case PerkTrigger::OnEnemyHit:     
                 std::cout << "OnWeaponHit";
                 break;
             default: 

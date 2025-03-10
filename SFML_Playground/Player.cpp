@@ -245,8 +245,17 @@ void Player::setSize(const sf::Vector2f& newSize)
 
 }
 
-void Player::onCollision(Collidable* other)
+void Player::onCollision(IHasCollision* other)
 {
-	std::cout << "I got hit by something" << std::endl;
+	other->collideWithPlayer(*this);
+}
+
+void Player::collideWithEnemy(Enemy& enemy)
+{
 	// If enemy, hurt
+}
+
+void Player::collideWithProjectile(Projectile& projectile)
+{
+	// idk what to put here now
 }

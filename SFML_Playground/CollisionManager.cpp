@@ -89,4 +89,5 @@ void CollisionManager::registerProjectile(Collidable* collidable)
 void CollisionManager::tick(const float& deltaTime)
 {
 	tick_collision(deltaTime);
+	//std::cout << "### Collisions active: " << enemyCollisions.size() + projectileCollisions.size() + (playerCollision != nullptr) << std::endl;
 }
