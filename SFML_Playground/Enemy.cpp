@@ -8,9 +8,14 @@ Enemy::Enemy()
 	: 
 	gameInstance(&GI_Arena::getInstance()),
 	manager(&EnemyManager::getInstance()),
-	collisionBox(getPosition(), getSize())
+	collisionBox(this, getPosition(), getSize())
 {
 	setPlayer(gameInstance->getPlayer());
+}
+
+Enemy::~Enemy()
+{
+	CollisionManager::getInstance().unregisterCollidable(getCollision()->getCollisionID());
 }
 
 void Enemy::setPlayer(Player* playerPtr)
@@ -32,6 +37,7 @@ sf::Vector2f Enemy::getNewSpawnPos() const
 
 void Enemy::spawn()
 {
+	CollisionManager::getInstance().registerEnemy(getCollision());
 	setPosition(getNewSpawnPos());
 
 	if (enemyIndex == 0)
@@ -42,9 +48,6 @@ void Enemy::tick(const float& deltaTime)
 {
 	// Calculate movement and apply i
 	tick_move(deltaTime);
-
-	// Check for collision updates
-	tick_collision(deltaTime);
 
 	return;
 }
@@ -85,23 +88,14 @@ void Enemy::tick_move(const float& deltaTime)
 	}
 }
 
-void Enemy::tick_collision(const float& deltaTime)
-{
-	const sf::FloatRect playerCollisionRect = playerRef->getCollisionBounds();
-	if (isColliding(playerCollisionRect))
-	{
-		// TODO: PROTOTYPE COLLISION LOGIC
-		die();
-	}
-}
-
 // TODO: Implement onCollision instead of constant checking in the loop
-void Enemy::onCollision(ICollidable* other)
+void Enemy::onCollision(Collidable* other)
 {
-
+	//kill_self();
+	// If other is bullet, kill self
 }
 
-void Enemy::die()
+void Enemy::kill_self()
 {
 	manager->callDelete(enemyIndex);
 }

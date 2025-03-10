@@ -652,6 +652,7 @@ void W_Gameplay::tick(const float& deltaTime)
 	{
 		enemyManager.tick(deltaTime);
 		projectileManager.tick(deltaTime);
+		collisionManager.tick(deltaTime);
 	}
 
 	healthBar.tick(deltaTime);

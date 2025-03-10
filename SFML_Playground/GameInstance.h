@@ -3,9 +3,10 @@
 
 #include "Player.h"
 #include "Functions.h"
+#include "RandomNumbers.h"
 #include "SoundManager.h"
 #include "FontManager.h"
-#include "RandomNumbers.h"
+#include "CollisionManager.h"
 
 // Global Game Instance ---------------------------------------------------------------------------
 
@@ -24,6 +25,7 @@ private:
 	// Manager instances
 	SoundManager& soundManager = SoundManager::getInstance();
 	FontManager& fontManager = FontManager::getInstance();
+	CollisionManager& collisionManager = CollisionManager::getInstance();
 	// SFML Viewport objects
 	sf::RenderWindow* window = nullptr;
 	sf::View* view = nullptr;

@@ -8,7 +8,7 @@ class Pistol : public Weapon
 {
 public:
 	Pistol()
-		: Weapon(ItemInfo("Pistol"))
+		: Weapon(ItemInfo("Pistol", "Basic weapon, semi automatic"))
 	{}
 
 	UseResult activate(ItemUse use) override

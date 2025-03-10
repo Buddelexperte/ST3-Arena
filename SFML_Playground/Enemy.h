@@ -3,14 +3,13 @@
 
 #include "RandomNumbers.h"
 #include "Player.h"
-// Parent Classes
-#include "Collision.h"
+#include "CollisionManager.h"
 #include "RenderInfo.h"
 
 class GI_Arena;
 class EnemyManager;
 
-class Enemy : public ICollidable, public IMovable
+class Enemy : public IHasCollision, public IMovable
 {
 private:
 	GI_Arena* gameInstance;
@@ -31,20 +30,23 @@ private:
 	sf::Vector2f getNewSpawnPos() const;
 
 	void tick_move(const float&) override;
-	void tick_collision(const float&) override;
-	void die();
+	void kill_self();
 
 public:
 	Enemy();
+	~Enemy();
+
 	void setPlayer(Player*);
-	void setID(const size_t& newIndex) { enemyIndex = newIndex; }
+	void setID(const size_t& newIndex)
+		{ enemyIndex = newIndex; }
 
 	void spawn();
 	void tick(const float&);
 
 	// Collision
-	ICollidable* getCollision() override { return &collisionBox; }
-	virtual void onCollision(ICollidable* other) override;
+	Collidable* getCollision() override 
+		{ return &collisionBox; }
+	virtual void onCollision(Collidable* other) override;
 
 	// RenderInfo general
 	void setRenderInfo(const RenderInfo& newRenderInfo) override;

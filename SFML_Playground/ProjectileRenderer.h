@@ -28,7 +28,6 @@ public:
     // Add a new projectile. Key can be a unique ID (or hash) for the projectile.
     void addProjectile(const IMovable::RenderInfo& info, const size_t& key)
     {
-        std::cout << "Renderer added bullet" << std::endl;
         // New projectile index is the current count.
         const size_t index = projectileKeyList.size();
         // Adding all relevant elements

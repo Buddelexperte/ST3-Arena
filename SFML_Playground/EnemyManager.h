@@ -12,7 +12,7 @@ private:
 	GI_Arena& gameInstance = GI_Arena::getInstance();
 	ProjectileManager& projectileManager = ProjectileManager::getInstance();
 
-	const float spawnInterval = SMALLEST_PRECISION;
+	const float spawnInterval = 1.0f;
 	const int maxEnemies = 9; // Temporary safe guard, replace with actual spawning logic later
 	static int enemyID;
 

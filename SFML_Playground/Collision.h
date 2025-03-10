@@ -1,45 +1,71 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-// Collision Interface, works with CollisionBox (CollisionComponent)
-class ICollidable
+
+class Collidable;
+
+// Collision interface Class for actors
+class IHasCollision
+{
+public:
+	virtual Collidable* getCollision() = 0;
+
+	// Actual event for onCollison logic
+	virtual void onCollision(Collidable* other)
+		{}
+};
+
+// Collision base class
+class Collidable
 {
 private:
-	// Collision tick prefab
-	virtual void tick_collision(const float& deltaTime) {};
+	IHasCollision* owner = nullptr;
+	size_t collisionID = -1;
 public:
-	// Pure virtual function that must be implemented by any class using this interface.
-	virtual ICollidable* getCollision() = 0;
-	virtual sf::FloatRect getCollisionBounds()
-	{
-		return getCollision()->getCollisionBounds();
-	}
+	Collidable(IHasCollision* owner)
+		: owner(owner)
+	{ }
+	// Collision ID managing
+	virtual void setCollisionID(const size_t& newID)
+		{ collisionID = newID; }
+
+	virtual size_t getCollisionID() const
+		{ return collisionID; }
+
+	virtual sf::FloatRect getCollisionBounds() = 0; // Abstract
+
 	// Checking for Collision
+	virtual bool isColliding(Collidable* other)
+		{ return isColliding(other->getCollisionBounds()); }
+	
 	virtual bool isColliding(const sf::FloatRect& otherBound)
 	{
-		return getCollision()->isColliding(otherBound);
+		return getCollisionBounds().intersects(otherBound);
 	}
 	virtual bool isColliding(const sf::Vector2f& otherPos)
 	{
-		return getCollision()->isColliding(otherPos);
+		return getCollisionBounds().contains(otherPos);
 	}
-	// Actual event for onCollison logic
-	virtual void onCollision(ICollidable* other) {};
+
+	void onCollision(Collidable* other)
+	{
+		owner->onCollision(other);
+	}
 
 	// Virtual destructor is important for proper cleanup.
-	virtual ~ICollidable() = default;
+	virtual ~Collidable() = default;
 };
 
 // Collision Component, works with ICollision (Collision Interface)
-class CollisionBox : public ICollidable
+class CollisionBox : public Collidable
 {
 protected:
 	sf::FloatRect collisionRect;
 	sf::Vector2f pos;
 	sf::Vector2f size;
 public:
-	CollisionBox(const sf::Vector2f& pos, const sf::Vector2f& size)
-		: pos(pos), size(size)
+	CollisionBox(IHasCollision* owner, const sf::Vector2f& pos, const sf::Vector2f& size)
+		: pos(pos), size(size), Collidable(owner)
 	{
 		collisionRect.top = pos.y - (size.y / 2.0f);
 		collisionRect.left = pos.x - (size.x / 2.0f);
@@ -61,17 +87,11 @@ public:
 		collisionRect.width = size.x;
 		collisionRect.height = size.y;
 	}
-	sf::Vector2f getSize() const { return size; }
-	sf::Vector2f getPos() const { return pos; }
+	sf::Vector2f getSize() const 
+		{ return size; }
+	sf::Vector2f getPos() const 
+		{ return pos; }
 	// ICollidable
-	ICollidable* getCollision() override { return nullptr; }
-	sf::FloatRect getCollisionBounds() override { return collisionRect; }
-	bool isColliding(const sf::FloatRect& otherBound) override
-	{	
-		return collisionRect.intersects(otherBound);
-	}
-	bool isColliding(const sf::Vector2f& otherPos) override
-	{
-		return collisionRect.contains(otherPos);
-	}
+	sf::FloatRect getCollisionBounds() override 
+		{ return collisionRect; }
 };

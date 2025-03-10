@@ -15,10 +15,10 @@ ProjectileSpawner::ProjectileSpawner()
 void ProjectileSpawner::spawnProjectile()
 {
 	RenderInfo projectileInfo = {
-		projectileInfo.pos = getPosition(),
+		projectileInfo.pos = getPosition() + baseInfo.pos,
 		projectileInfo.size = baseInfo.size,
 		projectileInfo.rot = getRotation() + baseInfo.rot,
-		projectileInfo.velocity = dirFromRot(getRotation()) * baseInfo.velocity * 100.0f,
+		projectileInfo.velocity = dirFromRot(getRotation()) * baseInfo.velocity,
 		projectileInfo.color = baseInfo.color
 	};
 	
@@ -27,7 +27,42 @@ void ProjectileSpawner::spawnProjectile()
 
 // PROJECTILE OBJECT ----------------------------------------
 
-void Projectile::onCollision(ICollidable* other)
+Projectile::Projectile()
+	: Projectile(RenderInfo({0.0f, 0.0f}, {100.0f, 100.0f}))
+{}
+
+Projectile::Projectile(const RenderInfo& initRenderInfo)
+	: collisionBox(this, initRenderInfo.pos, initRenderInfo.size)
+{
+	setRenderInfo(initRenderInfo);
+}
+
+Projectile::~Projectile()
+{
+	CollisionManager::getInstance().unregisterCollidable(getCollision()->getCollisionID());
+}
+
+void Projectile::kill_self() const
+{
+	ProjectileManager::getInstance().callDelete(projectileID);
+}
+
+void Projectile::onCollision(Collidable* other)
 {
 	GI_Arena::getInstance().getPlayer()->getInventory().triggerPerks(PerkTrigger::OnWeaponHit);
+	// If other is enemy kill_self() and trigger onEnemyHit
+}
+
+void Projectile::tick_move(const float& deltaTime)
+{
+	sf::Vector2f delta = getVelocity() * deltaTime;
+	addPosition(delta);
+}
+
+void Projectile::tick_lifetime(const float& deltaTime)
+{
+	lifetimeLeft -= deltaTime;
+
+	if (lifetimeLeft < SMALLEST_PRECISION)
+		kill_self();
 }

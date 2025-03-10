@@ -105,6 +105,9 @@
     <ClCompile Include="Inventory.cpp">
       <Filter>Source\Actors\Items</Filter>
     </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>Source\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SFML_Arena.h">
@@ -195,6 +198,9 @@
       <Filter>Header\Managers</Filter>
     </ClInclude>
     <ClInclude Include="ProjectilePool.h">
+      <Filter>Header\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
       <Filter>Header\Managers</Filter>
     </ClInclude>
   </ItemGroup>

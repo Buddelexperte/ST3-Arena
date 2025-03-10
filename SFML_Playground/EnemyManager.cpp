@@ -28,7 +28,9 @@ void EnemyManager::spawnEnemy(const IMovable::RenderInfo& renderInfo)
 
     // Set the enemy's index and add it to the activeEnemies vector
     size_t enemyKey = enemyID++;
+    std::cout << "Using new enemy with ID [" << enemyKey << "]" << std::endl;
     newEnemy->setID(enemyKey);
+    std::cout << "Worked" << std::endl;
 
     newEnemy->setRenderInfo(renderInfo);
 
@@ -42,6 +44,7 @@ void EnemyManager::spawnEnemy(const IMovable::RenderInfo& renderInfo)
 
 void EnemyManager::deleteEnemy(const size_t& key)
 {
+    CollisionManager::getInstance().unregisterCollidable(activeEnemies[key]->getCollision()->getCollisionID());
     enemyPool.release(std::move(activeEnemies[key]));
     
     activeEnemies.erase(key);

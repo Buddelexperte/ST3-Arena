@@ -5,7 +5,7 @@
 #include "RandomNumbers.h"
 #include "BaseTypes.h"
 #include "RenderInfo.h"
-#include "Collision.h"
+#include "CollisionManager.h"
 
 class GI_Arena;
 class ProjectileManager;
@@ -17,13 +17,16 @@ private:
     ProjectileManager* manager;
     RNG& random = RNG::getInstance();
 
+
+protected:
     const RenderInfo baseInfo = {
         {0.0f, 0.0f}, // Default offset
         {50.0f, 50.0f}, // Default projectile size
         0.0f, // Default rotation offset
-        {1.0, 1.0f}, // Default projectile velocity
-        sf::Color::White // Default projectile Color
+        {1000.0f, 1000.0f}, // Default projectile speed (velocity later multiplied with direction)
+        sf::Color(100, 100, 100, 255) // Default projectile Color
     };
+
 
 public:
     ProjectileSpawner();
@@ -32,67 +35,55 @@ public:
 };
 
 // The Projectile class now inherits from IMovable and ICollidable
-class Projectile : public IMovable, public ICollidable
+class Projectile : public IMovable, public IHasCollision
 {
 private:
+    const float maxLifetime = 5.0f;
+    float lifetimeLeft = maxLifetime;
     // Use CollisionBox for collision detection.
     CollisionBox collisionBox;
-    bool active = true;
 
-    size_t projectileIndex = -1;
+    size_t projectileID = -1;
+
+    void kill_self() const;
 
 public:
     // Constructor initializes movement info and collision box.
-    Projectile()
-        : collisionBox(sf::Vector2f(0.0f, .0f), sf::Vector2f(0.0f, 0.0f))
-        {}
+    Projectile();
+    Projectile(const RenderInfo& initRenderInfo);
+    ~Projectile();
 
-    Projectile(const RenderInfo& initRenderInfo)
-        : collisionBox(initRenderInfo.pos, initRenderInfo.size)
-    {
-        setRenderInfo(initRenderInfo);
-    }
-    void setID(const size_t& newIndex) { projectileIndex = newIndex; }
+    void setID(const size_t& newIndex) { projectileID = newIndex; }
 
-    // Override ICollidable to return the projectile's collision box.
-    ICollidable* getCollision() override
-    {
-        return &collisionBox;
-    }
+    // Override Collidable to return the projectile's collision box.
+    Collidable* getCollision() override
+        { return &collisionBox; }
 
-    void onCollision(ICollidable* other) override;
+    void onCollision(Collidable* other) override;
 
     void spawn()
     {
-
+        CollisionManager::getInstance().registerProjectile(getCollision()); 
+        lifetimeLeft = maxLifetime;
     }
 
-    void tick_move(const float& deltaTime) override
-    {
-        sf::Vector2f delta = getVelocity() * deltaTime;
-        addPosition(delta);
-    }
+    void tick_move(const float&) override;
 
-    void tick_collision(const float& deltaTime)
-    {
-
-    }
+    void tick_lifetime(const float&);
 
     // Update movement and synchronize the collision box position.
     void tick(const float& deltaTime)
     {
         tick_move(deltaTime);
 
-        tick_collision(deltaTime);
+        tick_lifetime(deltaTime);
     }
-
-    bool isActive() const { return active; }
-    void deactivate() { active = false; }
 
     void setRenderInfo(const RenderInfo& newRenderInfo) override
     {
         IMovable::setRenderInfo(newRenderInfo);
         collisionBox.setPos(newRenderInfo.pos);
+        collisionBox.setSize(newRenderInfo.size);
     }
 
     void setPosition(const sf::Vector2f& newPos) override
@@ -101,10 +92,16 @@ public:
         collisionBox.setPos(newPos);
     }
 
+
     void addPosition(const sf::Vector2f& deltaPos) override
     {
         IMovable::addPosition(deltaPos);
         collisionBox.setPos(collisionBox.getPos() + deltaPos);
     }
 
+    void setSize(const sf::Vector2f& newSize) override
+    {
+        IMovable::setSize(newSize);
+        collisionBox.setSize(newSize);
+    }
 };

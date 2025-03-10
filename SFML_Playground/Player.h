@@ -1,13 +1,13 @@
 #pragma once
 
 #include "BaseClasses.h"
-#include "Collision.h"
+#include "CollisionManager.h"
 #include "Flashlight.h"
 #include "Inventory.h"
 
 // PLAYER -----------------------------------------------------------------------------------------
 
-class Player : public InputWidget, public ICollidable
+class Player : public IHasCollision, public InputWidget
 {
 private:
 	sf::Sprite playerSprite;
@@ -26,7 +26,6 @@ private:
 
 	using IMovable::setVelocity; // Make this function private
 
-	void tick_collision(const float& deltaTime) override;
 	void tick_move(const float&) override;
 protected:
 	sf::Keyboard::Key onKeyPressed(sf::Event*) override;
@@ -36,6 +35,7 @@ protected:
 	float onMouseScrolled(sf::Event*) override;
 public:
 	Player(InputWidget*);
+	~Player();
 
 	Player* spawn(const sf::Vector2f& = (sf::Vector2f(0.0f, 0.0f)));
 
@@ -52,8 +52,12 @@ public:
 	void addPosition(const sf::Vector2f&) override;
 	void setRotation(const float&) override;
 	void setSize(const sf::Vector2f&) override;
-	sf::Vector2f getDirection() const { return direction; };
+	sf::Vector2f getDirection() const 
+		{ return direction; };
+
 	// Collision-Interface
-	ICollidable* getCollision() override { return &collisionBox; }
-	void onCollision(ICollidable* other) override;
+	Collidable* getCollision() override
+		{ return &collisionBox; }
+	
+	void onCollision(Collidable*) override;
 };

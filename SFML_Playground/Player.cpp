@@ -10,12 +10,14 @@ Player::Player(InputWidget* parent)
 	flashlight(this),
 	inventory(),
 	// TODO: Implement Start Weapon loading
-	collisionBox(getPosition(), getSize())
+	collisionBox(this, getPosition(), getSize())
 {
 	// Player Sprite Initialization
 	IMovable::setPosition(windowCenter);
 	playerSprite.setPosition(windowCenter);
 	collisionBox.setPos(windowCenter);
+
+	CollisionManager::getInstance().registerPlayer(getCollision());
 
 	IMovable::setColor(sf::Color::White);
 	playerSprite.setColor(sf::Color::White);
@@ -47,6 +49,12 @@ Player::Player(InputWidget* parent)
 		std::cerr << "Texture not set. Cannot adjust size.\n";
 	}
 
+}
+
+Player::~Player()
+{
+	WidgetElement::~WidgetElement();
+	CollisionManager::getInstance().unregisterPlayer();
 }
 
 Player* Player::spawn(const sf::Vector2f& spawnPos)
@@ -237,12 +245,8 @@ void Player::setSize(const sf::Vector2f& newSize)
 
 }
 
-void Player::tick_collision(const float& deltaTime)
+void Player::onCollision(Collidable* other)
 {
-	return;
-}
-
-void Player::onCollision(ICollidable* other)
-{
-	return;
+	std::cout << "I got hit by something" << std::endl;
+	// If enemy, hurt
 }

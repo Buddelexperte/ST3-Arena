@@ -37,6 +37,7 @@ public:
 		view = nullptr;
 		parent = nullptr;
 	}
+
 	virtual void construct() { windowUpdate(); };
 
 	InputWidget* getParent() const { return parent; }

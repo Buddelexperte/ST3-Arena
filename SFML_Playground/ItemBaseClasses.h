@@ -178,11 +178,21 @@ public:
             std::cout << "Perk \"" << info.name << "\" triggered on event: ";
             switch (trigger)
             {
-            case PerkTrigger::OnEnemyContact: std::cout << "OnEnemyContact"; break;
-            case PerkTrigger::OnPlayerDamaged: std::cout << "OnPlayerDamaged"; break;
-            case PerkTrigger::OnWeaponShot:    std::cout << "OnWeaponShot"; break;
-            case PerkTrigger::OnWeaponHit:     std::cout << "OnWeaponHit"; break;
-            default: std::cout << "Unknown Trigger"; break;
+            case PerkTrigger::OnEnemyContact:
+                std::cout << "OnEnemyContact";
+                break;
+            case PerkTrigger::OnPlayerDamaged:
+                std::cout << "OnPlayerDamaged";
+                break;
+            case PerkTrigger::OnWeaponShot:
+                std::cout << "OnWeaponShot";
+                break;
+            case PerkTrigger::OnWeaponHit:     
+                std::cout << "OnWeaponHit";
+                break;
+            default: 
+                std::cout << "Unknown Trigger";
+                break;
             }
             std::cout << "\n";
             // Insert perk effect logic here (e.g., boost stats, activate shield, etc.)
