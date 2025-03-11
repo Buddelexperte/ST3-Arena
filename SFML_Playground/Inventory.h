@@ -15,11 +15,13 @@ private:
     // Store all acquired perks.
     std::vector<std::unique_ptr<Perk>> perks;
 
+    // Multipliers
+    float cooldownMultiplier = 1.0f;
+    float cooldownSubtractor = 0.0f;
+
 public:
     Inventory() = default;
-
     Inventory(std::unique_ptr<Weapon>);
-
     ~Inventory() = default;
 
     size_t getNumWeapons() const
@@ -27,6 +29,18 @@ public:
 
     size_t getNumPerks() const
         { return perks.size(); }
+
+    void setCooldownMultiplier(const float& newMulti)
+        { cooldownMultiplier = newMulti; }
+
+    float getCooldownMultiplier() const
+        { return cooldownMultiplier; }
+
+    void setCooldownSubtractor(const float& newSub)
+        { cooldownSubtractor = newSub; }
+
+    float getCooldownSubtractor() const
+        { return cooldownSubtractor; }
 
     // Adds a new weapon. If this is the first weapon, it becomes the active weapon.
     void addWeapon(std::unique_ptr<Weapon>);

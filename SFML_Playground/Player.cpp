@@ -121,7 +121,10 @@ void Player::tick(const float& deltaTime)
 	
 	InputWidget::tick(deltaTime);
 	if (!gameInstance->getIsPaused())
+	{
 		tick_move(deltaTime);
+		inventory.getActiveWeapon()->tick(deltaTime);
+	}
 
 	// Flashlight update
 	if (bDrawFlashlight)

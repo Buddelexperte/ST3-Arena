@@ -2,14 +2,14 @@
 
 #include "GameInstance.h"
 #include "ProjectileManager.h"
-#include "Projectile.h"
 
 // PROJECTILE SPAWNER ----------------------------------------
  
-ProjectileSpawner::ProjectileSpawner()
+ProjectileSpawner::ProjectileSpawner(const RenderInfo& baseInfo)
 	: 
 	gameInstance(&GI_Arena::getInstance()),
-	manager(&ProjectileManager::getInstance())
+	manager(&ProjectileManager::getInstance()),
+	baseInfo(baseInfo)
 	{}
 
 void ProjectileSpawner::spawnProjectile()

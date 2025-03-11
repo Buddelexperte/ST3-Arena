@@ -12,24 +12,22 @@ class ProjectileManager;
 
 class ProjectileSpawner : public IMovable
 {
-private:
+protected:
     GI_Arena* gameInstance;
     ProjectileManager* manager;
     RNG& random = RNG::getInstance();
 
-
-protected:
+private:
     const RenderInfo baseInfo = {
         {0.0f, 0.0f}, // Default offset
         {50.0f, 50.0f}, // Default projectile size
         0.0f, // Default rotation offset
-        {1000.0f, 1000.0f}, // Default projectile speed (velocity later multiplied with direction)
+        {1500.0f, 1500.0f}, // Default projectile speed (velocity later multiplied with direction)
         sf::Color(100, 100, 100, 255) // Default projectile Color
     };
 
-
 public:
-    ProjectileSpawner();
+    ProjectileSpawner(const RenderInfo& baseInfo);
     
     virtual void spawnProjectile();
 };

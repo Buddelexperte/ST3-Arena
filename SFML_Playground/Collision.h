@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-
+// Forward declarations
 class Collidable;
 class Enemy;
 class Player;

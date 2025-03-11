@@ -23,6 +23,7 @@ enum class UseResult
 {
     INVALID_USE = -1,
     FAILURE = 0,
+    FAILURE_COOLDOWN,
     FAILURE_NO_RESOURCES,
     SUCCESS
 };
@@ -32,19 +33,19 @@ class Inventory; // Forward declaration
 // Base class for all items
 class Item : public IMovable
 {
-private:
-    Inventory* owningInventory = nullptr; // Maybe useless now, could be used later;
 public:
     struct ItemInfo
     {
         std::string name;
         std::string desc;
+
         ItemInfo(const std::string& n = "ItemName", const std::string& d = "Item Description")
             : name(n), desc(d)
         {}
     };
 
 protected:
+    Inventory* owningInventory = nullptr;
     bool bReady = false;      // Determines if the item is ready to be used
     ItemInfo info;
 
@@ -55,6 +56,9 @@ public:
     void setOwningInventory(Inventory* newInv)
         { owningInventory = newInv; }
 
+    Inventory* getOwningInventory()
+        { return owningInventory; }
+
     bool isReady() const 
         { return bReady; }
     
@@ -62,9 +66,10 @@ public:
         { return info; }
 
     // Virtual function to "activate" the item – behavior depends on the item type.
-    virtual UseResult activate(ItemUse use) = 0;
+    virtual UseResult activate(const ItemUse& use) = 0;
 
-
+    virtual void tick(const float& deltaTime)
+        { }
 };
 
 // =============================== WEAPON ===============================
@@ -72,11 +77,20 @@ public:
 // Weapon: active item that can perform actions (e.g., firing)
 class Weapon : public Item
 {
+private:
+    virtual float getMaxCooldown() const
+    {
+        return 0.0f;
+    }
+    float cooldownLeft = 0.0f;
+
 protected:
-    ProjectileSpawner projSpawner;
+    std::unique_ptr<ProjectileSpawner> projSpawner;
 public:
-    Weapon(const ItemInfo& info) 
-        : Item(info)
+    Weapon(const ItemInfo& info, std::unique_ptr<ProjectileSpawner> ps) 
+        : 
+        Item(info),
+        projSpawner(std::move(ps))
     {
         // Weapons are considered "ready" by default
         bReady = true;
@@ -84,47 +98,39 @@ public:
 
     virtual ~Weapon() = default;
 
-    // In this basic example, only ATTACK is supported.
-    virtual UseResult activate(ItemUse use) override
-    {
-        if (use == ItemUse::ATTACK)
-        {
-            std::cout << "Weapon \"" << info.name << "\" fired.\n";
-            // Add additional firing logic (ammo check, cooldowns, etc.) here.
-            return UseResult::SUCCESS;
-        }
-        return UseResult::FAILURE;
-    }
+    virtual UseResult activate(const ItemUse& use) override;
+
+    virtual void tick(const float& deltaTime) override;
 
     // Render Info extension for ProjectileSpawners
     void setPosition(const sf::Vector2f& newPos) override
     {
         IMovable::setPosition(newPos);
-        projSpawner.setPosition(newPos);
+        projSpawner->setPosition(newPos);
     }
 
     void addPosition(const sf::Vector2f& delta) override
     {
         IMovable::addPosition(delta);
-        projSpawner.addPosition(delta);
+        projSpawner->addPosition(delta);
     }
 
     void setRotation(const float& newRot) override
     {
         IMovable::setRotation(newRot);
-        projSpawner.setRotation(newRot);
+        projSpawner->setRotation(newRot);
     }
 
     void setSize(const sf::Vector2f& newSize) override
     {
         IMovable::setSize(newSize);
-        projSpawner.setSize(newSize);
+        projSpawner->setSize(newSize);
     }
 
     void setRenderInfo(const RenderInfo& newRenderInfo) override
     {
         IMovable::setRenderInfo(newRenderInfo);
-        projSpawner.setRenderInfo(newRenderInfo);
+        projSpawner->setRenderInfo(newRenderInfo);
     }
 
     // Additional weapon-specific methods could be added (e.g., reload, update)
@@ -159,12 +165,10 @@ public:
 
     virtual ~Perk() = default;
 
-    // While not "activated" directly like a weapon, we provide a stub for interface consistency.
-    virtual UseResult activate(ItemUse use) override
+    virtual UseResult activate(const ItemUse& use) override
     {
         if (use == ItemUse::PASSIVE_TRIGGER)
         {
-            // This function could log or perform a simple activation if needed.
             return UseResult::SUCCESS;
         }
         return UseResult::FAILURE;

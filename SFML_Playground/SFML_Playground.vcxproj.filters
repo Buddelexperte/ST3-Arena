@@ -108,6 +108,9 @@
     <ClCompile Include="CollisionManager.cpp">
       <Filter>Source\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="ItemBaseClasses.cpp">
+      <Filter>Source\Actors\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SFML_Arena.h">
@@ -202,6 +205,9 @@
     </ClInclude>
     <ClInclude Include="CollisionManager.h">
       <Filter>Header\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectiles_Pistol.h">
+      <Filter>Header\Actors\Items\Weapons</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

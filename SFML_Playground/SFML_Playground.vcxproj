@@ -151,6 +151,7 @@
     <ClCompile Include="Flashlight.cpp" />
     <ClCompile Include="FontManager.h" />
     <ClCompile Include="Inventory.cpp" />
+    <ClCompile Include="ItemBaseClasses.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ProjectileManager.cpp" />
     <ClCompile Include="RenderInfo.h" />
@@ -186,6 +187,7 @@
     <ClInclude Include="ProjectileManager.h" />
     <ClInclude Include="ProjectilePool.h" />
     <ClInclude Include="ProjectileRenderer.h" />
+    <ClInclude Include="Projectiles_Pistol.h" />
     <ClInclude Include="RandomNumbers.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="SoundManager.h" />
