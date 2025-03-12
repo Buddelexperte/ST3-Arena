@@ -17,8 +17,7 @@ public:
 			std::make_unique<PS_Pistol>(),							// ProjectileSpawner
 			std::make_unique<ValueBar>(0.8f)						// Cooldown	
 		)
-	{
-	}
+	{}
 
 	UseResult activate(const ItemUse& use) override
 	{
