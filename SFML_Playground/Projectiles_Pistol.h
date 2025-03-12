@@ -13,10 +13,8 @@ private:
 		sf::Color(100, 100, 100, 255) // Default projectile Color
 	};
 
-	const float damage = 0.1f;
-
 public:
-	PS_Pistol()
+	PS_Pistol(const float& damage = 0.2f)
 		:
 		ProjectileSpawner(baseInfo, damage)
 	{ }
@@ -31,6 +29,6 @@ public:
 			projectileInfo.color = baseInfo.color
 		};
 
-		manager->shootProjectile(projectileInfo, damage);
+		manager->shootProjectile(projectileInfo, getDamage());
 	}
 };

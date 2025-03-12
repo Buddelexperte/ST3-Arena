@@ -33,6 +33,11 @@ public:
 	virtual ~ProjectileSpawner() = default;
 
     virtual void shoot();
+
+	float getDamage() const
+	{
+		return damage;
+	}
 };
 
 // The Projectile class now inherits from IMovable and ICollidable
