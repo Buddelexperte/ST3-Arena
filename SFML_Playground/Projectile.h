@@ -26,9 +26,12 @@ private:
         sf::Color(100, 100, 100, 255) // Default projectile Color
     };
 
+	const float damage = 1.0f;
+
 public:
-    ProjectileSpawner(const RenderInfo& baseInfo);
-    
+    ProjectileSpawner(const RenderInfo& baseInfo, const float& damage);
+	virtual ~ProjectileSpawner() = default;
+
     virtual void shoot();
 };
 
@@ -39,7 +42,7 @@ private:
     const float maxLifetime = 5.0f;
     float lifetimeLeft = maxLifetime;
 
-    float damage = 0.1f;
+    float damage = 0.0f;
 
     CollisionBox collisionBox;
 
@@ -106,6 +109,9 @@ public:
         IMovable::setSize(newSize);
         collisionBox.setSize(newSize);
     }
+
+    void setDamage(const float& newDamage)
+	    { damage = newDamage; }
 
     float getDamage() const
         { return damage; }

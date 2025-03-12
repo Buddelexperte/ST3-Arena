@@ -7,11 +7,12 @@
 
 // PROJECTILE SPAWNER ----------------------------------------
  
-ProjectileSpawner::ProjectileSpawner(const RenderInfo& baseInfo)
+ProjectileSpawner::ProjectileSpawner(const RenderInfo& baseInfo, const float& damage)
 	: 
 	gameInstance(&GI_Arena::getInstance()),
 	manager(&ProjectileManager::getInstance()),
-	baseInfo(baseInfo)
+	baseInfo(baseInfo),
+	damage(damage)
 	{}
 
 void ProjectileSpawner::shoot()
@@ -24,7 +25,7 @@ void ProjectileSpawner::shoot()
 		projectileInfo.color = baseInfo.color
 	};
 	
-	manager->shootProjectile(projectileInfo);
+	manager->shootProjectile(projectileInfo, damage);
 }
 
 // PROJECTILE OBJECT ----------------------------------------

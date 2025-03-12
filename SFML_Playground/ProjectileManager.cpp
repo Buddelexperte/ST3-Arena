@@ -13,7 +13,7 @@ int ProjectileManager::getNumActiveProjectiles() const
     return static_cast<int>(activeProjectiles.size());
 }
 
-void ProjectileManager::shootProjectile(const IMovable::RenderInfo& renderInfo)
+void ProjectileManager::shootProjectile(const IMovable::RenderInfo& renderInfo, const float& damage)
 {
     // Retrieve an enemy instance from the pool
     std::unique_ptr<Projectile> newProjectile = projectilePool.get();
@@ -22,6 +22,7 @@ void ProjectileManager::shootProjectile(const IMovable::RenderInfo& renderInfo)
     newProjectile->setID(projectileKey);
 
     newProjectile->setRenderInfo(renderInfo);
+    newProjectile->setDamage(damage);
 
     // Extract render information and pass it to the renderer
     projectileRenderer.addProjectile(renderInfo, projectileKey);
