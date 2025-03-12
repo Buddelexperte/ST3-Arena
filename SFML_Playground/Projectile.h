@@ -38,7 +38,9 @@ class Projectile : public IMovable, public IHasCollision
 private:
     const float maxLifetime = 5.0f;
     float lifetimeLeft = maxLifetime;
-    // Use CollisionBox for collision detection.
+
+    float damage = 0.1f;
+
     CollisionBox collisionBox;
 
     size_t projectileID = -1;
@@ -104,4 +106,7 @@ public:
         IMovable::setSize(newSize);
         collisionBox.setSize(newSize);
     }
+
+    float getDamage() const
+        { return damage; }
 };

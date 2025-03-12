@@ -3,14 +3,16 @@
 
 #include "RandomNumbers.h"
 #include "Player.h"
-#include "CollisionManager.h"
+#include "Health.h"
+#include "Collision.h"
 #include "RenderInfo.h"
 
 // Forward Declarations
 class GI_Arena;
 class EnemyManager;
 
-class Enemy : public IHasCollision, public IMovable
+class Enemy : 
+	public IHasCollision, public IMovable, IHasHealth
 {
 private:
 	GI_Arena* gameInstance;
@@ -19,6 +21,9 @@ private:
 	RNG& random = RNG::getInstance();
 
 	CollisionBox collisionBox;
+	ValueBar healthBar;
+	virtual ValueBar& getValueBar() override
+		{ return healthBar; }
 
 	sf::Vector2f getNewSpawnPos() const;
 	size_t enemyIndex = -1;

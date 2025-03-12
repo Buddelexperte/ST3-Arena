@@ -2,6 +2,8 @@
 
 #include "GameInstance.h"
 #include "ProjectileManager.h"
+#include "Enemy.h"
+#include "Health.h"
 
 // PROJECTILE SPAWNER ----------------------------------------
  

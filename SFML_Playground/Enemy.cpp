@@ -8,6 +8,7 @@ Enemy::Enemy()
 	: 
 	gameInstance(&GI_Arena::getInstance()),
 	manager(&EnemyManager::getInstance()),
+	healthBar(0.1f),
 	collisionBox(this, getPosition(), getSize())
 {
 	setPlayer(gameInstance->getPlayer());
@@ -48,6 +49,12 @@ void Enemy::tick(const float& deltaTime)
 {
 	// Calculate movement and apply i
 	tick_move(deltaTime);
+
+	if (healthBar.isEmpty())
+	{
+		healthBar.reset();
+		kill_self();
+	}
 
 	return;
 }
@@ -134,8 +141,6 @@ void Enemy::setRenderInfo(const RenderInfo& newRenderInfo)
 void Enemy::onCollision(IHasCollision* other)
 {
 	other->collideWithEnemy(*this);
-	//kill_self();
-	// If other is bullet, kill self
 }
 
 void Enemy::collideWithPlayer(Player& player)
@@ -145,5 +150,5 @@ void Enemy::collideWithPlayer(Player& player)
 
 void Enemy::collideWithProjectile(Projectile& projectile)
 {
-	kill_self();
+	hurt(projectile.getDamage());
 }
