@@ -7,15 +7,13 @@
 
 class Rifle : public Weapon
 {
-private:
-	const float cooldown = 2.0f;
 public:
 	Rifle()
 		:
 		Weapon(
 			ItemInfo("Rifle", "Basic weapon, full automatic"),	// ItemInfo
 			std::make_unique<PS_Rifle>(),						// ProjectileSpawner
-			std::make_unique<ValueBar>(cooldown)				// Cooldown	
+			std::make_unique<ValueBar>(0.2f)					// Cooldown	
 		)
 	{}
 
@@ -26,7 +24,6 @@ public:
 		case ItemUse::ATTACK: case ItemUse::LOAD_UP:
 			if (Weapon::activate(ItemUse::ATTACK) < UseResult::SUCCESS)
 			{
-				std::cout << "Weapon \"" << info.name << "\" failed to fire because of Cooldown" << std::endl;
 				break;
 			}
 			projSpawner->shoot();

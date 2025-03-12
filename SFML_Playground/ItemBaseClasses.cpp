@@ -11,13 +11,13 @@ UseResult Weapon::activate(const ItemUse& use)
         break;
     case ItemUse::ATTACK:
         {
-        if (cooldown->isNotEmpty())
-            return UseResult::FAILURE_COOLDOWN;
+            if (cooldown->isNotEmpty())
+            {
+                return UseResult::FAILURE_COOLDOWN;
+            }
 
-        std::cout << "Weapon \"" << info.name << "\" fired.\n";
-        // Add additional firing logic (ammo check, cooldowns, etc.) here.
-        float newCooldownLeft = cooldown->getMaxValue() - owningInventory->getCooldownSubtractor();
-        cooldown->setValue(newCooldownLeft);
+            // Add additional firing logic (ammo check, cooldowns, etc.) here.
+            cooldown->reset(owningInventory->getCooldownSubtractor());
         }
         return UseResult::SUCCESS;
         break;

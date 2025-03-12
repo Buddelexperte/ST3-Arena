@@ -38,6 +38,7 @@ private:
 	std::shared_ptr<InputWidget> activeMenu = nullptr;
 
 	Player* player = nullptr;
+	Player* makePlayer();
 	// Somehow Gameplay related?
 	sf::Vector2f prevCamPos;
 	float zoomFactor = 1.0f;
@@ -51,7 +52,6 @@ public:
 	// Basics
 	void start(); // Function to call from main()
 	bool initWidgets();
-	Player* makePlayer();
 	void correctWidget();
 	// Ticks
 	void tickLoop();

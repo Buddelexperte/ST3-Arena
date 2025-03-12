@@ -11,7 +11,7 @@ Player::Player(InputWidget* parent)
 	: InputWidget(parent),
 	flashlight(this),
 	inventory(),
-	invincibility(0.5f), // 0.5 seconds of invincibility after hit
+	invincibility(0.1f), // 0.5 seconds of invincibility after hit
 	healthBar(1.0f),
 	collisionBox(this, getPosition(), getSize())
 {

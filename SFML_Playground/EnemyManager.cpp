@@ -28,9 +28,9 @@ void EnemyManager::spawnEnemy(const IMovable::RenderInfo& renderInfo)
 
     // Set the enemy's index and add it to the activeEnemies vector
     size_t enemyKey = enemyID++;
-    std::cout << "Using new enemy with ID [" << enemyKey << "]" << std::endl;
+    //std::cout << "Using new enemy with ID [" << enemyKey << "]" << std::endl;
     newEnemy->setID(enemyKey);
-    std::cout << "Worked" << std::endl;
+    //std::cout << "Worked" << std::endl;
 
     newEnemy->setRenderInfo(renderInfo);
 

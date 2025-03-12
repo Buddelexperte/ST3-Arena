@@ -55,14 +55,12 @@ Player* GI_Arena::makePlayer()
 {
 	if (player)
 	{
-		return player->spawn();
-	}
-	else
-	{
-		player = new Player(nullptr);
-		EnemyManager::getInstance().setPlayer(player);
 		return player;
 	}
+
+	player = new Player(nullptr);
+	EnemyManager::getInstance().setPlayer(player);
+	return player;
 }
 
 void GI_Arena::start()
@@ -214,7 +212,12 @@ void GI_Arena::setGameState(const GameState& newGS)
 
 Player* GI_Arena::getPlayer()
 {
-	return player;
+	if (player)
+	{
+		return player;
+	}
+
+	return makePlayer();
 }
 
 bool GI_Arena::handleEvent(sf::Event* eventRef)

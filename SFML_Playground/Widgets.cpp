@@ -544,7 +544,7 @@ void W_Gameplay::construct()
 
 	if (gameState == GAME_LAUNCHING)
 	{
-		gameInstance->makePlayer()->spawn(sf::Vector2f(0.0f, 0.0f) + windowCenter);
+		gameInstance->getPlayer()->spawn(sf::Vector2f(0.0f, 0.0f) + windowCenter);
 		// Reset values to game start values
 		hitTargets = 0;
 		healthBar.setMaxTime(TIMER_DEFAULT, true);
@@ -654,11 +654,11 @@ void W_Gameplay::tick(const float& deltaTime)
 		enemyManager.tick(deltaTime);
 		projectileManager.tick(deltaTime);
 		collisionManager.tick(deltaTime);
+		if (player->isDead())
+			lose();
 	}
 
 	healthBar.tick(deltaTime);
-	if (player->isDead())
-		lose();
 }
 
 bool W_Gameplay::input_esc()
