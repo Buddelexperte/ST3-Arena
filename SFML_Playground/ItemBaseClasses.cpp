@@ -10,15 +10,15 @@ UseResult Weapon::activate(const ItemUse& use)
     case ItemUse::NO_USE:
         break;
     case ItemUse::ATTACK:
-        if (cooldownLeft > 0.0f)
         {
+        if (cooldown->isNotEmpty())
             return UseResult::FAILURE_COOLDOWN;
-        }
 
         std::cout << "Weapon \"" << info.name << "\" fired.\n";
         // Add additional firing logic (ammo check, cooldowns, etc.) here.
-        cooldownLeft = getMaxCooldown() - owningInventory->getCooldownSubtractor();
-        return UseResult::SUCCESS;
+        float newCooldownLeft = cooldown->getMaxValue() - owningInventory->getCooldownSubtractor();
+        cooldown->setValue(newCooldownLeft);
+        }
         break;
     case ItemUse::LOAD_UP:
         break;
@@ -27,13 +27,15 @@ UseResult Weapon::activate(const ItemUse& use)
     case ItemUse::PASSIVE_TRIGGER:
         break;
     case ItemUse::INVALID_USE: default:
+        return UseResult::FAILURE;
         break;
     }
 
-    return UseResult::FAILURE;
+    return UseResult::SUCCESS;
 }
 
 void Weapon::tick(const float& deltaTime)
 {
-    cooldownLeft -= deltaTime * owningInventory->getCooldownMultiplier();
+    float cooldownDelta = -deltaTime * owningInventory->getCooldownMultiplier();
+    cooldown->addValue(cooldownDelta);
 }

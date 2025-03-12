@@ -1,13 +1,15 @@
 #pragma once
 
 #include "BaseClasses.h"
-#include "CollisionManager.h"
+#include "Collision.h"
+#include "Health.h"
 #include "Flashlight.h"
 #include "Inventory.h"
 
 // PLAYER -----------------------------------------------------------------------------------------
 
-class Player : public IHasCollision, public InputWidget
+class Player : public InputWidget,
+	public IHasCollision, public IHasHealth 
 {
 private:
 	sf::Sprite playerSprite;
@@ -16,6 +18,12 @@ private:
 
 	Flashlight flashlight;
 	Inventory inventory;
+
+	// Health bar
+	ValueBar invincibility;
+	ValueBar healthBar;
+	ValueBar& getValueBar() override
+		{ return healthBar; }
 
 	sf::Vector2f direction = { 0.0f, 0.0f };
 
@@ -27,6 +35,7 @@ private:
 	using IMovable::setVelocity; // Make this function private
 
 	void tick_move(const float&) override;
+	void tick_animation(const float&);
 protected:
 	sf::Keyboard::Key onKeyPressed(sf::Event*) override;
 	bool onMouseClickL(sf::Event*) override;
@@ -61,6 +70,10 @@ public:
 	
 	void onCollision(IHasCollision*) override;
 
+	// Collision
 	void collideWithEnemy(Enemy& enemy) override;
 	void collideWithProjectile(Projectile& projectile) override;
+
+	// Health
+	void hurt(const float& delta) override;
 };

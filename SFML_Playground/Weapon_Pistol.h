@@ -8,16 +8,13 @@
 class Pistol : public Weapon
 {
 private:
-	virtual float getMaxCooldown() const override
-	{
-		return 0.2f;
-	}
 public:
 	Pistol()
 		: 
 		Weapon(
 			ItemInfo("Pistol", "Basic weapon, semi automatic"),		// ItemInfo
-			std::make_unique<PS_Pistol>()							// ProjectileSpawner
+			std::make_unique<PS_Pistol>(),							// ProjectileSpawner
+			std::make_unique<ValueBar>(0.2f)						// Cooldown	
 		)
 	{}
 

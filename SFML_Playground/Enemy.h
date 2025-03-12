@@ -6,6 +6,7 @@
 #include "CollisionManager.h"
 #include "RenderInfo.h"
 
+// Forward Declarations
 class GI_Arena;
 class EnemyManager;
 
@@ -19,6 +20,7 @@ private:
 
 	CollisionBox collisionBox;
 
+	sf::Vector2f getNewSpawnPos() const;
 	size_t enemyIndex = -1;
 
 	const float WALK_SPEED = random.floatInRange(80.0f, 100.0f);
@@ -27,7 +29,7 @@ private:
 
 	using IMovable::setVelocity; // Make this function private for safety reasons
 
-	sf::Vector2f getNewSpawnPos() const;
+	float damage = 0.1f;
 
 	void tick_move(const float&) override;
 	void kill_self();
@@ -61,4 +63,7 @@ public:
 
 	void collideWithPlayer(Player& player) override;
 	void collideWithProjectile(Projectile& projectile) override;
+
+	float getDamage() const
+		{ return damage; }
 };

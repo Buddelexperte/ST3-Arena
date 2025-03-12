@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #include "Projectile.h"
+#include "ValueBar.h"
 
 // Enums for item usage and results
 enum class ItemUse
@@ -77,20 +78,15 @@ public:
 // Weapon: active item that can perform actions (e.g., firing)
 class Weapon : public Item
 {
-private:
-    virtual float getMaxCooldown() const
-    {
-        return 0.0f;
-    }
-    float cooldownLeft = 0.0f;
-
 protected:
+    std::unique_ptr<ValueBar> cooldown;
     std::unique_ptr<ProjectileSpawner> projSpawner;
 public:
-    Weapon(const ItemInfo& info, std::unique_ptr<ProjectileSpawner> ps) 
+    Weapon(const ItemInfo& info, std::unique_ptr<ProjectileSpawner> ps, std::unique_ptr<ValueBar> cd) 
         : 
         Item(info),
-        projSpawner(std::move(ps))
+        projSpawner(std::move(ps)),
+        cooldown(std::move(cd))
     {
         // Weapons are considered "ready" by default
         bReady = true;

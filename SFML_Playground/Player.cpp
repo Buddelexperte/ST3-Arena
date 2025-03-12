@@ -4,12 +4,15 @@
 #include "Functions.h"
 
 #include "AllWeapons.h"
+#include "Enemy.h"
+
 
 Player::Player(InputWidget* parent)
 	: InputWidget(parent),
 	flashlight(this),
 	inventory(),
-	// TODO: Implement Start Weapon loading
+	invincibility(0.5f), // 0.5 seconds of invincibility after hit
+	healthBar(1.0f),
 	collisionBox(this, getPosition(), getSize())
 {
 	// Player Sprite Initialization
@@ -115,27 +118,8 @@ void Player::tick_move(const float& deltaTime)
 	}
 }
 
-void Player::tick(const float& deltaTime)
+void Player::tick_animation(const float& deltaTime)
 {
-	constexpr bool bDrawFlashlight = true;
-	
-	InputWidget::tick(deltaTime);
-	if (!gameInstance->getIsPaused())
-	{
-		tick_move(deltaTime);
-		inventory.getActiveWeapon()->tick(deltaTime);
-	}
-
-	// Flashlight update
-	if (bDrawFlashlight)
-	{
-		flashlight.tick(deltaTime);
-		for (sf::Drawable* elem : shapes)
-		{
-			flashlight.drawOtherScene(elem);
-		}
-	}
-
 	if (!playerTextures.empty())
 	{
 		animationAccu += deltaTime;
@@ -144,6 +128,30 @@ void Player::tick(const float& deltaTime)
 			currentFrame = (static_cast<size_t>(currentFrame + 1)) % playerTextures.size();
 			playerSprite.setTexture(playerTextures[currentFrame], true);
 			animationAccu -= animationSpeed;
+		}
+	}
+}
+
+void Player::tick(const float& deltaTime)
+{
+	InputWidget::tick(deltaTime);
+	// Gameplay ticks
+	if (!gameInstance->getIsPaused())
+	{
+		tick_move(deltaTime); // Movement inputs
+		tick_animation(deltaTime); // Animation update
+		invincibility.addValue(-deltaTime); // Invinvibility update
+		inventory.getActiveWeapon()->tick(deltaTime); // Weapon cooldown update
+	}
+
+	// Flashlight update
+	constexpr bool bDrawFlashlight = true;
+	if (bDrawFlashlight)
+	{
+		flashlight.tick(deltaTime);
+		for (sf::Drawable* elem : shapes)
+		{
+			flashlight.drawOtherScene(elem);
 		}
 	}
 }
@@ -255,10 +263,19 @@ void Player::onCollision(IHasCollision* other)
 
 void Player::collideWithEnemy(Enemy& enemy)
 {
-	// If enemy, hurt
+	hurt(enemy.getDamage());
 }
 
 void Player::collideWithProjectile(Projectile& projectile)
 {
 	// idk what to put here now
+}
+
+void Player::hurt(const float& delta)
+{
+	if (invincibility.isEmpty())
+	{
+		IHasHealth::hurt(delta);
+		invincibility.reset();
+	}
 }

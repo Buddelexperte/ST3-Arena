@@ -627,6 +627,7 @@ void W_Gameplay::lose()
 {
 	// Add GameOver Screen to shapes list
 	setWidgetIndex(2)->construct();
+	gameInstance->setIsPaused(true);
 	gameOverScreen.changeScore(hitTargets);
 	if (hitTargets > SaveGame::Stored_Save) SaveGame::Stored_Save = hitTargets; // Update highscore value if new value is bigger
 	SaveGame::saveData(); // Save highscore value (didn't change if no greater was achieved)
@@ -656,10 +657,8 @@ void W_Gameplay::tick(const float& deltaTime)
 	}
 
 	healthBar.tick(deltaTime);
-	if (gameInstance->getGameState() >= IN_GAME)
-	{
-		if (healthBar.isFinished()) lose();
-	}
+	if (player->isDead())
+		lose();
 }
 
 bool W_Gameplay::input_esc()
