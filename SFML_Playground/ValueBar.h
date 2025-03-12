@@ -37,6 +37,11 @@ public:
 		zeroPrecision(currentValue);
 	}
 
+	void reset()
+	{
+		currentValue = maxValue;
+	}
+
 	void reset(const float& deficit)
 	{
 		currentValue = maxValue - deficit;

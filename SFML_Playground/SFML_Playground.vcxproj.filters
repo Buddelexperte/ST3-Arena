@@ -111,6 +111,9 @@
     <ClCompile Include="ItemBaseClasses.cpp">
       <Filter>Source\Actors\Items</Filter>
     </ClCompile>
+    <ClCompile Include="Weapon_Rifle_Burst.h">
+      <Filter>Header\Actors\Items\Weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SFML_Arena.h">
@@ -207,6 +210,18 @@
       <Filter>Header\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Projectiles_Pistol.h">
+      <Filter>Header\Actors\Items\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Health.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ValueBar.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectiles_Rifle.h">
+      <Filter>Header\Actors\Items\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon_Rifle.h">
       <Filter>Header\Actors\Items\Weapons</Filter>
     </ClInclude>
   </ItemGroup>

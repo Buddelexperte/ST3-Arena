@@ -3,8 +3,6 @@
 #include "ItemBaseClasses.h"
 #include "Projectiles_Rifle.h"
 
-// TODO: FIX mouse being pressed down
-
 class Rifle : public Weapon
 {
 public:

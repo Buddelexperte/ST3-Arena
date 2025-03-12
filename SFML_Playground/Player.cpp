@@ -64,7 +64,7 @@ Player* Player::spawn(const sf::Vector2f& spawnPos)
 {
 	inventory.clear();
 
-	inventory.addWeapon(std::make_unique<Rifle>());
+	inventory.addWeapon(std::make_unique<Rifle_Burst>());
 
 	setPosition(spawnPos);
 	gameInstance->resetViewPos();
@@ -135,6 +135,7 @@ void Player::tick_animation(const float& deltaTime)
 void Player::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
+	idleInputs();
 	// Gameplay ticks
 	if (!gameInstance->getIsPaused())
 	{

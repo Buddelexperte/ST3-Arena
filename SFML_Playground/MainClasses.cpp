@@ -116,9 +116,6 @@ void GI_Arena::tick(const float& deltaTime)
 {
 	tickView(deltaTime);
 
-	player->tick(deltaTime);
-	activeMenu->tick(deltaTime);
-
 	sf::Event event;
 	while (window->pollEvent(event) && gameState > QUIT)
 	{
@@ -129,8 +126,10 @@ void GI_Arena::tick(const float& deltaTime)
 		}
 		player->handleEvent(&event);	// Mouse buttons getting pressed down
 	}
+
 	// Non-event inputs
-	player->idleInputs();
+	player->tick(deltaTime);
+	activeMenu->tick(deltaTime);
 }
 
 void GI_Arena::postTick()

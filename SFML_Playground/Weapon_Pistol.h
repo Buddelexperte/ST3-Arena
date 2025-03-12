@@ -3,8 +3,6 @@
 #include "ItemBaseClasses.h"
 #include "Projectiles_Pistol.h"
 
-// TODO: Make WeaponInterfaces for shooting, melee and hitboxes
-
 class Pistol : public Weapon
 {
 public:
@@ -19,18 +17,20 @@ public:
 
 	UseResult activate(const ItemUse& use) override
 	{
-		switch (Weapon::activate(use))
+		switch (use)
 		{
-		case UseResult::SUCCESS:
-			if (use == ItemUse::ATTACK)
+		case ItemUse::ATTACK:
+			if (Weapon::activate(use) < UseResult::SUCCESS)
 			{
-				projSpawner->shoot();
+				break;
 			}
+
+			projSpawner->shoot();
 			break;
 		default:
 			break;
 		}
-		
+
 		return UseResult::FAILURE;
 	}
 };
