@@ -189,6 +189,7 @@
     <ClInclude Include="ProjectilePool.h" />
     <ClInclude Include="ProjectileRenderer.h" />
     <ClInclude Include="Projectiles_Pistol.h" />
+    <ClInclude Include="Projectiles_Rifle.h" />
     <ClInclude Include="RandomNumbers.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="SoundManager.h" />
@@ -197,6 +198,7 @@
     <ClInclude Include="SFML_Arena.h" />
     <ClInclude Include="ValueBar.h" />
     <ClInclude Include="Weapon_Pistol.h" />
+    <ClInclude Include="Weapon_Rifle.h" />
     <ClInclude Include="Widgets.h" />
   </ItemGroup>
   <ItemGroup>

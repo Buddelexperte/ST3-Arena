@@ -2,7 +2,7 @@
 
 #include "ProjectileManager.h"
 
-class PS_Pistol : public ProjectileSpawner
+class PS_Rifle : public ProjectileSpawner
 {
 private:
 	const RenderInfo baseInfo = {
@@ -14,7 +14,7 @@ private:
 	};
 
 public:
-	PS_Pistol()
+	PS_Rifle()
 		:
 		ProjectileSpawner(baseInfo)
 	{ }

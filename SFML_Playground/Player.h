@@ -40,6 +40,7 @@ protected:
 	sf::Keyboard::Key onKeyPressed(sf::Event*) override;
 	bool onMouseClickL(sf::Event*) override;
 	bool onMouseClickR(sf::Event*) override;
+	void onMouseDownL() override;
 	bool onMouseReleaseL(sf::Event*) override;
 	float onMouseScrolled(sf::Event*) override;
 public:

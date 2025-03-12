@@ -7,7 +7,6 @@
 
 class Pistol : public Weapon
 {
-private:
 public:
 	Pistol()
 		: 
@@ -25,7 +24,7 @@ public:
 		case UseResult::SUCCESS:
 			if (use == ItemUse::ATTACK)
 			{
-				projSpawner->spawnProjectile();
+				projSpawner->shoot();
 			}
 			break;
 		default:

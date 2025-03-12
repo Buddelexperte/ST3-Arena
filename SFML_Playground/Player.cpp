@@ -64,7 +64,7 @@ Player* Player::spawn(const sf::Vector2f& spawnPos)
 {
 	inventory.clear();
 
-	inventory.addWeapon(std::make_unique<Pistol>());
+	inventory.addWeapon(std::make_unique<Rifle>());
 
 	setPosition(spawnPos);
 	gameInstance->resetViewPos();
@@ -175,7 +175,23 @@ sf::Keyboard::Key Player::onKeyPressed(sf::Event* eventRef)
 
 bool Player::onMouseClickL(sf::Event* eventRef)
 {
-	return (inventory.getActiveWeapon()->activate(ItemUse::ATTACK) >= UseResult::SUCCESS);
+	UseResult result = UseResult::FAILURE;
+	if (inventory.getActiveWeapon() != nullptr)
+	{
+		result = inventory.getActiveWeapon()->activate(ItemUse::ATTACK);
+	}
+	return (result >= UseResult::SUCCESS);
+}
+
+void Player::onMouseDownL()
+{
+	if (gameInstance->getIsPaused())
+		return;
+
+	if (inventory.getActiveWeapon() != nullptr)
+	{
+		inventory.getActiveWeapon()->activate(ItemUse::LOAD_UP);
+	}
 }
 
 bool Player::onMouseClickR(sf::Event* eventRef)

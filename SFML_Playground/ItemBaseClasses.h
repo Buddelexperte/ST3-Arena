@@ -88,6 +88,7 @@ public:
         projSpawner(std::move(ps)),
         cooldown(std::move(cd))
     {
+        cooldown->setValue(cooldown->getMaxValue() + 2.0f);
         // Weapons are considered "ready" by default
         bReady = true;
     }

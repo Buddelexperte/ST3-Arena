@@ -129,8 +129,10 @@ void GI_Arena::tick(const float& deltaTime)
 			window->close();
 			break;
 		}
-		player->handleEvent(&event);
+		player->handleEvent(&event);	// Mouse buttons getting pressed down
 	}
+	// Non-event inputs
+	player->idleInputs();
 }
 
 void GI_Arena::postTick()
@@ -253,6 +255,7 @@ void WidgetElement::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 
 bool InputWidget::handleEvent(sf::Event* eventRef)
 {
+
 	switch (eventRef->type)
 	{
 	case sf::Event::KeyPressed:
@@ -271,6 +274,18 @@ bool InputWidget::handleEvent(sf::Event* eventRef)
 	}
 
 	return false;
+}
+
+void InputWidget::idleInputs()
+{
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+		onMouseDownL();
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
+		onMouseDownR();
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle))
+		onMouseDownM();
 }
 
 InputWidget* InputWidget::setWidgetIndex(const int& toIndex)

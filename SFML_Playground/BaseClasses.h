@@ -60,6 +60,9 @@ protected:
 	virtual bool onMouseClickL(sf::Event*) { return isMouseOver(true); };
 	virtual bool onMouseClickR(sf::Event*) { return true; };
 	virtual bool onMouseClickM(sf::Event*) { return true; };
+	virtual void onMouseDownL() {};
+	virtual void onMouseDownR() {};
+	virtual void onMouseDownM() {};
 	virtual bool onMouseReleaseL(sf::Event*) { return true; };
 	virtual bool onMouseReleaseR(sf::Event*) { return true; };
 	virtual bool onMouseReleaseM(sf::Event*) { return true; };
@@ -79,6 +82,7 @@ public:
 		return true;
 	}
 	virtual bool handleEvent(sf::Event* eventRef);
+	virtual void idleInputs();
 	virtual bool isMouseOver(const bool& = false) { return false; }
 };
 

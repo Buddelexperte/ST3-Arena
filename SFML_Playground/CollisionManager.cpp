@@ -59,12 +59,12 @@ void CollisionManager::unregisterCollidable(const size_t& key)
 	if (enemyCollisions.find(key) != enemyCollisions.end())
 		enemyCollisions.erase(key);
 
-	std::cout << "Collision [" << key << "] unregistered" << std::endl;
+	//std::cout << "Collision [" << key << "] unregistered" << std::endl;
 }
 
 void CollisionManager::registerPlayer(Collidable* collidable)
 {
-	std::cout << "Registered player Collision [" << collisionCounter << "]" << std::endl;
+	//std::cout << "Registered player Collision [" << collisionCounter << "]" << std::endl;
 	playerCollision = collidable;
 	collidable->setCollisionID(collisionCounter);
 	collisionCounter++;
@@ -72,7 +72,7 @@ void CollisionManager::registerPlayer(Collidable* collidable)
 
 void CollisionManager::registerEnemy(Collidable* collidable)
 {
-	std::cout << "Registered enemy Collision [" << collisionCounter << "]" << std::endl;
+	//std::cout << "Registered enemy Collision [" << collisionCounter << "]" << std::endl;
 	enemyCollisions[collisionCounter] = collidable;
 	collidable->setCollisionID(collisionCounter);
 	collisionCounter++;
@@ -80,7 +80,7 @@ void CollisionManager::registerEnemy(Collidable* collidable)
 
 void CollisionManager::registerProjectile(Collidable* collidable)
 {
-	std::cout << "Registered projectile Collision [" << collisionCounter << "]" << std::endl;
+	//std::cout << "Registered projectile Collision [" << collisionCounter << "]" << std::endl;
 	projectileCollisions[collisionCounter] = collidable;
 	collidable->setCollisionID(collisionCounter);
 	collisionCounter++;

@@ -14,7 +14,7 @@ ProjectileSpawner::ProjectileSpawner(const RenderInfo& baseInfo)
 	baseInfo(baseInfo)
 	{}
 
-void ProjectileSpawner::spawnProjectile()
+void ProjectileSpawner::shoot()
 {
 	RenderInfo projectileInfo = {
 		projectileInfo.pos = getPosition() + baseInfo.pos,

@@ -19,6 +19,7 @@ UseResult Weapon::activate(const ItemUse& use)
         float newCooldownLeft = cooldown->getMaxValue() - owningInventory->getCooldownSubtractor();
         cooldown->setValue(newCooldownLeft);
         }
+        return UseResult::SUCCESS;
         break;
     case ItemUse::LOAD_UP:
         break;
@@ -31,7 +32,7 @@ UseResult Weapon::activate(const ItemUse& use)
         break;
     }
 
-    return UseResult::SUCCESS;
+    return UseResult::INVALID_USE;
 }
 
 void Weapon::tick(const float& deltaTime)

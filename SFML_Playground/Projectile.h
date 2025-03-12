@@ -29,7 +29,7 @@ private:
 public:
     ProjectileSpawner(const RenderInfo& baseInfo);
     
-    virtual void spawnProjectile();
+    virtual void shoot();
 };
 
 // The Projectile class now inherits from IMovable and ICollidable
