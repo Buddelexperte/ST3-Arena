@@ -10,7 +10,7 @@ public:
 		:
 		Weapon(
 			ItemInfo("Rifle", "Basic weapon, full automatic"),	// ItemInfo
-			std::make_unique<PS_Rifle>(getDamage()),						// ProjectileSpawner
+			std::make_unique<PS_Rifle>(getDamage()),			// ProjectileSpawner
 			std::make_unique<ValueBar>(0.2f)					// Cooldown	
 		)
 	{}
