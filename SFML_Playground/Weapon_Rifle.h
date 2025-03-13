@@ -22,7 +22,7 @@ public:
 		case ItemUse::ATTACK: case ItemUse::LOAD_UP:
 			if (Weapon::activate(ItemUse::ATTACK) < UseResult::SUCCESS)
 			{
-				break;
+				return UseResult::FAILURE_COOLDOWN;
 			}
 			projSpawner->shoot();
 			return UseResult::SUCCESS;
