@@ -114,5 +114,5 @@ inline float getLookAtRot(const sf::Vector2f& start, const sf::Vector2f& target)
 template <typename T>
 bool vectorContains(const std::vector<T>& vec, const T& elem)
 {
-	return ((std::find(vec.begin(), vec.end(), elem) != vec.end());
+	return (std::find(vec.begin(), vec.end(), elem) != vec.end());
 }

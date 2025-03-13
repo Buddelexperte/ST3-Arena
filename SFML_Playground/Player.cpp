@@ -64,7 +64,7 @@ Player* Player::spawn(const sf::Vector2f& spawnPos)
 {
 	inventory.clear();
 
-	inventory.addWeapon(std::make_unique<Rifle_Burst>());
+	inventory.addWeapon(std::make_unique<Rifle>());
 
 	setPosition(spawnPos);
 	gameInstance->resetViewPos();
