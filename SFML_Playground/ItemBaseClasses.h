@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #include "Projectile.h"
+#include "Functions.h"
 #include "ValueBar.h"
 
 // Enums for item usage and results
@@ -174,7 +175,7 @@ public:
     // Called when a game event occurs; checks if the perk should trigger.
     void onTrigger(PerkTrigger trigger)
     {
-        if (std::find(triggers.begin(), triggers.end(), trigger) != triggers.end())
+        if (vectorContains(triggers, trigger))
         {
             std::cout << "Perk \"" << info.name << "\" triggered on event: ";
             switch (trigger)

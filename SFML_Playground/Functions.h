@@ -108,3 +108,11 @@ inline float getLookAtRot(const sf::Vector2f& start, const sf::Vector2f& target)
 	float angle = std::atan2(dir.y, dir.x) * 180.0f / static_cast<float>(pi);
 	return angle;
 }
+
+// STD::VECTOR ------------------------------------------------------------------------------------
+// Checking if item in vector
+template <typename T>
+bool vectorContains(const std::vector<T>& vec, const T& elem)
+{
+	return ((std::find(vec.begin(), vec.end(), elem) != vec.end());
+}
