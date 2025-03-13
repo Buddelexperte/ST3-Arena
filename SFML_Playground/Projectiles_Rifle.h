@@ -14,7 +14,7 @@ private:
 	};
 
 public:
-	PS_Rifle(const float& damage = 0.1f)
+	PS_Rifle(const float& damage)
 		:
 		ProjectileSpawner(baseInfo, damage)
 	{ }

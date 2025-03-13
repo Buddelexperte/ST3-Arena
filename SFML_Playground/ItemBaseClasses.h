@@ -130,8 +130,6 @@ public:
         projSpawner->setRenderInfo(newRenderInfo);
     }
 
-    virtual float getDamage() const = 0;
-
     // Additional weapon-specific methods could be added (e.g., reload, update)
 };
 

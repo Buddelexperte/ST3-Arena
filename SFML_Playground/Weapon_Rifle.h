@@ -10,7 +10,7 @@ public:
 		:
 		Weapon(
 			ItemInfo("Rifle", "Basic weapon, full automatic"),	// ItemInfo
-			std::make_unique<PS_Rifle>(),						// ProjectileSpawner
+			std::make_unique<PS_Rifle>(getDamage()),						// ProjectileSpawner
 			std::make_unique<ValueBar>(0.2f)					// Cooldown	
 		)
 	{}
@@ -34,8 +34,8 @@ public:
 		return UseResult::FAILURE;
 	}
 
-	virtual float getDamage() const
+	static constexpr float getDamage()
 	{
-		return 0.2f;
+		return 0.1f;
 	}
 };

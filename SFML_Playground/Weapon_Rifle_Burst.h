@@ -68,8 +68,8 @@ public:
 		Weapon::tick(deltaTime);
 	}
 
-	virtual float getDamage() const
+	static constexpr float getDamage()
 	{
-		return 0.1;
+		return 0.1f;
 	}
 };
