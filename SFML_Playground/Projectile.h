@@ -23,7 +23,7 @@ private:
         {50.0f, 50.0f}, // Default projectile size
         0.0f, // Default rotation offset
         {1500.0f, 1500.0f}, // Default projectile speed (velocity later multiplied with direction)
-        sf::Color(100, 100, 100, 255) // Default projectile Color
+        sf::Color::White // Default projectile Color
     };
 
 	const float damage = 1.0f;
