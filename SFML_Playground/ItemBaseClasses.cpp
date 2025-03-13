@@ -3,6 +3,8 @@
 #include "ItemBaseClasses.h"
 #include "Inventory.h"
 
+// TODO: Make Weapon, enemy and other attributes read from a file
+
 UseResult Weapon::activate(const ItemUse& use)
 {
     switch (use)

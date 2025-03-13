@@ -33,4 +33,9 @@ public:
 
 		return UseResult::FAILURE;
 	}
+
+	virtual float getDamage() const
+	{
+		return 0.2;
+	}
 };

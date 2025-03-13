@@ -14,7 +14,7 @@ public:
 		:
 		Weapon(
 			ItemInfo("Pistol", "Basic weapon, semi automatic"),		// ItemInfo
-			std::make_unique<PS_Pistol>(),							// ProjectileSpawner
+			std::make_unique<PS_Pistol>(getDamage()),				// ProjectileSpawner
 			std::make_unique<ValueBar>(0.8f)						// Cooldown	
 		)
 	{}
@@ -45,7 +45,7 @@ public:
 			}
 
 			projSpawner->shoot();
-			burstLeft = burstSize - 1;
+			burstLeft += burstSize - 1;
 			return UseResult::SUCCESS;
 
 			break;
@@ -66,5 +66,10 @@ public:
 
 		// Activating NO_USE (Burst)
 		Weapon::tick(deltaTime);
+	}
+
+	virtual float getDamage() const
+	{
+		return 0.1;
 	}
 };
