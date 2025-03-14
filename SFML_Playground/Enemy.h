@@ -15,11 +15,6 @@ class Enemy :
 	public IHasCollision, public IMovable, IHasHealth
 {
 private:
-	GI_Arena* gameInstance;
-	EnemyManager* manager;
-	Player* playerRef = nullptr;
-	RNG& random = RNG::getInstance();
-
 	CollisionBox collisionBox;
 	ValueBar healthBar;
 	virtual ValueBar& getValueBar() override
@@ -28,8 +23,8 @@ private:
 	sf::Vector2f getNewSpawnPos() const;
 	size_t enemyIndex = -1;
 
-	const float WALK_SPEED = random.floatInRange(80.0f, 100.0f);
-	const float ROT_LERP_MULTIPLIER = random.floatInRange(0.3, 0.8f);
+	const float WALK_SPEED = RNG::floatInRange(80.0f, 100.0f);
+	const float ROT_LERP_MULTIPLIER = RNG::floatInRange(0.3, 0.8f);
 	const float ROT_LERP = LERP_SMOOTHNESS * ROT_LERP_MULTIPLIER;
 
 	using IMovable::setVelocity; // Make this function private for safety reasons
@@ -37,13 +32,12 @@ private:
 	float damage = 0.1f;
 
 	void tick_move(const float&) override;
-	void kill_self();
+	void kill_self() const;
 
 public:
 	Enemy();
 	~Enemy();
 
-	void setPlayer(Player*);
 	void setID(const size_t& newIndex)
 		{ enemyIndex = newIndex; }
 

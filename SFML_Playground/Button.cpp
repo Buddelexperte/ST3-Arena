@@ -9,7 +9,6 @@ Button::Button()
 {};
 
 Button::Button(const ButtonConstruct& constr)
-	: gameInstance(&GI_Arena::getInstance())
 {
 	// Construct button parameters (font, text, color, etc)
 	construct(constr);
@@ -32,7 +31,7 @@ void Button::construct(const ButtonConstruct& constr)
 	B_Box.setOrigin(b_size.x / 2.0f, b_size.y / 2.0f);
 	B_Box.setFillColor(b_color);
 	// Initialize Text
-	T_Text.setFont(fm.getFont(fontID));
+	T_Text.setFont(FontManager::getInstance().getFont(fontID));
 	T_Text.setString(text);
 	T_Text.setCharacterSize(t_size);
 	T_Text.setFillColor(t_color);
@@ -42,12 +41,13 @@ void Button::construct(const ButtonConstruct& constr)
 	T_Text.setPosition({ pos.x, pos.y - textYFix});
 }
 
-void Button::onClick()
+void Button::onClick() const
 {
+	static SoundManager& soundManager = SoundManager::getInstance();
 	if (text == "RETURN" || text == "QUIT")
-		sm.play(sm.getReturnClickBuffer());
+		soundManager.play(soundManager.getReturnClickBuffer());
 	else
-		sm.play(sm.getClickBuffer());
+		soundManager.play(soundManager.getClickBuffer());
 }
 
 void Button::onHover()
@@ -62,7 +62,7 @@ void Button::onUnhover()
 
 bool Button::isMouseOver(const bool& registerClick)
 {
-	bool bIsMouseOver = B_Box.getGlobalBounds().contains(gameInstance->getMousePos());
+	bool bIsMouseOver = B_Box.getGlobalBounds().contains(GI_Arena::getInstance().getMousePos());
 
 	if (bIsMouseOver)
 	{

@@ -41,7 +41,6 @@ public:
 		return instance;
 	}
 
-	void setPlayer(Player*);
 	int getNumActiveEnemies() const;
 	void callDelete(const size_t&);
 	void callUpdate(const size_t&, const InfoType&);

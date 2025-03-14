@@ -21,10 +21,6 @@ struct ButtonConstruct
 class Button : public sf::Drawable
 {
 private:
-	GI_Arena* gameInstance;
-	SoundManager& sm = SoundManager::getInstance();
-	FontManager& fm = FontManager::getInstance();
-
 	int fontID = 0; // [0] in FontManager.h
 	sf::Vector2f lastScreenCenter = { 0.0f, 0.0f };
 	
@@ -57,7 +53,7 @@ public:
 	sf::Vector2f getSize() const { return usedConstr.size; }
 
 	bool isMouseOver(const bool& = false); // Check if mouse is over button
-	void onClick();
+	void onClick() const;
 	void onHover();
 	void onUnhover();
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

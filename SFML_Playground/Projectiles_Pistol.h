@@ -5,12 +5,24 @@
 class PS_Pistol : public ProjectileSpawner
 {
 private:
-	const RenderInfo baseInfo = {
-		{0.0f, 0.0f}, // Default offset
-		{40.0f, 10.0f}, // Default projectile size
-		0.0f, // Default rotation offset
-		{1500.0f, 1500.0f}, // Default projectile speed (velocity later multiplied with direction)
-		sf::Color::Red // Default projectile Color
+	// Static constexpr defaults for memory efficiency
+	static constexpr float OFFSET_X = 0.0f;
+	static constexpr float OFFSET_Y = 0.0f;
+
+	static constexpr float SIZE_X = 40.0f;
+	static constexpr float SIZE_Y = 10.0f;
+
+	static constexpr float ROT_OFFSET = 0.0f;
+
+	static constexpr float SPEED = 1500.0f;
+	static const inline sf::Color COLOR = sf::Color( 255, 0, 0, 255 );
+
+	static const inline RenderInfo baseInfo = {
+		{OFFSET_X, OFFSET_Y}, // Default offset
+		{SIZE_X, SIZE_Y}, // Default projectile size
+		ROT_OFFSET, // Default rotation offset
+		{SPEED, SPEED}, // Default projectile speed (velocity later multiplied with direction)
+		COLOR // Default projectile Color
 	};
 
 public:

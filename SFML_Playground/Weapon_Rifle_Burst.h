@@ -10,15 +10,17 @@ private:
 	const int burstSize = 3;
 	int burstLeft = 0;
 
-	static constexpr float damage = 0.1f;
+	static constexpr float BASE_DAMAGE = 0.1f;
+	static constexpr float COOLDOWN = 0.8f;
+
 public:
 	Rifle_Burst()
 		:
 		Weapon(
 			ItemInfo("Pistol", "Basic weapon, semi automatic"),		// ItemInfo
-			damage,
-			std::make_unique<PS_Pistol>(getDamage()),				// ProjectileSpawner
-			std::make_unique<ValueBar>(0.8f)						// Cooldown	
+			BASE_DAMAGE,											// Damage
+			std::make_unique<PS_Pistol>(BASE_DAMAGE),				// ProjectileSpawner
+			std::make_unique<ValueBar>(COOLDOWN)					// Cooldown	
 		)
 	{}
 

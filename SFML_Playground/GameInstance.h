@@ -43,8 +43,9 @@ private:
 	sf::Vector2f prevCamPos;
 	float zoomFactor = 1.0f;
 	bool bIsGameplayPaused = true;
+
 public:
-	static GI_Arena& getInstance() // SINGLETON getInstance
+	static GI_Arena& getInstance() // SINGLETON getInstance()
 	{
 		static GI_Arena instance;
 		return instance;

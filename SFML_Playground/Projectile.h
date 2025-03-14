@@ -26,7 +26,7 @@ private:
         sf::Color::White // Default projectile Color
     };
 
-	const float damage = 1.0f;
+	float damage = 1.0f;
 
 public:
     ProjectileSpawner(const RenderInfo& baseInfo, const float& damage);
@@ -38,6 +38,11 @@ public:
 	{
 		return damage;
 	}
+
+    void setDamage(const float& newDamage)
+    {
+		damage = newDamage;
+    }
 };
 
 // The Projectile class now inherits from IMovable and ICollidable
@@ -61,7 +66,8 @@ public:
     Projectile(const RenderInfo& initRenderInfo);
     ~Projectile();
 
-    void setID(const size_t& newIndex) { projectileID = newIndex; }
+    void setID(const size_t& newIndex) 
+        { projectileID = newIndex; }
 
     // Override Collidable to return the projectile's collision box.
     Collidable* getCollision() override

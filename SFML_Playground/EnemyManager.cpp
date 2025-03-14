@@ -5,16 +5,7 @@
 int EnemyManager::enemyID = 0;
 
 EnemyManager::EnemyManager()
-	: enemyPool(), enemyRenderer()
-{}
-
-void EnemyManager::setPlayer(Player* newPlayer)
-{
-    for (auto& enemy : activeEnemies)
-    {
-        enemy.second->setPlayer(newPlayer);
-    }
-}
+    {}
 
 int EnemyManager::getNumActiveEnemies() const
 {

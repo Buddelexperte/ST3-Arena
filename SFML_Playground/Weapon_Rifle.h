@@ -6,15 +6,17 @@
 class Rifle : public Weapon
 {
 private:
-	static constexpr float damage = 0.1f;
+	static constexpr float BASE_DAMAGE = 0.1f;
+	static constexpr float COOLDOWN = 0.2f;
+
 public:
 	Rifle()
 		:
 		Weapon(
-			ItemInfo("Rifle", "Basic weapon, full automatic"),	// ItemInfo
-			damage,
-			std::make_unique<PS_Rifle>(getDamage()),			// ProjectileSpawner
-			std::make_unique<ValueBar>(0.2f)					// Cooldown	
+			ItemInfo("Rifle", "Basic weapon, full automatic"),		// ItemInfo
+			BASE_DAMAGE,											// Damage		
+			std::make_unique<PS_Rifle>(BASE_DAMAGE),				// ProjectileSpawner
+			std::make_unique<ValueBar>(COOLDOWN)					// Cooldown	
 		)
 	{}
 

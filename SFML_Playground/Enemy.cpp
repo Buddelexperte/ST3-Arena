@@ -5,33 +5,24 @@
 #include "EnemyManager.h"
 
 Enemy::Enemy()
-	: 
-	gameInstance(&GI_Arena::getInstance()),
-	manager(&EnemyManager::getInstance()),
+	:
 	healthBar(0.1f),
 	collisionBox(this, getPosition(), getSize())
-{
-	setPlayer(gameInstance->getPlayer());
-}
+{}
 
 Enemy::~Enemy()
 {
 	CollisionManager::getInstance().unregisterCollidable(getCollision()->getCollisionID());
 }
 
-void Enemy::setPlayer(Player* playerPtr)
-{
-	playerRef = playerPtr;
-}
-
 sf::Vector2f Enemy::getNewSpawnPos() const
 {
 	// Getting values for generating a position
-	sf::Vector2f playerPos = gameInstance->getPlayer()->getPosition();
+	sf::Vector2f playerPos = GI_Arena::getInstance().getPlayer()->getPosition();
 
 	// Generating the random position
-	float distance = random.floatInRange(200.0f, 1000.0f);
-	sf::Vector2f generatedPos = random.posInDistanceFrom(playerPos, distance);
+	float distance = RNG::floatInRange(200.0f, 1000.0f);
+	sf::Vector2f generatedPos = RNG::posInDistanceFrom(playerPos, distance);
 
 	return generatedPos;
 }
@@ -62,6 +53,7 @@ void Enemy::tick(const float& deltaTime)
 void Enemy::tick_move(const float& deltaTime)
 {
 	// TODO: PROTOTYPE MOVEMENT LOGIC
+	Player* playerRef = GI_Arena::getInstance().getPlayer();
 	sf::Vector2f playerPos = playerRef->getPosition();
 	sf::Vector2f distance = playerPos - getPosition();
 
@@ -87,7 +79,7 @@ void Enemy::tick_move(const float& deltaTime)
 	const sf::Vector2f pos = getPosition();
 	float rotation = getRotation();
 	float targetRot = getLookAtRot(playerPos, pos);
-
+	
 	if (!(shouldZero(rotation - targetRot)))
 	{
 		float newRot = lerp(rotation, targetRot, ROT_LERP);
@@ -95,16 +87,16 @@ void Enemy::tick_move(const float& deltaTime)
 	}
 }
 
-void Enemy::kill_self()
+void Enemy::kill_self() const
 {
-	manager->callDelete(enemyIndex);
+	EnemyManager::getInstance().callDelete(enemyIndex);
 }
 
 void Enemy::setPosition(const sf::Vector2f& pos)
 {
 	if (pos == getPosition()) return;
 	IMovable::setPosition(pos);
-	manager->callUpdate(enemyIndex, InfoType::POSITION);
+	EnemyManager::getInstance().callUpdate(enemyIndex, InfoType::POSITION);
 	collisionBox.setPos(pos);
 }
 
@@ -119,7 +111,7 @@ void Enemy::setSize(const sf::Vector2f& size)
 {
 	if (size == getSize()) return;
 	IMovable::setSize(size);
-	manager->callUpdate(enemyIndex, InfoType::SIZE);
+	EnemyManager::getInstance().callUpdate(enemyIndex, InfoType::SIZE);
 	collisionBox.setSize(size);
 }
 
@@ -127,7 +119,7 @@ void Enemy::setColor(const sf::Color& color)
 {
 	if (color == getColor()) return;
 	IMovable::setColor(color);
-	manager->callUpdate(enemyIndex, InfoType::COLOR);
+	EnemyManager::getInstance().callUpdate(enemyIndex, InfoType::COLOR);
 }
 
 void Enemy::setRenderInfo(const RenderInfo& newRenderInfo)

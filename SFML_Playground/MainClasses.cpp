@@ -59,7 +59,6 @@ Player* GI_Arena::makePlayer()
 	}
 
 	player = new Player(nullptr);
-	EnemyManager::getInstance().setPlayer(player);
 	return player;
 }
 
@@ -109,7 +108,7 @@ void GI_Arena::correctWidget()
 void GI_Arena::preTick()
 {
 	prevCamPos = view->getCenter();
-	soundManager.cleanUp();
+	SoundManager::getInstance().cleanUp();
 }
 
 void GI_Arena::tick(const float& deltaTime)
