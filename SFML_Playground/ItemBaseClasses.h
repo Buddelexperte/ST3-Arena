@@ -80,12 +80,14 @@ public:
 class Weapon : public Item
 {
 protected:
+	float damage = 0.0f;    // Base damage of the weapon
     std::unique_ptr<ValueBar> cooldown;
     std::unique_ptr<ProjectileSpawner> projSpawner;
 public:
-    Weapon(const ItemInfo& info, std::unique_ptr<ProjectileSpawner> ps, std::unique_ptr<ValueBar> cd) 
+    Weapon(const ItemInfo& info, const float& damage, std::unique_ptr<ProjectileSpawner> ps, std::unique_ptr<ValueBar> cd) 
         : 
         Item(info),
+        damage(damage),
         projSpawner(std::move(ps)),
         cooldown(std::move(cd))
     {
@@ -130,6 +132,16 @@ public:
         IMovable::setRenderInfo(newRenderInfo);
         projSpawner->setRenderInfo(newRenderInfo);
     }
+
+    float getDamage() const
+    {
+        return damage;
+    }
+
+	void setDamage(const float& newDamage)
+	{
+		damage = newDamage;
+	}
 
     // Additional weapon-specific methods could be added (e.g., reload, update)
 };

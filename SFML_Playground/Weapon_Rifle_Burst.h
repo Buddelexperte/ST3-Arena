@@ -9,11 +9,14 @@ private:
 	ValueBar burstCooldown = ValueBar(0.1f);
 	const int burstSize = 3;
 	int burstLeft = 0;
+
+	static constexpr float damage = 0.1f;
 public:
 	Rifle_Burst()
 		:
 		Weapon(
 			ItemInfo("Pistol", "Basic weapon, semi automatic"),		// ItemInfo
+			damage,
 			std::make_unique<PS_Pistol>(getDamage()),				// ProjectileSpawner
 			std::make_unique<ValueBar>(0.8f)						// Cooldown	
 		)
@@ -68,8 +71,4 @@ public:
 		Weapon::tick(deltaTime);
 	}
 
-	static constexpr float getDamage()
-	{
-		return 0.1f;
-	}
 };

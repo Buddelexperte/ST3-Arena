@@ -5,11 +5,14 @@
 
 class Pistol : public Weapon
 {
-public:
+private:
+	static constexpr float damage = 0.2f;
+
 	Pistol()
-		: 
+		:
 		Weapon(
 			ItemInfo("Pistol", "Basic weapon, semi automatic"),		// ItemInfo
+			damage,
 			std::make_unique<PS_Pistol>(getDamage()),				// ProjectileSpawner
 			std::make_unique<ValueBar>(0.2f)						// Cooldown	
 		)
@@ -32,10 +35,5 @@ public:
 		}
 
 		return UseResult::FAILURE;
-	}
-
-	static constexpr float getDamage()
-	{
-		return 0.2;
 	}
 };
