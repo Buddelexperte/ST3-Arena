@@ -114,6 +114,9 @@
     <ClCompile Include="Weapon_Rifle_Burst.h">
       <Filter>Header\Actors\Items\Weapons</Filter>
     </ClCompile>
+    <ClCompile Include="SaveGame.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SFML_Arena.h">
@@ -223,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="Weapon_Rifle.h">
       <Filter>Header\Actors\Items\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveGame.h">
+      <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

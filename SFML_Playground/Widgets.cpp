@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Widgets.h" // Header File
+#include "SaveGame.h"
 
 // W_MainMenu -------------------------------------------------------------------------------------
 
@@ -8,11 +9,11 @@ W_MainMenu::W_MainMenu(InputWidget* parent)
 	: InputWidget(parent), optionsMenu(this), levelMenu(this)
 {
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
-		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100,	"ARENA",												sf::Color::White},
-		{viewCenter + sf::Vector2f{ 0, -200 },    sf::Vector2f{ 100, 100 }, sf::Color::Transparent,   16,	"Higscore: " + std::to_string(SaveGame::Stored_Save),	sf::Color::White},
-		{viewCenter + sf::Vector2f{ 0, 0 },       sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"START",												sf::Color::Black},
-		{viewCenter + sf::Vector2f{ 0, 150 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"OPTIONS",												sf::Color::Black},
-		{viewCenter + sf::Vector2f{ 0, 300 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"QUIT",													sf::Color::Black}
+		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100,	"ARENA",													sf::Color::White},
+		{viewCenter + sf::Vector2f{ 0, -200 },    sf::Vector2f{ 100, 100 }, sf::Color::Transparent,   16,	"Higscore: " + std::to_string(SaveGame::storedData.score),	sf::Color::White},
+		{viewCenter + sf::Vector2f{ 0, 0 },       sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"START",													sf::Color::Black},
+		{viewCenter + sf::Vector2f{ 0, 150 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"OPTIONS",													sf::Color::Black},
+		{viewCenter + sf::Vector2f{ 0, 300 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"QUIT",														sf::Color::Black}
 	};
 
 	menu_title.construct(MAIN_MENU_CONSTR[0]);
@@ -28,7 +29,7 @@ W_MainMenu::W_MainMenu(InputWidget* parent)
 void W_MainMenu::construct()
 {
 	setWidgetIndex(0);
-	menu_highscore.setText("Highscore: " + std::to_string(SaveGame::Stored_Save));
+	menu_highscore.setText("Highscore: " + std::to_string(SaveGame::storedData.score));
 }
 
 InputWidget* W_MainMenu::getWidgetAtIndex(const int& index)
@@ -62,13 +63,6 @@ InputWidget* W_MainMenu::setWidgetIndex(const int& newIndex)
 		break;
 	}
 	return getWidgetAtIndex(widgetIndex);
-}
-
-void W_MainMenu::tick(const float& deltaTime)
-{
-	InputWidget::tick(deltaTime);
-	if (isChildActive())
-		getWidgetAtIndex(widgetIndex)->tick(deltaTime);
 }
 
 void W_MainMenu::windowUpdate()
@@ -349,17 +343,15 @@ void W_LevelMenu::construct()
 	setWidgetIndex(0);
 }
 
-void W_LevelMenu::tick(const float& deltaTime)
-{
-	return;
-}
-
 bool W_LevelMenu::isMouseOver(const bool& checkForClick = false)
 {
 	if (level1_Button.isMouseOver(checkForClick) || level2_Button.isMouseOver(checkForClick) || level3_Button.isMouseOver(checkForClick))
 	{
-		if (checkForClick) gameInstance->setGameState(GAME_LAUNCHING);
+		if (checkForClick)
+		{
+			gameInstance->launchGame();
 			return true;
+		}
 	}
 	if (return_Button.isMouseOver(checkForClick))
 	{
@@ -423,13 +415,6 @@ InputWidget* W_Paused::setWidgetIndex(const int& newIndex)
 		break;
 	}
 	return getWidgetAtIndex(widgetIndex);
-}
-
-void W_Paused::tick(const float& deltaTime)
-{
-	if (isChildActive())
-		return getWidgetAtIndex(widgetIndex)->tick(deltaTime);
-	InputWidget::tick(deltaTime);
 }
 
 void W_Paused::windowUpdate()
@@ -544,12 +529,10 @@ void W_Gameplay::construct()
 
 	if (gameState == GAME_LAUNCHING)
 	{
-		gameInstance->getPlayer()->spawn(sf::Vector2f(0.0f, 0.0f) + windowCenter);
 		// Reset values to game start values
-		hitTargets = 0;
+		gameInstance->startRound();
 		healthBar.setMaxTime(TIMER_DEFAULT, true);
 		// Add Gameplay objects to shapes vector to draw them
-		gameInstance->setGameState(IN_GAME);
 	}
 	setWidgetIndex(0);
 }
@@ -628,18 +611,15 @@ void W_Gameplay::lose()
 	// Add GameOver Screen to shapes list
 	setWidgetIndex(2)->construct();
 	gameInstance->setIsPaused(true);
-	gameOverScreen.changeScore(hitTargets);
-	if (hitTargets > SaveGame::Stored_Save) SaveGame::Stored_Save = hitTargets; // Update highscore value if new value is bigger
-	SaveGame::saveData(); // Save highscore value (didn't change if no greater was achieved)
+	gameOverScreen.changeScore(SaveGame::currentData.score);
+	// Only save if higher than stored highscore
+	if (SaveGame::currentData.score > SaveGame::storedData.score)
+		SaveGame::saveData();
 }
 
 void W_Gameplay::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
-	
-	// Execute subWidgets
-	if (isChildActive())
-		getWidgetAtIndex(widgetIndex)->tick(deltaTime);
 
 	// Make sure flashlight draws shader onto environment
 	for (sf::Drawable* elem : shapes)

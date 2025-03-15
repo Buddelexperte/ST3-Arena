@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Widgets.h"
+#include "SaveGame.h"
 
 // Game Instance Code
 
@@ -21,6 +22,8 @@ GI_Arena::GI_Arena()
 	std::cout << "View created" << std::endl;
 	window->setView(*view);
 	std::cout << "View attached" << std::endl;
+
+	SaveGame::loadSavedData();
 }
 
 bool GI_Arena::initWidgets()
@@ -28,7 +31,8 @@ bool GI_Arena::initWidgets()
 	// Only execute this method once
 	static bool didOnce = false;
 
-	if (didOnce) return false;
+	if (didOnce) 
+		return false;
 	didOnce = true;
 
 	widgets.clear(); 
@@ -103,6 +107,26 @@ void GI_Arena::correctWidget()
 	}
 
 	activeMenu->construct();
+}
+
+void GI_Arena::launchGame()
+{
+	if (gameState >= GAME_LAUNCHING)
+		return;
+
+	gameState = GAME_LAUNCHING;
+	SaveGame::currentData.clear();
+}
+
+void GI_Arena::startRound()
+{
+	if (gameState < GAME_LAUNCHING)
+		return;
+
+	EnemyManager::getInstance().deleteAll();
+	gameState = IN_GAME;
+	player->spawn();
+	resetViewPos();
 }
 
 void GI_Arena::preTick()
@@ -365,33 +389,3 @@ float InputWidget::onMouseScrolled(sf::Event* eventRef)
 }
 
 
-// SaveGame Code ----------------------------------------------------------------------------------
-
-int SaveGame::Stored_Save = SaveGame::loadSavedData(SAVE_FILE);
-
-int SaveGame::loadSavedData(const std::string& path = SAVE_FILE)
-{
-	std::ifstream inFile(path);  // Open file in input mode and write the highscore to it
-	if (inFile.is_open()) {
-		inFile >> SaveGame::Stored_Save;
-		inFile.close();
-		std::cout << "SaveData loaded!\n";
-	}
-	else {
-		std::cerr << "Error opening save file for reading. Defaulting to 0.\n"; // Display file access error message
-	}
-	return SaveGame::Stored_Save;
-}
-
-void SaveGame::saveData()
-{
-	std::ofstream outFile(SAVE_FILE); // Open file in output mode and write the highscore to it
-	if (outFile.is_open()) {
-		outFile << SaveGame::Stored_Save;
-		outFile.close();
-		std::cout << "SaveData saved! (" << std::to_string(SaveGame::Stored_Save) << ")\n";
-	}
-	else {
-		std::cerr << "Error opening save file for writing.\n"; // Display file access error message
-	}
-}

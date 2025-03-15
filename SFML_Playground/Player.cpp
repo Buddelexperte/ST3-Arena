@@ -62,12 +62,16 @@ Player::~Player()
 
 Player* Player::spawn(const sf::Vector2f& spawnPos)
 {
+	healthBar.reset();
+
 	inventory.clear();
 
 	inventory.addWeapon(std::make_unique<Rifle_Burst>());
 
+	invincibility.setValue(2.0f);
+
 	setPosition(spawnPos);
-	gameInstance->resetViewPos();
+	setVelocity({ 0.0f, 0.0f });
 
 	return this;
 }

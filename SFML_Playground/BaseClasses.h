@@ -42,7 +42,11 @@ public:
 
 	InputWidget* getParent() const { return parent; }
 
-	virtual void tick(const float& deltaTime) { lastDeltaTime = deltaTime;  windowUpdate(); };
+	virtual void tick(const float& deltaTime) 
+	{ 
+		lastDeltaTime = deltaTime;  
+		windowUpdate(); 
+	};
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 
@@ -69,6 +73,14 @@ protected:
 public:
 	InputWidget(InputWidget* parent) : WidgetElement(parent) {};
 
+	virtual void tick(const float& deltaTime) override
+	{
+		WidgetElement::tick(deltaTime);
+		// Execute subWidgets
+		if (isChildActive())
+			getWidgetAtIndex(widgetIndex)->tick(deltaTime);
+	};
+
 	virtual InputWidget* setWidgetIndex(const int&);
 	virtual InputWidget* getWidgetAtIndex(const int& atIndex) { return (atIndex == 0 ? this : nullptr); };
 	int getWidgetIndex() const { return widgetIndex; }
@@ -84,17 +96,4 @@ public:
 	virtual bool handleEvent(sf::Event* eventRef);
 	virtual void idleInputs();
 	virtual bool isMouseOver(const bool& = false) { return false; }
-};
-
-// SAVE GAME --------------------------------------------------------------------------------------
-
-
-const std::string SAVE_FILE = "SaveGame.txt";
-
-class SaveGame
-{
-public:
-	static int Stored_Save;
-	static int loadSavedData(const std::string&);
-	static void saveData();
 };

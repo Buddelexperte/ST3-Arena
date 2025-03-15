@@ -70,7 +70,6 @@ protected:
 public:
 	W_LevelMenu(InputWidget*);
 	void construct() override;
-	void tick(const float&) override;
 	bool isMouseOver(const bool&) override;
 	
 	InputWidget* setWidgetIndex(const int& newIndex) override;
@@ -94,7 +93,6 @@ protected:
 public:
 	W_MainMenu(InputWidget*);
 	void construct() override;
-	void tick(const float&) override;
 	bool isMouseOver(const bool&) override;
 
 	InputWidget* setWidgetIndex(const int&) override;
@@ -114,7 +112,6 @@ protected:
 	void windowUpdate() override;
 public:
 	W_Paused(InputWidget*);
-	void tick(const float&) override;
 	bool input_esc() override;
 	InputWidget* setWidgetIndex(const int&) override;
 	InputWidget* getWidgetAtIndex(const int&) override;
@@ -140,7 +137,6 @@ class W_Gameplay : public InputWidget // Gameplay Widget -----------------------
 private:
 	const float TIMER_DEFAULT = 10.0f;
 	const float minTimer = 1.0f;
-	int hitTargets = 0; // TODO: Reimplement score counter to new Enemy system
 	Timer healthBar;
 	EnemyManager& enemyManager = EnemyManager::getInstance();
 	ProjectileManager& projectileManager = ProjectileManager::getInstance();

@@ -48,6 +48,14 @@ void EnemyManager::callDelete(const size_t& key)
     pendingKill.insert(key);
 }
 
+void EnemyManager::deleteAll()
+{
+	for (const auto& pair : activeEnemies)
+	{
+		callDelete(pair.first);
+	}
+}
+
 void EnemyManager::callUpdate(const size_t& key, const InfoType& updateFlags = InfoType::EMPTY_INFO)
 {
     if (updateFlags & InfoType::POSITION) { // Check if POSITION flag is set

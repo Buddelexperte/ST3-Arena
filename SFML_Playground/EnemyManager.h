@@ -41,8 +41,10 @@ public:
 		return instance;
 	}
 
+
 	int getNumActiveEnemies() const;
 	void callDelete(const size_t&);
+	void deleteAll();
 	void callUpdate(const size_t&, const InfoType&);
 
 	void spawnEnemy(const IMovable::RenderInfo& renderInfo);

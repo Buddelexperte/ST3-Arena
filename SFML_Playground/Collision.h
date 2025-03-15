@@ -40,18 +40,22 @@ public:
 	virtual size_t getCollisionID() const
 		{ return collisionID; }
 
-	virtual sf::FloatRect getCollisionBounds() = 0; // Abstract
+	virtual sf::FloatRect getCollisionBounds() const = 0; // Abstract
 
 	// Checking for Collision
 	virtual bool isColliding(Collidable* other)
-		{ return isColliding(other->getCollisionBounds()); }
-	
+	{ 
+		// Collision with other Collidable, gets redirected using the Collision bounds
+		return isColliding(other->getCollisionBounds());
+	}
 	virtual bool isColliding(const sf::FloatRect& otherBound)
 	{
+		// Collision detection using nox intersection
 		return getCollisionBounds().intersects(otherBound);
 	}
 	virtual bool isColliding(const sf::Vector2f& otherPos)
 	{
+		// Collision detection using point containing
 		return getCollisionBounds().contains(otherPos);
 	}
 
@@ -100,6 +104,6 @@ public:
 	sf::Vector2f getPos() const 
 		{ return pos; }
 	// ICollidable
-	sf::FloatRect getCollisionBounds() override 
+	sf::FloatRect getCollisionBounds() const override 
 		{ return collisionRect; }
 };

@@ -32,7 +32,7 @@ private:
 	float damage = 0.1f;
 
 	void tick_move(const float&) override;
-	void kill_self() const;
+	void kill_self(const bool&) const;
 
 public:
 	Enemy();

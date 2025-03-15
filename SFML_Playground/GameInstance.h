@@ -7,6 +7,7 @@
 #include "SoundManager.h"
 #include "FontManager.h"
 #include "CollisionManager.h"
+#include "SaveGame.h"
 
 // Global Game Instance ---------------------------------------------------------------------------
 
@@ -54,6 +55,9 @@ public:
 	void start(); // Function to call from main()
 	bool initWidgets();
 	void correctWidget();
+
+	void launchGame();
+	void startRound();
 	// Ticks
 	void tickLoop();
 	void preTick(); // Logic before Player input (Checks for Inventory etc.)

@@ -3,6 +3,7 @@
 #include "Enemy.h" // Own Header File
 #include "GameInstance.h"
 #include "EnemyManager.h"
+#include "SaveGame.h"
 
 Enemy::Enemy()
 	:
@@ -43,8 +44,9 @@ void Enemy::tick(const float& deltaTime)
 
 	if (healthBar.isEmpty())
 	{
+		constexpr bool diedByPlayer = true;
 		healthBar.reset();
-		kill_self();
+		kill_self(diedByPlayer);
 	}
 
 	return;
@@ -87,8 +89,10 @@ void Enemy::tick_move(const float& deltaTime)
 	}
 }
 
-void Enemy::kill_self() const
+void Enemy::kill_self(const bool& bByPlayer = false) const
 {
+	if (bByPlayer)
+		SaveGame::currentData.score = (SaveGame::currentData.score + 1);
 	EnemyManager::getInstance().callDelete(enemyIndex);
 }
 
