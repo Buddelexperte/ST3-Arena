@@ -154,10 +154,6 @@ void Player::tick(const float& deltaTime)
 	if (bDrawFlashlight)
 	{
 		flashlight.tick(deltaTime);
-		for (sf::Drawable* elem : shapes)
-		{
-			flashlight.drawOtherScene(elem);
-		}
 	}
 }
 

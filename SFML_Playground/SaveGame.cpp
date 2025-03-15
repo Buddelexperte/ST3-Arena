@@ -27,8 +27,8 @@ void SaveGame::saveData()
 	storedData = currentData;
 	std::ofstream outFile(SAVE_FILE); // Open file in output mode and write the highscore to it
 	if (outFile.is_open()) {
-		outFile << storedData.score;
-		outFile << storedData.weaponName;
+		outFile << storedData.score << '\n';
+		outFile << storedData.weaponName << '\n';
 		outFile.close();
 		std::cout << "SaveData saved! Score [" << std::to_string(storedData.score) << "]\n";
 	}

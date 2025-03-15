@@ -2,7 +2,7 @@
 
 #include "BaseClasses.h"
 
-class Player;
+// TODO: Add enemy DeathLights
 
 class Flashlight : public WidgetElement
 {
@@ -36,7 +36,8 @@ private:
         vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
 
         // If within radius, calculate smooth alpha for soft edge
-        if (dist < radius) {
+        if (dist < radius)
+        {
             float alpha = smoothstep(radius, radius * 0.4, dist); // Smooth transition
             color = vec4(0.0, 0.0, 0.0, 1.0 - alpha); // Black with varying transparency
         }
@@ -71,12 +72,14 @@ private:
         vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
 
         // Check if within radius
-        if (dist < radius) {
+        if (dist < radius)
+        {
             vec2 fragDir = normalize(toPixel); // Normalize the direction to this pixel
             float dotProduct = dot(fragDir, direction);
 
             // Check if within the cone angle
-            if (dotProduct > cos(angle)) {
+            if (dotProduct > cos(angle))
+            {
                 // Smooth transition for distance from lightPos
                 float distanceFactor = smoothstep(radius, radius * 0.5, dist);
 
@@ -114,6 +117,7 @@ private:
     sf::Shader flashlightShader_Cone;
     sf::Shader testShader;
 
+    const bool bDrawEnemies = true; // TODO: EnemyDeathLights
     sf::Shader* currShader = nullptr;
     bool bUseCone = false;
 
@@ -125,21 +129,19 @@ private:
     const sf::Vector2f SPRITE_SCALE = { 2.1f, 2.1f };
     const sf::Vector2f SHADER_SPRITE_RATIO{ 2.1f / SHADER_RADIUS, 2.1f / SHADER_RADIUS };
 
+    std::vector<sf::Texture> textures = {}; 
     sf::Texture flashlightTexture;
     sf::Sprite flashlightSprite;
 
-    Player* player = nullptr;
-
-    std::vector<sf::Texture> textures = {};
-
 public:
     Flashlight(InputWidget* parent);
+    ~Flashlight() = default;
 
     virtual void construct() override { return; }
 
     void tick(const float& deltaTime) override;
 
-    void setMaskMode(const bool = false);
+    void setMaskMode(const bool& = false);
 
     void toggleMaskMode();
 

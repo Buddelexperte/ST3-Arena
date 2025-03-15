@@ -92,7 +92,9 @@ void Enemy::tick_move(const float& deltaTime)
 void Enemy::kill_self(const bool& bByPlayer = false) const
 {
 	if (bByPlayer)
+	{
 		SaveGame::currentData.score = (SaveGame::currentData.score + 1);
+	}
 	EnemyManager::getInstance().callDelete(enemyIndex);
 }
 

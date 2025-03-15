@@ -2,7 +2,6 @@
 
 #include "Flashlight.h"
 #include "GameInstance.h"
-#include "Player.h"
 
 
 Flashlight::Flashlight(InputWidget* parent)
@@ -75,15 +74,15 @@ void Flashlight::tick(const float& deltaTime)
     // Update flashlight position and rotation
     static sf::Vector2f lastPos;
     static float lastRot;
-    sf::Vector2f newPos = gameInstance->getPlayer()->getPosition();
-    if (newPos != lastPos) {
-        flashlightSprite.setPosition(newPos);
-        lastPos = newPos;
+    sf::Vector2f newPlayerPos = gameInstance->getPlayer()->getPosition();
+    if (newPlayerPos != lastPos) {
+        flashlightSprite.setPosition(newPlayerPos);
+        lastPos = newPlayerPos;
     }
 
     if (!(gameInstance->getIsPaused() || bUseCone))
     {
-        float newRot = getLookAtRot(newPos, gameInstance->getMousePos());
+        float newRot = getLookAtRot(newPlayerPos, gameInstance->getMousePos());
         if (newRot != lastRot) {
             flashlightSprite.setRotation(newRot);
             lastRot = newRot;
@@ -92,7 +91,7 @@ void Flashlight::tick(const float& deltaTime)
 
     // Transform player's world position to view-space coordinates for shader
     sf::Vector2f viewOffset = view->getCenter() - (view->getSize() / 2.0f);
-    sf::Vector2f lightPos = newPos - viewOffset;
+    sf::Vector2f lightPos = newPlayerPos - viewOffset;
 
     static sf::Vector2f lastMouseDir = { 0.0f, 0.0f };
     sf::Vector2f mouseDir = lastMouseDir;
@@ -103,11 +102,11 @@ void Flashlight::tick(const float& deltaTime)
         sf::Vector2f mouseWorldPosition = window->mapPixelToCoords(mousePosition, *view); // Transform to world coords
 
         // Normalize direction vector
-        mouseDir = mouseWorldPosition - newPos;
+        mouseDir = mouseWorldPosition - newPlayerPos;
         if (mouseDir != sf::Vector2f(0, 0))
         {
             float len = std::sqrt(mouseDir.x * mouseDir.x + mouseDir.y * mouseDir.y);
-            if (len > 0.0001f)
+            if (len > 0.0f)
             {
                 mouseDir /= len;
             }
@@ -145,10 +144,11 @@ void Flashlight::tick(const float& deltaTime)
 
     // Ensure the render texture sprite is positioned properly
     sceneSprite.setPosition(view->getCenter() - (view->getSize() / 2.0f));
+
     return;
 }
 
-void Flashlight::setMaskMode(const bool bCone)
+void Flashlight::setMaskMode(const bool& bCone)
 {
     bUseCone = bCone;
     shaderType = (bUseCone ? CONE : CIRCLE);
@@ -184,7 +184,8 @@ void Flashlight::drawOtherScene(sf::Drawable* drawable)
 {
     // Draw your scene here (make sure to render the actual scene)
     sceneRenderTexture.draw(*drawable);
-    sceneRenderTexture.draw(flashlightSprite, sf::BlendMin);
+    sf::BlendMode blendMode = sf::BlendMin;
+    sceneRenderTexture.draw(flashlightSprite, blendMode);
     // Use the shader to draw the flashlight effect
     sf::Shader* currShader = getActiveShader();
     if (currShader != nullptr)
