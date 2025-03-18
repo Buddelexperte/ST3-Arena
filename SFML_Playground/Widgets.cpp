@@ -6,7 +6,7 @@
 // W_MainMenu -------------------------------------------------------------------------------------
 
 W_MainMenu::W_MainMenu(InputWidget* parent)
-	: InputWidget(parent), optionsMenu(this), levelMenu(this)
+	: InputWidget(parent), optionsMenu(this), levelMenu(this), inventory(this)
 {
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100,	"ARENA",													sf::Color::White},
@@ -45,6 +45,8 @@ InputWidget* W_MainMenu::getWidgetAtIndex(const int& index)
 	case 2:
 		return &levelMenu; // LEVEL_MENU
 		break;
+	case 3:
+		return &inventory;
 	default:
 		break;
 	}
@@ -281,9 +283,90 @@ bool W_Options::isMouseOver(const bool& checkForClick)
 	return false;
 }
 
+// W_Inventory ---------------------------------------------------------------------------------------
+
+W_Inventory::W_Inventory(InputWidget* parent) : InputWidget(parent)
+{
+	const std::vector<ButtonConstruct> INVENTORY_MENU_CONSTR = {
+		{viewCenter + sf::Vector2f(0.0f, -300.0f),	sf::Vector2f(100.0f, 100.0f),	sf::Color::Transparent,		100,	"INVENTORY", sf::Color::White},
+		{viewCenter + sf::Vector2f(-500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"ITEM 1",		sf::Color::White},
+		{viewCenter + sf::Vector2f(0.0f, 0.0f),		sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"ITEM 2",		sf::Color::White},
+		{viewCenter + sf::Vector2f(500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"ITEM 3",		sf::Color::White},
+		{viewCenter + sf::Vector2f(0.0f, 300.0f),	sf::Vector2f(200.0f, 100.0f),	sf::Color::White,			24,		"RETURN",		sf::Color::Black}
+	};
+
+	inventory_title.construct(INVENTORY_MENU_CONSTR[0]);
+	item1_Button.construct(INVENTORY_MENU_CONSTR[1]);
+	item2_Button.construct(INVENTORY_MENU_CONSTR[2]);
+	item3_Button.construct(INVENTORY_MENU_CONSTR[3]);
+	return_Button.construct(INVENTORY_MENU_CONSTR[4]);
+}
+
+void W_Inventory::windowUpdate()
+{
+	InputWidget::windowUpdate();
+	inventory_title.setPos(viewCenter + sf::Vector2f(0.0f, -300.0f));
+	item1_Button.setPos(viewCenter + sf::Vector2f(-500.0f, 0.0f));
+	item2_Button.setPos(viewCenter + sf::Vector2f(0.0f, 0.0f));
+	item3_Button.setPos(viewCenter + sf::Vector2f(500.0f, 0.0f));
+	return_Button.setPos(viewCenter + sf::Vector2f(0.0f, 300.0f));
+}
+
+InputWidget* W_Inventory::getWidgetAtIndex(const int& atIndex)
+{
+	switch (atIndex)
+	{
+	case 0:
+		return this;
+		break;
+	default:
+		break;
+	}
+	return nullptr;
+}
+
+InputWidget* W_Inventory::setWidgetIndex(const int& newIndex)
+{
+	switch (widgetIndex = newIndex)
+	{
+	case 0:
+		shapes = { &inventory_title, &item1_Button, &item2_Button, &item3_Button, &return_Button };
+		break;
+	default:
+		shapes = {};
+		break;
+	}
+	return getWidgetAtIndex(widgetIndex);
+}
+
+void W_Inventory::construct()
+{
+	InputWidget::construct();
+	setWidgetIndex(0);
+}
+
+bool W_Inventory::isMouseOver(const bool& checkForClick = false)
+{
+	if (item1_Button.isMouseOver(checkForClick) || item2_Button.isMouseOver(checkForClick) || item3_Button.isMouseOver(checkForClick))
+	{
+		if (checkForClick)
+		{
+			gameInstance->launchGame();
+			return true;
+		}
+	}
+	if (return_Button.isMouseOver(checkForClick))
+	{
+		if (checkForClick) input_esc();
+		return true;
+	}
+	return false;
+}
+
+
 // W_LevelMenu ---------------------------------------------------------------------------------------
 
-W_LevelMenu::W_LevelMenu(InputWidget* parent) : InputWidget(parent)
+W_LevelMenu::W_LevelMenu(InputWidget* parent) : InputWidget(parent), inventory(this)
 {
 	const std::vector<ButtonConstruct> LEVEL_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f(0.0f, -300.0f),	sf::Vector2f(100.0f, 100.0f),	sf::Color::Transparent,		100,	"LEVEL SELECT", sf::Color::White},
@@ -317,6 +400,9 @@ InputWidget* W_LevelMenu::getWidgetAtIndex(const int& atIndex)
 	case 0:
 		return this;
 		break;
+	case 1:
+		return &inventory; // INVENTORY_MENU
+		break;
 	default:
 		break;
 	}
@@ -331,7 +417,7 @@ InputWidget* W_LevelMenu::setWidgetIndex(const int& newIndex)
 		shapes = { &levelmenu_title, &level1_Button, &level2_Button, &level3_Button, &return_Button };
 		break;
 	default:
-		shapes = {};
+		shapes = { getWidgetAtIndex(widgetIndex) };
 		break;
 	}
 	return getWidgetAtIndex(widgetIndex);
@@ -349,7 +435,7 @@ bool W_LevelMenu::isMouseOver(const bool& checkForClick = false)
 	{
 		if (checkForClick)
 		{
-			gameInstance->launchGame();
+			setWidgetIndex(1)->construct();
 			return true;
 		}
 	}
