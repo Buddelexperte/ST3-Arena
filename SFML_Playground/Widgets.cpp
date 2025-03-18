@@ -121,8 +121,8 @@ bool W_MainMenu::input_esc()
 W_OptionsSounds::W_OptionsSounds(InputWidget* parent = nullptr) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
-		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "TEST",											sf::Color::White},
-
+		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "SOUND",		sf::Color::White},
+		{viewCenter + sf::Vector2f{ 0, 300 },		sf::Vector2f{ 300, 100 }, sf::Color::White,        24, "RETURN",	sf::Color::Black},
 	};
 
 	optionsSounds_test.construct(MAIN_MENU_CONSTR[0]);
@@ -157,7 +157,8 @@ bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)
 W_OptionsGraphics::W_OptionsGraphics(InputWidget* parent = nullptr) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
-		{viewCenter + sf::Vector2f{ 0, -300 }, sf::Vector2f{ 350, 120 }, sf::Color::Transparent, 100, "TEST", sf::Color::White},
+		{viewCenter + sf::Vector2f{ 0, -300 }, sf::Vector2f{ 350, 120 }, sf::Color::Transparent,		100, "Graphics", sf::Color::White},
+		{viewCenter + sf::Vector2f{ 0, 300 },		sf::Vector2f{ 300, 100 }, sf::Color::White,         24,  "RETURN",   sf::Color::Black},
 
 	};
 
@@ -211,11 +212,11 @@ InputWidget* W_Options::getWidgetAtIndex(const int& atIndex)
 	case 0: // OPTIONS SELECTOR
 		return this;
 		break;
-	case 1: // GRAPHICS
-		return &graphicMenu;
-		break;
-	case 2: // SOUNDS
+	case 1: // SOUNDS
 		return &soundMenu;
+		break;
+	case 2: // GRAPHICS
+		return &graphicMenu;
 		break;
 	default:
 		return nullptr;
@@ -231,11 +232,11 @@ InputWidget* W_Options::setWidgetIndex(const int& newIndex)
 	case 0: // THIS
 		shapes = { &options_title, &options_graphics, &options_return, &options_sounds };
 		break;
-	case 1: // GRAPHICS
-		shapes = { &graphicMenu };
-		break;
-	case 2: // SOUNDS
+	case 1: // SOUNDS
 		shapes = { &soundMenu };
+		break;
+	case 2: // GRAPHICS
+		shapes = { &graphicMenu };
 		break;
 	default:
 		shapes = {};
@@ -289,9 +290,9 @@ W_Inventory::W_Inventory(InputWidget* parent) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> INVENTORY_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f(0.0f, -300.0f),	sf::Vector2f(100.0f, 100.0f),	sf::Color::Transparent,		100,	"INVENTORY", sf::Color::White},
-		{viewCenter + sf::Vector2f(-500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"ITEM 1",		sf::Color::White},
-		{viewCenter + sf::Vector2f(0.0f, 0.0f),		sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"ITEM 2",		sf::Color::White},
-		{viewCenter + sf::Vector2f(500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"ITEM 3",		sf::Color::White},
+		{viewCenter + sf::Vector2f(-500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"PISTOL",		sf::Color::White},
+		{viewCenter + sf::Vector2f(0.0f, 0.0f),		sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"SHOTGUN",		sf::Color::White},
+		{viewCenter + sf::Vector2f(500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"RIFLE",		sf::Color::White},
 		{viewCenter + sf::Vector2f(0.0f, 300.0f),	sf::Vector2f(200.0f, 100.0f),	sf::Color::White,			24,		"RETURN",		sf::Color::Black}
 	};
 
@@ -333,7 +334,7 @@ InputWidget* W_Inventory::setWidgetIndex(const int& newIndex)
 		shapes = { &inventory_title, &item1_Button, &item2_Button, &item3_Button, &return_Button };
 		break;
 	default:
-		shapes = {};
+		shapes = { getWidgetAtIndex(widgetIndex) };
 		break;
 	}
 	return getWidgetAtIndex(widgetIndex);
@@ -436,6 +437,7 @@ bool W_LevelMenu::isMouseOver(const bool& checkForClick = false)
 		if (checkForClick)
 		{
 			setWidgetIndex(1)->construct();
+			//gameInstance->launchGame();
 			return true;
 		}
 	}
