@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Flashlight.h"
 #include "GameInstance.h"
 

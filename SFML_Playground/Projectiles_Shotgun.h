@@ -59,5 +59,4 @@ public:
 			manager->createProjectile(projectileInfo, getDamage());
 		}
 	}
-
 };
