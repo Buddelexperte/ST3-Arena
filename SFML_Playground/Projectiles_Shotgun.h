@@ -40,14 +40,15 @@ public:
 
 	virtual void shoot() override
 	{
+		const float base_rotation = getRotation() - (SPREAD_DEGREES_TOTAL / 2.0f) + ANGLE_PER_SHELL;
+		const sf::Vector2f dir_offset = dirFromRot(getRotation()) * OFFSET_VARIETY;
+
 		for (int i = 0; i < NUM_SHELLS; i++)
 		{
-			const float shell_rotation = getRotation() + (i * ANGLE_PER_SHELL) - (SPREAD_DEGREES_TOTAL / 2.0f) + ANGLE_PER_SHELL;
+			float shell_rotation = base_rotation + (i * ANGLE_PER_SHELL);
+			sf::Vector2f offset = (i % 2 == 0) ? sf::Vector2f(0.f, 0.f) : dir_offset;
 
-			const sf::Vector2f dir_offset = (dirFromRot(getRotation()) * OFFSET_VARIETY);
-			const sf::Vector2f offset = (i % 2 ? dir_offset : NULL_NULL);
-
-			RenderInfo projectileInfo = {
+			RenderInfo projectileInfo{
 				projectileInfo.pos = getPosition() + baseInfo.pos + offset,
 				projectileInfo.size = baseInfo.size,
 				projectileInfo.rot = shell_rotation + baseInfo.rot,
@@ -57,6 +58,6 @@ public:
 
 			manager->createProjectile(projectileInfo, getDamage());
 		}
-
 	}
+
 };
