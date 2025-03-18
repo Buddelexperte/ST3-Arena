@@ -5,6 +5,8 @@
 
 // SAVE GAME --------------------------------------------------------------------------------------
 
+extern const std::string SAVE_FILE;
+
 struct SaveGame_Struct
 {
 	int score;
@@ -20,9 +22,6 @@ struct SaveGame_Struct
 		weaponName = "Keine Waffe";
 	}
 };
-
-
-const std::string SAVE_FILE = "SaveGame.txt";
 
 class SaveGame
 {

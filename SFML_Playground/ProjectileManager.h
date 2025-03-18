@@ -38,7 +38,7 @@ public:
 	void callDelete(const size_t&);
 	void callUpdate(const size_t&, const InfoType&);
 
-	void shootProjectile(const IMovable::RenderInfo& renderInfo, const float& damage);
+	void createProjectile(const IMovable::RenderInfo& renderInfo, const float& damage);
 
 	void tick(const float& deltaTime);
 

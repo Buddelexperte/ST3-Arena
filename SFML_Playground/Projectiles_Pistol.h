@@ -41,6 +41,6 @@ public:
 			projectileInfo.color = baseInfo.color
 		};
 
-		manager->shootProjectile(projectileInfo, getDamage());
+		manager->createProjectile(projectileInfo, getDamage());
 	}
 };

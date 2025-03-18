@@ -25,7 +25,7 @@ void ProjectileSpawner::shoot()
 		projectileInfo.color = baseInfo.color
 	};
 	
-	manager->shootProjectile(projectileInfo, damage);
+	manager->createProjectile(projectileInfo, damage);
 }
 
 // PROJECTILE OBJECT ----------------------------------------

@@ -8,9 +8,10 @@ const sf::Keyboard::Key KEY_S = sf::Keyboard::S;
 const sf::Keyboard::Key KEY_D = sf::Keyboard::D;
 const sf::Keyboard::Key KEY_LSHIFT = sf::Keyboard::LShift;
 
-// Mathematical Pi
-const double pi = 4 * std::atan(1.0); // Calculation of Pi
-constexpr float SMALLEST_PRECISION = 1e-3f;
+// Constants
+static const inline sf::Vector2f NULL_NULL(0.0f, 0.0f);
+static const double pi = 4.0f * std::atan(1.0); // Calculation of Pi
+static constexpr float SMALLEST_PRECISION = 1e-3f;
 
 // WEAK POINTER -------------------------------------------------------------------------------------------
 // Lock weak pointer into shared pointer

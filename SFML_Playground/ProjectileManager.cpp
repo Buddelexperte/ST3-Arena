@@ -13,7 +13,7 @@ int ProjectileManager::getNumActiveProjectiles() const
     return static_cast<int>(activeProjectiles.size());
 }
 
-void ProjectileManager::shootProjectile(const IMovable::RenderInfo& renderInfo, const float& damage)
+void ProjectileManager::createProjectile(const IMovable::RenderInfo& renderInfo, const float& damage)
 {
     // Retrieve an enemy instance from the pool
     std::unique_ptr<Projectile> newProjectile = projectilePool.get();

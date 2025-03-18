@@ -14,6 +14,7 @@ class Player : public InputWidget,
 private:
 	sf::Sprite playerSprite;
 
+	static const inline sf::Vector2f HITBOX_SIZE = sf::Vector2f(80.0f, 80.0f);
 	CollisionBox collisionBox;
 
 	Flashlight flashlight;
@@ -62,6 +63,7 @@ public:
 	void addPosition(const sf::Vector2f&) override;
 	void setRotation(const float&) override;
 	void setSize(const sf::Vector2f&) override;
+	void setColor(const sf::Color&) override;
 	sf::Vector2f getDirection() const 
 		{ return direction; };
 

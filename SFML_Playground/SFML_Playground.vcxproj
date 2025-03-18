@@ -154,6 +154,7 @@
     <ClCompile Include="ItemBaseClasses.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ProjectileManager.cpp" />
+    <ClCompile Include="Projectiles_Shotgun.h" />
     <ClCompile Include="RenderInfo.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="ValueBar.h" />
     <ClInclude Include="Weapon_Pistol.h" />
     <ClInclude Include="Weapon_Rifle.h" />
+    <ClInclude Include="Weapon_Shotgun.h" />
     <ClInclude Include="Widgets.h" />
   </ItemGroup>
   <ItemGroup>

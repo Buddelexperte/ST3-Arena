@@ -117,6 +117,9 @@
     <ClCompile Include="SaveGame.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Projectiles_Shotgun.h">
+      <Filter>Header\Actors\Items\Weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SFML_Arena.h">
@@ -229,6 +232,9 @@
     </ClInclude>
     <ClInclude Include="SaveGame.h">
       <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon_Shotgun.h">
+      <Filter>Header\Actors\Items\Weapons</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

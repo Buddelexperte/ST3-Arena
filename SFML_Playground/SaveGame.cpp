@@ -2,6 +2,8 @@
 
 #include "SaveGame.h"
 
+const std::string SAVE_FILE = "SaveGame.txt";
+
 // SaveGame Code ----------------------------------------------------------------------------------
 
 SaveGame_Struct SaveGame::currentData;

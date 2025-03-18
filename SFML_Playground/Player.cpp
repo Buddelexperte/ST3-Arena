@@ -11,20 +11,17 @@ Player::Player(InputWidget* parent)
 	: InputWidget(parent),
 	flashlight(this),
 	inventory(),
-	invincibility(0.1f), // 0.5 seconds of invincibility after hit
-	healthBar(1.0f),
-	collisionBox(this, getPosition(), getSize())
+	invincibility(0.1f), // 0.1 seconds of invincibility after hit
+	healthBar(1.0f), // 100% life from start on
+	collisionBox(this, getPosition(), HITBOX_SIZE) // Collision box centered on player, hals as big as sprite
 {
 	// Player Sprite Initialization
-	IMovable::setPosition(windowCenter);
-	playerSprite.setPosition(windowCenter);
-	collisionBox.setPos(windowCenter);
+	setPosition(windowCenter);
+	setColor(sf::Color::White);
 
 	CollisionManager::getInstance().registerPlayer(getCollision());
 
-	IMovable::setColor(sf::Color::White);
-	playerSprite.setColor(sf::Color::White);
-
+	// Sprite & textures
 	for (int i = 4; i <= 6; i++)
 	{
 		sf::Texture newTexture;
@@ -35,8 +32,6 @@ Player::Player(InputWidget* parent)
 		}
 		playerTextures.push_back(newTexture);
 	}
-
-	shapes = { &flashlight, &playerSprite };
 
 	if (!playerTextures.empty())
 	{
@@ -52,6 +47,7 @@ Player::Player(InputWidget* parent)
 		std::cerr << "Texture not set. Cannot adjust size.\n";
 	}
 
+	shapes = { &flashlight, &playerSprite };
 }
 
 Player::~Player()
@@ -66,7 +62,7 @@ Player* Player::spawn(const sf::Vector2f& spawnPos)
 
 	inventory.clear();
 
-	inventory.addWeapon(std::make_unique<Rifle_Burst>());
+	inventory.addWeapon(std::make_unique<Shotgun>());
 
 	invincibility.setValue(2.0f);
 
@@ -81,7 +77,8 @@ void Player::tick_move(const float& deltaTime)
 	// Movement
 
 	constexpr float WALKING_SPEED = 350.0f;
-	constexpr float LERP_SMOOTHNESS = 0.01f;
+	constexpr float LERP_SMOOTHNESS = 0.01f;		
+	constexpr float ROT_LERP_MULTIPLIER = 10.0f;
 
 	float x = 0.0f, y = 0.0f, multiplier = 1.0f;
 
@@ -98,9 +95,13 @@ void Player::tick_move(const float& deltaTime)
 	zeroPrecision(currVelo);
 
 	if (!shouldZero(targetVelo - currVelo))
+	{
 		currVelo = (lerp(currVelo, targetVelo, LERP_SMOOTHNESS));
+	}
 	else
-		currVelo = (targetVelo);
+	{
+		currVelo = targetVelo;
+	}
 
 	direction = { currVelo.x / WALKING_SPEED, currVelo.y / WALKING_SPEED };
 	sf::Vector2f offset = currVelo * deltaTime;
@@ -117,9 +118,15 @@ void Player::tick_move(const float& deltaTime)
 
 	if (!shouldZero(rotation - targetRot))
 	{
-		const float ROT_LERP = LERP_SMOOTHNESS * 10.0f * multiplier;
-		setRotation(lerp(rotation, targetRot, ROT_LERP));
+		const float ROT_LERP = LERP_SMOOTHNESS * ROT_LERP_MULTIPLIER * multiplier;
+		rotation = lerp(rotation, targetRot, ROT_LERP);
 	}
+	else
+	{
+		rotation = targetRot;
+	}
+
+	setRotation(rotation);
 }
 
 void Player::tick_animation(const float& deltaTime)
@@ -266,11 +273,16 @@ void Player::setSize(const sf::Vector2f& newSize)
 	playerSprite.setOrigin(originalSize.x / 2.0f, originalSize.y / 2.0f);
 	playerSprite.setScale((newSize.x * 2.0f) / originalSize.x, (newSize.y * 2.0f) / originalSize.y);
 	
-	collisionBox.setSize(newSize);
+	collisionBox.setSize(HITBOX_SIZE);
 
 	if (inventory.getActiveWeapon())
 		inventory.getActiveWeapon()->setSize(newSize);
+}
 
+void Player::setColor(const sf::Color& newColor)
+{
+	IMovable::setColor(sf::Color::White);
+	playerSprite.setColor(sf::Color::White);
 }
 
 void Player::onCollision(IHasCollision* other)
