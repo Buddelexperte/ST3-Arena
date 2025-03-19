@@ -6,7 +6,7 @@
 // W_MainMenu -------------------------------------------------------------------------------------
 
 W_MainMenu::W_MainMenu(InputWidget* parent)
-	: InputWidget(parent), optionsMenu(this), levelMenu(this), inventory(this)
+	: InputWidget(parent), optionsMenu(this), levelMenu(this), selectWeapon(this)
 {
 	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100,	"ARENA",													sf::Color::White},
@@ -46,7 +46,7 @@ InputWidget* W_MainMenu::getWidgetAtIndex(const int& index)
 		return &levelMenu; // LEVEL_MENU
 		break;
 	case 3:
-		return &inventory;
+		return &selectWeapon; // SELECT WEAPON SCREEN
 	default:
 		break;
 	}
@@ -286,7 +286,7 @@ bool W_Options::isMouseOver(const bool& checkForClick)
 
 // W_Inventory ---------------------------------------------------------------------------------------
 
-W_Inventory::W_Inventory(InputWidget* parent) : InputWidget(parent)
+W_SelectWeapon::W_SelectWeapon(InputWidget* parent) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> INVENTORY_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f(0.0f, -300.0f),	sf::Vector2f(100.0f, 100.0f),	sf::Color::Transparent,		100,	"INVENTORY", sf::Color::White},
@@ -303,7 +303,7 @@ W_Inventory::W_Inventory(InputWidget* parent) : InputWidget(parent)
 	return_Button.construct(INVENTORY_MENU_CONSTR[4]);
 }
 
-void W_Inventory::windowUpdate()
+void W_SelectWeapon::windowUpdate()
 {
 	InputWidget::windowUpdate();
 	inventory_title.setPos(viewCenter + sf::Vector2f(0.0f, -300.0f));
@@ -313,7 +313,7 @@ void W_Inventory::windowUpdate()
 	return_Button.setPos(viewCenter + sf::Vector2f(0.0f, 300.0f));
 }
 
-InputWidget* W_Inventory::getWidgetAtIndex(const int& atIndex)
+InputWidget* W_SelectWeapon::getWidgetAtIndex(const int& atIndex)
 {
 	switch (atIndex)
 	{
@@ -326,7 +326,7 @@ InputWidget* W_Inventory::getWidgetAtIndex(const int& atIndex)
 	return nullptr;
 }
 
-InputWidget* W_Inventory::setWidgetIndex(const int& newIndex)
+InputWidget* W_SelectWeapon::setWidgetIndex(const int& newIndex)
 {
 	switch (widgetIndex = newIndex)
 	{
@@ -340,13 +340,13 @@ InputWidget* W_Inventory::setWidgetIndex(const int& newIndex)
 	return getWidgetAtIndex(widgetIndex);
 }
 
-void W_Inventory::construct()
+void W_SelectWeapon::construct()
 {
 	InputWidget::construct();
 	setWidgetIndex(0);
 }
 
-bool W_Inventory::isMouseOver(const bool& checkForClick = false)
+bool W_SelectWeapon::isMouseOver(const bool& checkForClick = false)
 {
 	if (isChildActive())
 		return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
@@ -370,7 +370,7 @@ bool W_Inventory::isMouseOver(const bool& checkForClick = false)
 
 // W_LevelMenu ---------------------------------------------------------------------------------------
 
-W_LevelMenu::W_LevelMenu(InputWidget* parent) : InputWidget(parent), inventory(this)
+W_LevelMenu::W_LevelMenu(InputWidget* parent) : InputWidget(parent)
 {
 	const std::vector<ButtonConstruct> LEVEL_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f(0.0f, -300.0f),	sf::Vector2f(100.0f, 100.0f),	sf::Color::Transparent,		100,	"LEVEL SELECT", sf::Color::White},
@@ -403,9 +403,6 @@ InputWidget* W_LevelMenu::getWidgetAtIndex(const int& atIndex)
 	{
 	case 0:
 		return this;
-		break;
-	case 1:
-		return &inventory; // INVENTORY_MENU
 		break;
 	default:
 		break;
@@ -442,8 +439,7 @@ bool W_LevelMenu::isMouseOver(const bool& checkForClick = false)
 	{
 		if (checkForClick)
 		{
-			setWidgetIndex(1)->construct();
-			//gameInstance->launchGame();
+			parent->setWidgetIndex(parent->getWidgetIndex() + 1)->construct();
 			return true;
 		}
 	}

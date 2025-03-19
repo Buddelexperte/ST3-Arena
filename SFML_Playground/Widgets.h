@@ -57,7 +57,7 @@ public:
 	bool isMouseOver(const bool& = false) override;
 };
 
-class W_Inventory : public InputWidget // Inventory Widget ------------------------------------------
+class W_SelectWeapon : public InputWidget // Inventory Widget ------------------------------------------
 {
 private:
 	Button inventory_title;
@@ -68,7 +68,7 @@ private:
 protected:
 	void windowUpdate() override;
 public:
-	W_Inventory(InputWidget*);
+	W_SelectWeapon(InputWidget*);
 	void construct() override;
 	bool isMouseOver(const bool&) override;
 
@@ -84,8 +84,6 @@ private:
 	Button level2_Button;
 	Button level3_Button;
 	Button return_Button;
-
-	W_Inventory inventory;
 protected:
 	void windowUpdate() override;
 public:
@@ -108,7 +106,7 @@ private:
 
 	W_Options optionsMenu;
 	W_LevelMenu levelMenu;
-	W_Inventory inventory;
+	W_SelectWeapon selectWeapon;
 
 	virtual bool input_esc() override;
 protected:
