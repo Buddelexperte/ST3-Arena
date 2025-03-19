@@ -105,7 +105,6 @@ void Flashlight::tick_shader(const float& deltaTime)
     sf::Vector2f lightPos = playerPos - viewOffset;
 
     // Calculation for Cone specific mouse direction
-    sf::Vector2f mouseDir = { 0.0f, 0.0f };
     if (!gameInstance->getIsPaused() && bUseCone)
     {
         // Calculate direction vector to mouse
@@ -113,7 +112,7 @@ void Flashlight::tick_shader(const float& deltaTime)
         sf::Vector2f mouseWorldPosition = window->mapPixelToCoords(mousePosition, *view); // Transform to world coords
 
         // Normalize direction vector
-        mouseDir = mouseWorldPosition - playerPos;
+        sf::Vector2f mouseDir = mouseWorldPosition - playerPos;
         if (mouseDir != sf::Vector2f(0.0f, 0.0f))
         {
             float len = std::sqrt(mouseDir.x * mouseDir.x + mouseDir.y * mouseDir.y);
@@ -122,6 +121,7 @@ void Flashlight::tick_shader(const float& deltaTime)
                 mouseDir /= len;
             }
         }
+        coneDir = mouseDir;
     }
 
     switch (shaderType)
@@ -137,7 +137,7 @@ void Flashlight::tick_shader(const float& deltaTime)
         flashlightSprite.setScale(SPRITE_SCALE * 2.0f);
         flashlightShader_Cone.setUniform("lightPos", lightPos);
         flashlightShader_Cone.setUniform("radius", radius * 2.0f);
-        flashlightShader_Cone.setUniform("direction", mouseDir);
+        flashlightShader_Cone.setUniform("direction", coneDir);
         flashlightShader_Cone.setUniform("angle", degreesToRadians(30.0f)); // 60° cone (30° half-angle)
         flashlightShader_Cone.setUniform("u_viewSize", sf::Glsl::Vec2(viewSize));
         flashlightShader_Cone.setUniform("viewportHeight", view->getSize().y);

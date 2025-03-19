@@ -126,6 +126,7 @@ private:
 
     sf::Shader* currShader = nullptr;
     bool bUseCone = false;
+    sf::Vector2f coneDir;
 
     sf::RenderTexture sceneRenderTexture;
     sf::Sprite sceneSprite;
@@ -138,14 +139,16 @@ private:
     std::vector<sf::Texture> textures = {};
     sf::Sprite flashlightSprite;
 
+
+    // Scrapped Light for dead enemies
+    static constexpr bool bRenderDeathLights = false; // DESIGN CHOICE, DON'T TURN ON
     struct DeathLight
     {
         sf::Vector2f position;
         float timeRemaining;
     };
-
-    static constexpr bool bRenderDeathLights = false; // DESIGN CHOICE, DON'T TURN ON
     std::vector<DeathLight> deathLights;
+
 
     void tick_animation(const float&);
     void tick_shader(const float&);
