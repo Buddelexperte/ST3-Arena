@@ -2,7 +2,6 @@
 
 #include "Widgets.h" // Header File
 #include "SaveGame.h"
-#include "AllWeapons.h"
 
 // W_MainMenu -------------------------------------------------------------------------------------
 
@@ -304,10 +303,6 @@ W_SelectWeapon::W_SelectWeapon(InputWidget* parent) : InputWidget(parent)
 	return_Button.construct(INVENTORY_MENU_CONSTR[4]);
 }
 
-W_SelectWeapon::~W_SelectWeapon() {
-	std::cout << "W_SelectWeapon wurde zerstoert!" << std::endl;
-}
-
 void W_SelectWeapon::windowUpdate()
 {
 	InputWidget::windowUpdate();
@@ -356,36 +351,14 @@ bool W_SelectWeapon::isMouseOver(const bool& checkForClick = false)
 	if (isChildActive())
 		return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
 
-	if (item1_Button.isMouseOver(checkForClick))
+	if (item1_Button.isMouseOver(checkForClick) || item2_Button.isMouseOver(checkForClick) || item3_Button.isMouseOver(checkForClick))
 	{
 		if (checkForClick)
 		{
-			selectedWeapon = std::make_unique<Pistol>();
 			gameInstance->launchGame();
 			return true;
 		}
 	}
-
-	else if (item2_Button.isMouseOver(checkForClick))
-	{
-		if (checkForClick)
-		{
-			selectedWeapon = std::make_unique<Shotgun>();
-			gameInstance->launchGame();
-			return true;
-		}
-	}
-
-	else if (item3_Button.isMouseOver(checkForClick))
-	{
-		if (checkForClick)
-		{
-			selectedWeapon = std::make_unique<Rifle>();
-			gameInstance->launchGame();
-			return true;
-		}
-	}
-
 	if (return_Button.isMouseOver(checkForClick))
 	{
 		if (checkForClick) input_esc();
@@ -646,17 +619,6 @@ void W_Gameplay::construct()
 
 	if (gameState == GAME_LAUNCHING)
 	{
-		W_SelectWeapon* selectWeapon = dynamic_cast<W_SelectWeapon*>(parent);
-		if (selectWeapon) {
-			std::cout << "selectWeapon ist gueltig!" << std::endl;
-			if (selectWeapon->getSelectedWeapon() != nullptr) { // Überprüfung hinzufügen
-				player->spawn(windowCenter, selectWeapon->getSelectedWeapon());
-			}
-			else {
-				std::cout << "FEHLER: selectedWeapon ist leer!" << std::endl;
-			}
-		}
-
 		// Reset values to game start values
 		gameInstance->startRound();
 		healthBar.setMaxTime(TIMER_DEFAULT, true);

@@ -48,7 +48,7 @@ public:
 	Player(InputWidget*);
 	~Player();
 
-	Player* spawn(const sf::Vector2f& = (sf::Vector2f(0.0f, 0.0f)), std::unique_ptr<Weapon> weapon = nullptr);
+	Player* spawn(const sf::Vector2f& = (sf::Vector2f(0.0f, 0.0f)));
 
 	void tick(const float&) override;
 
