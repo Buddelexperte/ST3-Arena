@@ -2,8 +2,8 @@
 #include <unordered_set>
 
 #include "GameInstance.h"
-#include "ProjectileRenderer.h"
 #include "ProjectilePool.h"
+#include "Renderer.h"
 
 class ProjectileManager : public sf::Drawable
 {
@@ -13,7 +13,7 @@ private:
 	static int projectileID;
 
 	ProjectilePool projectilePool;
-	ProjectileRenderer projectileRenderer; // Manages draw calls
+	EntityRenderer projectileRenderer; // Manages draw calls
 	std::unordered_map<size_t, std::unique_ptr<Projectile>> activeProjectiles; // Random Access to Enemies
 	std::unordered_set<size_t> pendingKill;
 

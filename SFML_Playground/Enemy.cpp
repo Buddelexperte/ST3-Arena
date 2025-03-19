@@ -18,11 +18,14 @@ Enemy::~Enemy()
 
 sf::Vector2f Enemy::getNewSpawnPos() const
 {
+	constexpr float MIN_DISTANCE = 800.0f;
+	constexpr float MAX_DISTANCE = 1200.0f;
+
 	// Getting values for generating a position
 	sf::Vector2f playerPos = GI_Arena::getInstance().getPlayer()->getPosition();
 
 	// Generating the random position
-	float distance = RNG::floatInRange(200.0f, 1000.0f);
+	float distance = RNG::floatInRange(MIN_DISTANCE, MAX_DISTANCE);
 	sf::Vector2f generatedPos = RNG::posInDistanceFrom(playerPos, distance);
 
 	return generatedPos;
@@ -94,6 +97,8 @@ void Enemy::kill_self(const bool& bByPlayer = false) const
 	if (bByPlayer)
 	{
 		SaveGame::currentData.score = (SaveGame::currentData.score + 1);
+		GI_Arena::getInstance().getPlayer()->getFlashlight().addDeathLight(getPosition());
+
 	}
 	EnemyManager::getInstance().callDelete(enemyIndex);
 }
@@ -142,9 +147,7 @@ void Enemy::onCollision(IHasCollision* other)
 }
 
 void Enemy::collideWithPlayer(Player& player)
-{
-	kill_self();
-}
+	{}
 
 void Enemy::collideWithProjectile(Projectile& projectile)
 {

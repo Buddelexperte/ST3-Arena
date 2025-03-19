@@ -120,6 +120,9 @@
     <ClCompile Include="Projectiles_Shotgun.h">
       <Filter>Header\Actors\Items\Weapons</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SFML_Arena.h">
@@ -156,9 +159,6 @@
       <Filter>Header\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="EnemyManager.h">
-      <Filter>Header\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyRenderer.h">
       <Filter>Header\Managers</Filter>
     </ClInclude>
     <ClInclude Include="EnemyPool.h">
@@ -200,9 +200,6 @@
     <ClInclude Include="AllPerks.h">
       <Filter>Header\Helper</Filter>
     </ClInclude>
-    <ClInclude Include="ProjectileRenderer.h">
-      <Filter>Header\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="Projectile.h">
       <Filter>Header\Actors</Filter>
     </ClInclude>
@@ -235,6 +232,9 @@
     </ClInclude>
     <ClInclude Include="Weapon_Shotgun.h">
       <Filter>Header\Actors\Items\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Header\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

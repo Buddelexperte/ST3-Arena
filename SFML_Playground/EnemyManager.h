@@ -3,7 +3,7 @@
 
 #include "GameInstance.h"
 #include "EnemyPool.h"
-#include "EnemyRenderer.h"
+#include "Renderer.h"
 #include "ProjectileManager.h" // For projectile collision
 
 class EnemyManager : public sf::Drawable
@@ -17,7 +17,7 @@ private:
 	static int enemyID;
 
 	EnemyPool enemyPool; // Manages memory
-	EnemyRenderer enemyRenderer; // Manages draw calls
+	EntityRenderer enemyRenderer; // Manages draw calls
 	std::unordered_map<size_t, std::unique_ptr<Enemy>> activeEnemies; // Random Access to Enemies
 	std::unordered_set<size_t> pendingKill;
 

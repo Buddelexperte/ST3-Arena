@@ -25,7 +25,7 @@ void ProjectileManager::createProjectile(const IMovable::RenderInfo& renderInfo,
     newProjectile->setDamage(damage);
 
     // Extract render information and pass it to the renderer
-    projectileRenderer.addProjectile(renderInfo, projectileKey);
+    projectileRenderer.addEntity(renderInfo, projectileKey);
 
     // Actually spawn the enemy properly and update it's attributes accordingly
     activeProjectiles[projectileKey] = (std::move(newProjectile));
@@ -39,7 +39,7 @@ void ProjectileManager::deleteProjectile(const size_t& key)
 
     activeProjectiles.erase(key);
 
-    projectileRenderer.removeProjectile(key);
+    projectileRenderer.removeEntity(key);
 }
 
 void ProjectileManager::callDelete(const size_t& key)

@@ -13,40 +13,47 @@ private:
         CONE
     } shaderType = CIRCLE;
 
-    const std::string circleShader_Code = R"(
-    uniform vec2 lightPos; // light "Source" = Center of Mask
-    uniform float radius; // Circle Radius
-    uniform float viewportHeight; // Viewport Height
-    uniform vec2 u_viewSize; // Size of the view
+    static const inline std::string circleShader_Code = R"(
+    uniform vec2 lightPos;
+    uniform float radius;
+    uniform float viewportHeight;
+    uniform vec2 u_viewSize;
+
+    // New uniforms for enemy death lights
+    const int MAX_LIGHTS = 500;
+    uniform int numDeathLights;
+    uniform vec2 deathLightPos[MAX_LIGHTS];
 
     void main() {
-        // Convert gl_FragCoord to normalized coordinates (0 to 1)
-        vec2 normalizedCoords = gl_FragCoord.xy / u_viewSize; 
-
-        // Scale normalized coordinates back to world space
+        vec2 normalizedCoords = gl_FragCoord.xy / u_viewSize;
         vec2 worldCoords = normalizedCoords * u_viewSize;
-
-        // Flip Y coordinate (SFML's Y axis is flipped for textures)
         worldCoords.y = viewportHeight - worldCoords.y;
 
-        // Calculate distance from light position
         float dist = length(worldCoords - lightPos);
-
+        float alpha = smoothstep(radius, radius * 0.4, dist);
+        
         // Start with a fully black color (opaque)
-        vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
 
         // If within radius, calculate smooth alpha for soft edge
         if (dist < radius)
         {
-            float alpha = smoothstep(radius, radius * 0.4, dist); // Smooth transition
-            color = vec4(0.0, 0.0, 0.0, 1.0 - alpha); // Black with varying transparency
+            alpha = smoothstep(radius, radius * 0.4, dist); // Smooth transition
         }
 
-        gl_FragColor = color; // Output final color for the fragment
+        // Add contribution from enemy death lights
+        for (int i = 0; i < numDeathLights; i++)
+        {
+            float distToDeathLight = length(worldCoords - deathLightPos[i]);
+            float deathLightAlpha = smoothstep(radius * 0.3, radius * 0.1, distToDeathLight);
+            alpha = max(alpha, deathLightAlpha); // Blend
+        }
+
+        gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0 - alpha);
     }
+
 )";
 
-    const std::string coneShader_Code = R"(
+    static const inline std::string coneShader_Code = R"(
     uniform vec2 lightPos; // Light "Source" = Center of Mask
     uniform vec2 direction; // Direction of the cone from the center (normalized)
     uniform float radius; // Cone Radius
@@ -99,7 +106,7 @@ private:
     }
 )";
 
-    const std::string debugShader_Code = R"(
+    static const inline std::string debugShader_Code = R"(
     uniform vec2 lightPos; // Light "Source" = Center of Mask
     uniform vec2 direction; // Direction of the cone from the center (normalized)
     uniform float radius; // Cone Radius
@@ -117,22 +124,33 @@ private:
     sf::Shader flashlightShader_Cone;
     sf::Shader testShader;
 
-    const bool bDrawEnemies = true; // TODO: EnemyDeathLights
     sf::Shader* currShader = nullptr;
     bool bUseCone = false;
 
     sf::RenderTexture sceneRenderTexture;
     sf::Sprite sceneSprite;
 
-    const float SHADER_RADIUS = 480;
+    static constexpr float SHADER_RADIUS = 480;
     float radius = SHADER_RADIUS;
-    const sf::Vector2f SPRITE_SCALE = { 2.1f, 2.1f };
-    const sf::Vector2f SHADER_SPRITE_RATIO{ 2.1f / SHADER_RADIUS, 2.1f / SHADER_RADIUS };
+    static const inline sf::Vector2f SPRITE_SCALE = { 2.1f, 2.1f };
+    static const inline sf::Vector2f SHADER_SPRITE_RATIO { 2.1f / SHADER_RADIUS, 2.1f / SHADER_RADIUS };
 
-    std::vector<sf::Texture> textures = {}; 
-    sf::Texture flashlightTexture;
+    std::vector<sf::Texture> textures = {};
     sf::Sprite flashlightSprite;
 
+    struct DeathLight
+    {
+        sf::Vector2f position;
+        float timeRemaining;
+    };
+
+    static constexpr bool bRenderDeathLights = false; // DESIGN CHOICE, DON'T TURN ON
+    std::vector<DeathLight> deathLights;
+
+    void tick_animation(const float&);
+    void tick_shader(const float&);
+    void tick_deathLights(const float&);
+    void tick_display(const float&);
 public:
     Flashlight(InputWidget* parent);
     ~Flashlight() = default;
@@ -155,4 +173,11 @@ public:
     void setRadius(const float& newRadius);
 
     void resetRadius() { setRadius(SHADER_RADIUS); }
+
+    void setPosition(const sf::Vector2f& newPos) override;
+    void setRotation(const float& newRot) override;
+
+    // Additional Lights
+    void addDeathLight(const sf::Vector2f&);
+
 };

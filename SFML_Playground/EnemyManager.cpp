@@ -26,7 +26,7 @@ void EnemyManager::spawnEnemy(const IMovable::RenderInfo& renderInfo)
     newEnemy->setRenderInfo(renderInfo);
 
     // Extract render information and pass it to the renderer
-    enemyRenderer.addEnemy(renderInfo, enemyKey);
+    enemyRenderer.addEntity(renderInfo, enemyKey);
 
     // Actually spawn the enemy properly and update it's attributes accordingly
     activeEnemies[enemyKey] = (std::move(newEnemy));
@@ -40,7 +40,7 @@ void EnemyManager::deleteEnemy(const size_t& key)
     
     activeEnemies.erase(key);
 
-    enemyRenderer.removeEnemy(key);
+    enemyRenderer.removeEntity(key);
 }
 
 void EnemyManager::callDelete(const size_t& key)

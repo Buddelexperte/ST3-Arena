@@ -6,10 +6,12 @@
 Flashlight::Flashlight(InputWidget* parent)
     : WidgetElement(parent)
 {
-    flashlightSprite.setOrigin(512.0f / 2.0f, 512.0f / 2.0f);
-    sf::Color color = flashlightSprite.getColor();
-    color.a = 200;
-    flashlightSprite.setColor(color);
+    constexpr float SPRITE_SIZE = 512.0f;
+    flashlightSprite.setOrigin(SPRITE_SIZE / 2.0f, SPRITE_SIZE / 2.0f);
+
+    sf::Color spriteTint = flashlightSprite.getColor();
+    spriteTint.a = 180;
+    flashlightSprite.setColor(spriteTint);
 
     if (!flashlightShader_Circle.loadFromMemory(circleShader_Code, sf::Shader::Fragment))
     {
@@ -28,11 +30,17 @@ Flashlight::Flashlight(InputWidget* parent)
     {
         sf::Texture newTexture;
         std::string texturePath = "Content/Textures/512x512 textures (" + std::to_string(i) + ").png";
-        if (!newTexture.loadFromFile(texturePath)) {
+        if (!newTexture.loadFromFile(texturePath))
+        {
             std::cerr << "Failed to load texture: " << texturePath << std::endl;
             continue;
         }
         textures.push_back(newTexture);
+    }
+
+    if (textures.empty())
+    {
+        throw std::runtime_error("No flashlight textures were loaded!");
     }
 
     // Create the render texture with the window size
@@ -46,54 +54,58 @@ Flashlight::Flashlight(InputWidget* parent)
     sceneSprite.setTexture(sceneRenderTexture.getTexture());
 
     shapes = { &sceneSprite };
+
+    addDeathLight(sf::Vector2f(0.0f, 0.0f));
 }
 
 void Flashlight::tick(const float& deltaTime)
 {
     WidgetElement::tick(deltaTime);
 
-    sf::Vector2f viewSize = gameInstance->getView()->getSize();
+    tick_animation(deltaTime);
 
-    currShader = getActiveShader();
-    currShader->setUniform("u_viewSize", sf::Glsl::Vec2(viewSize));
-    currShader->setUniform("viewportHeight", static_cast<float>(window->getSize().y));
+    tick_shader(deltaTime);
 
-    // Update flashlight texture
+    tick_deathLights(deltaTime);
+
+    tick_display(deltaTime);
+}
+
+void Flashlight::tick_animation(const float& deltaTime)
+{
     static int steps = 0;
-    if (++steps % 100 == 0) {
+    if (++steps % 128 == 0)
+    {
         int textureIndex = steps % textures.size();
         static int lastTextureIndex = -1; // Track last assigned texture index
-        if (textureIndex != lastTextureIndex) {
-            flashlightTexture = textures[textureIndex];
-            flashlightSprite.setTexture(flashlightTexture);
+        if (textureIndex != lastTextureIndex)
+        {
+            flashlightSprite.setTexture(textures[textureIndex]);
             lastTextureIndex = textureIndex;
         }
     }
+}
+
+void Flashlight::tick_shader(const float& deltaTime)
+{
+    currShader = getActiveShader();
+    if (!currShader)
+        return;
 
     // Update flashlight position and rotation
-    static sf::Vector2f lastPos;
-    static float lastRot;
-    sf::Vector2f newPlayerPos = gameInstance->getPlayer()->getPosition();
-    if (newPlayerPos != lastPos) {
-        flashlightSprite.setPosition(newPlayerPos);
-        lastPos = newPlayerPos;
-    }
+    sf::Vector2f playerPos = gameInstance->getPlayer()->getPosition();
+    setPosition(playerPos);
 
-    if (!(gameInstance->getIsPaused() || bUseCone))
-    {
-        float newRot = getLookAtRot(newPlayerPos, gameInstance->getMousePos());
-        if (newRot != lastRot) {
-            flashlightSprite.setRotation(newRot);
-            lastRot = newRot;
-        }
-    }
+    float newRot = getLookAtRot(playerPos, gameInstance->getMousePos());
+    setRotation(newRot);
+
 
     // Transform player's world position to view-space coordinates for shader
     sf::Vector2f viewOffset = view->getCenter() - (view->getSize() / 2.0f);
-    sf::Vector2f lightPos = newPlayerPos - viewOffset;
+    sf::Vector2f lightPos = playerPos - viewOffset;
 
-    static sf::Vector2f lastMouseDir = { 0.0f, 0.0f };
-    sf::Vector2f mouseDir = lastMouseDir;
+    // Calculation for Cone specific mouse direction
+    sf::Vector2f mouseDir = { 0.0f, 0.0f };
     if (!gameInstance->getIsPaused() && bUseCone)
     {
         // Calculate direction vector to mouse
@@ -101,8 +113,8 @@ void Flashlight::tick(const float& deltaTime)
         sf::Vector2f mouseWorldPosition = window->mapPixelToCoords(mousePosition, *view); // Transform to world coords
 
         // Normalize direction vector
-        mouseDir = mouseWorldPosition - newPlayerPos;
-        if (mouseDir != sf::Vector2f(0, 0))
+        mouseDir = mouseWorldPosition - playerPos;
+        if (mouseDir != sf::Vector2f(0.0f, 0.0f))
         {
             float len = std::sqrt(mouseDir.x * mouseDir.x + mouseDir.y * mouseDir.y);
             if (len > 0.0f)
@@ -110,7 +122,6 @@ void Flashlight::tick(const float& deltaTime)
                 mouseDir /= len;
             }
         }
-        lastMouseDir = mouseDir;
     }
 
     switch (shaderType)
@@ -119,32 +130,61 @@ void Flashlight::tick(const float& deltaTime)
         flashlightSprite.setScale(SPRITE_SCALE);
         flashlightShader_Circle.setUniform("lightPos", lightPos);
         flashlightShader_Circle.setUniform("radius", radius);
+        flashlightShader_Circle.setUniform("u_viewSize", sf::Glsl::Vec2(viewSize));
         flashlightShader_Circle.setUniform("viewportHeight", view->getSize().y);
         break;
     case Flashlight::CONE:
         flashlightSprite.setScale(SPRITE_SCALE * 2.0f);
         flashlightShader_Cone.setUniform("lightPos", lightPos);
-        flashlightShader_Cone.setUniform("direction", mouseDir);
         flashlightShader_Cone.setUniform("radius", radius * 2.0f);
+        flashlightShader_Cone.setUniform("direction", mouseDir);
         flashlightShader_Cone.setUniform("angle", degreesToRadians(30.0f)); // 60° cone (30° half-angle)
+        flashlightShader_Cone.setUniform("u_viewSize", sf::Glsl::Vec2(viewSize));
         flashlightShader_Cone.setUniform("viewportHeight", view->getSize().y);
         break;
     default:
         break;
     }
+}
 
+void Flashlight::tick_deathLights(const float& deltaTime)
+{
+    if (!bRenderDeathLights)
+        return;
+
+    // Remove expired death lights
+    std::vector<sf::Glsl::Vec2> lightPositions;
+    for (auto it = deathLights.begin(); it != deathLights.end();)
+    {
+        it->timeRemaining -= deltaTime;
+        if (shouldZero(it->timeRemaining))
+        {
+            it = deathLights.erase(it);
+        }
+        else
+        {
+            lightPositions.push_back(sf::Glsl::Vec2(it->position - viewCenter + viewHalfSize));
+            it++;
+        }
+    }
+
+    // Pass death light information to shader using uniform params
+    currShader->setUniform("numDeathLights", static_cast<int>(lightPositions.size()));
+    if (lightPositions.size() > 0)
+    {
+        currShader->setUniformArray("deathLightPos", lightPositions.data(), lightPositions.size());
+    }
+}
+
+void Flashlight::tick_display(const float& deltaTime)
+{
     // Set the render texture's view to match the player's view
     sceneRenderTexture.setView(*view);
-
-    // Render flashlight effect
-    sceneRenderTexture.clear(sf::Color(0, 0, 0, 0)); // Clear with fully transparent background
-
-    sceneRenderTexture.display();
-
     // Ensure the render texture sprite is positioned properly
     sceneSprite.setPosition(view->getCenter() - (view->getSize() / 2.0f));
-
-    return;
+    // Clear with fully transparent background and render
+    sceneRenderTexture.clear(sf::Color::Black);
+    sceneRenderTexture.display();
 }
 
 void Flashlight::setMaskMode(const bool& bCone)
@@ -185,6 +225,7 @@ void Flashlight::drawOtherScene(sf::Drawable* drawable)
     sceneRenderTexture.draw(*drawable);
     sf::BlendMode blendMode = sf::BlendMin;
     sceneRenderTexture.draw(flashlightSprite, blendMode);
+
     // Use the shader to draw the flashlight effect
     sf::Shader* currShader = getActiveShader();
     if (currShader != nullptr)
@@ -199,4 +240,30 @@ void Flashlight::setRadius(const float& newRadius)
     float radiusRatio = (newRadius / SHADER_RADIUS);
     sf::Vector2f newScale = { (SPRITE_SCALE * radiusRatio) };
     flashlightSprite.setScale(newScale);
+}
+
+void Flashlight::setPosition(const sf::Vector2f& newPos)
+{
+    if (newPos != getPosition())
+    {
+        IMovable::setPosition(newPos);
+        flashlightSprite.setPosition(newPos);
+    }
+}
+
+void Flashlight::setRotation(const float& newRot)
+{
+    if (!(gameInstance->getIsPaused() || bUseCone))
+    {
+        if (newRot != getRotation())
+        {
+            IMovable::setRotation(newRot);
+            flashlightSprite.setRotation(newRot);
+        }
+    }
+}
+
+void Flashlight::addDeathLight(const sf::Vector2f& position)
+{
+    deathLights.push_back({ position, 5.0f }); // Lasts 5 seconds
 }
