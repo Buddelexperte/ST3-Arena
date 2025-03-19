@@ -56,13 +56,21 @@ Player::~Player()
 	CollisionManager::getInstance().unregisterPlayer();
 }
 
-Player* Player::spawn(const sf::Vector2f& spawnPos)
+Player* Player::spawn(const sf::Vector2f& spawnPos, std::unique_ptr<Weapon> weapon)
 {
 	healthBar.reset();
 
 	inventory.clear();
 
-	inventory.addWeapon(std::make_unique<Shotgun>());
+	//inventory.addWeapon(std::make_unique<Shotgun>());
+	inventory.addWeapon(std::move(weapon));
+	inventory.selectWeapon(0);
+	if (inventory.getActiveWeapon() != nullptr) {
+		std::cout << "Waffe erfolgreich hinzugefuegt und ausgewaehlt!" << std::endl;
+	}
+	else {
+		std::cout << "FEHLER: Waffe nicht im Inventar!" << std::endl;
+	}
 
 	invincibility.setValue(2.0f);
 
@@ -153,7 +161,13 @@ void Player::tick(const float& deltaTime)
 		tick_move(deltaTime); // Movement inputs
 		tick_animation(deltaTime); // Animation update
 		invincibility.addValue(-deltaTime); // Invinvibility update
-		inventory.getActiveWeapon()->tick(deltaTime); // Weapon cooldown update
+		//inventory.getActiveWeapon()->tick(deltaTime); // Weapon cooldown update
+		Weapon* activeWeapon = inventory.getActiveWeapon(); // Get active weapon
+
+		if (activeWeapon != nullptr) // Check if weapon exists
+		{
+			activeWeapon->tick(deltaTime); // Weapon cooldown update
+		}
 	}
 
 	// Flashlight update
@@ -210,7 +224,17 @@ bool Player::onMouseClickR(sf::Event* eventRef)
 
 bool Player::onMouseReleaseL(sf::Event* eventRef)
 {
-	return (inventory.getActiveWeapon()->activate(ItemUse::CANCEL_LOAD) == UseResult::SUCCESS);
+	//return (inventory.getActiveWeapon()->activate(ItemUse::CANCEL_LOAD) == UseResult::SUCCESS);
+	Weapon* activeWeapon = inventory.getActiveWeapon(); // Get active weapon
+
+	if (activeWeapon != nullptr) // Check if weapon exists
+	{
+		return (activeWeapon->activate(ItemUse::CANCEL_LOAD) == UseResult::SUCCESS);
+	}
+	else
+	{
+		return false; // Or handle the case where there's no weapon
+	}
 }
 
 float Player::onMouseScrolled(sf::Event* eventRef)

@@ -65,15 +65,28 @@ private:
 	Button item2_Button;
 	Button item3_Button;
 	Button return_Button;
+	std::unique_ptr<Weapon> selectedWeapon;
 protected:
 	void windowUpdate() override;
 public:
 	W_SelectWeapon(InputWidget*);
+	~W_SelectWeapon();
 	void construct() override;
 	bool isMouseOver(const bool&) override;
 
 	InputWidget* setWidgetIndex(const int& newIndex) override;
 	InputWidget* getWidgetAtIndex(const int& atIndex) override;
+
+	std::unique_ptr<Weapon> getSelectedWeapon() {
+		std::cout << "getSelectedWeapon aufgerufen. selectedWeapon: " << selectedWeapon.get() << std::endl;
+		if (selectedWeapon != nullptr) {
+			return std::move(selectedWeapon);
+		}
+		else {
+			std::cout << "FEHLER: selectedWeapon ist leer!" << std::endl;
+			return nullptr;
+		}
+	}
 };
 
 class W_LevelMenu : public InputWidget // LevelMenu Widget ------------------------------------------
