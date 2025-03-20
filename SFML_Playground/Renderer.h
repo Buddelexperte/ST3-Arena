@@ -3,6 +3,7 @@
 #include <vector>
 #include <unordered_map>
 #include <cmath>
+#include <iostream>
 
 #include "BaseTypes.h"
 #include "Functions.h"

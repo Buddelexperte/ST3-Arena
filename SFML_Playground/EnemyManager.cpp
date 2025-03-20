@@ -14,7 +14,7 @@ int EnemyManager::getNumActiveEnemies() const
 	return static_cast<int>(activeEnemies.size());
 }
 
-void EnemyManager::spawnEnemy(const IMovable::RenderInfo& renderInfo)
+void EnemyManager::spawnEnemy()
 {
     // Retrieve an enemy instance from the pool
     std::unique_ptr<Enemy> newEnemy = enemyPool.get();
@@ -25,14 +25,14 @@ void EnemyManager::spawnEnemy(const IMovable::RenderInfo& renderInfo)
     newEnemy->setID(enemyKey);
     //std::cout << "Worked" << std::endl;
 
-    newEnemy->setRenderInfo(renderInfo);
+    newEnemy->spawn();
 
     // Extract render information and pass it to the renderer
+    IMovable::RenderInfo renderInfo = newEnemy->getRenderInfo();
     enemyRenderer.addEntity(renderInfo, enemyKey);
 
     // Actually spawn the enemy properly and update it's attributes accordingly
     activeEnemies[enemyKey] = (std::move(newEnemy));
-    activeEnemies[enemyKey]->spawn();
 }
 
 void EnemyManager::deleteEnemy(const size_t& key)
@@ -95,7 +95,7 @@ void EnemyManager::tick_spawning(const float& deltaTime)
         return;
 
     timer += spawnInterval; // Reset the timer to the configured spawn interval
-    spawnEnemy(standardRenderInfo);
+    spawnEnemy();
 }
 
 void EnemyManager::tick_enemies(const float& deltaTime)

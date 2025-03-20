@@ -51,8 +51,8 @@ protected:
 	bool onMouseReleaseL(sf::Event*) override;
 	float onMouseScrolled(sf::Event*) override;
 public:
-	Player(InputWidget*);
-	~Player();
+	Player();
+	~Player() = default;
 
 	// Entity
 	void spawn() override;

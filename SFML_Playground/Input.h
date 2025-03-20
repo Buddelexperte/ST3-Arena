@@ -11,11 +11,43 @@ protected:
 	}
 	virtual sf::Mouse::Button onMouseButtonPressed(sf::Event* eventRef)
 	{
-		return eventRef->mouseButton.button;
+		const sf::Mouse::Button mouseInput = eventRef->mouseButton.button;
+
+		switch (mouseInput)
+		{
+		case sf::Mouse::Left:
+			onMouseClickL(eventRef);
+			break;
+		case sf::Mouse::Right:
+			onMouseClickR(eventRef);
+			break;
+		case sf::Mouse::Middle:
+			onMouseClickM(eventRef);
+			break;
+		default:
+			break;
+		}
+		return mouseInput;
 	}
 	virtual sf::Mouse::Button onMouseButtonReleased(sf::Event* eventRef)
 	{
-		return eventRef->mouseButton.button;
+		const sf::Mouse::Button mouseInput = eventRef->mouseButton.button;
+
+		switch (mouseInput)
+		{
+		case sf::Mouse::Left:
+			onMouseReleaseL(eventRef);
+			break;
+		case sf::Mouse::Right:
+			onMouseReleaseR(eventRef);
+			break;
+		case sf::Mouse::Middle:
+			onMouseReleaseM(eventRef);
+			break;
+		default:
+			break;
+		}
+		return mouseInput;
 	}
 	virtual float onMouseScrolled(sf::Event* eventRef)
 	{
@@ -33,8 +65,40 @@ protected:
 	virtual bool onMouseReleaseM(sf::Event*) { return false; };
 
 public:
-	virtual bool handleEvent(sf::Event* eventRef) { return false; };
-	virtual void idleInputs() { };
+	virtual bool handleEvent(sf::Event* eventRef)
+	{
+		switch (eventRef->type)
+		{
+		case sf::Event::KeyPressed:
+			//std::cout << "[Keyboard Event]" << std::endl;
+			return onKeyPressed(eventRef);
+		case sf::Event::MouseButtonPressed:
+			//std::cout << "[Mouse Event]" << std::endl;
+			return onMouseButtonPressed(eventRef);
+		case sf::Event::MouseWheelScrolled:
+			//std::cout << "[Mouse Wheel Event]" << std::endl;
+			return onMouseScrolled(eventRef);
+		case sf::Event::MouseButtonReleased:
+			return onMouseButtonReleased(eventRef);
+		default:
+			break;
+		}
+
+		return false;
+	}
+
+	virtual void idleInputs()
+	{
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+			onMouseDownL();
+
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
+			onMouseDownR();
+
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle))
+			onMouseDownM();
+	}
+
 	virtual bool isMouseOver(const bool& = false) { return false; }
 	virtual bool input_esc() { return false; };
 };

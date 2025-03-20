@@ -61,10 +61,10 @@ InputWidget* W_MainMenu::setWidgetIndex(const int& newIndex)
 		shapes = { &menu_title, &menu_highscore, &menu_startButton, &menu_optionsButton, &menu_quitButton };
 		break;
 	default: // SUB-WIDGETS (implement this notation in EVERY other Widget)
-		shapes = { getWidgetAtIndex(widgetIndex) };
+		shapes = { getActiveChild() };
 		break;
 	}
-	return getWidgetAtIndex(widgetIndex);
+	return getActiveChild();
 }
 
 void W_MainMenu::tick(const float& deltaTime)
@@ -80,7 +80,7 @@ void W_MainMenu::tick(const float& deltaTime)
 bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 {
 	if (isChildActive())
-		return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
+		return getActiveChild()->isMouseOver(checkForClick);
 
 	sf::Vector2f mousePos = gameInstance().getMousePos();
 
@@ -111,8 +111,10 @@ bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 
 bool W_MainMenu::input_esc()
 {
-	if (isChildActive()) getWidgetAtIndex(widgetIndex)->input_esc();
-	else gameInstance().setGameState(QUIT);
+	if (isChildActive()) 
+		getActiveChild()->input_esc();
+	else 
+		gameInstance().setGameState(QUIT);
 	return true;
 }
 
@@ -242,7 +244,7 @@ InputWidget* W_Options::setWidgetIndex(const int& newIndex)
 		shapes = {};
 		break;
 	}
-	return getWidgetAtIndex(widgetIndex);
+	return getActiveChild();
 }
 
 void W_Options::construct()
@@ -262,8 +264,8 @@ void W_Options::tick(const float& deltaTime)
 
 bool W_Options::isMouseOver(const bool& checkForClick)
 {
-	if (getWidgetAtIndex(widgetIndex) != this)
-	return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
+	if (isChildActive())
+	return getActiveChild()->isMouseOver(checkForClick);
 
 	if (options_return.isMouseOver(checkForClick))
 	{
@@ -313,19 +315,6 @@ void W_SelectWeapon::tick(const float& deltaTime)
 	return_Button.setPos(viewCenter + sf::Vector2f(0.0f, 300.0f));
 }
 
-InputWidget* W_SelectWeapon::getWidgetAtIndex(const int& atIndex)
-{
-	switch (atIndex)
-	{
-	case 0:
-		return this;
-		break;
-	default:
-		break;
-	}
-	return nullptr;
-}
-
 InputWidget* W_SelectWeapon::setWidgetIndex(const int& newIndex)
 {
 	switch (widgetIndex = newIndex)
@@ -349,7 +338,7 @@ void W_SelectWeapon::construct()
 bool W_SelectWeapon::isMouseOver(const bool& checkForClick = false)
 {
 	if (isChildActive())
-		return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
+		return getActiveChild()->isMouseOver(checkForClick);
 
 	if (item1_Button.isMouseOver(checkForClick) || item2_Button.isMouseOver(checkForClick) || item3_Button.isMouseOver(checkForClick))
 	{
@@ -397,33 +386,6 @@ void W_LevelMenu::tick(const float& deltaTime)
 	return_Button.setPos(	viewCenter + sf::Vector2f(0.0f, 300.0f)		);
 }
 
-InputWidget* W_LevelMenu::getWidgetAtIndex(const int& atIndex)
-{
-	switch (atIndex)
-	{
-	case 0:
-		return this;
-		break;
-	default:
-		break;
-	}
-	return nullptr;
-}
-
-InputWidget* W_LevelMenu::setWidgetIndex(const int& newIndex)
-{
-	switch (widgetIndex = newIndex)
-	{
-	case 0:
-		shapes = { &levelmenu_title, &level1_Button, &level2_Button, &level3_Button, &return_Button };
-		break;
-	default:
-		shapes = { getWidgetAtIndex(widgetIndex) };
-		break;
-	}
-	return getWidgetAtIndex(widgetIndex);
-}
-
 void W_LevelMenu::construct()
 {
 	InputWidget::construct();
@@ -449,6 +411,20 @@ bool W_LevelMenu::isMouseOver(const bool& checkForClick = false)
 			return true;
 	}
 	return false;
+}
+
+InputWidget* W_LevelMenu::setWidgetIndex(const int& newIndex)
+{
+	switch (widgetIndex = newIndex)
+	{
+	case 0:
+		shapes = { &levelmenu_title, &level1_Button, &level2_Button, &level3_Button, &return_Button };
+		break;
+	default:
+		shapes = { getWidgetAtIndex(widgetIndex) };
+		break;
+	}
+	return getWidgetAtIndex(widgetIndex);
 }
 
 // W_Paused ---------------------------------------------------------------------------------------
@@ -497,14 +473,11 @@ InputWidget* W_Paused::setWidgetIndex(const int& newIndex)
 	case 0:
 		shapes = { &pause_title, &pause_resumeButton, &pause_optionsButton, &pause_quitButton };
 		break;
-	case 1:
-		shapes = { &optionsMenu };
-		break;
 	default:
-		shapes = {};
+		shapes = { getActiveChild() };
 		break;
 	}
-	return getWidgetAtIndex(widgetIndex);
+	return getActiveChild();
 }
 
 void W_Paused::tick(const float& deltaTime)
@@ -728,7 +701,6 @@ void W_Gameplay::tick(const float& deltaTime)
 
 bool W_Gameplay::input_esc()
 {
-	std::cout << "Recognized esc" << std::endl;
 	if (isChildActive())
 		return getWidgetAtIndex(widgetIndex)->input_esc();
 	// If no sub widget open, open optionsMenu

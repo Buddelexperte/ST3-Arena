@@ -7,10 +7,10 @@
 #include "Enemy.h"
 
 
-Player::Player(InputWidget* parent)
+Player::Player()
 	: 
 	Entity(EntityType::Player),
-	invincibility(0.1f), // 0.1 seconds of invincibility after hit
+	invincibility(0.5f), // 0.5 seconds of invincibility after hit
 	healthBar(1.0f), // 100% life from start on
 	collisionBox(this, getPosition(), HITBOX_SIZE) // Collision box centered on player, hals as big as sprite
 {
@@ -46,12 +46,6 @@ Player::Player(InputWidget* parent)
 	}
 
 	shapes = { &flashlight, &playerSprite };
-}
-
-Player::~Player()
-{
-	IDrawableShapes::~IDrawableShapes();
-	Entity::~Entity();
 }
 
 void Player::spawn()
@@ -200,7 +194,6 @@ void Player::onMouseDownL()
 
 bool Player::onMouseClickR(sf::Event* eventRef)
 {
-	std::cout << "Right click" << std::endl;
 	flashlight.toggleMaskMode();
 	return true;
 }
@@ -294,7 +287,7 @@ void Player::collideWithEnemy(Enemy& enemy)
 
 void Player::collideWithProjectile(Projectile& projectile)
 {
-	// idk what to put here now
+	// Empty for now
 }
 
 void Player::hurt(const float& delta)

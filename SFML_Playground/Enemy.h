@@ -23,6 +23,8 @@ private:
 		{ return healthBar; }
 
 	sf::Vector2f getNewSpawnPos() const;
+	RenderInfo makeSpawnInfo();
+
 	size_t enemyIndex = -1;
 
 	const float WALK_SPEED = RNG::floatInRange(80.0f, 100.0f);

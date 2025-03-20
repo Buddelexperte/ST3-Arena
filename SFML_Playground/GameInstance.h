@@ -41,6 +41,11 @@ private:
 	float zoomFactor = 1.0f;
 	bool bIsGameplayPaused = true;
 
+	void preTick(); // Logic before Player input (Checks for Inventory etc.)
+	void tick_view(const float&);
+	void tick(const float&); // Player Input and window.draw()
+	void postTick(); // Logic after Player Input (Checks for game closing etc.)
+
 public:
 	static GI_Arena& getInstance() // SINGLETON getInstance()
 	{
@@ -56,12 +61,8 @@ public:
 	void startRound();
 	// Ticks
 	void tickLoop();
-	void preTick(); // Logic before Player input (Checks for Inventory etc.)
-	void tick(const float&); // Player Input and window.draw()
-	void postTick(); // Logic after Player Input (Checks for game closing etc.)
 	// Viewport
 	void updateScreen();
-	void tickView(const float&);
 	void resetViewPos();
 	void setViewPos(const sf::Vector2f&);
 	// Setters and Getters of pointers and important variables

@@ -60,7 +60,7 @@ Player* GI_Arena::makePlayer()
 		return player;
 	}
 
-	player = new Player(nullptr);
+	player = new Player;
 	return player;
 }
 
@@ -139,7 +139,8 @@ void GI_Arena::preTick()
 
 void GI_Arena::tick(const float& deltaTime)
 {
-	tickView(deltaTime);
+	tick_view(deltaTime);
+	IDrawableShapes::updateValues();
 
 	sf::Event event;
 	while (window->pollEvent(event) && gameState > QUIT)
@@ -149,19 +150,19 @@ void GI_Arena::tick(const float& deltaTime)
 			window->close();
 			break;
 		}
-		player->handleEvent(&event);	// Mouse buttons getting pressed down
+		player->handleEvent(&event);
 	}
 
-	// Non-event inputs
+	// Tick all actors
 	player->tick(deltaTime);
-	IDrawableShapes::updateValues();
-	activeMenu->tick(deltaTime);
+	correctWidget();
+
+	if (activeMenu)
+		activeMenu->tick(deltaTime);
 }
 
 void GI_Arena::postTick()
 {
-	correctWidget();
-
 	// Draw new Menu to screen through GameInstance
 	updateScreen();
 }
@@ -193,7 +194,7 @@ void GI_Arena::resetViewPos()
 }
 
 // Adjust the camera position based on velocity and distance to player (Spring-Damp-System)
-void GI_Arena::tickView(const float& deltaTime)
+void GI_Arena::tick_view(const float& deltaTime)
 {
 	constexpr float SPRING_STRENGTH = 2.5f; // Higher = Quicker follow
 	constexpr float DAMPING_COEFFICIENT = 4.0f; // Higher = More Resistance

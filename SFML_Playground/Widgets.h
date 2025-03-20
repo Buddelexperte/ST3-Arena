@@ -49,9 +49,10 @@ public:
 	void tick(const float& deltaTime) override;
 	W_Options(InputWidget*);
 	void construct() override;
+	bool isMouseOver(const bool& = false) override;
+	
 	InputWidget* setWidgetIndex(const int&) override;
 	InputWidget* getWidgetAtIndex(const int&) override;
-	bool isMouseOver(const bool& = false) override;
 };
 
 class W_SelectWeapon : public InputWidget // Inventory Widget ------------------------------------------
@@ -69,7 +70,6 @@ public:
 	bool isMouseOver(const bool&) override;
 
 	InputWidget* setWidgetIndex(const int& newIndex) override;
-	InputWidget* getWidgetAtIndex(const int& atIndex) override;
 };
 
 class W_LevelMenu : public InputWidget // LevelMenu Widget ------------------------------------------
@@ -80,14 +80,14 @@ private:
 	Button level2_Button;
 	Button level3_Button;
 	Button return_Button;
+
 public:
 	void tick(const float& deltaTime) override;
 	W_LevelMenu(InputWidget*);
 	void construct() override;
 	bool isMouseOver(const bool&) override;
-	
+
 	InputWidget* setWidgetIndex(const int& newIndex) override;
-	InputWidget* getWidgetAtIndex(const int& atIndex) override;
 };
 
 class W_MainMenu : public InputWidget // MainMenu Widget ------------------------------------------
@@ -127,10 +127,11 @@ public:
 	void tick(const float& deltaTime) override;
 	W_Paused(InputWidget*);
 	bool input_esc() override;
-	InputWidget* setWidgetIndex(const int&) override;
-	InputWidget* getWidgetAtIndex(const int&) override;
 	void construct() override;
 	bool isMouseOver(const bool&) override;
+	
+	InputWidget* setWidgetIndex(const int&) override;
+	InputWidget* getWidgetAtIndex(const int&) override;
 };
 
 class W_GameOver : public InputWidget

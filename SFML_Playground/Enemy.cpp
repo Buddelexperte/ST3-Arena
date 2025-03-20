@@ -11,6 +11,30 @@ Enemy::Enemy()
 	collisionBox(this, getPosition(), getSize())
 {}
 
+IMovable::RenderInfo Enemy::makeSpawnInfo()
+{
+	sf::Vector2f position = getNewSpawnPos();
+	static constexpr float SIZE_X = 100.0f;
+	static constexpr float SIZE_Y = 100.0f;
+	float rotation = getLookAtRot(getPosition(), gameInstance().getPlayer()->getPosition());
+	static const float START_V_X = 0.0f;
+	static const float START_V_Y = 0.0f;
+	static const sf::Color COLOR = sf::Color(255, 255, 255, 255);
+
+	IMovable::RenderInfo renderInfo = {
+		.pos = position,
+		.size = {SIZE_X, SIZE_Y},
+		.rot = rotation,
+		.velocity = {START_V_X, START_V_Y},
+		.color = COLOR,
+	};
+
+	if (enemyIndex == 0)
+		renderInfo.color = sf::Color::Red;
+
+	return renderInfo;
+}
+
 sf::Vector2f Enemy::getNewSpawnPos() const
 {
 	constexpr float MIN_DISTANCE = 800.0f;
@@ -29,10 +53,8 @@ sf::Vector2f Enemy::getNewSpawnPos() const
 void Enemy::spawn()
 {
 	CollisionManager::getInstance().registerEnemy(getCollision());
-	setPosition(getNewSpawnPos());
 
-	if (enemyIndex == 0)
-		setColor(sf::Color::Red);
+	setRenderInfo(makeSpawnInfo());
 }
 
 void Enemy::tick(const float& deltaTime)
