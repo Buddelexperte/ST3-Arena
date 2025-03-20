@@ -11,11 +11,6 @@ Enemy::Enemy()
 	collisionBox(this, getPosition(), getSize())
 {}
 
-Enemy::~Enemy()
-{
-	CollisionManager::getInstance().unregisterCollidable(getCollision()->getCollisionID());
-}
-
 sf::Vector2f Enemy::getNewSpawnPos() const
 {
 	constexpr float MIN_DISTANCE = 800.0f;

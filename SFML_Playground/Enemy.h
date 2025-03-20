@@ -36,7 +36,7 @@ private:
 
 public:
 	Enemy();
-	~Enemy();
+	~Enemy() = default;
 
 	void setID(const size_t& newIndex)
 		{ enemyIndex = newIndex; }

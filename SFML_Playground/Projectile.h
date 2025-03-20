@@ -64,7 +64,7 @@ public:
     // Constructor initializes movement info and collision box.
     Projectile();
     Projectile(const RenderInfo& initRenderInfo);
-    ~Projectile();
+    ~Projectile() = default;
 
     void setID(const size_t& newIndex) 
         { projectileID = newIndex; }

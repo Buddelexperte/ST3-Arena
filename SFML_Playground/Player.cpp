@@ -9,8 +9,8 @@
 
 Player::Player(InputWidget* parent)
 	: InputWidget(parent),
+	Entity(EntityType::Player),
 	flashlight(this),
-	inventory(),
 	invincibility(0.1f), // 0.1 seconds of invincibility after hit
 	healthBar(1.0f), // 100% life from start on
 	collisionBox(this, getPosition(), HITBOX_SIZE) // Collision box centered on player, hals as big as sprite
@@ -53,23 +53,23 @@ Player::Player(InputWidget* parent)
 Player::~Player()
 {
 	WidgetElement::~WidgetElement();
-	CollisionManager::getInstance().unregisterPlayer();
+	Entity::~Entity();
 }
 
-Player* Player::spawn(const sf::Vector2f& spawnPos)
+void Player::spawn()
 {
-	healthBar.reset();
-
-	inventory.clear();
-
-	inventory.addWeapon(std::make_unique<Shotgun>());
-
-	invincibility.setValue(2.0f);
-
+	const sf::Vector2f spawnPos = { 0.0f, 0.0f };
 	setPosition(spawnPos);
 	setVelocity({ 0.0f, 0.0f });
 
-	return this;
+	// TODO: Implement dynamic start weapon
+	inventory.clear();
+	inventory.addWeapon(std::make_unique<Shotgun>());
+
+	healthBar.reset(); // 100% hp
+
+	invincibility.setValue(2.0f); // 2 seconds invincibility (Spawn protection)
+
 }
 
 void Player::tick_move(const float& deltaTime)
@@ -103,7 +103,6 @@ void Player::tick_move(const float& deltaTime)
 		currVelo = targetVelo;
 	}
 
-	direction = { currVelo.x / WALKING_SPEED, currVelo.y / WALKING_SPEED };
 	sf::Vector2f offset = currVelo * deltaTime;
 
 	addPosition(offset);

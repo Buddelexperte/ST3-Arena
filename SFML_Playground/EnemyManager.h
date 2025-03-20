@@ -9,7 +9,6 @@
 class EnemyManager : public sf::Drawable
 {
 private:
-	GI_Arena& gameInstance = GI_Arena::getInstance();
 	ProjectileManager& projectileManager = ProjectileManager::getInstance();
 
 	const float spawnInterval = SMALLEST_PRECISION;
@@ -32,7 +31,7 @@ private:
 
 	void deleteEnemy(const size_t&);
 
-	const IMovable::RenderInfo standardRenderInfo = { {0.0f, 0.0f}, {100.0f, 100.0f}, 0.0f, {0.0f, 0.0f}, sf::Color::White };
+	static const inline IMovable::RenderInfo standardRenderInfo = { {0.0f, 0.0f}, {100.0f, 100.0f}, 0.0f, {0.0f, 0.0f}, sf::Color::White };
 
 public:
 	static EnemyManager& getInstance()

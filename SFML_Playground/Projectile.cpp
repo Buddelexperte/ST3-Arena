@@ -40,11 +40,6 @@ Projectile::Projectile(const RenderInfo& initRenderInfo)
 	setRenderInfo(initRenderInfo);
 }
 
-Projectile::~Projectile()
-{
-	CollisionManager::getInstance().unregisterCollidable(getCollision()->getCollisionID());
-}
-
 void Projectile::kill_self() const
 {
 	ProjectileManager::getInstance().callDelete(projectileID);

@@ -5,15 +5,19 @@
 #include "Health.h"
 #include "Flashlight.h"
 #include "Inventory.h"
+#include "Entity.h"
 
 // PLAYER -----------------------------------------------------------------------------------------
 
-class Player : public InputWidget,
-	public IHasCollision, public IHasHealth 
+class Player : 
+	public Entity,
+	public InputWidget, // Is also IMovable
+	public IHasCollision,
+	public IHasHealth
 {
 private:
-	sf::Sprite playerSprite;
 
+	// Collision
 	static const inline sf::Vector2f HITBOX_SIZE = sf::Vector2f(80.0f, 80.0f);
 	CollisionBox collisionBox;
 
@@ -26,8 +30,8 @@ private:
 	ValueBar& getValueBar() override
 		{ return healthBar; }
 
-	sf::Vector2f direction = { 0.0f, 0.0f };
-
+	// Animation
+	sf::Sprite playerSprite;
 	std::vector<sf::Texture> playerTextures = {};
 	int currentFrame = 0;
 	float animationAccu = 0.0f;
@@ -48,8 +52,8 @@ public:
 	Player(InputWidget*);
 	~Player();
 
-	Player* spawn(const sf::Vector2f& = (sf::Vector2f(0.0f, 0.0f)));
-
+	// Entity
+	void spawn() override;
 	void tick(const float&) override;
 
 	bool handleEvent(sf::Event* eventRef) override;
@@ -64,16 +68,13 @@ public:
 	void setRotation(const float&) override;
 	void setSize(const sf::Vector2f&) override;
 	void setColor(const sf::Color&) override;
-	sf::Vector2f getDirection() const 
-		{ return direction; };
 
-	// Collision-Interface
+	// Collision
 	Collidable* getCollision() override
 		{ return &collisionBox; }
 	
-	void onCollision(IHasCollision*) override;
+	void onCollision(IHasCollision* other) override;
 
-	// Collision
 	void collideWithEnemy(Enemy& enemy) override;
 	void collideWithProjectile(Projectile& projectile) override;
 

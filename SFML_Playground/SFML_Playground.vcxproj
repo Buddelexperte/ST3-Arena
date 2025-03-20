@@ -148,6 +148,8 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="Flashlight.cpp" />
     <ClCompile Include="FontManager.cpp" />
     <ClCompile Include="FontManager.h" />
@@ -173,6 +175,8 @@
   <ItemGroup>
     <ClInclude Include="AllPerks.h" />
     <ClInclude Include="AllWeapons.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="EntityManager.h" />
     <ClInclude Include="WidgetBase.h" />
     <ClInclude Include="BaseTypes.h" />
     <ClInclude Include="Button.h" />

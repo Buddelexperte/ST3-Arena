@@ -51,6 +51,9 @@
     <Filter Include="Source\libs">
       <UniqueIdentifier>{1b56c034-b3a0-4ed9-b5e2-936c31c6bf8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Actors\Enemies">
+      <UniqueIdentifier>{ddb69889-7fa9-4194-8734-a9931b3609e8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -58,9 +61,6 @@
     </ClCompile>
     <ClCompile Include="Button.cpp">
       <Filter>Source\Widgets</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Source\Actors</Filter>
     </ClCompile>
     <ClCompile Include="Slider.cpp">
       <Filter>Source\Widgets</Filter>
@@ -128,6 +128,15 @@
     <ClCompile Include="SaveGame.cpp">
       <Filter>Source\Helpers</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source\Actors\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Source\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>Source\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TargetController.h">
@@ -184,9 +193,6 @@
     <ClInclude Include="Flashlight.h">
       <Filter>Source\Actors\Inventory\Items</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Source\Actors</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Source\Actors</Filter>
     </ClInclude>
@@ -237,6 +243,15 @@
     </ClInclude>
     <ClInclude Include="SFML_Arena.h">
       <Filter>Source\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Source\Actors\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Source\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>Source\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
