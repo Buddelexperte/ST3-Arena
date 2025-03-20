@@ -193,33 +193,57 @@ void GI_Arena::resetViewPos()
 	prevCamPos = view->getCenter();
 }
 
-// Adjust the camera position based on velocity and distance to player (Spring-Damp-System)
+// Adjust the camera position based on velocity and distance to target (Player + Mouse Influence)
 void GI_Arena::tick_view(const float& deltaTime)
 {
-	constexpr float SPRING_STRENGTH = 2.5f; // Higher = Quicker follow
-	constexpr float DAMPING_COEFFICIENT = 4.0f; // Higher = More Resistance
+	constexpr float SPRING_STRENGTH = 2.5f;         // Higher = Quicker follow
+	constexpr float DAMPING_COEFFICIENT = 4.0f;       // Higher = More Resistance
+	constexpr float MAX_DISTANCE = 120.0f;            // Maximum allowed mouse influence
 
-	// Get current camera and player positions
-	const sf::Vector2f& camPos = view->getCenter();
-	const sf::Vector2f& playerPos = getPlayer()->getPosition();
+	// Get current camera, player, and mouse positions
+	const sf::Vector2f camPos = view->getCenter();
+	const sf::Vector2f playerPos = getPlayer()->getPosition();
 
-	// Calculate distance between both positions (x and y)
-	sf::Vector2f distance = camPos - playerPos;
-	// Calculate Spring Force (Using distance to target)
+	static sf::Vector2f mousePos = getMousePos();
+
+
+	if (!getIsPaused())
+		mousePos = getMousePos();
+
+	// Calculate the offset from the player to the mouse
+	sf::Vector2f mouseOffset = mousePos - playerPos;
+	float offsetLength = std::sqrt(mouseOffset.x * mouseOffset.x + mouseOffset.y * mouseOffset.y);
+
+	// Clamp the mouse offset so it doesn't exceed MAX_DISTANCE
+	if (offsetLength > MAX_DISTANCE)
+	{
+		mouseOffset = (mouseOffset / offsetLength) * MAX_DISTANCE;
+	}
+
+	// Determine the new target position: player's position plus the clamped mouse offset
+	sf::Vector2f targetPos = playerPos + mouseOffset;
+
+	// Compute the distance from the current camera position to the target position
+	sf::Vector2f distance = camPos - targetPos;
+
+	// Calculate the spring force using the distance
 	sf::Vector2f springForce = -SPRING_STRENGTH * distance;
 
-	// Calculate velocity (Using old and new position)
+	// Compute the camera's velocity based on the previous camera position
 	sf::Vector2f velocity = camPos - prevCamPos;
-	// Calculate Damping Force (Using velocity)
+
+	// Calculate the damping force using the velocity
 	sf::Vector2f dampingForce = -DAMPING_COEFFICIENT * velocity;
 
-	// Calculate total force (spring + damping)
-	sf::Vector2f totalForce = dampingForce + springForce;
-	// Applying total camera force (scaled by deltaTime) onto old Position
+	// Combine forces to determine the total force applied to the camera
+	sf::Vector2f totalForce = springForce + dampingForce;
+
+	// Update the camera position by applying the total force scaled by deltaTime
 	sf::Vector2f newCamPos = camPos + (totalForce * deltaTime);
 
 	setViewPos(newCamPos);
 }
+
 
 void GI_Arena::updateScreen()
 {
