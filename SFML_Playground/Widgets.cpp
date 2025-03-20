@@ -290,28 +290,37 @@ bool W_Options::isMouseOver(const bool& checkForClick)
 
 W_SelectWeapon::W_SelectWeapon(InputWidget* parent) : InputWidget(parent)
 {
+	const float spacing = 250.0f; // Abstand zwischen den Buttons
+
 	const std::vector<RawButton> INVENTORY_MENU_CONSTR = {
-		{viewCenter + sf::Vector2f(0.0f, -300.0f),	sf::Vector2f(100.0f, 100.0f),	sf::Color::Transparent,		100,	"INVENTORY", sf::Color::White},
-		{viewCenter + sf::Vector2f(-500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"PISTOL",		sf::Color::White},
-		{viewCenter + sf::Vector2f(0.0f, 0.0f),		sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"SHOTGUN",		sf::Color::White},
-		{viewCenter + sf::Vector2f(500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"RIFLE",		sf::Color::White},
-		{viewCenter + sf::Vector2f(0.0f, 300.0f),	sf::Vector2f(200.0f, 100.0f),	sf::Color::White,			24,		"RETURN",		sf::Color::Black}
+		{viewCenter + sf::Vector2f(0.0f, -300.0f),			sf::Vector2f(100.0f, 100.0f),		sf::Color::Transparent,	100,	"INVENTORY",	sf::Color::White},
+		{viewCenter + sf::Vector2f(-1.5f * spacing, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"PISTOL",		sf::Color::White},
+		{viewCenter + sf::Vector2f(-0.5f * spacing, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"SHOTGUN",		sf::Color::White},
+		{viewCenter + sf::Vector2f(0.5f * spacing, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"RIFLE",		sf::Color::White},
+		{viewCenter + sf::Vector2f(1.5f * spacing, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"BURST RIFLE",	sf::Color::White},
+		{viewCenter + sf::Vector2f(0.0f, 200.0f),			sf::Vector2f(200.0f, 100.0f),		sf::Color::White, 24,			"RETURN",		sf::Color::Black}
 	};
 
 	inventory_title.construct(INVENTORY_MENU_CONSTR[0]);
 	item1_Button.construct(INVENTORY_MENU_CONSTR[1]);
 	item2_Button.construct(INVENTORY_MENU_CONSTR[2]);
 	item3_Button.construct(INVENTORY_MENU_CONSTR[3]);
-	return_Button.construct(INVENTORY_MENU_CONSTR[4]);
+	item4_Button.construct(INVENTORY_MENU_CONSTR[4]);
+	return_Button.construct(INVENTORY_MENU_CONSTR[5]);
 }
 
 void W_SelectWeapon::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
+	const float spacing = 250.0f; // Abstand zwischen den Buttons
+
 	inventory_title.setPos(viewCenter + sf::Vector2f(0.0f, -300.0f));
-	item1_Button.setPos(viewCenter + sf::Vector2f(-500.0f, 0.0f));
-	item2_Button.setPos(viewCenter + sf::Vector2f(0.0f, 0.0f));
-	item3_Button.setPos(viewCenter + sf::Vector2f(500.0f, 0.0f));
+
+	item1_Button.setPos(viewCenter + sf::Vector2f(-1.5f * spacing, 0.0f));
+	item2_Button.setPos(viewCenter + sf::Vector2f(-0.5f * spacing, 0.0f));
+	item3_Button.setPos(viewCenter + sf::Vector2f(0.5f * spacing, 0.0f));
+	item4_Button.setPos(viewCenter + sf::Vector2f(1.5f * spacing, 0.0f));
+
 	return_Button.setPos(viewCenter + sf::Vector2f(0.0f, 300.0f));
 }
 
@@ -320,7 +329,7 @@ InputWidget* W_SelectWeapon::setWidgetIndex(const int& newIndex)
 	switch (widgetIndex = newIndex)
 	{
 	case 0:
-		shapes = { &inventory_title, &item1_Button, &item2_Button, &item3_Button, &return_Button };
+		shapes = { &inventory_title, &item1_Button, &item2_Button, &item3_Button, &item4_Button, &return_Button };
 		break;
 	default:
 		shapes = { getWidgetAtIndex(widgetIndex) };
@@ -340,7 +349,7 @@ bool W_SelectWeapon::isMouseOver(const bool& checkForClick = false)
 	if (isChildActive())
 		return getActiveChild()->isMouseOver(checkForClick);
 
-	if (item1_Button.isMouseOver(checkForClick) || item2_Button.isMouseOver(checkForClick) || item3_Button.isMouseOver(checkForClick))
+	if (item1_Button.isMouseOver(checkForClick) || item2_Button.isMouseOver(checkForClick) || item3_Button.isMouseOver(checkForClick) || item4_Button.isMouseOver(checkForClick))
 	{
 		if (checkForClick)
 		{
