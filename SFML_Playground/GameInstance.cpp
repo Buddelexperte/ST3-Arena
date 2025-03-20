@@ -206,7 +206,6 @@ void GI_Arena::tick_view(const float& deltaTime)
 
 	static sf::Vector2f mousePos = getMousePos();
 
-
 	if (!getIsPaused())
 		mousePos = getMousePos();
 
