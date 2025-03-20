@@ -58,6 +58,7 @@ public:
 class W_SelectWeapon : public InputWidget // Inventory Widget ------------------------------------------
 {
 private:
+	static constexpr float WEAPON_SPACING = 250.0f; // Abstand zwischen den Buttons
 	Button inventory_title;
 	Button item1_Button;
 	Button item2_Button;
