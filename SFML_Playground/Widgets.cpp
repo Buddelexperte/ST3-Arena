@@ -289,14 +289,14 @@ bool W_Options::isMouseOver(const bool& checkForClick)
 // W_Inventory ---------------------------------------------------------------------------------------
 
 W_SelectWeapon::W_SelectWeapon(InputWidget* parent) : InputWidget(parent),
-	WEAPON_SPACING(viewHalfSize.x / NUM_WEAPONS)
+	WEAPON_SPACING_X(viewHalfSize.x / NUM_WEAPONS)
 {
 	const std::vector<RawButton> INVENTORY_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f(0.0f, -300.0f),					sf::Vector2f(100.0f, 100.0f),		sf::Color::Transparent,	100,	"INVENTORY",	sf::Color::White},
-		{viewCenter + sf::Vector2f(-1.5f * WEAPON_SPACING, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"PISTOL",		sf::Color::White},
-		{viewCenter + sf::Vector2f(-0.5f * WEAPON_SPACING, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"SHOTGUN",		sf::Color::White},
-		{viewCenter + sf::Vector2f(0.5f * WEAPON_SPACING, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"RIFLE",		sf::Color::White},
-		{viewCenter + sf::Vector2f(1.5f * WEAPON_SPACING, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"BURST RIFLE",	sf::Color::White},
+		{viewCenter + sf::Vector2f(-1.5f * WEAPON_SPACING_X, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"PISTOL",		sf::Color::White},
+		{viewCenter + sf::Vector2f(-0.5f * WEAPON_SPACING_X, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"SHOTGUN",		sf::Color::White},
+		{viewCenter + sf::Vector2f(0.5f * WEAPON_SPACING_X, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"RIFLE",		sf::Color::White},
+		{viewCenter + sf::Vector2f(1.5f * WEAPON_SPACING_X, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"BURST RIFLE",	sf::Color::White},
 		{viewCenter + sf::Vector2f(0.0f, 200.0f),					sf::Vector2f(200.0f, 100.0f),		sf::Color::White, 24,			"RETURN",		sf::Color::Black}
 	};
 
@@ -312,14 +312,14 @@ void W_SelectWeapon::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 
-	WEAPON_SPACING = (viewHalfSize.x / NUM_WEAPONS);
+	WEAPON_SPACING_X = (viewHalfSize.x / NUM_WEAPONS);
 
 	inventory_title.setPos(viewCenter + sf::Vector2f(0.0f, -300.0f));
 
-	item1_Button.setPos(viewCenter + sf::Vector2f(-1.5 * WEAPON_SPACING, 0.0f));
-	item2_Button.setPos(viewCenter + sf::Vector2f(-0.5 * WEAPON_SPACING, 0.0f));
-	item3_Button.setPos(viewCenter + sf::Vector2f(0.5 * WEAPON_SPACING, 0.0f));
-	item4_Button.setPos(viewCenter + sf::Vector2f(1.5 * WEAPON_SPACING, 0.0f));
+	item1_Button.setPos(viewCenter + sf::Vector2f(-1.5 * WEAPON_SPACING_X, 0.0f));
+	item2_Button.setPos(viewCenter + sf::Vector2f(-0.5 * WEAPON_SPACING_X, 0.0f));
+	item3_Button.setPos(viewCenter + sf::Vector2f(0.5 * WEAPON_SPACING_X, 0.0f));
+	item4_Button.setPos(viewCenter + sf::Vector2f(1.5 * WEAPON_SPACING_X, 0.0f));
 
 	return_Button.setPos(viewCenter + sf::Vector2f(0.0f, 300.0f));
 }

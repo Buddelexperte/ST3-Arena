@@ -59,7 +59,7 @@ class W_SelectWeapon : public InputWidget // Inventory Widget ------------------
 {
 private:
 	static constexpr unsigned int NUM_WEAPONS = 4; // Anzahl Weaffen Buttons
-	float WEAPON_SPACING;
+	float WEAPON_SPACING_X;
 
 	Button inventory_title;
 	Button item1_Button;
