@@ -207,6 +207,12 @@ W_Options::W_Options(InputWidget* parent = nullptr) : InputWidget(parent), sound
 	options_return.construct(MAIN_MENU_CONSTR[3]);
 }
 
+void W_Options::construct()
+{
+	InputWidget::construct();
+	setWidgetIndex(0);
+}
+
 InputWidget* W_Options::getWidgetAtIndex(const int& atIndex)
 {
 	switch (atIndex)
@@ -247,11 +253,6 @@ InputWidget* W_Options::setWidgetIndex(const int& newIndex)
 	return getActiveChild();
 }
 
-void W_Options::construct()
-{
-	InputWidget::construct();
-	setWidgetIndex(0);
-}
 
 void W_Options::tick(const float& deltaTime)
 {
@@ -308,6 +309,12 @@ W_SelectWeapon::W_SelectWeapon(InputWidget* parent) : InputWidget(parent),
 	return_Button.construct(INVENTORY_MENU_CONSTR[5]);
 }
 
+void W_SelectWeapon::construct()
+{
+	InputWidget::construct();
+	setWidgetIndex(0);
+}
+
 void W_SelectWeapon::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
@@ -338,11 +345,6 @@ InputWidget* W_SelectWeapon::setWidgetIndex(const int& newIndex)
 	return getWidgetAtIndex(widgetIndex);
 }
 
-void W_SelectWeapon::construct()
-{
-	InputWidget::construct();
-	setWidgetIndex(0);
-}
 
 bool W_SelectWeapon::isMouseOver(const bool& checkForClick = false)
 {
