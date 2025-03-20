@@ -58,7 +58,9 @@ public:
 class W_SelectWeapon : public InputWidget // Inventory Widget ------------------------------------------
 {
 private:
-	static constexpr float WEAPON_SPACING = 250.0f; // Abstand zwischen den Buttons
+	static constexpr unsigned int NUM_WEAPONS = 4; // Anzahl Weaffen Buttons
+	float WEAPON_SPACING;
+
 	Button inventory_title;
 	Button item1_Button;
 	Button item2_Button;
