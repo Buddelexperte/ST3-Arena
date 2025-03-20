@@ -141,9 +141,9 @@ public:
             {
                 float rotation = info.rot; // in degrees
 
-                float rad = rotation * pi / 180.f;
-                float cosA = std::cos(rad);
-                float sinA = std::sin(rad);
+                double rad = rotation * pi / 180.f;
+                float cosA = static_cast<float>(std::cos(rad));
+                float sinA = static_cast<float>(std::sin(rad));
 
                 for (auto& corner : corners)
                 {

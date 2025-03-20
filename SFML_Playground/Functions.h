@@ -2,15 +2,15 @@
 #include <SFML/Graphics.hpp>
 
 // SFML abbreviations
-const sf::Keyboard::Key KEY_W = sf::Keyboard::W;
-const sf::Keyboard::Key KEY_A = sf::Keyboard::A;
-const sf::Keyboard::Key KEY_S = sf::Keyboard::S;
-const sf::Keyboard::Key KEY_D = sf::Keyboard::D;
-const sf::Keyboard::Key KEY_LSHIFT = sf::Keyboard::LShift;
+static const inline sf::Keyboard::Key KEY_W = sf::Keyboard::W;
+static const inline sf::Keyboard::Key KEY_A = sf::Keyboard::A;
+static const inline sf::Keyboard::Key KEY_S = sf::Keyboard::S;
+static const inline sf::Keyboard::Key KEY_D = sf::Keyboard::D;
+static const inline sf::Keyboard::Key KEY_LSHIFT = sf::Keyboard::LShift;
 
 // Constants
-static const double pi = 4.0f * std::atan(1.0); // Calculation of Pi
-static constexpr float SMALLEST_PRECISION = 1e-3f;
+static const inline double pi = 4.0f * std::atan(1.0); // Calculation of Pi
+static constexpr inline float SMALLEST_PRECISION = 1e-3f;
 
 // WEAK POINTER -------------------------------------------------------------------------------------------
 // Lock weak pointer into shared pointer
@@ -93,8 +93,8 @@ inline sf::Vector2f posToGrid(const sf::Vector2f& pos, const float& gridSize)
 // Function to get normalized velocity from rotation
 inline sf::Vector2f dirFromRot(const float angle)
 {
-	float rad = angle * pi / 180.0f; // Convert to radians
-	return sf::Vector2f(std::cos(rad), std::sin(rad)); // Normalized direction
+	double rad = angle * pi / 180.0f; // Convert to radians
+	return sf::Vector2f(static_cast<float>(std::cos(rad)), static_cast<float>(std::sin(rad))); // Normalized direction
 }
 
 // ROTATION ---------------------------------------------------------------------------------------

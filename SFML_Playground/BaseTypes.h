@@ -1,6 +1,6 @@
 #pragma once
 
-constexpr float LERP_SMOOTHNESS = 0.01f;
+static constexpr inline float LERP_SMOOTHNESS = 0.01f;
 
 enum InfoType {
 	EMPTY_INFO	= 0,		// No info

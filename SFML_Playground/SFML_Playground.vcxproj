@@ -149,7 +149,9 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Flashlight.cpp" />
+    <ClCompile Include="FontManager.cpp" />
     <ClCompile Include="FontManager.h" />
+    <ClCompile Include="GameInstance.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="ItemBaseClasses.cpp" />
     <ClCompile Include="Projectile.cpp" />
@@ -159,7 +161,8 @@
     <ClCompile Include="RenderInfo.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="MainClasses.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="WidgetBase.cpp" />
     <ClCompile Include="SaveGame.cpp" />
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="TargetController.cpp" />
@@ -170,12 +173,11 @@
   <ItemGroup>
     <ClInclude Include="AllPerks.h" />
     <ClInclude Include="AllWeapons.h" />
-    <ClInclude Include="BaseClasses.h" />
+    <ClInclude Include="WidgetBase.h" />
     <ClInclude Include="BaseTypes.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionManager.h" />
-    <ClInclude Include="CollisionQuadTree.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="EnemyPool.h" />

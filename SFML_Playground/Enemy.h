@@ -24,7 +24,7 @@ private:
 	size_t enemyIndex = -1;
 
 	const float WALK_SPEED = RNG::floatInRange(80.0f, 100.0f);
-	const float ROT_LERP_MULTIPLIER = RNG::floatInRange(0.3, 0.8f);
+	const float ROT_LERP_MULTIPLIER = RNG::floatInRange(0.3f, 0.8f);
 	const float ROT_LERP = LERP_SMOOTHNESS * ROT_LERP_MULTIPLIER;
 
 	using IMovable::setVelocity; // Make this function private for safety reasons

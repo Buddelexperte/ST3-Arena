@@ -1,34 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Header">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Header\Widgets">
-      <UniqueIdentifier>{6310f2aa-1b9f-45af-9a58-26da671dcfed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header\Actors">
-      <UniqueIdentifier>{43614117-ec53-4ebc-bc09-92f34949e4f1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header\DataStructures">
-      <UniqueIdentifier>{bfbfda43-b28c-4537-84cc-1ee26b307327}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header\Managers">
-      <UniqueIdentifier>{01352f2e-ac37-4d7e-89da-344ad975ad00}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header\Helper">
-      <UniqueIdentifier>{0abe8223-59df-4285-890a-6ff7f52e0dac}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
     <Filter Include="Source\Widgets">
       <UniqueIdentifier>{768c09ac-d6fa-4f9e-b491-e337e312c543}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Actors">
-      <UniqueIdentifier>{18865e06-ae9a-4d8c-82d1-3e867b84f9d8}</UniqueIdentifier>
     </Filter>
     <Filter Include="zDeprecated">
       <UniqueIdentifier>{c66aa173-4673-49a6-af36-9bbb5e0cdd79}</UniqueIdentifier>
@@ -40,31 +18,43 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header\Actors\Abstracts">
-      <UniqueIdentifier>{9e8353a4-a43b-4f51-89e8-cf742906a696}</UniqueIdentifier>
+    <Filter Include="Source\Base">
+      <UniqueIdentifier>{afb6fcc0-7061-45c3-b975-5579ea1a630f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header\Actors\Items">
-      <UniqueIdentifier>{c0065e4b-c57f-4090-8cc9-9a25e95836fa}</UniqueIdentifier>
+    <Filter Include="Source\Actors">
+      <UniqueIdentifier>{18865e06-ae9a-4d8c-82d1-3e867b84f9d8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header\Actors\Items\Weapons">
-      <UniqueIdentifier>{df0db31a-ea99-4aaa-9e44-9c80f9e52938}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header\Actors\Items\Perks">
-      <UniqueIdentifier>{8ae4b029-bf6c-4b2b-aac2-7a611b3788d7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Actors\Items">
+    <Filter Include="Source\Actors\Inventory">
       <UniqueIdentifier>{e6060964-9bde-4dcd-adf3-38ccd8597606}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Actors\Inventory\Items">
+      <UniqueIdentifier>{b541e6f6-a07d-4ce5-b6b6-5bf572e13ea5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Actors\Inventory\Items\Weapons">
+      <UniqueIdentifier>{53b46cf5-e3d4-4b48-a016-9a7d6ffda86d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Actors\Inventory\Items\Projectiles">
+      <UniqueIdentifier>{13130653-7738-4189-84fa-1324ad7dbd05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Actors\EntityPools">
+      <UniqueIdentifier>{9c2398b0-0c08-45fa-adb4-be56d64de2f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Base\Abstracts">
+      <UniqueIdentifier>{fa25da7d-d065-4dc1-9c81-8740e000ddad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Actors\Inventory\Items\Perks">
+      <UniqueIdentifier>{f057bce3-b246-4c70-bc7e-c202debb8cd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Helpers">
+      <UniqueIdentifier>{3c6d6988-b775-4bc8-bedd-07c42a8e4d3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\libs">
+      <UniqueIdentifier>{1b56c034-b3a0-4ed9-b5e2-936c31c6bf8f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="MainClasses.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="FontManager.h">
-      <Filter>Header\Managers</Filter>
     </ClCompile>
     <ClCompile Include="Button.cpp">
       <Filter>Source\Widgets</Filter>
@@ -90,12 +80,6 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source\Actors</Filter>
     </ClCompile>
-    <ClCompile Include="RenderInfo.h">
-      <Filter>Header\Actors\Abstracts</Filter>
-    </ClCompile>
-    <ClCompile Include="Flashlight.cpp">
-      <Filter>Source\Actors</Filter>
-    </ClCompile>
     <ClCompile Include="ProjectileManager.cpp">
       <Filter>Source\Managers</Filter>
     </ClCompile>
@@ -103,143 +87,163 @@
       <Filter>Source\Actors</Filter>
     </ClCompile>
     <ClCompile Include="Inventory.cpp">
-      <Filter>Source\Actors\Items</Filter>
+      <Filter>Source\Actors\Inventory</Filter>
     </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
       <Filter>Source\Managers</Filter>
     </ClCompile>
     <ClCompile Include="ItemBaseClasses.cpp">
-      <Filter>Source\Actors\Items</Filter>
-    </ClCompile>
-    <ClCompile Include="Weapon_Rifle_Burst.h">
-      <Filter>Header\Actors\Items\Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="SaveGame.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Projectiles_Shotgun.h">
-      <Filter>Header\Actors\Items\Weapons</Filter>
+      <Filter>Source\Actors\Inventory</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Source\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="GameInstance.cpp">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="WidgetBase.cpp">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Source\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="FontManager.h">
+      <Filter>Source\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="FontManager.cpp">
+      <Filter>Source\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderInfo.h">
+      <Filter>Source\Base\Abstracts</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectiles_Shotgun.h">
+      <Filter>Source\Actors\Inventory\Items\Projectiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon_Rifle_Burst.h">
+      <Filter>Source\Actors\Inventory\Items\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Flashlight.cpp">
+      <Filter>Source\Actors\Inventory\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveGame.cpp">
+      <Filter>Source\Helpers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SFML_Arena.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="GameInstance.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseClasses.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseTypes.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Widgets.h">
-      <Filter>Header\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Header\Actors</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header\Actors</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionQuadTree.h">
-      <Filter>Header\DataStructures</Filter>
-    </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>Header\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="Slider.h">
-      <Filter>Header\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Header\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyManager.h">
-      <Filter>Header\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyPool.h">
-      <Filter>Header\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="TargetController.h">
       <Filter>zDeprecated</Filter>
     </ClInclude>
-    <ClInclude Include="SoundManager.h">
-      <Filter>Header\Managers</Filter>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>Source\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Functions.h">
-      <Filter>Header\Helper</Filter>
-    </ClInclude>
-    <ClInclude Include="RandomNumbers.h">
-      <Filter>Header\Helper</Filter>
-    </ClInclude>
-    <ClInclude Include="Collision.h">
-      <Filter>Header\Actors\Abstracts</Filter>
-    </ClInclude>
-    <ClInclude Include="ItemPool.h">
-      <Filter>Header\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="ItemBaseClasses.h">
-      <Filter>Header\Actors\Items</Filter>
-    </ClInclude>
-    <ClInclude Include="Inventory.h">
-      <Filter>Header\Actors\Items</Filter>
-    </ClInclude>
-    <ClInclude Include="Flashlight.h">
-      <Filter>Header\Actors\Items</Filter>
-    </ClInclude>
-    <ClInclude Include="Weapon_Pistol.h">
-      <Filter>Header\Actors\Items\Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="AllWeapons.h">
-      <Filter>Header\Helper</Filter>
-    </ClInclude>
-    <ClInclude Include="AllPerks.h">
-      <Filter>Header\Helper</Filter>
-    </ClInclude>
-    <ClInclude Include="Projectile.h">
-      <Filter>Header\Actors</Filter>
+    <ClInclude Include="EnemyManager.h">
+      <Filter>Source\Managers</Filter>
     </ClInclude>
     <ClInclude Include="ProjectileManager.h">
-      <Filter>Header\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="ProjectilePool.h">
-      <Filter>Header\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionManager.h">
-      <Filter>Header\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Projectiles_Pistol.h">
-      <Filter>Header\Actors\Items\Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="Health.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="ValueBar.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Projectiles_Rifle.h">
-      <Filter>Header\Actors\Items\Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="Weapon_Rifle.h">
-      <Filter>Header\Actors\Items\Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="SaveGame.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Weapon_Shotgun.h">
-      <Filter>Header\Actors\Items\Weapons</Filter>
+      <Filter>Source\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
-      <Filter>Header\Managers</Filter>
+      <Filter>Source\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Source\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyPool.h">
+      <Filter>Source\Actors\EntityPools</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemPool.h">
+      <Filter>Source\Actors\EntityPools</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectilePool.h">
+      <Filter>Source\Actors\EntityPools</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Source\Base\Abstracts</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectiles_Pistol.h">
+      <Filter>Source\Actors\Inventory\Items\Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectiles_Rifle.h">
+      <Filter>Source\Actors\Inventory\Items\Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon_Shotgun.h">
+      <Filter>Source\Actors\Inventory\Items\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon_Pistol.h">
+      <Filter>Source\Actors\Inventory\Items\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon_Rifle.h">
+      <Filter>Source\Actors\Inventory\Items\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>Source\Actors\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemBaseClasses.h">
+      <Filter>Source\Actors\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="Flashlight.h">
+      <Filter>Source\Actors\Inventory\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Source\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Source\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Source\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Source\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Slider.h">
+      <Filter>Source\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Source\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Widgets.h">
+      <Filter>Source\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="WidgetBase.h">
+      <Filter>Source\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="GameInstance.h">
+      <Filter>Source\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Health.h">
+      <Filter>Source\Base\Abstracts</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseTypes.h">
+      <Filter>Source\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Functions.h">
+      <Filter>Source\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomNumbers.h">
+      <Filter>Source\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveGame.h">
+      <Filter>Source\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="ValueBar.h">
+      <Filter>Source\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="AllPerks.h">
+      <Filter>Source\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="AllWeapons.h">
+      <Filter>Source\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="SFML_Arena.h">
+      <Filter>Source\libs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="SaveGame.txt" />
     <CopyFileToFolders Include="..\openal32.dll">
+      <Filter>Ressources</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="SaveGame.txt">
       <Filter>Ressources</Filter>
     </CopyFileToFolders>
   </ItemGroup>

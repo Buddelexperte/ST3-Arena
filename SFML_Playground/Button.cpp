@@ -5,25 +5,24 @@
 
 
 Button::Button()
-	: Button(ButtonConstruct{ { 0, 0 }, { 100.0f, 100.0f }, sf::Color::White, 24, "Text", sf::Color::Black })
+	: Button(RawButton{ { 0, 0 }, { 100.0f, 100.0f }, sf::Color::White, 24, "Text", sf::Color::Black })
 {};
 
-Button::Button(const ButtonConstruct& constr)
+Button::Button(const RawButton& constr)
 {
 	// Construct button parameters (font, text, color, etc)
 	construct(constr);
 };
 
-void Button::construct(const ButtonConstruct& constr)
+void Button::construct(const RawButton& constr)
 {
-	usedConstr = constr;
-	const sf::Vector2f& pos = constr.pos;
-	const sf::Vector2f& b_size = constr.size;
-	const sf::Color& b_color = constr.color;
-	const unsigned int& t_size = constr.textSize;
-	const std::string& t_text = constr.text;
-	text = t_text;
-	const sf::Color& t_color = constr.textColor;
+	buttonData					= constr;
+	const sf::Vector2f& pos		= constr.pos;
+	const sf::Vector2f& b_size	= constr.size;
+	const sf::Color& b_color	= constr.color;
+	const unsigned int& t_size	= constr.textSize;
+	const std::string& t_text	= constr.text;
+	const sf::Color& t_color	= constr.textColor;
 
 	// Initialize button
 	B_Box.setSize(b_size);
@@ -31,8 +30,8 @@ void Button::construct(const ButtonConstruct& constr)
 	B_Box.setOrigin(b_size.x / 2.0f, b_size.y / 2.0f);
 	B_Box.setFillColor(b_color);
 	// Initialize Text
-	T_Text.setFont(FontManager::getInstance().getFont(fontID));
-	T_Text.setString(text);
+	T_Text.setFont(FontManager::getInstance().getFont(font));
+	T_Text.setString(t_text);
 	T_Text.setCharacterSize(t_size);
 	T_Text.setFillColor(t_color);
 	// Center Text inside Box
@@ -44,10 +43,10 @@ void Button::construct(const ButtonConstruct& constr)
 void Button::onClick() const
 {
 	static SoundManager& soundManager = SoundManager::getInstance();
-	if (text == "RETURN" || text == "QUIT")
-		soundManager.play(soundManager.getReturnClickBuffer());
+	if (buttonData.text == "RETURN" || buttonData.text == "QUIT")
+		soundManager.play(soundManager.getSound_ReturnClick());
 	else
-		soundManager.play(soundManager.getClickBuffer());
+		soundManager.play(soundManager.getSound_Click());
 }
 
 void Button::onHover()
@@ -76,18 +75,27 @@ bool Button::isMouseOver(const bool& registerClick)
 
 void Button::setText(const std::string& text)
 {
+	buttonData.text = text;
 	T_Text.setString(text);
 	setPos(B_Box.getPosition()); // Recenter Text (idk why I need that but it works)
 }
 
 void Button::setColor(const sf::Color& color, const bool& bTextColor)
 {
-	(bTextColor ? T_Text.setFillColor(color) : B_Box.setFillColor(color)); // set either box or text fillcolor
+	if (bTextColor)
+	{
+		buttonData.textColor = color;
+		T_Text.setFillColor(color);
+		return;
+	}
+	buttonData.color = color;
+	B_Box.setFillColor(color);
+	return;
 }
 
 sf::Color Button::getColor(const bool& bTextColor) const
 {
-	return (bTextColor ? T_Text.getFillColor() : B_Box.getFillColor()); // return either box or text fillcolor
+	return (bTextColor ? buttonData.textColor : buttonData.color); // return either box or text fillcolor
 }
 
 void Button::setTexture(const sf::Texture& newText, const bool resetTint = false)
@@ -98,6 +106,7 @@ void Button::setTexture(const sf::Texture& newText, const bool resetTint = false
 
 void Button::setPos(const sf::Vector2f& newPos = {0.0f, 0.0f})
 {
+	buttonData.pos = newPos;
 	// Update Box position and origin
 	B_Box.setPosition(newPos);
 	B_Box.setOrigin(B_Box.getSize().x / 2.0f, B_Box.getSize().y / 2.0f);
@@ -106,10 +115,11 @@ void Button::setPos(const sf::Vector2f& newPos = {0.0f, 0.0f})
 	T_Text.setPosition({ newPos.x, newPos.y - 6.0f });
 }
 
-void Button::addPos(const sf::Vector2f& x)
+void Button::addPos(const sf::Vector2f& deltaPos)
 {
-	B_Box.setPosition(B_Box.getPosition() + x);
-	T_Text.setPosition(T_Text.getPosition() + x);
+	buttonData.pos += deltaPos;
+	B_Box.setPosition(buttonData.pos);
+	T_Text.setPosition(buttonData.pos);
 }
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const

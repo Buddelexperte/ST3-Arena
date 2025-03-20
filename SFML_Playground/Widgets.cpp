@@ -8,7 +8,7 @@
 W_MainMenu::W_MainMenu(InputWidget* parent)
 	: InputWidget(parent), optionsMenu(this), levelMenu(this), selectWeapon(this)
 {
-	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
+	const std::vector<RawButton> MAIN_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100,	"ARENA",													sf::Color::White},
 		{viewCenter + sf::Vector2f{ 0, -200 },    sf::Vector2f{ 100, 100 }, sf::Color::Transparent,   16,	"Higscore: " + std::to_string(SaveGame::storedData.score),	sf::Color::White},
 		{viewCenter + sf::Vector2f{ 0, 0 },       sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"START",													sf::Color::Black},
@@ -120,7 +120,7 @@ bool W_MainMenu::input_esc()
 
 W_OptionsSounds::W_OptionsSounds(InputWidget* parent = nullptr) : InputWidget(parent)
 {
-	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
+	const std::vector<RawButton> MAIN_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "SOUND",		sf::Color::White},
 		{viewCenter + sf::Vector2f{ 0, 300 },		sf::Vector2f{ 300, 100 }, sf::Color::White,        24, "RETURN",	sf::Color::Black}
 	};
@@ -156,7 +156,7 @@ bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)
 
 W_OptionsGraphics::W_OptionsGraphics(InputWidget* parent = nullptr) : InputWidget(parent)
 {
-	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
+	const std::vector<RawButton> MAIN_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f{ 0, -300 }, sf::Vector2f{ 350, 120 }, sf::Color::Transparent,		100, "GRAPHICS", sf::Color::White},
 		{viewCenter + sf::Vector2f{ 0, 300 },		sf::Vector2f{ 300, 100 }, sf::Color::White,         24,  "RETURN",   sf::Color::Black}
 
@@ -192,7 +192,7 @@ bool W_OptionsGraphics::isMouseOver(const bool& checkForClick = false)
 
 W_Options::W_Options(InputWidget* parent = nullptr) : InputWidget(parent), soundMenu(this), graphicMenu(this)
 {
-	const std::vector<ButtonConstruct> MAIN_MENU_CONSTR = {
+	const std::vector<RawButton> MAIN_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f{ 0, -300 },		sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "OPTIONS",	sf::Color::White},
 		{viewCenter + sf::Vector2f{ 0, 0 },			sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "SOUNDS",	sf::Color::Black},
 		{viewCenter + sf::Vector2f{ 0, 150 },		sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "GRAPHICS",	sf::Color::Black},
@@ -288,7 +288,7 @@ bool W_Options::isMouseOver(const bool& checkForClick)
 
 W_SelectWeapon::W_SelectWeapon(InputWidget* parent) : InputWidget(parent)
 {
-	const std::vector<ButtonConstruct> INVENTORY_MENU_CONSTR = {
+	const std::vector<RawButton> INVENTORY_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f(0.0f, -300.0f),	sf::Vector2f(100.0f, 100.0f),	sf::Color::Transparent,		100,	"INVENTORY", sf::Color::White},
 		{viewCenter + sf::Vector2f(-500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"PISTOL",		sf::Color::White},
 		{viewCenter + sf::Vector2f(0.0f, 0.0f),		sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"SHOTGUN",		sf::Color::White},
@@ -372,7 +372,7 @@ bool W_SelectWeapon::isMouseOver(const bool& checkForClick = false)
 
 W_LevelMenu::W_LevelMenu(InputWidget* parent) : InputWidget(parent)
 {
-	const std::vector<ButtonConstruct> LEVEL_MENU_CONSTR = {
+	const std::vector<RawButton> LEVEL_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f(0.0f, -300.0f),	sf::Vector2f(100.0f, 100.0f),	sf::Color::Transparent,		100,	"LEVEL SELECT", sf::Color::White},
 		{viewCenter + sf::Vector2f(-500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"LEVEL 1",		sf::Color::White},
 		{viewCenter + sf::Vector2f(0.0f, 0.0f),		sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"LEVEL 2",		sf::Color::White},
@@ -455,7 +455,7 @@ bool W_LevelMenu::isMouseOver(const bool& checkForClick = false)
 
 W_Paused::W_Paused(InputWidget* parent) : InputWidget(parent), optionsMenu(this)
 {
-	const std::vector<ButtonConstruct> PAUSED_CONSTR = {
+	const std::vector<RawButton> PAUSED_CONSTR = {
 		{viewCenter + sf::Vector2f{ 0.0f, -300.0f },    sf::Vector2f{ 350.0f, 120.0f }, sf::Color::Transparent,   100, "PAUSE",		sf::Color::White},
 		{viewCenter + sf::Vector2f{ 0.0f, 0.0f },       sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "RESUME",		sf::Color::Black},
 		{viewCenter + sf::Vector2f{ 0.0f, 150.0f },     sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "OPTIONS",	sf::Color::Black},
@@ -553,7 +553,7 @@ bool W_Paused::input_esc()
 
 W_GameOver::W_GameOver(InputWidget* parent) : InputWidget(parent)
 {
-	const std::vector<ButtonConstruct> GAME_OVER_CONSTR = {
+	const std::vector<RawButton> GAME_OVER_CONSTR = {
 		{viewCenter + sf::Vector2f{ 0.0f, -300.0f },	sf::Vector2f{ 350.0f, 120.0f }, sf::Color::Transparent,   100, "GAME OVER",						sf::Color::White},
 		{viewCenter + sf::Vector2f{ 0.0f, -200.0f },	sf::Vector2f{ 100.0f, 100.0f }, sf::Color::Transparent,   16, "Score: " + std::to_string(0),	sf::Color::White},
 		{viewCenter + sf::Vector2f{ 0.0f, 0.0f },		sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "QUIT",							sf::Color::Black}
@@ -641,8 +641,8 @@ void W_Gameplay::windowUpdate()
 	background[2].position = sf::Vector2f(viewCenter.x + viewSize.x / 2.0f, viewCenter.y + viewSize.y / 2.0f);
 	background[3].position = sf::Vector2f(viewCenter.x - viewSize.x / 2.0f, viewCenter.y + viewSize.y / 2.0f);
 
-	double textureOffsetX = fmod(backgroundPos.x * TILING_SCALE, backgroundTexture.getSize().x);
-	double textureOffsetY = fmod(backgroundPos.y * TILING_SCALE, backgroundTexture.getSize().y);
+	float textureOffsetX = static_cast<float>(fmod(backgroundPos.x * TILING_SCALE, backgroundTexture.getSize().x));
+	float textureOffsetY = static_cast<float>(fmod(backgroundPos.y * TILING_SCALE, backgroundTexture.getSize().y));
 
 	background[0].texCoords = sf::Vector2f(textureOffsetX, textureOffsetY);  // Top-left
 	background[1].texCoords = sf::Vector2f(textureOffsetX + viewSize.x * TILING_SCALE, textureOffsetY);  // Top-right

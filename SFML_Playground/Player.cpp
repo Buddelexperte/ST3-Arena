@@ -266,8 +266,8 @@ void Player::setSize(const sf::Vector2f& newSize)
 	if (!playerSprite.getTexture()) return;
 	IMovable::setSize(newSize);
 
-	const sf::Vector2u textureSize = playerSprite.getTexture()->getSize();
-	const sf::Vector2f originalSize(textureSize.x, textureSize.y);
+	sf::Vector2u textureSize = playerSprite.getTexture()->getSize();
+	sf::Vector2u originalSize(textureSize.x, textureSize.y);
 
 	// * 2.0f because sprite isn't perfectly aligned
 	playerSprite.setOrigin(originalSize.x / 2.0f, originalSize.y / 2.0f);
