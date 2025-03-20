@@ -36,7 +36,10 @@ public:
 		return instance;
 	}
 
-	int getNumEntites() const;
+	size_t getNumEntites() const;
+
+	void tick(const float& deltaTime);
+
 	void callDelete(const size_t&);
 	void deleteAll();
 	void callUpdate(const size_t&, const InfoType&);
@@ -45,7 +48,6 @@ public:
 	void spawn_Enemy(const IMovable::RenderInfo& renderInfo);
 	void spawn_Proj(const IMovable::RenderInfo& renderInfo, const float& damage);
 
-	void tick(const float& deltaTime);
 
 	// Call renderer to draw
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates::Default) const override;

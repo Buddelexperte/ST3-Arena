@@ -5,7 +5,9 @@
 int EnemyManager::enemyID = 0;
 
 EnemyManager::EnemyManager()
-    {}
+{
+
+}
 
 int EnemyManager::getNumActiveEnemies() const
 {

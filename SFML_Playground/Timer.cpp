@@ -7,7 +7,7 @@ void Timer::tick(const float& deltaTime)
 {
 	WidgetElement::tick(deltaTime);
 	// Don't update gameplay while paused
-	if (gameInstance->getIsPaused()) return;
+	if (gameInstance().getIsPaused()) return;
 
 
 	return;
@@ -19,11 +19,6 @@ void Timer::tick(const float& deltaTime)
 	float timeRatio = (currentTime / maxTime); // Calculate ratio from timeLeft to maxTime for progress visuality
 	timerBar.setFillColor(timeRatio < 0.33f ? sf::Color::Red : sf::Color::White);
 	timerBar.setSize(sf::Vector2f(barWidth * timeRatio, barHeight)); //
-}
-
-void Timer::windowUpdate()
-{
-	WidgetElement::windowUpdate();
 	timerBar.setPosition(viewCenter + sf::Vector2f(0.0f, windowSize.y / -2.0f));
 }
 

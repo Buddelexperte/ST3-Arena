@@ -1,17 +1,19 @@
 #pragma once
 
-#include "WidgetBase.h"
 #include "Collision.h"
 #include "Health.h"
 #include "Flashlight.h"
+#include "DrawableShape.h"
 #include "Inventory.h"
+#include "Input.h"
 #include "Entity.h"
 
 // PLAYER -----------------------------------------------------------------------------------------
 
 class Player : 
 	public Entity,
-	public InputWidget, // Is also IMovable
+	public IDrawableShapes,
+	public IHasInput,
 	public IHasCollision,
 	public IHasHealth
 {

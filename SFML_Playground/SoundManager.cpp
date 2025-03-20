@@ -4,6 +4,10 @@
 
 #include "SoundManager.h"
 
+SoundManager::SoundManager()
+{
+
+}
 
 void SoundManager::play(const sf::SoundBuffer& buffer)
 {

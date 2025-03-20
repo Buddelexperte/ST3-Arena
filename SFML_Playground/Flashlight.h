@@ -4,7 +4,7 @@
 
 // TODO: Add enemy DeathLights
 
-class Flashlight : public WidgetElement
+class Flashlight : public IDrawableShapes, public IMovable
 {
 private:
     enum FlashlightType {
@@ -154,13 +154,12 @@ private:
     void tick_shader(const float&);
     void tick_deathLights(const float&);
     void tick_display(const float&);
+
 public:
-    Flashlight(InputWidget* parent);
+    Flashlight();
     ~Flashlight() = default;
 
-    virtual void construct() override { return; }
-
-    void tick(const float& deltaTime) override;
+    void tick(const float& deltaTime);
 
     void setMaskMode(const bool& = false);
 

@@ -1,9 +1,9 @@
 #pragma once
+#include <iostream>
 
 #include "GameInstance.h"
 #include "Widgets.h"
 
-// Game Instance Code
 
 GI_Arena::GI_Arena()
 {
@@ -11,7 +11,7 @@ GI_Arena::GI_Arena()
 	//window = new sf::RenderWindow(desktop, "SFML_Arena", sf::Style::Fullscreen);
 
 	// Only use for crash heavy debug !
-	window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), "SFML_Arena", sf::Style::Titlebar | sf::Style::Default);
+	window = new sf::RenderWindow(desktop, "SFML_Arena", sf::Style::Titlebar | sf::Style::Default);
 
 	std::cout << "RenderWindow created." << std::endl;
 	sf::Vector2f desktopSize = { static_cast<float>(desktop.width), static_cast<float>(desktop.height) };
@@ -66,6 +66,8 @@ Player* GI_Arena::makePlayer()
 
 void GI_Arena::start()
 {
+	IDrawableShapes::updateValues();
+
 	makePlayer();
 	std::cout << "Player created" << std::endl;
 
@@ -130,6 +132,8 @@ void GI_Arena::startRound()
 void GI_Arena::preTick()
 {
 	prevCamPos = view->getCenter();
+	IDrawableShapes::updateValues();
+
 	SoundManager::getInstance().cleanUp();
 }
 
@@ -150,6 +154,7 @@ void GI_Arena::tick(const float& deltaTime)
 
 	// Non-event inputs
 	player->tick(deltaTime);
+	IDrawableShapes::updateValues();
 	activeMenu->tick(deltaTime);
 }
 

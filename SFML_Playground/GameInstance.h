@@ -1,5 +1,5 @@
 #pragma once
-#include <iostream>
+#include <SFML/Graphics.hpp>
 
 #include "Player.h"
 #include "Functions.h"
@@ -23,10 +23,6 @@ private:
 	GI_Arena(const GI_Arena&) = delete;
 	GI_Arena& operator=(const GI_Arena&) = delete; // Block the '=' operator to stop copies being made of this class
 	
-	// Manager instances
-	SoundManager& soundManager = SoundManager::getInstance();
-	FontManager& fontManager = FontManager::getInstance();
-	CollisionManager& collisionManager = CollisionManager::getInstance();
 	// SFML Viewport objects
 	sf::RenderWindow* window = nullptr;
 	sf::View* view = nullptr;
@@ -38,8 +34,8 @@ private:
 	std::vector<std::shared_ptr<InputWidget>> widgets;
 	std::shared_ptr<InputWidget> activeMenu = nullptr;
 
-	Player* player = nullptr;
 	Player* makePlayer();
+	Player* player = nullptr;
 	// Somehow Gameplay related?
 	sf::Vector2f prevCamPos;
 	float zoomFactor = 1.0f;
@@ -86,3 +82,8 @@ public:
 	void setGameState(const GameState&);
 	GameState getGameState() const { return gameState; }
 };
+
+static inline GI_Arena& gameInstance()
+{
+	return GI_Arena::getInstance();
+}

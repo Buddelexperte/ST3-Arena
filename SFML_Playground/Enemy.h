@@ -1,18 +1,20 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+#include "BaseTypes.h"
 #include "RandomNumbers.h"
-#include "Player.h"
 #include "Health.h"
 #include "Collision.h"
 #include "RenderInfo.h"
+#include "Entity.h"
 
 // Forward Declarations
 class GI_Arena;
 class EnemyManager;
 
 class Enemy : 
-	public IHasCollision, public IMovable, IHasHealth
+	public Entity,
+	public IHasCollision, IHasHealth
 {
 private:
 	CollisionBox collisionBox;
@@ -41,8 +43,8 @@ public:
 	void setID(const size_t& newIndex)
 		{ enemyIndex = newIndex; }
 
-	void spawn();
-	void tick(const float&);
+	void spawn() override;
+	void tick(const float&) override;
 
 	// RenderInfo general
 	void setRenderInfo(const RenderInfo& newRenderInfo) override;

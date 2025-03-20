@@ -2,29 +2,20 @@
 #include "Button.h"
 #include "BaseTypes.h"
 #include "RenderInfo.h"
+#include "Input.h"
+#include "DrawableShape.h"
 
 class GI_Arena;
 class InputWidget;
 
 // WIDGETS ----------------------------------------------------------------------------------------
 
-class WidgetElement : public sf::Drawable, public IMovable
+class WidgetElement : public IMovable, public IDrawableShapes
 {
 protected:
-	float lastDeltaTime = 0.0f;
 	InputWidget* parent = nullptr;
-	GI_Arena* gameInstance;
-	sf::RenderWindow* window;
-	sf::Vector2u windowSize;
-	sf::Vector2f windowCenter;
-	sf::Vector2f ORIGIN;
-	sf::View* view = nullptr;
-	sf::Vector2f viewSize;
-	sf::Vector2f viewHalfSize;
-	sf::Vector2f viewCenter;
-	std::vector<sf::Drawable*> shapes;
 
-	virtual void windowUpdate();
+
 public:
 	WidgetElement(InputWidget* parentWidget);
 	virtual ~WidgetElement()
@@ -38,38 +29,19 @@ public:
 		parent = nullptr;
 	}
 
-	virtual void construct() { windowUpdate(); };
+	virtual void construct() {};
 
 	InputWidget* getParent() const { return parent; }
 
-	virtual void tick(const float& deltaTime) 
-	{ 
-		lastDeltaTime = deltaTime;  
-		windowUpdate(); 
-	};
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	virtual void tick(const float& deltaTime) {};
 };
 
-class InputWidget : public WidgetElement
+class InputWidget : public WidgetElement, public IHasInput
 {
 protected:
-	sf::Event* event = nullptr;
-
 	int widgetIndex = 0;
+	virtual bool onMouseClickL(sf::Event*) override { return isMouseOver(true); }
 
-	virtual sf::Keyboard::Key onKeyPressed(sf::Event*);
-	virtual sf::Mouse::Button onMouseButtonPressed(sf::Event*);
-	virtual sf::Mouse::Button onMouseButtonReleased(sf::Event*);
-	virtual float onMouseScrolled(sf::Event*);
-	virtual bool onMouseClickL(sf::Event*) { return isMouseOver(true); };
-	virtual bool onMouseClickR(sf::Event*) { return true; };
-	virtual bool onMouseClickM(sf::Event*) { return true; };
-	virtual void onMouseDownL() {};
-	virtual void onMouseDownR() {};
-	virtual void onMouseDownM() {};
-	virtual bool onMouseReleaseL(sf::Event*) { return true; };
-	virtual bool onMouseReleaseR(sf::Event*) { return true; };
-	virtual bool onMouseReleaseM(sf::Event*) { return true; };
 public:
 	InputWidget(InputWidget* parent) : WidgetElement(parent) {};
 
@@ -84,16 +56,16 @@ public:
 	virtual InputWidget* setWidgetIndex(const int&);
 	virtual InputWidget* getWidgetAtIndex(const int& atIndex) { return (atIndex == 0 ? this : nullptr); };
 	int getWidgetIndex() const { return widgetIndex; }
-	bool isChildActive() { return (getWidgetAtIndex(widgetIndex) != this); }
+	bool isChildActive() { return (widgetIndex > 0); }
 
-	virtual bool input_esc()
-	{
-		if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->input_esc();
-		if (parent != nullptr) parent->setWidgetIndex(0)->construct();
-		else return false;
-		return true;
-	}
-	virtual bool handleEvent(sf::Event* eventRef);
-	virtual void idleInputs();
-	virtual bool isMouseOver(const bool& = false) { return false; }
+	virtual bool handleEvent(sf::Event*) override;
+	virtual void idleInputs() override;
+
+	virtual sf::Keyboard::Key onKeyPressed(sf::Event*);
+	virtual sf::Mouse::Button onMouseButtonPressed(sf::Event*);
+	virtual sf::Mouse::Button onMouseButtonReleased(sf::Event*);
+
+	virtual float onMouseScrolled(sf::Event*);
+
+	virtual bool input_esc() override;
 };

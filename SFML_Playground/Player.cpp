@@ -8,15 +8,13 @@
 
 
 Player::Player(InputWidget* parent)
-	: InputWidget(parent),
+	: 
 	Entity(EntityType::Player),
-	flashlight(this),
 	invincibility(0.1f), // 0.1 seconds of invincibility after hit
 	healthBar(1.0f), // 100% life from start on
 	collisionBox(this, getPosition(), HITBOX_SIZE) // Collision box centered on player, hals as big as sprite
 {
 	// Player Sprite Initialization
-	setPosition(windowCenter);
 	setColor(sf::Color::White);
 
 	CollisionManager::getInstance().registerPlayer(getCollision());
@@ -52,7 +50,7 @@ Player::Player(InputWidget* parent)
 
 Player::~Player()
 {
-	WidgetElement::~WidgetElement();
+	IDrawableShapes::~IDrawableShapes();
 	Entity::~Entity();
 }
 
@@ -111,7 +109,7 @@ void Player::tick_move(const float& deltaTime)
 	 // Rotation
 
 	const sf::Vector2f playerPos = getPosition();
-	const sf::Vector2f mousePos = gameInstance->getMousePos();
+	const sf::Vector2f mousePos = gameInstance().getMousePos();
 	float rotation = getRotation();
 	const float targetRot = getLookAtRot(playerPos, mousePos);
 
@@ -144,10 +142,9 @@ void Player::tick_animation(const float& deltaTime)
 
 void Player::tick(const float& deltaTime)
 {
-	InputWidget::tick(deltaTime);
 	idleInputs();
 	// Gameplay ticks
-	if (!gameInstance->getIsPaused())
+	if (!gameInstance().getIsPaused())
 	{
 		tick_move(deltaTime); // Movement inputs
 		tick_animation(deltaTime); // Animation update
@@ -166,17 +163,17 @@ void Player::tick(const float& deltaTime)
 bool Player::handleEvent(sf::Event* eventRef)
 {
 	// If gameplay is paused, use gameInstance to relay event to activeWidget
-	if (gameInstance->getIsPaused())
-		return gameInstance->handleEvent(eventRef);
+	if (gameInstance().getIsPaused())
+		return gameInstance().handleEvent(eventRef);
 	// if not, just continue with normal distributing of events
-	return InputWidget::handleEvent(eventRef);
+	return IHasInput::handleEvent(eventRef);
 }
 
 sf::Keyboard::Key Player::onKeyPressed(sf::Event* eventRef)
 {
 	const sf::Keyboard::Key inputKey = eventRef->key.code;
 	if (inputKey == sf::Keyboard::Escape)
-		gameInstance->handleEvent(eventRef);
+		gameInstance().handleEvent(eventRef);
 	return inputKey;
 }
 
@@ -192,7 +189,7 @@ bool Player::onMouseClickL(sf::Event* eventRef)
 
 void Player::onMouseDownL()
 {
-	if (gameInstance->getIsPaused())
+	if (gameInstance().getIsPaused())
 		return;
 
 	if (inventory.getActiveWeapon() != nullptr)
@@ -203,6 +200,7 @@ void Player::onMouseDownL()
 
 bool Player::onMouseClickR(sf::Event* eventRef)
 {
+	std::cout << "Right click" << std::endl;
 	flashlight.toggleMaskMode();
 	return true;
 }

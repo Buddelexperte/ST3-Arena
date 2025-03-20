@@ -1,10 +1,8 @@
 #pragma once
-// SFML Libraries
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
 // Own libraries
 #include "SoundManager.h"
 #include "FontManager.h"
+#include "DrawableShape.h"
 
 class GI_Arena;
 
@@ -18,7 +16,7 @@ struct RawButton
 	sf::Color textColor = sf::Color::White;
 };
 
-class Button : public sf::Drawable
+class Button : public IDrawableShapes
 {
 private:
 	FontManager::Font font = FontManager::Font::BUTTON_FONT; // [0] in FontManager.h

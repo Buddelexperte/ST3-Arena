@@ -4,18 +4,12 @@
 class FontManager
 {
 private:
-    FontManager()
-    {
-        loadFonts();
-    }
+    FontManager();
     ~FontManager() = default;
-
+    FontManager(const FontManager&) = delete;
+    FontManager& operator=(const FontManager&) = delete; 
 
     std::vector<std::unique_ptr<sf::Font>> allFonts;
-
-    // Verbiete Kopieren und Zuweisung
-    FontManager(const FontManager&) = delete;
-    FontManager& operator=(const FontManager&) = delete;
 
 public:
     static FontManager& getInstance()

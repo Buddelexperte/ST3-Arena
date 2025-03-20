@@ -3,8 +3,7 @@
 #include "GameInstance.h"
 
 
-Flashlight::Flashlight(InputWidget* parent)
-    : WidgetElement(parent)
+Flashlight::Flashlight()
 {
     constexpr float SPRITE_SIZE = 512.0f;
     flashlightSprite.setOrigin(SPRITE_SIZE / 2.0f, SPRITE_SIZE / 2.0f);
@@ -60,8 +59,6 @@ Flashlight::Flashlight(InputWidget* parent)
 
 void Flashlight::tick(const float& deltaTime)
 {
-    WidgetElement::tick(deltaTime);
-
     tick_animation(deltaTime);
 
     tick_shader(deltaTime);
@@ -93,10 +90,10 @@ void Flashlight::tick_shader(const float& deltaTime)
         return;
 
     // Update flashlight position and rotation
-    sf::Vector2f playerPos = gameInstance->getPlayer()->getPosition();
+    sf::Vector2f playerPos = gameInstance().getPlayer()->getPosition();
     setPosition(playerPos);
 
-    float newRot = getLookAtRot(playerPos, gameInstance->getMousePos());
+    float newRot = getLookAtRot(playerPos, gameInstance().getMousePos());
     setRotation(newRot);
 
 
@@ -105,7 +102,7 @@ void Flashlight::tick_shader(const float& deltaTime)
     sf::Vector2f lightPos = playerPos - viewOffset;
 
     // Calculation for Cone specific mouse direction
-    if (!gameInstance->getIsPaused() && bUseCone)
+    if (!gameInstance().getIsPaused() && bUseCone)
     {
         // Calculate direction vector to mouse
         sf::Vector2i mousePosition = sf::Mouse::getPosition(*window); // Mouse in window coordinates
@@ -253,7 +250,7 @@ void Flashlight::setPosition(const sf::Vector2f& newPos)
 
 void Flashlight::setRotation(const float& newRot)
 {
-    if (!(gameInstance->getIsPaused() || bUseCone))
+    if (!(gameInstance().getIsPaused() || bUseCone))
     {
         if (newRot != getRotation())
         {

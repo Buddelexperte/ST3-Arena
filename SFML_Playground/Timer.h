@@ -19,7 +19,6 @@ public:
     }
 
     void tick(const float&) override; // update timeLeft using deltaTime
-    void windowUpdate() override;
     float getCurrentTime() const; // get TimeLeft
     void setCurrentTime(const float&); // set MaxTime
     float getMaxTime() const; // get MaxTime

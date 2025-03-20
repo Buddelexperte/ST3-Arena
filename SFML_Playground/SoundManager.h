@@ -6,23 +6,21 @@ class SoundManager
 private:
     static const inline std::string SOUND_DIR = "Content/Sounds/";
 
+    SoundManager();
+    ~SoundManager() = default;
+    SoundManager(const SoundManager&) = delete;
+    SoundManager& operator=(const SoundManager&) = delete; // Block the '=' operator to stop copies being made of this class
+
+    std::vector<std::unique_ptr<sf::Sound>> activeSounds;
+    
     struct LoadedSound
     {
         sf::SoundBuffer sound;
         bool bLoaded = false;
     };
 
-    SoundManager() = default;
-    ~SoundManager() = default;
-
-    std::vector<std::unique_ptr<sf::Sound>> activeSounds;
-
     LoadedSound sound_click;
     LoadedSound sound_returnClick;
-
-    // Verbiete Kopieren und Zuweisung
-    SoundManager(const SoundManager&) = delete;
-    SoundManager& operator=(const SoundManager&) = delete;
 
 public:
     static SoundManager& getInstance()

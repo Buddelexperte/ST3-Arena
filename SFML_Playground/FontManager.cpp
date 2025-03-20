@@ -3,6 +3,11 @@
 
 #include "FontManager.h"
 
+FontManager::FontManager()
+{
+    loadFonts();
+}
+
 void FontManager::loadFonts()
 {
     static bool didOnce = false;
@@ -10,7 +15,7 @@ void FontManager::loadFonts()
     if (didOnce) return;
     didOnce = true;
 
-    const std::vector<std::string> fontPaths = {
+    static const std::vector<std::string> fontPaths = {
         "Content/fonts/coolvetica/coolvetica_rg.otf" // [0]
     };
 

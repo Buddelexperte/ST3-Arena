@@ -6,7 +6,7 @@
 #include "SaveGame.h"
 
 Enemy::Enemy()
-	:
+	: Entity(EntityType::Enemy),
 	healthBar(0.1f),
 	collisionBox(this, getPosition(), getSize())
 {}

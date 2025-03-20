@@ -6,40 +6,19 @@
 // WidgetMenu Code --------------------------------------------------------------------------------
 
 WidgetElement::WidgetElement(InputWidget* parentWidget)
-	: parent(parentWidget), gameInstance(&GI_Arena::getInstance()), window(gameInstance->getWindow())
+	: parent(parentWidget)
 {
-	ORIGIN = window->getView().getCenter();
-	windowUpdate();
+	updateValues();
 }
-
-void WidgetElement::windowUpdate()
-{
-	// Everything sf::RenderWindow related
-	window = gameInstance->getWindow();
-	windowSize = window->getSize();
-	windowCenter = { windowSize.x / 2.0f, windowSize.y / 2.0f };
-	// Everything sf::View related
-	view = gameInstance->getView();
-	viewSize = view->getSize();
-	viewHalfSize = viewSize / 2.0f;
-	viewCenter = view->getCenter();
-}
-
-void WidgetElement::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-	for (const auto& elem : shapes) target.draw(*elem, states);
-}
-
 
 // InputWidget ------------------------------------------------------------------------------------
 
 bool InputWidget::handleEvent(sf::Event* eventRef)
 {
-
 	switch (eventRef->type)
 	{
 	case sf::Event::KeyPressed:
-		//std::cout << "[Keyboard Event]" << std::endl;
+		std::cout << "[Keyboard Event]" << std::endl;
 		return onKeyPressed(eventRef);
 	case sf::Event::MouseButtonPressed:
 		//std::cout << "[Mouse Event]" << std::endl;
@@ -87,7 +66,7 @@ sf::Keyboard::Key InputWidget::onKeyPressed(sf::Event* eventRef)
 	switch (eventRef->key.code)
 	{
 	case sf::Keyboard::Escape:
-		lockWeakPtr( gameInstance->getActiveWidget() )->input_esc();
+		lockWeakPtr( gameInstance().getActiveWidget())->input_esc();
 		break;
 	default:
 		break;
@@ -139,8 +118,14 @@ sf::Mouse::Button InputWidget::onMouseButtonReleased(sf::Event* eventRef)
 
 float InputWidget::onMouseScrolled(sf::Event* eventRef)
 {
-	if (event->mouseWheelScroll.wheel != sf::Mouse::VerticalWheel) return 0.0f;
+	if (eventRef->mouseWheelScroll.wheel != sf::Mouse::VerticalWheel) return 0.0f;
 	return eventRef->mouseWheelScroll.delta;
 }
 
-
+bool InputWidget::input_esc()
+{
+	if (getWidgetAtIndex(widgetIndex) != this) return getWidgetAtIndex(widgetIndex)->input_esc();
+	if (parent != nullptr) parent->setWidgetIndex(0)->construct();
+	else return false;
+	return true;
+}

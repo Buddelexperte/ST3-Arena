@@ -67,9 +67,9 @@ InputWidget* W_MainMenu::setWidgetIndex(const int& newIndex)
 	return getWidgetAtIndex(widgetIndex);
 }
 
-void W_MainMenu::windowUpdate()
+void W_MainMenu::tick(const float& deltaTime)
 {
-	InputWidget::windowUpdate();
+	InputWidget::tick(deltaTime);
 	menu_title.setPos(viewCenter + sf::Vector2f{ 0, -300 });
 	menu_highscore.setPos(viewCenter + sf::Vector2f{ 0, -200 });
 	menu_startButton.setPos(viewCenter + sf::Vector2f{ 0, 0 });
@@ -82,7 +82,7 @@ bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 	if (isChildActive())
 		return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
 
-	sf::Vector2f mousePos = gameInstance->getMousePos();
+	sf::Vector2f mousePos = gameInstance().getMousePos();
 
 	if (menu_title.isMouseOver(checkForClick))
 	{
@@ -102,7 +102,7 @@ bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 	}
 	if (menu_quitButton.isMouseOver(checkForClick))
 	{
-		if (checkForClick) gameInstance->setGameState(QUIT);
+		if (checkForClick) gameInstance().setGameState(QUIT);
 		return true;
 	}
 	// On no button-mouse overlap
@@ -111,8 +111,8 @@ bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 
 bool W_MainMenu::input_esc()
 {
-	if (widgetIndex > 0) getWidgetAtIndex(widgetIndex)->input_esc();
-	else gameInstance->setGameState(QUIT);
+	if (isChildActive()) getWidgetAtIndex(widgetIndex)->input_esc();
+	else gameInstance().setGameState(QUIT);
 	return true;
 }
 
@@ -134,15 +134,15 @@ void W_OptionsSounds::construct()
 	shapes = { &optionsSounds_test };
 }
 
-void W_OptionsSounds::windowUpdate()
+void W_OptionsSounds::tick(const float& deltaTime)
 {
-	InputWidget::windowUpdate();
+	InputWidget::tick(deltaTime);
 	optionsSounds_test.setPos(viewCenter + sf::Vector2f{ 0, -300 });
 }
 
 bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)
 {
-	sf::Vector2f mousePos = gameInstance->getMousePos();
+	sf::Vector2f mousePos = gameInstance().getMousePos();
 	if (optionsSounds_test.isMouseOver(checkForClick))
 	{
 		if (checkForClick) parent->construct();
@@ -171,9 +171,9 @@ void W_OptionsGraphics::construct()
 	shapes = { &optionsGraphics_test };
 }
 
-void W_OptionsGraphics::windowUpdate()
+void W_OptionsGraphics::tick(const float& deltaTime)
 {
-	InputWidget::windowUpdate();
+	InputWidget::tick(deltaTime);
 	optionsGraphics_test.setPos(viewCenter + sf::Vector2f{ 0, -300 });
 }
 
@@ -251,9 +251,9 @@ void W_Options::construct()
 	setWidgetIndex(0);
 }
 
-void W_Options::windowUpdate()
+void W_Options::tick(const float& deltaTime)
 {
-	InputWidget::windowUpdate();
+	InputWidget::tick(deltaTime);
 	options_title.setPos(viewCenter + sf::Vector2f{ 0, -300 });
 	options_graphics.setPos(viewCenter + sf::Vector2f{ 0, 0 });
 	options_sounds.setPos(viewCenter + sf::Vector2f{ 0, 150 });
@@ -303,9 +303,9 @@ W_SelectWeapon::W_SelectWeapon(InputWidget* parent) : InputWidget(parent)
 	return_Button.construct(INVENTORY_MENU_CONSTR[4]);
 }
 
-void W_SelectWeapon::windowUpdate()
+void W_SelectWeapon::tick(const float& deltaTime)
 {
-	InputWidget::windowUpdate();
+	InputWidget::tick(deltaTime);
 	inventory_title.setPos(viewCenter + sf::Vector2f(0.0f, -300.0f));
 	item1_Button.setPos(viewCenter + sf::Vector2f(-500.0f, 0.0f));
 	item2_Button.setPos(viewCenter + sf::Vector2f(0.0f, 0.0f));
@@ -355,7 +355,7 @@ bool W_SelectWeapon::isMouseOver(const bool& checkForClick = false)
 	{
 		if (checkForClick)
 		{
-			gameInstance->launchGame();
+			gameInstance().launchGame();
 			return true;
 		}
 	}
@@ -387,9 +387,9 @@ W_LevelMenu::W_LevelMenu(InputWidget* parent) : InputWidget(parent)
 	return_Button.construct(LEVEL_MENU_CONSTR[4]);
 }
 
-void W_LevelMenu::windowUpdate()
+void W_LevelMenu::tick(const float& deltaTime)
 {
-	InputWidget::windowUpdate();
+	InputWidget::tick(deltaTime);
 	levelmenu_title.setPos(	viewCenter + sf::Vector2f(0.0f, -300.0f)	);
 	level1_Button.setPos(	viewCenter + sf::Vector2f(-500.0f, 0.0f)	);
 	level2_Button.setPos(	viewCenter + sf::Vector2f(0.0f, 0.0f)		);
@@ -507,9 +507,9 @@ InputWidget* W_Paused::setWidgetIndex(const int& newIndex)
 	return getWidgetAtIndex(widgetIndex);
 }
 
-void W_Paused::windowUpdate()
+void W_Paused::tick(const float& deltaTime)
 {
-	InputWidget::windowUpdate();
+	InputWidget::tick(deltaTime);
 	pause_title.setPos(viewCenter + sf::Vector2f{ 0.0f, -300.0f });
 	pause_resumeButton.setPos(viewCenter + sf::Vector2f{ 0.0f, 0.0f });
 	pause_optionsButton.setPos(viewCenter + sf::Vector2f{ 0.0f, 150.0f });
@@ -533,7 +533,7 @@ bool W_Paused::isMouseOver(const bool& checkForClick = false)
 	}
 	if (pause_quitButton.isMouseOver(checkForClick))
 	{
-		if (checkForClick) gameInstance->setGameState(MENU_SCREEN);
+		if (checkForClick) gameInstance().setGameState(MENU_SCREEN);
 		return true;
 	}
 	// On no button-mouse overlap
@@ -566,10 +566,9 @@ W_GameOver::W_GameOver(InputWidget* parent) : InputWidget(parent)
 	shapes = { &gameOver_title, &gameOver_score, &gameOver_quitButton };
 }
 
-void W_GameOver::windowUpdate()
+void W_GameOver::tick(const float& deltaTime)
 {
-	InputWidget::windowUpdate();
-
+	InputWidget::tick(deltaTime);
 	gameOver_title.setPos(viewCenter + sf::Vector2f{ 0.0f, -300.0f });
 	gameOver_score.setPos(viewCenter + sf::Vector2f{ 0.0f, -200.0f });
 	gameOver_quitButton.setPos(viewCenter + sf::Vector2f{ 0.0f, 0.0f });
@@ -585,7 +584,7 @@ bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
 	if (gameOver_quitButton.isMouseOver(checkForClick))
 	{
-		gameInstance->setGameState(MENU_SCREEN);
+		gameInstance().setGameState(MENU_SCREEN);
 		return true;
 	}
 	// On no button-mouse overlap
@@ -596,7 +595,7 @@ bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 // W_Gameplay -------------------------------------------------------------------------------------
 
 W_Gameplay::W_Gameplay(InputWidget* parent) 
-	: InputWidget(parent), pauseMenu(this), gameOverScreen(this), healthBar(10.0f, static_cast<float>(windowSize.x), 100.0f), background(sf::Quads, 4)
+	: InputWidget(parent), pauseMenu(this), gameOverScreen(this), background(sf::Quads, 4)
 {
 	// Load texture
 	if (!backgroundTexture.loadFromFile("Content/Textures/cobblestone_mossy.png"))
@@ -613,24 +612,21 @@ void W_Gameplay::construct()
 {
 	InputWidget::construct();
 
-	GameState gameState = gameInstance->getGameState();
+	GameState gameState = gameInstance().getGameState();
 
 	if (gameState < GAME_LAUNCHING) return getWidgetAtIndex(widgetIndex)->construct();
 
 	if (gameState == GAME_LAUNCHING)
 	{
 		// Reset values to game start values
-		gameInstance->startRound();
-		healthBar.setMaxTime(TIMER_DEFAULT, true);
+		gameInstance().startRound();
 		// Add Gameplay objects to shapes vector to draw them
 	}
 	setWidgetIndex(0);
 }
 
-void W_Gameplay::windowUpdate()
+void W_Gameplay::tick_background(const float& deltaTime)
 {
-	InputWidget::windowUpdate();
-
 	// This creates the parallax effect: background moves as the sf::View moves
 	constexpr float parallaxStrength = 1.0f;
 	backgroundPos = viewCenter * parallaxStrength;  // Adjust this factor for stronger/weaker parallax
@@ -671,22 +667,22 @@ InputWidget* W_Gameplay::getWidgetAtIndex(const int& atIndex)
 
 InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 {
-	shapes = { &background, &enemyManager, player, &projectileManager, &healthBar };
+	shapes = { &background, &enemyManager, player, &projectileManager };
 
 	switch (widgetIndex = toIndex)
 	{
 	case 0:
-		gameInstance->setIsPaused(false);
-		gameInstance->setGameState(IN_GAME);
+		gameInstance().setIsPaused(false);
+		gameInstance().setGameState(IN_GAME);
 		break;
-	case 1:
-		gameInstance->setIsPaused(true);
-		gameInstance->setGameState(GAME_PAUSED);
+	case 1:	
+		gameInstance().setIsPaused(true);
+		gameInstance().setGameState(GAME_PAUSED);
 		shapes.push_back(&pauseMenu);
 		break;
 	case 2:
-		gameInstance->setIsPaused(true);
-		gameInstance->setGameState(GAME_OVER);
+		gameInstance().setIsPaused(true);
+		gameInstance().setGameState(GAME_OVER);
 		shapes.push_back(& gameOverScreen);
 		break;
 	default:
@@ -700,7 +696,7 @@ void W_Gameplay::lose()
 {
 	// Add GameOver Screen to shapes list
 	setWidgetIndex(2)->construct();
-	gameInstance->setIsPaused(true);
+	gameInstance().setIsPaused(true);
 	gameOverScreen.changeScore(SaveGame::currentData.score);
 	// Only save if higher than stored highscore
 	if (SaveGame::currentData.score > SaveGame::storedData.score)
@@ -708,18 +704,11 @@ void W_Gameplay::lose()
 }
 
 void W_Gameplay::tick(const float& deltaTime)
-{
+{	
 	InputWidget::tick(deltaTime);
 
-	// Make sure flashlight draws shader onto environment
-	for (sf::Drawable* elem : shapes)
-	{
-		player->getFlashlight().drawOtherScene(elem);
-	}
-	
-
 	// If Gameplay is UnPaused
-	if (!gameInstance->getIsPaused())
+	if (!gameInstance().getIsPaused())
 	{
 		enemyManager.tick(deltaTime);
 		projectileManager.tick(deltaTime);
@@ -728,11 +717,18 @@ void W_Gameplay::tick(const float& deltaTime)
 			lose();
 	}
 
-	healthBar.tick(deltaTime);
+	tick_background(deltaTime);
+	
+	// Make sure flashlight draws shader onto environment
+	for (sf::Drawable* elem : shapes)
+	{
+		player->getFlashlight().drawOtherScene(elem);
+	}
 }
 
 bool W_Gameplay::input_esc()
 {
+	std::cout << "Recognized esc" << std::endl;
 	if (isChildActive())
 		return getWidgetAtIndex(widgetIndex)->input_esc();
 	// If no sub widget open, open optionsMenu
@@ -742,7 +738,7 @@ bool W_Gameplay::input_esc()
 
 bool W_Gameplay::onMouseClickR(sf::Event* eventRef)
 {
-	if (gameInstance->getIsPaused())
+	if (gameInstance().getIsPaused())
 		return false;
 
 	return true;

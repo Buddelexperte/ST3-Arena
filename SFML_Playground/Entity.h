@@ -9,7 +9,7 @@ enum class EntityType {
 	Projectile
 };
 
-class Entity
+class Entity : public IMovable
 {
 private:
 	size_t entityID = -1; // -1 is invalid or uninitialized
