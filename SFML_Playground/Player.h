@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BaseClasses.h"
+#include "WidgetBase.h"
 #include "Collision.h"
 #include "Health.h"
 #include "Flashlight.h"

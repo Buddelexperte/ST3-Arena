@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BaseClasses.h"
+#include "WidgetBase.h"
 
 // TODO: Add enemy DeathLights
 

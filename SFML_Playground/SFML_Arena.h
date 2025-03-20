@@ -18,7 +18,7 @@
 // Base classes for gameplay
 #include "GameInstance.h"
 #include "Button.h" // Button class for UI
-#include "BaseClasses.h"
+#include "WidgetBase.h"
 #include "Timer.h"
 #include "TargetController.h" // TargetSpawner and Handler
 

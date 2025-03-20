@@ -1,6 +1,5 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include "BaseClasses.h"
+#include "WidgetBase.h"
 
 class Timer : public WidgetElement
 {
@@ -29,4 +28,3 @@ public:
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
-
