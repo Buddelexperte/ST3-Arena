@@ -204,23 +204,24 @@ void GI_Arena::tick_view(const float& deltaTime)
 	const sf::Vector2f camPos = view->getCenter();
 	const sf::Vector2f playerPos = getPlayer()->getPosition();
 
-	static sf::Vector2f mousePos = getMousePos();
+	const sf::Vector2f mousePos = getMousePos();
+
+	static sf::Vector2f usedMouseOffset = mousePos - playerPos;
 
 	if (!getIsPaused())
-		mousePos = getMousePos();
+		usedMouseOffset = mousePos - playerPos;
 
 	// Calculate the offset from the player to the mouse
-	sf::Vector2f mouseOffset = mousePos - playerPos;
-	float offsetLength = std::sqrt(mouseOffset.x * mouseOffset.x + mouseOffset.y * mouseOffset.y);
+	float usedOffsetLength = std::sqrt(usedMouseOffset.x * usedMouseOffset.x + usedMouseOffset.y * usedMouseOffset.y);
 
 	// Clamp the mouse offset so it doesn't exceed MAX_DISTANCE
-	if (offsetLength > MAX_DISTANCE)
+	if (usedOffsetLength > MAX_DISTANCE)
 	{
-		mouseOffset = (mouseOffset / offsetLength) * MAX_DISTANCE;
+		usedMouseOffset = (usedMouseOffset / usedOffsetLength) * MAX_DISTANCE;
 	}
 
 	// Determine the new target position: player's position plus the clamped mouse offset
-	sf::Vector2f targetPos = playerPos + mouseOffset;
+	sf::Vector2f targetPos = playerPos + usedMouseOffset;
 
 	// Compute the distance from the current camera position to the target position
 	sf::Vector2f distance = camPos - targetPos;
