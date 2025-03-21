@@ -70,11 +70,12 @@ InputWidget* W_MainMenu::setWidgetIndex(const int& newIndex)
 void W_MainMenu::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
-	menu_title.setPos(viewCenter + sf::Vector2f{ 0, -300 });
-	menu_highscore.setPos(viewCenter + sf::Vector2f{ 0, -200 });
-	menu_startButton.setPos(viewCenter + sf::Vector2f{ 0, 0 });
-	menu_optionsButton.setPos(viewCenter + sf::Vector2f{ 0, 150 });
-	menu_quitButton.setPos(viewCenter + sf::Vector2f{ 0, 300 });
+
+	menu_title.setPos(widgetOffset + sf::Vector2f{ 0, -300 });
+	menu_highscore.setPos(widgetOffset + sf::Vector2f{ 0, -200 });
+	menu_startButton.setPos(widgetOffset + sf::Vector2f{ 0, 0 });
+	menu_optionsButton.setPos(widgetOffset + sf::Vector2f{ 0, 150 });
+	menu_quitButton.setPos(widgetOffset + sf::Vector2f{ 0, 300 });
 }
 
 bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
@@ -139,7 +140,7 @@ void W_OptionsSounds::construct()
 void W_OptionsSounds::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
-	optionsSounds_test.setPos(viewCenter + sf::Vector2f{ 0, -300 });
+	optionsSounds_test.setPos(widgetOffset + sf::Vector2f{ 0, -300 });
 }
 
 bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)
@@ -176,7 +177,7 @@ void W_OptionsGraphics::construct()
 void W_OptionsGraphics::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
-	optionsGraphics_test.setPos(viewCenter + sf::Vector2f{ 0, -300 });
+	optionsGraphics_test.setPos(widgetOffset + sf::Vector2f{ 0, -300 });
 }
 
 bool W_OptionsGraphics::isMouseOver(const bool& checkForClick = false)
@@ -257,10 +258,11 @@ InputWidget* W_Options::setWidgetIndex(const int& newIndex)
 void W_Options::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
-	options_title.setPos(viewCenter + sf::Vector2f{ 0, -300 });
-	options_graphics.setPos(viewCenter + sf::Vector2f{ 0, 0 });
-	options_sounds.setPos(viewCenter + sf::Vector2f{ 0, 150 });
-	options_return.setPos(viewCenter + sf::Vector2f{ 0, 300 });
+
+	options_title.setPos(widgetOffset + sf::Vector2f{ 0, -300 });
+	options_graphics.setPos(widgetOffset + sf::Vector2f{ 0, 0 });
+	options_sounds.setPos(widgetOffset + sf::Vector2f{ 0, 150 });
+	options_return.setPos(widgetOffset + sf::Vector2f{ 0, 300 });
 }
 
 bool W_Options::isMouseOver(const bool& checkForClick)
@@ -321,14 +323,14 @@ void W_SelectWeapon::tick(const float& deltaTime)
 
 	WEAPON_SPACING_X = (viewHalfSize.x / NUM_WEAPONS);
 
-	inventory_title.setPos(viewCenter + sf::Vector2f(0.0f, -300.0f));
+	inventory_title.setPos(widgetOffset + sf::Vector2f(0.0f, -300.0f));
 
-	item1_Button.setPos(viewCenter + sf::Vector2f(-1.5 * WEAPON_SPACING_X, 0.0f));
-	item2_Button.setPos(viewCenter + sf::Vector2f(-0.5 * WEAPON_SPACING_X, 0.0f));
-	item3_Button.setPos(viewCenter + sf::Vector2f(0.5 * WEAPON_SPACING_X, 0.0f));
-	item4_Button.setPos(viewCenter + sf::Vector2f(1.5 * WEAPON_SPACING_X, 0.0f));
+	item1_Button.setPos(widgetOffset + sf::Vector2f(-1.5 * WEAPON_SPACING_X, 0.0f));
+	item2_Button.setPos(widgetOffset + sf::Vector2f(-0.5 * WEAPON_SPACING_X, 0.0f));
+	item3_Button.setPos(widgetOffset + sf::Vector2f(0.5 * WEAPON_SPACING_X, 0.0f));
+	item4_Button.setPos(widgetOffset + sf::Vector2f(1.5 * WEAPON_SPACING_X, 0.0f));
 
-	return_Button.setPos(viewCenter + sf::Vector2f(0.0f, 300.0f));
+	return_Button.setPos(widgetOffset + sf::Vector2f(0.0f, 300.0f));
 }
 
 InputWidget* W_SelectWeapon::setWidgetIndex(const int& newIndex)
@@ -390,11 +392,12 @@ W_LevelMenu::W_LevelMenu(InputWidget* parent) : InputWidget(parent)
 void W_LevelMenu::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
-	levelmenu_title.setPos(	viewCenter + sf::Vector2f(0.0f, -300.0f)	);
-	level1_Button.setPos(	viewCenter + sf::Vector2f(-500.0f, 0.0f)	);
-	level2_Button.setPos(	viewCenter + sf::Vector2f(0.0f, 0.0f)		);
-	level3_Button.setPos(	viewCenter + sf::Vector2f(500.0f, 0.0f)		);
-	return_Button.setPos(	viewCenter + sf::Vector2f(0.0f, 300.0f)		);
+
+	levelmenu_title.setPos(widgetOffset + sf::Vector2f(0.0f, -300.0f)	);
+	level1_Button.setPos(widgetOffset + sf::Vector2f(-500.0f, 0.0f)	);
+	level2_Button.setPos(widgetOffset + sf::Vector2f(0.0f, 0.0f)		);
+	level3_Button.setPos(widgetOffset + sf::Vector2f(500.0f, 0.0f)		);
+	return_Button.setPos(widgetOffset + sf::Vector2f(0.0f, 300.0f)		);
 }
 
 void W_LevelMenu::construct()
@@ -494,10 +497,11 @@ InputWidget* W_Paused::setWidgetIndex(const int& newIndex)
 void W_Paused::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
-	pause_title.setPos(viewCenter + sf::Vector2f{ 0.0f, -300.0f });
-	pause_resumeButton.setPos(viewCenter + sf::Vector2f{ 0.0f, 0.0f });
-	pause_optionsButton.setPos(viewCenter + sf::Vector2f{ 0.0f, 150.0f });
-	pause_quitButton.setPos(viewCenter + sf::Vector2f{ 0.0f, 300.0f });
+
+	pause_title.setPos( widgetOffset + sf::Vector2f{ 0.0f, -300.0f });
+	pause_resumeButton.setPos( widgetOffset + sf::Vector2f{ 0.0f, 0.0f });
+	pause_optionsButton.setPos( widgetOffset + sf::Vector2f{ 0.0f, 150.0f });
+	pause_quitButton.setPos( widgetOffset + sf::Vector2f{ 0.0f, 300.0f });
 }
 
 bool W_Paused::isMouseOver(const bool& checkForClick = false)
@@ -553,9 +557,10 @@ W_GameOver::W_GameOver(InputWidget* parent) : InputWidget(parent)
 void W_GameOver::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
-	gameOver_title.setPos(viewCenter + sf::Vector2f{ 0.0f, -300.0f });
-	gameOver_score.setPos(viewCenter + sf::Vector2f{ 0.0f, -200.0f });
-	gameOver_quitButton.setPos(viewCenter + sf::Vector2f{ 0.0f, 0.0f });
+
+	gameOver_title.setPos(widgetOffset + sf::Vector2f{ 0.0f, -300.0f });
+	gameOver_score.setPos(widgetOffset + sf::Vector2f{ 0.0f, -200.0f });
+	gameOver_quitButton.setPos(widgetOffset + sf::Vector2f{ 0.0f, 0.0f });
 }
 
 void W_GameOver::changeScore(const int& currScore = 0)

@@ -137,6 +137,9 @@
     <ClCompile Include="EntityManager.cpp">
       <Filter>Source\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="DrawableShape.cpp">
+      <Filter>Source\Helpers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TargetController.h">
@@ -252,6 +255,12 @@
     </ClInclude>
     <ClInclude Include="EntityManager.h">
       <Filter>Source\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Source\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawableShape.h">
+      <Filter>Source\Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

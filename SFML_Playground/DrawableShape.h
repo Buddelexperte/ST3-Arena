@@ -14,6 +14,7 @@ protected:
 	static sf::Vector2f viewSize;
 	static sf::Vector2f viewHalfSize;
 	static sf::Vector2f viewCenter;
+	static sf::Vector2f widgetOffset;
 
 	std::vector<sf::Drawable*> shapes;
 

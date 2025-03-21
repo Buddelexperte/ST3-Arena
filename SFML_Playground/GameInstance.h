@@ -33,13 +33,17 @@ private:
 	// Widget variables
 	std::vector<std::shared_ptr<InputWidget>> widgets;
 	std::shared_ptr<InputWidget> activeMenu = nullptr;
+	bool bIsGameplayPaused = true;
 
+	// Player
 	Player* makePlayer();
 	Player* player = nullptr;
-	// Somehow Gameplay related?
+
+	// View related
 	sf::Vector2f prevCamPos;
 	float zoomFactor = 1.0f;
-	bool bIsGameplayPaused = true;
+	sf::Vector2f widgetOffset;
+	
 
 	void preTick(); // Logic before Player input (Checks for Inventory etc.)
 	void tick_view(const float&);
@@ -68,6 +72,7 @@ public:
 	// Setters and Getters of pointers and important variables
 	sf::RenderWindow* getWindow() const { return window; }
 	sf::View* getView() const { return view; }
+	sf::Vector2f getWidgetOffset() const;
 	sf::RenderStates getRenderStates() const { return states; }
 	Player* getPlayer();
 	std::weak_ptr<InputWidget> getActiveWidget() { return activeMenu; }

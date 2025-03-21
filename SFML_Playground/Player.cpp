@@ -14,7 +14,9 @@ Player::Player()
 	healthBar(1.0f), // 100% life from start on
 	collisionBox(this, getPosition(), HITBOX_SIZE) // Collision box centered on player, hals as big as sprite
 {
+
 	// Player Sprite Initialization
+	setPosition(viewCenter);
 	setColor(sf::Color::White);
 
 	CollisionManager::getInstance().registerPlayer(getCollision());

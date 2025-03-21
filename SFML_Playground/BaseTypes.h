@@ -25,8 +25,8 @@ enum GameState {
 	QUIT = -1,			// Not yet started or game has been interrupted
 	MENU_SCREEN = 0,	// A Menu with clickable buttons
 	UNPAUSED,			// From pause to not paused
-	GAME_PAUSED,		// Freeze gamepay and show PauseMenu
 	GAME_OVER,			// Game ended due to Gameplay, freezes and show GameOverMenu
+	GAME_PAUSED,		// Freeze gamepay and show PauseMenu
 	GAME_LAUNCHING,		// gameLoop should start and execute init functionality
 	IN_GAME				// gameLoop should continue
 };

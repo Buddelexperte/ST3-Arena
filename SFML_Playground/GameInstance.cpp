@@ -16,7 +16,7 @@ GI_Arena::GI_Arena()
 	std::cout << "RenderWindow created." << std::endl;
 	sf::Vector2f desktopSize = { static_cast<float>(desktop.width), static_cast<float>(desktop.height) };
 	view = new sf::View(desktopSize / 2.0f, desktopSize);
-	prevCamPos = view->getCenter();
+	prevCamPos = widgetOffset = view->getCenter();
 	std::cout << "View created" << std::endl;
 	window->setView(*view);
 	std::cout << "View attached" << std::endl;
@@ -66,6 +66,7 @@ Player* GI_Arena::makePlayer()
 
 void GI_Arena::start()
 {
+
 	IDrawableShapes::updateValues();
 
 	makePlayer();
@@ -193,35 +194,38 @@ void GI_Arena::resetViewPos()
 	prevCamPos = view->getCenter();
 }
 
+sf::Vector2f GI_Arena::getWidgetOffset() const
+{
+	return widgetOffset;
+}
+
 // Adjust the camera position based on velocity and distance to target (Player + Mouse Influence)
 void GI_Arena::tick_view(const float& deltaTime)
 {
-	constexpr float SPRING_STRENGTH = 2.5f;         // Higher = Quicker follow
-	constexpr float DAMPING_COEFFICIENT = 4.0f;       // Higher = More Resistance
-	constexpr float MAX_DISTANCE = 120.0f;            // Maximum allowed mouse influence
+	constexpr float SPRING_STRENGTH = 2.5f;             // Higher = Quicker follow
+	constexpr float DAMPING_COEFFICIENT = 4.0f;           // Higher = More Resistance
+	constexpr float MAX_DISTANCE = 100.0f;                // Maximum allowed mouse influence
+
+	// A factor for widgetOffset interpolation (tweak for less aggressive movement)
+	constexpr float WIDGET_LERP_ALPHA = 0.5f;             // Lower value = slower, snappier response
 
 	// Get current camera, player, and mouse positions
 	const sf::Vector2f camPos = view->getCenter();
 	const sf::Vector2f playerPos = getPlayer()->getPosition();
-
 	const sf::Vector2f mousePos = getMousePos();
 
-	static sf::Vector2f usedMouseOffset = mousePos - playerPos;
-
-	if (!getIsPaused())
-		usedMouseOffset = mousePos - playerPos;
-
-	// Calculate the offset from the player to the mouse
-	float usedOffsetLength = std::sqrt(usedMouseOffset.x * usedMouseOffset.x + usedMouseOffset.y * usedMouseOffset.y);
+	// Calculate the mouse offset relative to the player
+	sf::Vector2f mouseOffset = mousePos - playerPos;
+	float offsetLength = std::sqrt(mouseOffset.x * mouseOffset.x + mouseOffset.y * mouseOffset.y);
 
 	// Clamp the mouse offset so it doesn't exceed MAX_DISTANCE
-	if (usedOffsetLength > MAX_DISTANCE)
+	if (offsetLength > MAX_DISTANCE)
 	{
-		usedMouseOffset = (usedMouseOffset / usedOffsetLength) * MAX_DISTANCE;
+		mouseOffset = (mouseOffset / offsetLength) * MAX_DISTANCE;
 	}
 
 	// Determine the new target position: player's position plus the clamped mouse offset
-	sf::Vector2f targetPos = playerPos + usedMouseOffset;
+	sf::Vector2f targetPos = playerPos + mouseOffset;
 
 	// Compute the distance from the current camera position to the target position
 	sf::Vector2f distance = camPos - targetPos;
@@ -240,9 +244,14 @@ void GI_Arena::tick_view(const float& deltaTime)
 
 	// Update the camera position by applying the total force scaled by deltaTime
 	sf::Vector2f newCamPos = camPos + (totalForce * deltaTime);
-
 	setViewPos(newCamPos);
+
+	// Instead of scaling newCamPos directly, calculate the widget offset relative to the player's position.
+	// This sets widgetOffset to be halfway between playerPos and newCamPos.
+	widgetOffset = lerp(playerPos + (newCamPos - playerPos) * 0.2f, view->getCenter(), WIDGET_LERP_ALPHA);
 }
+
+
 
 
 void GI_Arena::updateScreen()
