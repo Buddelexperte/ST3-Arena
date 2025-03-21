@@ -4,12 +4,13 @@
 #include "Collision.h"
 
 enum class EntityType {
-	Player,
+	NoEntity = -1,
+	Player = 0,
 	Enemy,
 	Projectile
 };
 
-class Entity : public IMovable
+class Entity : public IMovable, public IHasCollision
 {
 private:
 	size_t entityID = -1; // -1 is invalid or uninitialized

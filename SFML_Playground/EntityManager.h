@@ -9,13 +9,25 @@
 class EntityManager : sf::Drawable
 {
 private:
-	static size_t enemyID;
+	static size_t entityID;
 
+	struct EntityStruct
+	{
+		std::unique_ptr<Entity> ptr = nullptr;
+		EntityType type = EntityType::NoEntity;
+
+		EntityStruct(std::unique_ptr<Entity> ptr, EntityType type)
+			: ptr(std::move(ptr)), type(type)
+		{ }
+	};
+
+	// Pools
 	EnemyPool enemyPool; // Manages memory
 	ProjectilePool projPool; // Manages memory
+	// Renderer
 	EntityRenderer renderer; // Manages draw calls
 
-	std::unordered_map<size_t, std::unique_ptr<Entity>> activeEntities; // Random Access to Enemies
+	std::unordered_map<size_t, EntityStruct> activeEntities; // Random Access to Enemies
 	std::unordered_set<size_t> pendingKill;
 
 	// SINGLETON
