@@ -2,6 +2,7 @@
 
 #include "EnemyManager.h" // Header File
 
+unsigned int EnemyManager::numEnemies = 0;
 int EnemyManager::enemyID = 0;
 
 EnemyManager::EnemyManager()
@@ -20,7 +21,9 @@ void EnemyManager::spawnEnemy()
     std::unique_ptr<Enemy> newEnemy = enemyPool.get();
 
     // Set the enemy's index and add it to the activeEnemies vector
-    size_t enemyKey = enemyID++;
+    size_t enemyKey = enemyID;
+    enemyID++;
+    numEnemies++;
     //std::cout << "Using new enemy with ID [" << enemyKey << "]" << std::endl;
     newEnemy->setID(enemyKey);
 
@@ -42,6 +45,8 @@ void EnemyManager::deleteEnemy(const size_t& key)
     activeEnemies.erase(key);
 
     enemyRenderer.removeEntity(key);
+
+    numEnemies--;
 }
 
 void EnemyManager::callDelete(const size_t& key)
@@ -81,20 +86,23 @@ void EnemyManager::tick_kill(const float& deltaTime)
 
 void EnemyManager::tick_spawning(const float& deltaTime)
 {
-    static float timer = spawnInterval; // Static variable to track time between enemy spawns.
+    constexpr float SPAWN_INTERVAL = SMALLEST_PRECISION;
+    constexpr unsigned int MAX_ENEMIES = 9; // Temporary safe guard, replace with actual spawning logic later
+
+    static ValueBar timer(SPAWN_INTERVAL); // Static variable to track time between enemy spawns.
 
     // If the number of active enemies would exceed the maximum allowed cancel any spawning attempt
-    if (activeEnemies.size() >= maxEnemies)
+    if (numEnemies >= MAX_ENEMIES)
         return;
 
     // Decrease spawnTimer (Countdown)
-    timer -= deltaTime;
+    timer.addValue(-deltaTime);
     // If the timer did not reach zero, cancel spawn attempt
-    if (timer > 0.0f)
-        return;
-
-    timer += spawnInterval; // Reset the timer to the configured spawn interval
-    spawnEnemy();
+    if (timer.isEmpty())
+    {
+        spawnEnemy();
+        timer.reset(); // Reset the timer to the configured spawn interval
+    }
 }
 
 void EnemyManager::tick_enemies(const float& deltaTime)

@@ -10,9 +10,8 @@ class EnemyManager : public sf::Drawable
 {
 private:
 	ProjectileManager& projectileManager = ProjectileManager::getInstance();
-
-	const float spawnInterval = SMALLEST_PRECISION;
-	const int maxEnemies = 9; // Temporary safe guard, replace with actual spawning logic later
+	
+	static unsigned int numEnemies;
 	static int enemyID;
 
 	EnemyPool enemyPool; // Manages memory
