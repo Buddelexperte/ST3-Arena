@@ -41,7 +41,7 @@ sf::Vector2f Enemy::getNewSpawnPos() const
 	constexpr float MAX_DISTANCE = 1200.0f;
 
 	// Getting values for generating a position
-	sf::Vector2f playerPos = GI_Arena::getInstance().getPlayer()->getPosition();
+	sf::Vector2f playerPos = gameInstance().getPlayer()->getPosition();
 
 	// Generating the random position
 	float distance = RNG::floatInRange(MIN_DISTANCE, MAX_DISTANCE);
@@ -168,6 +168,5 @@ void Enemy::collideWithPlayer(Player& player)
 
 void Enemy::collideWithProjectile(Projectile& projectile)
 {
-	std::cout << "Got hit with [" << projectile.getDamage() << "] damage" << std::endl;
 	hurt(projectile.getDamage());
 }
