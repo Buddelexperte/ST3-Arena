@@ -7,7 +7,7 @@
 
 Enemy::Enemy()
 	: Entity(EntityType::Enemy),
-	healthBar(0.1f),
+	healthBar(1.0f),
 	collisionBox(this, getPosition(), getSize())
 {}
 
@@ -75,7 +75,7 @@ void Enemy::tick(const float& deltaTime)
 void Enemy::tick_move(const float& deltaTime)
 {
 	// TODO: PROTOTYPE MOVEMENT LOGIC
-	Player* playerRef = GI_Arena::getInstance().getPlayer();
+	Player* playerRef = gameInstance().getPlayer();
 	sf::Vector2f playerPos = playerRef->getPosition();
 	sf::Vector2f distance = playerPos - getPosition();
 
@@ -114,7 +114,7 @@ void Enemy::kill_self(const bool& bByPlayer = false) const
 	if (bByPlayer)
 	{
 		SaveGame::currentData.score = (SaveGame::currentData.score + 1);
-		GI_Arena::getInstance().getPlayer()->getFlashlight().addDeathLight(getPosition());
+		gameInstance().getPlayer()->getFlashlight().addDeathLight(getPosition());
 
 	}
 	EnemyManager::getInstance().callDelete(enemyIndex);
@@ -168,5 +168,6 @@ void Enemy::collideWithPlayer(Player& player)
 
 void Enemy::collideWithProjectile(Projectile& projectile)
 {
+	std::cout << "Got hit with [" << projectile.getDamage() << "] damage" << std::endl;
 	hurt(projectile.getDamage());
 }
