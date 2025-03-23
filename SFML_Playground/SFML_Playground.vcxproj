@@ -180,6 +180,7 @@
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="DrawableShape.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="PlayerPool.h" />
     <ClInclude Include="WidgetBase.h" />
     <ClInclude Include="BaseTypes.h" />
     <ClInclude Include="Button.h" />

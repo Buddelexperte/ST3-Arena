@@ -1,10 +1,12 @@
 #pragma once
+#include <unordered_set>
 
 #include "Entity.h"
 #include "Renderer.h"
 
 #include "EnemyPool.h"
 #include "ProjectilePool.h"
+#include "PlayerPool.h"
 
 class EntityManager : sf::Drawable
 {
@@ -16,6 +18,10 @@ private:
 		std::unique_ptr<Entity> ptr = nullptr;
 		EntityType type = EntityType::NoEntity;
 
+		EntityStruct()
+			: ptr(nullptr), type(EntityType::NoEntity)
+		{ }
+
 		EntityStruct(std::unique_ptr<Entity> ptr, EntityType type)
 			: ptr(std::move(ptr)), type(type)
 		{ }
@@ -24,11 +30,14 @@ private:
 	// Pools
 	EnemyPool enemyPool; // Manages memory
 	ProjectilePool projPool; // Manages memory
+	PlayerPool playerPool; // Manages memory
 	// Renderer
 	EntityRenderer renderer; // Manages draw calls
 
 	std::unordered_map<size_t, EntityStruct> activeEntities; // Random Access to Enemies
 	std::unordered_set<size_t> pendingKill;
+
+	static unsigned int numEnemies;
 
 	// SINGLETON
 	EntityManager();
@@ -52,14 +61,11 @@ public:
 
 	void tick(const float& deltaTime);
 
+	void spawn(EntityType);
 	void callDelete(const size_t&);
-	void deleteAll();
 	void callUpdate(const size_t&, const InfoType&);
 
-	void spawn_Player(const IMovable::RenderInfo& renderInfo);
-	void spawn_Enemy(const IMovable::RenderInfo& renderInfo);
-	void spawn_Proj(const IMovable::RenderInfo& renderInfo, const float& damage);
-
+	void deleteAll();
 
 	// Call renderer to draw
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates::Default) const override;

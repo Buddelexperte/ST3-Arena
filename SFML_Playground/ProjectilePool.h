@@ -1,6 +1,4 @@
 #pragma once
-
-#pragma once
 #include <memory>
 #include <queue>
 
@@ -14,7 +12,9 @@ public:
     std::unique_ptr<Projectile> get()
     {
         if (pool.empty())
+        {
             return std::make_unique<Projectile>();
+        }
 
         std::unique_ptr<Projectile> projectile = std::move(pool.front());
         pool.pop();

@@ -14,7 +14,6 @@ class Player :
 	public Entity,
 	public IDrawableShapes,
 	public IHasInput,
-	public IHasCollision,
 	public IHasHealth
 {
 private:

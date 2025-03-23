@@ -23,7 +23,6 @@ void EnemyManager::spawnEnemy()
     size_t enemyKey = enemyID++;
     //std::cout << "Using new enemy with ID [" << enemyKey << "]" << std::endl;
     newEnemy->setID(enemyKey);
-    //std::cout << "Worked" << std::endl;
 
     newEnemy->spawn();
 
@@ -109,7 +108,6 @@ void EnemyManager::tick_enemies(const float& deltaTime)
         enemyRenderer.setVelocity(pair.first, pair.second->getVelocity());
         enemyRenderer.setRotation(pair.first, pair.second->getRotation());
     }
-    // TODO: add projectile collision
 }
 
 void EnemyManager::tick(const float& deltaTime)

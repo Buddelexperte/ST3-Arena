@@ -15,6 +15,7 @@ public:
         {
             return std::make_unique<Enemy>();
         }
+
         std::unique_ptr<Enemy> enemy = std::move(pool.front());
         pool.pop();
         return enemy;

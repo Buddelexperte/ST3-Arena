@@ -14,7 +14,7 @@ class EnemyManager;
 
 class Enemy : 
 	public Entity,
-	public IHasCollision, IHasHealth
+	public IHasHealth
 {
 private:
 	CollisionBox collisionBox;

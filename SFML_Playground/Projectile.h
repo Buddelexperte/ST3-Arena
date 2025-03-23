@@ -4,8 +4,7 @@
 
 #include "RandomNumbers.h"
 #include "BaseTypes.h"
-#include "RenderInfo.h"
-#include "CollisionManager.h"
+#include "Entity.h"
 
 class GI_Arena;
 class ProjectileManager;
@@ -46,7 +45,8 @@ public:
 };
 
 // The Projectile class now inherits from IMovable and ICollidable
-class Projectile : public IMovable, public IHasCollision
+class Projectile : 
+    public Entity
 {
 private:
     const float maxLifetime = 5.0f;

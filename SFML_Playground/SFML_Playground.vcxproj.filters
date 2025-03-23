@@ -262,6 +262,9 @@
     <ClInclude Include="DrawableShape.h">
       <Filter>Source\Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerPool.h">
+      <Filter>Source\Actors\EntityPools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\openal32.dll">

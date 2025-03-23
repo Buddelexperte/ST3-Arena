@@ -584,7 +584,9 @@ bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 // W_Gameplay -------------------------------------------------------------------------------------
 
 W_Gameplay::W_Gameplay(InputWidget* parent) 
-	: InputWidget(parent), pauseMenu(this), gameOverScreen(this), background(sf::Quads, 4)
+	: InputWidget(parent),
+	pauseMenu(this), gameOverScreen(this), 
+	background(sf::Quads, 4)
 {
 	// Load texture
 	if (!backgroundTexture.loadFromFile("Content/Textures/cobblestone_mossy.png"))
@@ -603,7 +605,8 @@ void W_Gameplay::construct()
 
 	GameState gameState = gameInstance().getGameState();
 
-	if (gameState < GAME_LAUNCHING) return getWidgetAtIndex(widgetIndex)->construct();
+	if (gameState < GAME_LAUNCHING) 
+		return getWidgetAtIndex(widgetIndex)->construct();
 
 	if (gameState == GAME_LAUNCHING)
 	{
