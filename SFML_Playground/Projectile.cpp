@@ -35,7 +35,8 @@ Projectile::Projectile()
 {}
 
 Projectile::Projectile(const RenderInfo& initRenderInfo)
-	: collisionBox(this, initRenderInfo.pos, initRenderInfo.size)
+	: Entity(EntityType::Projectile), 
+	collisionBox(this, initRenderInfo.pos, initRenderInfo.size)
 {
 	setRenderInfo(initRenderInfo);
 }

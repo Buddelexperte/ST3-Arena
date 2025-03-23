@@ -5,6 +5,7 @@
 #include "RandomNumbers.h"
 #include "BaseTypes.h"
 #include "Entity.h"
+#include "CollisionManager.h"
 
 class GI_Arena;
 class ProjectileManager;
