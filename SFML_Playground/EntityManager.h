@@ -70,3 +70,8 @@ public:
 	// Call renderer to draw
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates::Default) const override;
 };
+
+inline static EntityManager& entityManager()
+{
+	return EntityManager::getInstance();
+}
