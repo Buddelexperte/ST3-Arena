@@ -207,6 +207,7 @@ void GI_Arena::tick_view(const float& deltaTime)
 	constexpr float MAX_DISTANCE = 100.0f;                // Maximum allowed mouse influence
 
 	// A factor for widgetOffset interpolation (tweak for less aggressive movement)
+	constexpr bool bWidgetParallax = false;
 	constexpr float WIDGET_LERP_ALPHA = 0.5f;             // Lower value = slower, snappier response
 
 	// Get current camera, player, and mouse positions
@@ -214,14 +215,20 @@ void GI_Arena::tick_view(const float& deltaTime)
 	const sf::Vector2f playerPos = getPlayer()->getPosition();
 	const sf::Vector2f mousePos = getMousePos();
 
-	// Calculate the mouse offset relative to the player
-	sf::Vector2f mouseOffset = mousePos - playerPos;
-	float offsetLength = std::sqrt(mouseOffset.x * mouseOffset.x + mouseOffset.y * mouseOffset.y);
+	static sf::Vector2f mouseOffset;
+	static float offsetLength;
 
-	// Clamp the mouse offset so it doesn't exceed MAX_DISTANCE
-	if (offsetLength > MAX_DISTANCE)
+	// Calculate the mouse offset relative to the player
+	if (bWidgetParallax || !getIsPaused())
 	{
-		mouseOffset = (mouseOffset / offsetLength) * MAX_DISTANCE;
+		mouseOffset = mousePos - playerPos;
+		offsetLength = std::sqrt(mouseOffset.x * mouseOffset.x + mouseOffset.y * mouseOffset.y);
+
+		// Clamp the mouse offset so it doesn't exceed MAX_DISTANCE
+		if (offsetLength > MAX_DISTANCE)
+		{
+			mouseOffset = (mouseOffset / offsetLength) * MAX_DISTANCE;
+		}
 	}
 
 	// Determine the new target position: player's position plus the clamped mouse offset
@@ -246,9 +253,16 @@ void GI_Arena::tick_view(const float& deltaTime)
 	sf::Vector2f newCamPos = camPos + (totalForce * deltaTime);
 	setViewPos(newCamPos);
 
-	// Instead of scaling newCamPos directly, calculate the widget offset relative to the player's position.
-	// This sets widgetOffset to be halfway between playerPos and newCamPos.
-	widgetOffset = lerp(playerPos + (newCamPos - playerPos) * 0.2f, view->getCenter(), WIDGET_LERP_ALPHA);
+	if (bWidgetParallax)
+	{
+		// Instead of scaling newCamPos directly, calculate the widget offset relative to the player's position.
+		// This sets widgetOffset to be halfway between playerPos and newCamPos.
+		widgetOffset = lerp(playerPos + (newCamPos - playerPos) * 0.2f, view->getCenter(), WIDGET_LERP_ALPHA);
+	}
+	else
+	{
+		widgetOffset = view->getCenter();
+	}
 }
 
 
