@@ -38,6 +38,9 @@ private:
 	float animationAccu = 0.0f;
 	float animationSpeed = 0.0f;
 
+	//Standard Weapon
+	std::string selectedWeapon = " ";
+
 	using IMovable::setVelocity; // Make this function private
 
 	void tick_move(const float&) override;
@@ -81,4 +84,8 @@ public:
 
 	// Health
 	void hurt(const float& delta) override;
+
+	//Weapon Select
+	void setSelectedWeapon(const std::string& weaponName) { selectedWeapon = weaponName; }
+	const std::string& getSelectedWeapon() const { return selectedWeapon; }
 };
