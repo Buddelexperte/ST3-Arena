@@ -125,6 +125,7 @@ void GI_Arena::startRound()
 		return;
 
 	EnemyManager::getInstance().deleteAll();
+	ProjectileManager::getInstance().deleteAll();
 	gameState = IN_GAME;
 	player->spawn();
 	resetViewPos();

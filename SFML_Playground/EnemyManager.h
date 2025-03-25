@@ -15,7 +15,7 @@ private:
 	static int enemyID;
 
 	EnemyPool enemyPool; // Manages memory
-	EntityRenderer enemyRenderer; // Manages draw calls
+	EntityRenderer renderer; // Manages draw calls
 	std::unordered_map<size_t, std::unique_ptr<Enemy>> activeEnemies; // Random Access to Enemies
 	std::unordered_set<size_t> pendingKill;
 
@@ -41,8 +41,9 @@ public:
 
 	int getNumActiveEnemies() const;
 	void callDelete(const size_t&);
-	void deleteAll();
 	void callUpdate(const size_t&, const InfoType&);
+
+	void deleteAll();
 
 	void spawnEnemy();
 

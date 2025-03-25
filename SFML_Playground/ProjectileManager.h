@@ -13,7 +13,7 @@ private:
 	static int projectileID;
 
 	ProjectilePool projectilePool;
-	EntityRenderer projectileRenderer; // Manages draw calls
+	EntityRenderer renderer; // Manages draw calls
 	std::unordered_map<size_t, std::unique_ptr<Projectile>> activeProjectiles; // Random Access to Enemies
 	std::unordered_set<size_t> pendingKill;
 
@@ -37,6 +37,8 @@ public:
 	int getNumActiveProjectiles() const;
 	void callDelete(const size_t&);
 	void callUpdate(const size_t&, const InfoType&);
+
+	void deleteAll();
 
 	void createProjectile(const IMovable::RenderInfo& renderInfo, const float& damage);
 

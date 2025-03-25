@@ -5,7 +5,7 @@
 int ProjectileManager::projectileID = 0;
 
 ProjectileManager::ProjectileManager()
-	: projectileRenderer()
+	: renderer()
 {}
 
 int ProjectileManager::getNumActiveProjectiles() const
@@ -23,13 +23,13 @@ void ProjectileManager::createProjectile(const IMovable::RenderInfo& renderInfo,
 
     newProjectile->setRenderInfo(renderInfo);
     newProjectile->setDamage(damage);
+    newProjectile->spawn();
 
     // Extract render information and pass it to the renderer
-    projectileRenderer.addEntity(renderInfo, projectileKey);
+    renderer.addEntity(renderInfo, projectileKey);
 
     // Actually spawn the enemy properly and update it's attributes accordingly
-    activeProjectiles[projectileKey] = (std::move(newProjectile));
-    activeProjectiles[projectileKey]->spawn();
+    activeProjectiles.emplace(projectileKey, std::move(newProjectile));
 }
 
 void ProjectileManager::deleteProjectile(const size_t& key)
@@ -39,7 +39,7 @@ void ProjectileManager::deleteProjectile(const size_t& key)
 
     activeProjectiles.erase(key);
 
-    projectileRenderer.removeEntity(key);
+    renderer.removeEntity(key);
 }
 
 void ProjectileManager::callDelete(const size_t& key)
@@ -50,13 +50,21 @@ void ProjectileManager::callDelete(const size_t& key)
 void ProjectileManager::callUpdate(const size_t& key, const InfoType& updateFlags = InfoType::EMPTY_INFO)
 {
     if (updateFlags & InfoType::POSITION) { // Check if POSITION flag is set
-        projectileRenderer.setPosition(key, activeProjectiles[key]->getPosition());
+        renderer.setPosition(key, activeProjectiles[key]->getPosition());
     }
     if (updateFlags & InfoType::SIZE) { // Check if SIZE flag is set
-        projectileRenderer.setSize(key, activeProjectiles[key]->getSize());
+        renderer.setSize(key, activeProjectiles[key]->getSize());
     }
     if (updateFlags & InfoType::COLOR) { // Check if COLOR flag is set
-        projectileRenderer.setColor(key, activeProjectiles[key]->getColor());
+        renderer.setColor(key, activeProjectiles[key]->getColor());
+    }
+}
+
+void ProjectileManager::deleteAll()
+{
+    for (const auto& pair : activeProjectiles)
+    {
+        callDelete(pair.first);
     }
 }
 
@@ -77,8 +85,8 @@ void ProjectileManager::tick_projectiles(const float& deltaTime)
             continue;
 
         pair.second->tick(deltaTime);
-        projectileRenderer.setVelocity(pair.first, pair.second->getVelocity());
-        projectileRenderer.setRotation(pair.first, pair.second->getRotation());
+        renderer.setVelocity(pair.first, pair.second->getVelocity());
+        renderer.setRotation(pair.first, pair.second->getRotation());
     }
 
 }
@@ -92,10 +100,10 @@ void ProjectileManager::tick(const float& deltaTime)
     tick_projectiles(deltaTime);
 
     // Update the enemy renderer at last
-    projectileRenderer.tick(deltaTime);
+    renderer.tick(deltaTime);
 }
 
 void ProjectileManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    projectileRenderer.draw(target, states);
+    renderer.draw(target, states);
 }

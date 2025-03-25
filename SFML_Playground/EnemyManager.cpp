@@ -31,7 +31,7 @@ void EnemyManager::spawnEnemy()
 
     // Extract render information and pass it to the renderer
     IMovable::RenderInfo renderInfo = newEnemy->getRenderInfo();
-    enemyRenderer.addEntity(renderInfo, enemyKey);
+    renderer.addEntity(renderInfo, enemyKey);
 
     // Actually spawn the enemy properly and update it's attributes accordingly
     activeEnemies[enemyKey] = (std::move(newEnemy));
@@ -44,7 +44,7 @@ void EnemyManager::deleteEnemy(const size_t& key)
     
     activeEnemies.erase(key);
 
-    enemyRenderer.removeEntity(key);
+    renderer.removeEntity(key);
 
     numEnemies--;
 }
@@ -65,13 +65,13 @@ void EnemyManager::deleteAll()
 void EnemyManager::callUpdate(const size_t& key, const InfoType& updateFlags = InfoType::EMPTY_INFO)
 {
     if (updateFlags & InfoType::POSITION) { // Check if POSITION flag is set
-        enemyRenderer.setPosition(key, activeEnemies[key]->getPosition());
+        renderer.setPosition(key, activeEnemies[key]->getPosition());
     }
     if (updateFlags & InfoType::SIZE) { // Check if SIZE flag is set
-        enemyRenderer.setSize(key, activeEnemies[key]->getSize());
+        renderer.setSize(key, activeEnemies[key]->getSize());
     }
     if (updateFlags & InfoType::COLOR) { // Check if COLOR flag is set
-        enemyRenderer.setColor(key, activeEnemies[key]->getColor());
+        renderer.setColor(key, activeEnemies[key]->getColor());
     }
 }
 
@@ -113,8 +113,8 @@ void EnemyManager::tick_enemies(const float& deltaTime)
             continue;
 
         pair.second->tick(deltaTime);
-        enemyRenderer.setVelocity(pair.first, pair.second->getVelocity());
-        enemyRenderer.setRotation(pair.first, pair.second->getRotation());
+        renderer.setVelocity(pair.first, pair.second->getVelocity());
+        renderer.setRotation(pair.first, pair.second->getRotation());
     }
 }
 
@@ -130,10 +130,10 @@ void EnemyManager::tick(const float& deltaTime)
     tick_enemies(deltaTime);
 
     // Update the enemy renderer at last
-    enemyRenderer.tick(deltaTime);
+    renderer.tick(deltaTime);
 }
 
 void EnemyManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	enemyRenderer.draw(target, states);
+	renderer.draw(target, states);
 }
