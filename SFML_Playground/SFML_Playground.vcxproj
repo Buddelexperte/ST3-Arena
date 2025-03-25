@@ -168,7 +168,6 @@
     <ClCompile Include="WidgetBase.cpp" />
     <ClCompile Include="SaveGame.cpp" />
     <ClCompile Include="Slider.cpp" />
-    <ClCompile Include="TargetController.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Weapon_Rifle_Burst.h" />
     <ClCompile Include="Widgets.cpp" />
@@ -207,7 +206,6 @@
     <ClInclude Include="SaveGame.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="SoundManager.h" />
-    <ClInclude Include="TargetController.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="SFML_Arena.h" />
     <ClInclude Include="ValueBar.h" />
