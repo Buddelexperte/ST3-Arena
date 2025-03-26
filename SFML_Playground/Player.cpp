@@ -157,6 +157,11 @@ void Player::tick(const float& deltaTime)
 	}
 }
 
+void Player::releaseToPool()
+{
+	GenericPool<Player>::instance().release(std::unique_ptr<Player>(this));
+}
+
 bool Player::handleEvent(sf::Event* eventRef)
 {
 	// If gameplay is paused, use gameInstance to relay event to activeWidget

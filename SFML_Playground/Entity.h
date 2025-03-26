@@ -4,6 +4,7 @@
 #include "Collision.h"
 #include "Health.h"
 #include "Damage.h"
+#include "GenericPool.h"
 
 enum class EntityType {
 	NoEntity = -1,
@@ -43,6 +44,7 @@ public:
 
 	virtual void spawn(const SpawnInformation&) = 0;
 	virtual void tick(const float& deltaTime) = 0;
+	virtual void releaseToPool() = 0;
 
 	// RenderInfo + CallUpdate
 	void setRenderInfo(const RenderInfo&) override;

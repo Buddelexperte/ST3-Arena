@@ -50,11 +50,12 @@ private:
     const float maxLifetime = 5.0f;
     float lifetimeLeft = maxLifetime;
 
-    float damage = 0.0f;
-
     CollisionBox collisionBox;
 
     void kill_self() const;
+
+    void tick_move(const float&) override;
+    void tick_lifetime(const float&);
 
 public:
     // Constructor initializes movement info and collision box.
@@ -67,58 +68,36 @@ public:
         { return &collisionBox; }
 
     void onCollision(IHasCollision* other) override;
-
     void collideWithEnemy(Enemy& enemy) override;
+   
 
-    void spawn(const SpawnInformation& spawnInfo) override
-    {
-        CollisionManager::getInstance().registerProjectile(getCollision());
-        lifetimeLeft = maxLifetime;
-        setRenderInfo(spawnInfo.renderInfo);
-        setDamage(spawnInfo.damage);
-    }
-
-    void tick_move(const float&) override;
-
-    void tick_lifetime(const float&);
-
-    // Update movement and synchronize the collision box position.
-    void tick(const float& deltaTime)
-    {
-        tick_move(deltaTime);
-
-        tick_lifetime(deltaTime);
-    }
+    void spawn(const SpawnInformation& spawnInfo) override;
+    void tick(const float& deltaTime) override;
+    void releaseToPool() override;
 
     void setRenderInfo(const RenderInfo& newRenderInfo) override
     {
-        IMovable::setRenderInfo(newRenderInfo);
+        Entity::setRenderInfo(newRenderInfo);
         collisionBox.setPos(newRenderInfo.pos);
         collisionBox.setSize(newRenderInfo.size);
     }
 
     void setPosition(const sf::Vector2f& newPos) override
     {
-        IMovable::setPosition(newPos);
+        Entity::setPosition(newPos);
         collisionBox.setPos(newPos);
     }
 
 
     void addPosition(const sf::Vector2f& deltaPos) override
     {
-        IMovable::addPosition(deltaPos);
+        Entity::addPosition(deltaPos);
         collisionBox.setPos(collisionBox.getPos() + deltaPos);
     }
 
     void setSize(const sf::Vector2f& newSize) override
     {
-        IMovable::setSize(newSize);
+        Entity::setSize(newSize);
         collisionBox.setSize(newSize);
     }
-
-    void setDamage(const float& newDamage)
-	    { damage = newDamage; }
-
-    float getDamage() const
-        { return damage; }
 };

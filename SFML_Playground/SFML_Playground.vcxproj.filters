@@ -134,6 +134,9 @@
     <ClCompile Include="DrawableShape.cpp">
       <Filter>Source\Helpers</Filter>
     </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>Source\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionManager.h">

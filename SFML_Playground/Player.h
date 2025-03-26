@@ -56,6 +56,7 @@ public:
 	void spawn(const SpawnInformation&) override;
 	void spawn();
 	void tick(const float&) override;
+	void releaseToPool() override;
 
 	bool handleEvent(sf::Event* eventRef) override;
 

@@ -6,8 +6,9 @@
 int ProjectileManager::projectileID = 0;
 
 ProjectileManager::ProjectileManager()
-	: renderer()
-{}
+{
+
+}
 
 int ProjectileManager::getNumActiveProjectiles() const
 {
@@ -18,14 +19,19 @@ void ProjectileManager::createProjectile(const SpawnInformation& spawnInfo)
 {
     // Retrieve an enemy instance from the pool
     std::unique_ptr<Projectile> newProjectile = GenericPool<Projectile>::instance().get();
+
     // Set the enemy's index and add it to the activeProjectiles vector
-    size_t projectileKey = projectileID++;
+    size_t projectileKey = projectileID;
+    projectileID++;
+
+
     newProjectile->setID(projectileKey);
 
     newProjectile->spawn(spawnInfo);
 
     // Extract render information and pass it to the renderer
-    renderer.addEntity(spawnInfo.renderInfo, projectileKey);
+    IMovable::RenderInfo renderInfo = newProjectile->getRenderInfo();
+    renderer.addEntity(renderInfo, projectileKey);
 
     // Actually spawn the enemy properly and update it's attributes accordingly
     activeProjectiles.emplace(projectileKey, std::move(newProjectile));
@@ -36,7 +42,17 @@ void ProjectileManager::deleteProjectile(const size_t& key)
     CollisionManager::getInstance().unregisterCollidable(activeProjectiles[key]->getCollision()->getCollisionID());
     GenericPool<Projectile>::instance().release(std::move(activeProjectiles[key]));
 
-    activeProjectiles.erase(key);
+    auto it = activeProjectiles.find(key);
+    if (it != activeProjectiles.end())
+    {
+        std::unique_ptr<Entity> entity = std::move(it->second);  // Take ownership
+        activeProjectiles.erase(it);  // Remove from map first to prevent dangling pointers
+
+        if (entity)
+        {
+            entity->releaseToPool();  // Calls derived release function safely
+        }
+    }
 
     renderer.removeEntity(key);
 }

@@ -35,6 +35,11 @@ void Enemy::tick(const float& deltaTime)
 	return;
 }
 
+void Enemy::releaseToPool()
+{
+	GenericPool<Enemy>::instance().release(std::unique_ptr<Enemy>(this));
+}
+
 void Enemy::tick_move(const float& deltaTime)
 {
 	// TODO: PROTOTYPE MOVEMENT LOGIC

@@ -38,7 +38,7 @@ void EnemyManager::spawnEnemy(const SpawnInformation& spawnInfo)
     renderer.addEntity(renderInfo, enemyKey);
 
     // Actually spawn the enemy properly and update it's attributes accordingly
-    activeEnemies[enemyKey] = (std::move(newEnemy));
+    activeEnemies.emplace(enemyKey, std::move(newEnemy));
 }
 
 void EnemyManager::deleteEnemy(const size_t& key)
@@ -46,7 +46,17 @@ void EnemyManager::deleteEnemy(const size_t& key)
     CollisionManager::getInstance().unregisterCollidable(activeEnemies[key]->getCollision()->getCollisionID());
     GenericPool<Enemy>::instance().release(std::move(activeEnemies[key]));
     
-    activeEnemies.erase(key);
+    auto it = activeEnemies.find(key);
+    if (it != activeEnemies.end())
+    {
+        std::unique_ptr<Entity> entity = std::move(it->second);  // Take ownership
+        activeEnemies.erase(it);  // Remove from map first to prevent dangling pointers
+
+        if (entity)
+        {
+            entity->releaseToPool();  // Calls derived release function safely
+        }
+    }
 
     renderer.removeEntity(key);
 
@@ -56,14 +66,6 @@ void EnemyManager::deleteEnemy(const size_t& key)
 void EnemyManager::callDelete(const size_t& key)
 {
     pendingKill.insert(key);
-}
-
-void EnemyManager::deleteAll()
-{
-	for (const auto& pair : activeEnemies)
-	{
-		callDelete(pair.first);
-	}
 }
 
 void EnemyManager::callUpdate(const size_t& key, const InfoType& updateFlags = InfoType::EMPTY_INFO)
@@ -77,6 +79,14 @@ void EnemyManager::callUpdate(const size_t& key, const InfoType& updateFlags = I
     if (updateFlags & InfoType::COLOR) { // Check if COLOR flag is set
         renderer.setColor(key, activeEnemies[key]->getColor());
     }
+}
+
+void EnemyManager::deleteAll()
+{
+	for (const auto& pair : activeEnemies)
+	{
+		callDelete(pair.first);
+	}
 }
 
 void EnemyManager::tick_kill(const float& deltaTime)

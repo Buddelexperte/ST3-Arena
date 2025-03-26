@@ -38,6 +38,7 @@ public:
 
 	void spawn(const SpawnInformation&) override;
 	void tick(const float&) override;
+	void releaseToPool() override;
 
 	// RenderInfo general
 	void setRenderInfo(const RenderInfo& newRenderInfo) override;

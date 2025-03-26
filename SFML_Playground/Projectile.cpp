@@ -63,6 +63,26 @@ void Projectile::tick_lifetime(const float& deltaTime)
 		kill_self();
 }
 
+void Projectile::spawn(const SpawnInformation& spawnInfo)
+{
+	CollisionManager::getInstance().registerProjectile(getCollision());
+	lifetimeLeft = maxLifetime;
+	setRenderInfo(spawnInfo.renderInfo);
+	setDamage(spawnInfo.damage);
+}
+
+void Projectile::tick(const float& deltaTime)
+{
+	tick_move(deltaTime);
+
+	tick_lifetime(deltaTime);
+}
+
+void Projectile::releaseToPool()
+{
+	GenericPool<Projectile>::instance().release(std::unique_ptr<Projectile>(this));
+}
+
 void Projectile::onCollision(IHasCollision* other)
 {
 	other->collideWithProjectile(*this);
