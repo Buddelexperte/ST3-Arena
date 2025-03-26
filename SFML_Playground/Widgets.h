@@ -14,6 +14,7 @@ class W_OptionsSounds : public InputWidget // OptionSoundMenu Widget -----------
 {
 private:
 	Button optionsSounds_test;
+	Button optionsSoundsReturn;
 
 public:
 	void tick(const float& deltaTime) override;
@@ -27,6 +28,7 @@ class W_OptionsGraphics : public InputWidget // OptionsGraphicsMenu Widget -----
 {
 private:
 	Button optionsGraphics_test;
+	Button optionsGraphicsReturn;
 
 public:
 	void tick(const float& deltaTime) override;

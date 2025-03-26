@@ -129,12 +129,13 @@ W_OptionsSounds::W_OptionsSounds(InputWidget* parent = nullptr) : InputWidget(pa
 	};
 
 	optionsSounds_test.construct(MAIN_MENU_CONSTR[0]);
+	optionsSoundsReturn.construct(MAIN_MENU_CONSTR[1]);
 }
 
 void W_OptionsSounds::construct()
 {
 	InputWidget::construct();
-	shapes = { &optionsSounds_test };
+	shapes = { &optionsSounds_test, &optionsSoundsReturn };
 }
 
 void W_OptionsSounds::tick(const float& deltaTime)
@@ -146,7 +147,7 @@ void W_OptionsSounds::tick(const float& deltaTime)
 bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)
 {
 	sf::Vector2f mousePos = gameInstance().getMousePos();
-	if (optionsSounds_test.isMouseOver(checkForClick))
+	if (optionsSoundsReturn.isMouseOver(checkForClick))
 	{
 		if (checkForClick) parent->construct();
 		return true;
@@ -166,12 +167,13 @@ W_OptionsGraphics::W_OptionsGraphics(InputWidget* parent = nullptr) : InputWidge
 	};
 
 	optionsGraphics_test.construct(MAIN_MENU_CONSTR[0]);
+	optionsGraphicsReturn.construct(MAIN_MENU_CONSTR[1]);
 }
 
 void W_OptionsGraphics::construct()
 {
 	InputWidget::construct();
-	shapes = { &optionsGraphics_test };
+	shapes = { &optionsGraphics_test, &optionsGraphicsReturn };
 }
 
 void W_OptionsGraphics::tick(const float& deltaTime)
@@ -182,7 +184,7 @@ void W_OptionsGraphics::tick(const float& deltaTime)
 
 bool W_OptionsGraphics::isMouseOver(const bool& checkForClick = false)
 {
-	if (optionsGraphics_test.isMouseOver(checkForClick))
+	if (optionsGraphicsReturn.isMouseOver(checkForClick))
 	{
 		if (checkForClick) parent->construct();
 		return true;
