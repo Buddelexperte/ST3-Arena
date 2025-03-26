@@ -57,23 +57,9 @@ void Player::spawn()
 	setVelocity({ 0.0f, 0.0f });
 
 	// TODO: Implement dynamic start weapon
-	inventory.clear();
-	//inventory.addWeapon(std::make_unique<Shotgun>())
+	inventory.reset();
 	
 	// Adding selected weapon
-	if (selectedWeapon == "Pistol") {
-		inventory.addWeapon(std::make_unique<Pistol>());
-	}
-	else if (selectedWeapon == "Rifle") {
-		inventory.addWeapon(std::make_unique<Rifle>());
-	}
-	else if (selectedWeapon == "Rifle_Burst") {
-		inventory.addWeapon(std::make_unique<Rifle_Burst>());
-	}
-	else if (selectedWeapon == "Shotgun") {
-		inventory.addWeapon(std::make_unique<Shotgun>());
-	}
-
 	healthBar.reset(); // 100% hp
 
 	invincibility.setValue(2.0f); // 2 seconds invincibility (Spawn protection)

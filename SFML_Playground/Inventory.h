@@ -9,6 +9,7 @@ class Inventory
 private:
     Player* owner = nullptr;
     // Store all acquired weapons.
+    std::string startWeaponName;
     std::vector<std::unique_ptr<Weapon>> weapons;
     int activeWeaponIndex = -1; // -1 means no active weapon
 
@@ -42,6 +43,16 @@ public:
     float getCooldownSubtractor() const
         { return cooldownSubtractor; }
 
+    std::string getStartWeapon() const
+    {
+        return startWeaponName;
+    }
+
+    void setStartWeapon(const std::string& newWeaponName)
+    {
+        startWeaponName = newWeaponName;
+    }
+
     // Adds a new weapon. If this is the first weapon, it becomes the active weapon.
     void addWeapon(std::unique_ptr<Weapon>);
 
@@ -67,7 +78,10 @@ public:
     std::unique_ptr<Perk> removePerk(size_t);
     
     void clear_weapons()
-        { weapons.clear(); }
+    {
+        weapons.clear();
+        activeWeaponIndex = -1;
+    }
 
     void clear_perks()
         { perks.clear(); }
@@ -76,8 +90,9 @@ public:
     {
         clear_perks();
         clear_weapons();
-        activeWeaponIndex = -1;
     }
+
+    void reset();
 
     // Optional: an update function to process inventory-related logic each frame.
     void update(const float&);

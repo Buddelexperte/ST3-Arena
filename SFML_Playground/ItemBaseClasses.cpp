@@ -43,3 +43,24 @@ void Weapon::tick(const float& deltaTime)
 
 	activate(ItemUse::NO_USE);
 }
+
+#include "AllWeapons.h"
+#include "Functions.h"
+
+static std::unique_ptr<Weapon> makeWeapon(std::string weaponName)
+{
+    weaponName = toUpperCase(weaponName);
+
+    if (weaponName == "PISTOL") {
+        return std::make_unique<Pistol>();
+    }
+    else if (weaponName == "RIFLE") {
+        return std::make_unique<Rifle>();
+    }
+    else if (weaponName == "RIFLE_BURST") {
+        return std::make_unique<Rifle_Burst>();
+    }
+    else if (weaponName == "SHOTGUN") {
+        return std::make_unique<Shotgun>();
+    }
+}

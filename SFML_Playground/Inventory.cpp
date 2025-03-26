@@ -97,6 +97,14 @@ std::unique_ptr<Perk> Inventory::removePerk(size_t index)
     return removedPerk;
 }
 
+void Inventory::reset()
+{
+    clear();
+    // Get wepaon by StartWeaponName
+    std::unique_ptr<Weapon> startWeapon = makeWeapon(startWeaponName);
+    addWeapon(std::move(startWeapon));
+}
+
 // Optional: an update function to process inventory-related logic each frame.
 void Inventory::update(const float& deltaTime)
 {

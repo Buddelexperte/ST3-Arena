@@ -23,6 +23,15 @@ std::shared_ptr<T> lockWeakPtr(const std::weak_ptr<T>& weakPtr) {
 	return nullptr;  // Or handle the expired object case appropriately
 }
 
+// STRING -------------------------------------------------------------------------------------------
+inline std::string toUpperCase(const std::string& input) {
+	std::string result = input;
+	for (char& c : result) {
+		c = std::toupper(c);
+	}
+	return result;
+}
+
 // PRECISION -------------------------------------------------------------------------------------------
 inline bool shouldZero(const float& value, const float& precision = SMALLEST_PRECISION)
 {

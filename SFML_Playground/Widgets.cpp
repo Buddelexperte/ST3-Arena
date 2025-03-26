@@ -353,50 +353,28 @@ bool W_SelectWeapon::isMouseOver(const bool& checkForClick = false)
 	if (isChildActive())
 		return getActiveChild()->isMouseOver(checkForClick);
 
-	/*if (item1_Button.isMouseOver(checkForClick) || item2_Button.isMouseOver(checkForClick) || item3_Button.isMouseOver(checkForClick) || item4_Button.isMouseOver(checkForClick))
-	{
-		if (checkForClick)
-		{
-			gameInstance().launchGame();
-			return true;
-		}
-	}*/
+	static const std::vector<Button*> weaponButtons = {
+		&item1_Button, &item2_Button, &item3_Button, &item4_Button
+	};
 
-	if (item1_Button.isMouseOver(checkForClick))
+	bool bStartGame = false;
+	std::string selectedWeaponName = "NoWeapon";
+
+	for (Button* button : weaponButtons)
 	{
-		if (checkForClick)
+		if (button->isMouseOver(checkForClick))
 		{
-			gameInstance().getPlayer()->setSelectedWeapon("Pistol");
-			gameInstance().launchGame();
-			return true;
+			if (checkForClick)
+			{
+				selectedWeaponName = button->getText();
+				bStartGame |= true;
+			}
 		}
 	}
-	if (item2_Button.isMouseOver(checkForClick))
+
+	if (bStartGame)
 	{
-		if (checkForClick)
-		{
-			gameInstance().getPlayer()->setSelectedWeapon("Shotgun");
-			gameInstance().launchGame();
-			return true;
-		}
-	}
-	if (item3_Button.isMouseOver(checkForClick))
-	{
-		if (checkForClick)
-		{
-			gameInstance().getPlayer()->setSelectedWeapon("Rifle");
-			gameInstance().launchGame();
-			return true;
-		}
-	}
-	if (item4_Button.isMouseOver(checkForClick))
-	{
-		if (checkForClick)
-		{
-			gameInstance().getPlayer()->setSelectedWeapon("Rifle_Burst");
-			gameInstance().launchGame();
-			return true;
-		}
+		gameInstance().getPlayer()->getInventory().setStartWeapon(selectedWeaponName);
 	}
 
 	if (return_Button.isMouseOver(checkForClick))	

@@ -146,6 +146,8 @@ public:
     // Additional weapon-specific methods could be added (e.g., reload, update)
 };
 
+std::unique_ptr<Weapon> makeWeapon(const std::string& weaponName);
+
 // =============================== PERK ===============================
 
 // Enum for various perk triggers.
