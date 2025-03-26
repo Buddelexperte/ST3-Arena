@@ -71,9 +71,6 @@
     <ClCompile Include="Widgets.cpp">
       <Filter>Source\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="TargetController.cpp">
-      <Filter>zDeprecated</Filter>
-    </ClCompile>
     <ClCompile Include="EnemyManager.cpp">
       <Filter>Source\Managers</Filter>
     </ClCompile>
@@ -142,9 +139,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TargetController.h">
-      <Filter>zDeprecated</Filter>
-    </ClInclude>
     <ClInclude Include="CollisionManager.h">
       <Filter>Source\Managers</Filter>
     </ClInclude>
@@ -263,6 +257,9 @@
       <Filter>Source\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="PlayerPool.h">
+      <Filter>Source\Actors\EntityPools</Filter>
+    </ClInclude>
+    <ClInclude Include="GenericPool.h">
       <Filter>Source\Actors\EntityPools</Filter>
     </ClInclude>
   </ItemGroup>

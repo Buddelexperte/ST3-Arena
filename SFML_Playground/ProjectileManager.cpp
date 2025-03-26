@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ProjectileManager.h" // Header File
+#include "GenericPool.h"
 
 int ProjectileManager::projectileID = 0;
 
@@ -16,7 +17,7 @@ int ProjectileManager::getNumActiveProjectiles() const
 void ProjectileManager::createProjectile(const IMovable::RenderInfo& renderInfo, const float& damage)
 {
     // Retrieve an enemy instance from the pool
-    std::unique_ptr<Projectile> newProjectile = projectilePool.get();
+    std::unique_ptr<Projectile> newProjectile = GenericPool<Projectile>::instance().get();
     // Set the enemy's index and add it to the activeProjectiles vector
     size_t projectileKey = projectileID++;
     newProjectile->setID(projectileKey);
@@ -35,7 +36,7 @@ void ProjectileManager::createProjectile(const IMovable::RenderInfo& renderInfo,
 void ProjectileManager::deleteProjectile(const size_t& key)
 {
     CollisionManager::getInstance().unregisterCollidable(activeProjectiles[key]->getCollision()->getCollisionID());
-    projectilePool.release(std::move(activeProjectiles[key]));
+    GenericPool<Projectile>::instance().release(std::move(activeProjectiles[key]));
 
     activeProjectiles.erase(key);
 

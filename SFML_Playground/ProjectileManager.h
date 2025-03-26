@@ -12,7 +12,6 @@ private:
 
 	static int projectileID;
 
-	ProjectilePool projectilePool;
 	EntityRenderer renderer; // Manages draw calls
 	std::unordered_map<size_t, std::unique_ptr<Projectile>> activeProjectiles; // Random Access to Enemies
 	std::unordered_set<size_t> pendingKill;

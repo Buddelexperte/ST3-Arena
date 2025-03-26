@@ -14,7 +14,6 @@ private:
 	static unsigned int numEnemies;
 	static int enemyID;
 
-	EnemyPool enemyPool; // Manages memory
 	EntityRenderer renderer; // Manages draw calls
 	std::unordered_map<size_t, std::unique_ptr<Enemy>> activeEnemies; // Random Access to Enemies
 	std::unordered_set<size_t> pendingKill;

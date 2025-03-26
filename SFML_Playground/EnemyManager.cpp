@@ -1,6 +1,7 @@
 #pragma once
 
 #include "EnemyManager.h" // Header File
+#include "GenericPool.h"
 
 unsigned int EnemyManager::numEnemies = 0;
 int EnemyManager::enemyID = 0;
@@ -18,7 +19,7 @@ int EnemyManager::getNumActiveEnemies() const
 void EnemyManager::spawnEnemy()
 {
     // Retrieve an enemy instance from the pool
-    std::unique_ptr<Enemy> newEnemy = enemyPool.get();
+    std::unique_ptr<Enemy> newEnemy = GenericPool<Enemy>::instance().get();
 
     // Set the enemy's index and add it to the activeEnemies vector
     size_t enemyKey = enemyID;
@@ -40,7 +41,7 @@ void EnemyManager::spawnEnemy()
 void EnemyManager::deleteEnemy(const size_t& key)
 {
     CollisionManager::getInstance().unregisterCollidable(activeEnemies[key]->getCollision()->getCollisionID());
-    enemyPool.release(std::move(activeEnemies[key]));
+    GenericPool<Enemy>::instance().release(std::move(activeEnemies[key]));
     
     activeEnemies.erase(key);
 
