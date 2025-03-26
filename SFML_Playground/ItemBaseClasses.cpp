@@ -44,24 +44,48 @@ void Weapon::tick(const float& deltaTime)
 	activate(ItemUse::NO_USE);
 }
 
+
+// Weapon Factory
 #include "AllWeapons.h"
-#include "Functions.h"
 
-std::unique_ptr<Weapon> makeWeapon(std::string weaponName)
+const std::vector<StringWeapon> weaponMappings = {
+    {"PISTOL", PISTOL},
+    {"RIFLE", RIFLE},
+    {"SHOTGUN", SHOTGUN},
+    {"BURST RIFLE", BURST_RIFLE},
+    {"RIFLE BURST", BURST_RIFLE},
+    {"RIFLE_BURST", BURST_RIFLE}
+};
+
+
+WeaponType getWeaponTypeFromText(const std::string& buttonText)
 {
-    weaponName = toUpperCase(weaponName);
+    std::string normalized = normalizeWeaponName(buttonText);
+    // For simplicity, perform a linear search; for many entries, consider using a hash map.
+    for (const auto& mapping : weaponMappings)
+    {
+        if (normalized == mapping.name)
+        {
+            return mapping.type;
+        }
+    }
+    return UNKNOWN_WEAPON;
+}
+std::unique_ptr<Weapon> makeWeapon(const std::string& selectWeaponText)
+{
+    const WeaponType type = getWeaponTypeFromText(selectWeaponText);
 
-    if (weaponName == "PISTOL") {
+    switch (type) {
+    case PISTOL:
         return std::make_unique<Pistol>();
-    }
-    else if (weaponName == "RIFLE") {
+    case RIFLE:
         return std::make_unique<Rifle>();
-    }
-    else if (weaponName == "BURST RIFLE" || weaponName == "RIFLE_BURST" || weaponName == "RIFLE BURST") {
-        return std::make_unique<Rifle_Burst>();
-    }
-    else if (weaponName == "SHOTGUN") {
+    case SHOTGUN:
         return std::make_unique<Shotgun>();
+    case BURST_RIFLE:
+        return std::make_unique<Rifle_Burst>();
+    default:
+        break;
     }
 
     return nullptr;

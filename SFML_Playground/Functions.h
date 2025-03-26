@@ -24,12 +24,34 @@ std::shared_ptr<T> lockWeakPtr(const std::weak_ptr<T>& weakPtr) {
 }
 
 // STRING -------------------------------------------------------------------------------------------
-inline std::string toUpperCase(const std::string& input) {
-	std::string result = input;
-	for (char& c : result) {
-		c = std::toupper(c);
+inline std::string normalizeWeaponName(const std::string& name) {
+	std::string normalized;
+	bool lastWasSpace = true; // To collapse multiple spaces
+
+	for (char ch : name) {
+		// Convert to uppercase and replace underscores with spaces
+		if (ch == '_') ch = ' ';
+		if (std::isspace(ch)) {
+			if (!lastWasSpace) {
+				normalized.push_back(' '); // Only add one space
+				lastWasSpace = true;
+			}
+		}
+		else {
+			normalized.push_back(std::toupper(ch));
+			lastWasSpace = false;
+		}
 	}
-	return result;
+
+	// Trim leading and trailing spaces
+	if (!normalized.empty() && normalized.front() == ' ') {
+		normalized.erase(normalized.begin());
+	}
+	if (!normalized.empty() && normalized.back() == ' ') {
+		normalized.pop_back();
+	}
+
+	return normalized;
 }
 
 // PRECISION -------------------------------------------------------------------------------------------

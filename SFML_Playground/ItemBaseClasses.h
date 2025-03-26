@@ -76,6 +76,26 @@ public:
 
 // =============================== WEAPON ===============================
 
+enum WeaponType {
+    UNKNOWN_WEAPON = -1,
+    PISTOL = 0,
+    RIFLE,
+    SHOTGUN,
+    BURST_RIFLE,
+};
+
+// Mapping structure for weapon names to WeaponType
+struct StringWeapon
+{
+    std::string name;
+    WeaponType type;
+};
+
+// List of all possible synonyms for each weapon
+extern const std::vector<StringWeapon> weaponMappings;
+
+WeaponType getWeaponTypeFromText(const std::string& buttonText);
+
 // Weapon: active item that can perform actions (e.g., firing)
 class Weapon : public Item
 {
@@ -146,7 +166,7 @@ public:
     // Additional weapon-specific methods could be added (e.g., reload, update)
 };
 
-std::unique_ptr<Weapon> makeWeapon(std::string weaponName);
+std::unique_ptr<Weapon> makeWeapon(const std::string& weaponName);
 
 // =============================== PERK ===============================
 
