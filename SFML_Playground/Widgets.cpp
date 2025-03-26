@@ -353,12 +353,21 @@ bool W_SelectWeapon::isMouseOver(const bool& checkForClick = false)
 	if (isChildActive())
 		return getActiveChild()->isMouseOver(checkForClick);
 
-	std::vector<Button> weaponButtons = {
-		item1_Button, item2_Button, item3_Button, item4_Button
-	};
+	if (return_Button.isMouseOver(checkForClick))	
+	{
+		if (checkForClick)
+		{
+			input_esc();
+		}
+		return true;
+	}
 
 	bool bStartGame = false;
 	std::string selectedWeaponName = "NoWeapon";
+
+	std::vector<Button> weaponButtons = {
+		item1_Button, item2_Button, item3_Button, item4_Button
+	};
 
 	for (Button& button : weaponButtons)
 	{
@@ -367,18 +376,12 @@ bool W_SelectWeapon::isMouseOver(const bool& checkForClick = false)
 			if (checkForClick)
 			{
 				selectedWeaponName = button.getText();
-				std::cout << selectedWeaponName << std::endl;
-				bStartGame = true;
+				bStartGame |= true;
 				break;
 			}
 		}
 	}
 
-	if (return_Button.isMouseOver(checkForClick))	
-	{
-		if (checkForClick) input_esc();
-		return true;
-	}
 	if (bStartGame)
 	{
 		gameInstance().getPlayer()->getInventory().setStartWeapon(selectedWeaponName);

@@ -57,7 +57,7 @@ std::unique_ptr<Weapon> makeWeapon(std::string weaponName)
     else if (weaponName == "RIFLE") {
         return std::make_unique<Rifle>();
     }
-    else if (weaponName == "RIFLE BURST") {
+    else if (weaponName == "RIFLE BURST" || weaponName == "RIFLE_BURST") {
         return std::make_unique<Rifle_Burst>();
     }
     else if (weaponName == "SHOTGUN") {
