@@ -13,8 +13,7 @@
 class Player : 
 	public Entity,
 	public IDrawableShapes,
-	public IHasInput,
-	public IHasHealth
+	public IHasInput
 {
 private:
 
@@ -28,7 +27,7 @@ private:
 	// Health bar
 	ValueBar invincibility;
 	ValueBar healthBar;
-	ValueBar& getValueBar() override
+	ValueBar& getHealthBar() override
 		{ return healthBar; }
 
 	// Animation
@@ -54,7 +53,8 @@ public:
 	~Player() = default;
 
 	// Entity
-	void spawn() override;
+	void spawn(const SpawnInformation&) override;
+	void spawn();
 	void tick(const float&) override;
 
 	bool handleEvent(sf::Event* eventRef) override;

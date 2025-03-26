@@ -56,7 +56,12 @@ public:
 				projectileInfo.color = baseInfo.color
 			};
 
-			manager->createProjectile(projectileInfo, getDamage());
+			SpawnInformation spawnInfo = {
+				.renderInfo = projectileInfo,
+				.damage = getDamage()
+			};
+
+			ProjectileManager::getInstance().createProjectile(spawnInfo);
 		}
 	}
 };

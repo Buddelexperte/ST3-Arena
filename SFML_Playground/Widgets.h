@@ -163,8 +163,6 @@ private:
 	W_Paused pauseMenu;
 	W_GameOver gameOverScreen;
 
-	Player* player = gameInstance().getPlayer();
-
 	sf::Vector2f backgroundPos;
 	const float TILING_SCALE = 0.1f; // Larger = more tiling
 	sf::Texture backgroundTexture;

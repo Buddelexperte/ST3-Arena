@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Widgets.h" // Header File
+#include "GameInstance.h"
 #include "SaveGame.h"
 
 // W_MainMenu -------------------------------------------------------------------------------------
@@ -684,7 +685,7 @@ InputWidget* W_Gameplay::getWidgetAtIndex(const int& atIndex)
 
 InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 {
-	shapes = { &background, &enemyManager, player, &projectileManager };
+	shapes = { &background, &enemyManager, gameInstance().getPlayer(), &projectileManager};
 
 	switch (widgetIndex = toIndex)
 	{
@@ -723,6 +724,7 @@ void W_Gameplay::lose()
 void W_Gameplay::tick(const float& deltaTime)
 {	
 	InputWidget::tick(deltaTime);
+	Player* player = gameInstance().getPlayer();
 
 	// If Gameplay is UnPaused
 	if (!gameInstance().getIsPaused())

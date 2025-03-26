@@ -40,8 +40,13 @@ public:
 			projectileInfo.velocity = dirFromRot(getRotation()) * baseInfo.velocity,
 			projectileInfo.color = baseInfo.color
 		};
+		
+		SpawnInformation spawnInfo = {
+			.renderInfo = projectileInfo,
+			.damage = getDamage()
+		};
 
-		manager->createProjectile(projectileInfo, getDamage());
+		ProjectileManager::getInstance().createProjectile(spawnInfo);
 	}
 
 };

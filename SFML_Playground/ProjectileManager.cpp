@@ -14,7 +14,7 @@ int ProjectileManager::getNumActiveProjectiles() const
     return static_cast<int>(activeProjectiles.size());
 }
 
-void ProjectileManager::createProjectile(const IMovable::RenderInfo& renderInfo, const float& damage)
+void ProjectileManager::createProjectile(const SpawnInformation& spawnInfo)
 {
     // Retrieve an enemy instance from the pool
     std::unique_ptr<Projectile> newProjectile = GenericPool<Projectile>::instance().get();
@@ -22,12 +22,10 @@ void ProjectileManager::createProjectile(const IMovable::RenderInfo& renderInfo,
     size_t projectileKey = projectileID++;
     newProjectile->setID(projectileKey);
 
-    newProjectile->setRenderInfo(renderInfo);
-    newProjectile->setDamage(damage);
-    newProjectile->spawn();
+    newProjectile->spawn(spawnInfo);
 
     // Extract render information and pass it to the renderer
-    renderer.addEntity(renderInfo, projectileKey);
+    renderer.addEntity(spawnInfo.renderInfo, projectileKey);
 
     // Actually spawn the enemy properly and update it's attributes accordingly
     activeProjectiles.emplace(projectileKey, std::move(newProjectile));

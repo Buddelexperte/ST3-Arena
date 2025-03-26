@@ -56,14 +56,15 @@ void Player::spawn()
 	setPosition(spawnPos);
 	setVelocity({ 0.0f, 0.0f });
 
-	// TODO: Implement dynamic start weapon
 	inventory.reset();
-	
-	// Adding selected weapon
 	healthBar.reset(); // 100% hp
 
 	invincibility.setValue(2.0f); // 2 seconds invincibility (Spawn protection)
+}
 
+void Player::spawn(const SpawnInformation&)
+{
+	spawn();
 }
 
 void Player::tick_move(const float& deltaTime)

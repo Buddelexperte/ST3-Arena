@@ -8,9 +8,7 @@
 // PROJECTILE SPAWNER ----------------------------------------
  
 ProjectileSpawner::ProjectileSpawner(const RenderInfo& baseInfo, const float& damage)
-	: 
-	gameInstance(&GI_Arena::getInstance()),
-	manager(&ProjectileManager::getInstance()),
+	:
 	baseInfo(baseInfo),
 	damage(damage)
 	{}
@@ -25,7 +23,12 @@ void ProjectileSpawner::shoot()
 		projectileInfo.color = baseInfo.color
 	};
 	
-	manager->createProjectile(projectileInfo, damage);
+	SpawnInformation spawnInfo = {
+		.renderInfo = projectileInfo,
+		.damage = getDamage()
+	};
+
+	ProjectileManager::getInstance().createProjectile(spawnInfo);
 }
 
 // PROJECTILE OBJECT ----------------------------------------
@@ -43,7 +46,7 @@ Projectile::Projectile(const RenderInfo& initRenderInfo)
 
 void Projectile::kill_self() const
 {
-	ProjectileManager::getInstance().callDelete(projectileID);
+	ProjectileManager::getInstance().callDelete(getID());
 }
 
 void Projectile::tick_move(const float& deltaTime)

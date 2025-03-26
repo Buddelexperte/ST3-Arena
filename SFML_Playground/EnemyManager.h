@@ -1,16 +1,12 @@
 #pragma once
 #include <unordered_set>
 
-#include "GameInstance.h"
-#include "EnemyPool.h"
+#include "Enemy.h"
 #include "Renderer.h"
-#include "ProjectileManager.h" // For projectile collision
 
 class EnemyManager : public sf::Drawable
 {
 private:
-	ProjectileManager& projectileManager = ProjectileManager::getInstance();
-	
 	static unsigned int numEnemies;
 	static int enemyID;
 
@@ -24,6 +20,8 @@ private:
 	EnemyManager& operator=(const EnemyManager&) = delete;
 
 	void tick_kill(const float&);
+	sf::Vector2f getNewSpawnPos() const;
+	IMovable::RenderInfo makeSpawnRenderInfo();
 	void tick_spawning(const float&);
 	void tick_enemies(const float&);
 
@@ -44,7 +42,7 @@ public:
 
 	void deleteAll();
 
-	void spawnEnemy();
+	void spawnEnemy(const SpawnInformation&);
 
 	void tick(const float& deltaTime);
 

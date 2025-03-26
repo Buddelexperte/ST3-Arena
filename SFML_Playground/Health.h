@@ -5,22 +5,32 @@
 class IHasHealth
 {
 private:
-	virtual ValueBar& getValueBar() = 0;
+	virtual ValueBar& getHealthBar() = 0;
 
 public:
 	virtual void hurt(const float& delta)
 	{
-		getValueBar().addValue(-delta);
+		getHealthBar().addValue(-delta);
 	}
 
 	virtual void heal(const float& delta)
 	{
-		getValueBar().addValue(delta);
+		getHealthBar().addValue(delta);
+	}
+
+	virtual void setHealth(const float& newVal)
+	{
+		return getHealthBar().setValue(newVal);
+	}
+
+	virtual void setMaxHealth(const float& newMax)
+	{
+		return getHealthBar().setMaxValue(newMax);
 	}
 
 	virtual float getHealth()
 	{
-		return getValueBar().getValue();
+		return getHealthBar().getValue();
 	}
 
 	bool isDead()

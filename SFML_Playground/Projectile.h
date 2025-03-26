@@ -7,15 +7,12 @@
 #include "Entity.h"
 #include "CollisionManager.h"
 
-class GI_Arena;
-class ProjectileManager;
 
-class ProjectileSpawner : public IMovable
+class ProjectileSpawner 
+    : public IMovable
 {
 protected:
-    GI_Arena* gameInstance;
-    ProjectileManager* manager;
-    RNG& random = RNG::getInstance();
+    static inline RNG& random = RNG::getInstance();
 
 private:
     const RenderInfo baseInfo = {
@@ -57,8 +54,6 @@ private:
 
     CollisionBox collisionBox;
 
-    size_t projectileID = -1;
-
     void kill_self() const;
 
 public:
@@ -66,9 +61,6 @@ public:
     Projectile();
     Projectile(const RenderInfo& initRenderInfo);
     ~Projectile() = default;
-
-    void setID(const size_t& newIndex) 
-        { projectileID = newIndex; }
 
     // Override Collidable to return the projectile's collision box.
     Collidable* getCollision() override
@@ -78,10 +70,12 @@ public:
 
     void collideWithEnemy(Enemy& enemy) override;
 
-    void spawn()
+    void spawn(const SpawnInformation& spawnInfo) override
     {
-        CollisionManager::getInstance().registerProjectile(getCollision()); 
+        CollisionManager::getInstance().registerProjectile(getCollision());
         lifetimeLeft = maxLifetime;
+        setRenderInfo(spawnInfo.renderInfo);
+        setDamage(spawnInfo.damage);
     }
 
     void tick_move(const float&) override;

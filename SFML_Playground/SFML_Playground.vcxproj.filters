@@ -131,9 +131,6 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Source\Actors</Filter>
     </ClCompile>
-    <ClCompile Include="EntityManager.cpp">
-      <Filter>Source\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="DrawableShape.cpp">
       <Filter>Source\Helpers</Filter>
     </ClCompile>
@@ -154,13 +151,7 @@
     <ClInclude Include="SoundManager.h">
       <Filter>Source\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyPool.h">
-      <Filter>Source\Actors\EntityPools</Filter>
-    </ClInclude>
     <ClInclude Include="ItemPool.h">
-      <Filter>Source\Actors\EntityPools</Filter>
-    </ClInclude>
-    <ClInclude Include="ProjectilePool.h">
       <Filter>Source\Actors\EntityPools</Filter>
     </ClInclude>
     <ClInclude Include="Collision.h">
@@ -247,20 +238,20 @@
     <ClInclude Include="Entity.h">
       <Filter>Source\Actors</Filter>
     </ClInclude>
-    <ClInclude Include="EntityManager.h">
-      <Filter>Source\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>Source\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="DrawableShape.h">
       <Filter>Source\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerPool.h">
-      <Filter>Source\Actors\EntityPools</Filter>
-    </ClInclude>
     <ClInclude Include="GenericPool.h">
       <Filter>Source\Actors\EntityPools</Filter>
+    </ClInclude>
+    <ClInclude Include="Damage.h">
+      <Filter>Source\Base\Abstracts</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>Source\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

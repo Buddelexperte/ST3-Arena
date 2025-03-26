@@ -13,19 +13,13 @@ class GI_Arena;
 class EnemyManager;
 
 class Enemy : 
-	public Entity,
-	public IHasHealth
+	public Entity
 {
 private:
 	CollisionBox collisionBox;
 	ValueBar healthBar;
-	virtual ValueBar& getValueBar() override
+	virtual ValueBar& getHealthBar() override
 		{ return healthBar; }
-
-	sf::Vector2f getNewSpawnPos() const;
-	RenderInfo makeSpawnInfo();
-
-	size_t enemyIndex = -1;
 
 	const float WALK_SPEED = RNG::floatInRange(80.0f, 100.0f);
 	const float ROT_LERP_MULTIPLIER = RNG::floatInRange(0.3f, 0.8f);
@@ -42,10 +36,7 @@ public:
 	Enemy();
 	~Enemy() = default;
 
-	void setID(const size_t& newIndex)
-		{ enemyIndex = newIndex; }
-
-	void spawn() override;
+	void spawn(const SpawnInformation&) override;
 	void tick(const float&) override;
 
 	// RenderInfo general

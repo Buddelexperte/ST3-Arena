@@ -1,7 +1,10 @@
 #pragma once
 
 #include "EnemyManager.h" // Header File
+#include "CollisionManager.h"
 #include "GenericPool.h"
+
+#include "GameInstance.h"
 
 unsigned int EnemyManager::numEnemies = 0;
 int EnemyManager::enemyID = 0;
@@ -16,7 +19,7 @@ int EnemyManager::getNumActiveEnemies() const
 	return static_cast<int>(activeEnemies.size());
 }
 
-void EnemyManager::spawnEnemy()
+void EnemyManager::spawnEnemy(const SpawnInformation& spawnInfo)
 {
     // Retrieve an enemy instance from the pool
     std::unique_ptr<Enemy> newEnemy = GenericPool<Enemy>::instance().get();
@@ -28,7 +31,7 @@ void EnemyManager::spawnEnemy()
     //std::cout << "Using new enemy with ID [" << enemyKey << "]" << std::endl;
     newEnemy->setID(enemyKey);
 
-    newEnemy->spawn();
+    newEnemy->spawn(spawnInfo);
 
     // Extract render information and pass it to the renderer
     IMovable::RenderInfo renderInfo = newEnemy->getRenderInfo();
@@ -85,6 +88,45 @@ void EnemyManager::tick_kill(const float& deltaTime)
     pendingKill.clear();
 }
 
+sf::Vector2f EnemyManager::getNewSpawnPos() const
+{
+    constexpr float MIN_DISTANCE = 800.0f;
+    constexpr float MAX_DISTANCE = 1200.0f;
+
+    // Getting values for generating a position
+    sf::Vector2f playerPos = gameInstance().getPlayer()->getPosition();
+
+    // Generating the random position
+    float distance = RNG::floatInRange(MIN_DISTANCE, MAX_DISTANCE);
+    sf::Vector2f generatedPos = RNG::posInDistanceFrom(playerPos, distance);
+
+    return generatedPos;
+}
+
+IMovable::RenderInfo EnemyManager::makeSpawnRenderInfo()
+{
+    sf::Vector2f position = getNewSpawnPos();
+    static constexpr float SIZE_X = 100.0f;
+    static constexpr float SIZE_Y = 100.0f;
+    float rotation = getLookAtRot(position, gameInstance().getPlayer()->getPosition());
+    static const float START_V_X = 0.0f;
+    static const float START_V_Y = 0.0f;
+    static const sf::Color COLOR = sf::Color(255, 255, 255, 255);
+
+    IMovable::RenderInfo renderInfo = {
+        .pos = position,
+        .size = {SIZE_X, SIZE_Y},
+        .rot = rotation,
+        .velocity = {START_V_X, START_V_Y},
+        .color = COLOR,
+    };
+
+    if (enemyID == 0)
+        renderInfo.color = sf::Color::Red;
+
+    return renderInfo;
+}
+
 void EnemyManager::tick_spawning(const float& deltaTime)
 {
     constexpr float SPAWN_INTERVAL = SMALLEST_PRECISION;
@@ -101,7 +143,8 @@ void EnemyManager::tick_spawning(const float& deltaTime)
     // If the timer did not reach zero, cancel spawn attempt
     if (timer.isEmpty())
     {
-        spawnEnemy();
+        SpawnInformation spawnInfo = { makeSpawnRenderInfo(), 1.0f, 0.1f };
+        spawnEnemy(spawnInfo);
         timer.reset(); // Reset the timer to the configured spawn interval
     }
 }

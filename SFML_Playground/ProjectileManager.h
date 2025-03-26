@@ -1,15 +1,12 @@
 #pragma once
 #include <unordered_set>
 
-#include "GameInstance.h"
-#include "ProjectilePool.h"
+#include "Projectile.h"
 #include "Renderer.h"
 
 class ProjectileManager : public sf::Drawable
 {
 private:
-	GI_Arena& gameInstance = GI_Arena::getInstance();
-
 	static int projectileID;
 
 	EntityRenderer renderer; // Manages draw calls
@@ -39,7 +36,7 @@ public:
 
 	void deleteAll();
 
-	void createProjectile(const IMovable::RenderInfo& renderInfo, const float& damage);
+	void createProjectile(const SpawnInformation&);
 
 	void tick(const float& deltaTime);
 
