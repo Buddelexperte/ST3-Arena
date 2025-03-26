@@ -173,6 +173,7 @@
     <ClCompile Include="Widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AllEntities.h" />
     <ClInclude Include="AllPerks.h" />
     <ClInclude Include="AllWeapons.h" />
     <ClInclude Include="Damage.h" />

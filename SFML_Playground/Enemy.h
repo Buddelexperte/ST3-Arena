@@ -27,8 +27,6 @@ private:
 
 	using IMovable::setVelocity; // Make this function private for safety reasons
 
-	float damage = 0.1f;
-
 	void tick_move(const float&) override;
 	void kill_self(const bool&) const;
 
@@ -58,7 +56,4 @@ public:
 
 	void collideWithPlayer(Player& player) override;
 	void collideWithProjectile(Projectile& projectile) override;
-
-	float getDamage() const
-		{ return damage; }
 };

@@ -36,9 +36,6 @@
     <Filter Include="Source\Actors\Inventory\Items\Projectiles">
       <UniqueIdentifier>{13130653-7738-4189-84fa-1324ad7dbd05}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Actors\EntityPools">
-      <UniqueIdentifier>{9c2398b0-0c08-45fa-adb4-be56d64de2f6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Base\Abstracts">
       <UniqueIdentifier>{fa25da7d-d065-4dc1-9c81-8740e000ddad}</UniqueIdentifier>
     </Filter>
@@ -53,6 +50,9 @@
     </Filter>
     <Filter Include="Source\Actors\Enemies">
       <UniqueIdentifier>{ddb69889-7fa9-4194-8734-a9931b3609e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Managers\Pools">
+      <UniqueIdentifier>{9c2398b0-0c08-45fa-adb4-be56d64de2f6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -155,7 +155,7 @@
       <Filter>Source\Managers</Filter>
     </ClInclude>
     <ClInclude Include="ItemPool.h">
-      <Filter>Source\Actors\EntityPools</Filter>
+      <Filter>Source\Managers\Pools</Filter>
     </ClInclude>
     <ClInclude Include="Collision.h">
       <Filter>Source\Base\Abstracts</Filter>
@@ -248,13 +248,16 @@
       <Filter>Source\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="GenericPool.h">
-      <Filter>Source\Actors\EntityPools</Filter>
+      <Filter>Source\Managers\Pools</Filter>
     </ClInclude>
     <ClInclude Include="Damage.h">
       <Filter>Source\Base\Abstracts</Filter>
     </ClInclude>
     <ClInclude Include="EntityManager.h">
       <Filter>Source\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="AllEntities.h">
+      <Filter>Source\libs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

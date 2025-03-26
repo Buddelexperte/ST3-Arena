@@ -44,7 +44,6 @@ void EnemyManager::spawnEnemy(const SpawnInformation& spawnInfo)
 void EnemyManager::deleteEnemy(const size_t& key)
 {
     CollisionManager::getInstance().unregisterCollidable(activeEnemies[key]->getCollision()->getCollisionID());
-    GenericPool<Enemy>::instance().release(std::move(activeEnemies[key]));
     
     auto it = activeEnemies.find(key);
     if (it != activeEnemies.end())
@@ -54,7 +53,7 @@ void EnemyManager::deleteEnemy(const size_t& key)
 
         if (entity)
         {
-            entity->releaseToPool();  // Calls derived release function safely
+            entity.release()->releaseToPool();  // Calls derived release function safely
         }
     }
 

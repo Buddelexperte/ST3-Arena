@@ -40,7 +40,6 @@ void ProjectileManager::createProjectile(const SpawnInformation& spawnInfo)
 void ProjectileManager::deleteProjectile(const size_t& key)
 {
     CollisionManager::getInstance().unregisterCollidable(activeProjectiles[key]->getCollision()->getCollisionID());
-    GenericPool<Projectile>::instance().release(std::move(activeProjectiles[key]));
 
     auto it = activeProjectiles.find(key);
     if (it != activeProjectiles.end())
@@ -50,7 +49,7 @@ void ProjectileManager::deleteProjectile(const size_t& key)
 
         if (entity)
         {
-            entity->releaseToPool();  // Calls derived release function safely
+            entity.release()->releaseToPool();  // Calls derived release function safely
         }
     }
 
@@ -103,7 +102,6 @@ void ProjectileManager::tick_projectiles(const float& deltaTime)
         renderer.setVelocity(pair.first, pair.second->getVelocity());
         renderer.setRotation(pair.first, pair.second->getRotation());
     }
-
 }
 
 void ProjectileManager::tick(const float& deltaTime)

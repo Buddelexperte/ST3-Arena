@@ -91,7 +91,7 @@ void Enemy::kill_self(const bool& bByPlayer = false) const
 void Enemy::setPosition(const sf::Vector2f& pos)
 {
 	if (pos == getPosition()) return;
-	IMovable::setPosition(pos);
+	Entity::setPosition(pos);
 	EnemyManager::getInstance().callUpdate(getID(), InfoType::POSITION);
 	collisionBox.setPos(pos);
 }
@@ -99,14 +99,14 @@ void Enemy::setPosition(const sf::Vector2f& pos)
 void Enemy::addPosition(const sf::Vector2f& delta)
 {
 	if (shouldZero(delta)) return;
-	IMovable::addPosition(delta);
+	Entity::addPosition(delta);
 	collisionBox.setPos(collisionBox.getPos() + delta);
 }
 
 void Enemy::setSize(const sf::Vector2f& size)
 {
 	if (size == getSize()) return;
-	IMovable::setSize(size);
+	Entity::setSize(size);
 	EnemyManager::getInstance().callUpdate(getID(), InfoType::SIZE);
 	collisionBox.setSize(size);
 }
@@ -114,13 +114,13 @@ void Enemy::setSize(const sf::Vector2f& size)
 void Enemy::setColor(const sf::Color& color)
 {
 	if (color == getColor()) return;
-	IMovable::setColor(color);
+	Entity::setColor(color);
 	EnemyManager::getInstance().callUpdate(getID(), InfoType::COLOR);
 }
 
 void Enemy::setRenderInfo(const RenderInfo& newRenderInfo)
 {
-	IMovable::setRenderInfo(newRenderInfo);
+	Entity::setRenderInfo(newRenderInfo);
 	collisionBox.setPos(newRenderInfo.pos);
 	collisionBox.setSize(newRenderInfo.size);
 }

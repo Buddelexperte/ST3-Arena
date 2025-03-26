@@ -4,10 +4,12 @@
 #include "Entity.h"
 #include "Renderer.h"
 
+#include "AllEntities.h"
+
 struct RendererAndKeys
 {
 	EntityRenderer renderer;
-	std::unordered_set<size_t> keys;
+	std::unordered_set<size_t> keys; //TODO: Change into std::vector to benefit from binary_search
 };
 
 class EntityManager
@@ -17,7 +19,7 @@ private:
 	static int entityID;
 
 	std::vector<RendererAndKeys> renderLayers;
-	std::unordered_map<size_t, std::unique_ptr<Entity>> activeEnemies; // Random Access to Enemies
+	std::unordered_map<size_t, std::unique_ptr<Entity>> activeEntities; // Random Access to Enemies
 	std::unordered_set<size_t> pendingKill;
 
 	// SINGLETON
@@ -25,11 +27,15 @@ private:
 	EntityManager(const EntityManager&) = delete;
 	EntityManager& operator=(const EntityManager&) = delete;
 
+	EntityRenderer* getRenderLayer(const size_t& key);
+
 	// Tick wrappers
 	void tick_kill(const float&);
 	void tick_spawning(const float&);
 	void tick_entities(const float&);
-	void tick_renderer(const float&);
+
+	sf::Vector2f getNewSpawnPos() const;
+	IMovable::RenderInfo makeSpawnRenderInfo();
 
 	void deleteEntity(const size_t&);
 
@@ -78,6 +84,8 @@ public:
 		}
 
 		// Actually spawn the enemy properly and update it's attributes accordingly
-		activeEnemies.emplace(enemyKey, std::move(newEntity));
+		activeEntities.emplace(enemyKey, std::move(newEntity));
 	}
+
+	sf::Drawable* getDrawableLayer(const unsigned int& layer);
 };
