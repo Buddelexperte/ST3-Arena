@@ -2,14 +2,21 @@
 
 #include "EntityManager.h" // Own header file
 #include "GameInstance.h"
+#include "RandomNumbers.h"
 #include "GenericPool.h"
 #include "CollisionManager.h"
 
 unsigned int EntityManager::numEnemies = 0;
 int EntityManager::entityID = 0;
 
+EntityManager::EntityManager()
+{
+
+}
+
 void EntityManager::tick(const float& deltaTime)
 {
+
     // Kill all pendingKill enemies
     tick_kill(deltaTime);
 
@@ -18,6 +25,9 @@ void EntityManager::tick(const float& deltaTime)
 
     // Ticking of each enemy
     tick_entities(deltaTime);
+
+    // Tick the render layers
+    tick_renderer(deltaTime);
 
     return;
 }
@@ -47,7 +57,7 @@ void EntityManager::deleteEntity(const size_t& key)
         }
     }
 
-    getRenderLayer(key)->removeEntity(key);
+    getRenderLayerByEnemyKey(key)->removeEntity(key);
 
 }
 
@@ -58,7 +68,7 @@ void EntityManager::callDelete(const size_t& key)
 
 void EntityManager::callUpdate(const size_t& key, const InfoType& updateFlags)
 {
-    EntityRenderer* usedRenderLayer = getRenderLayer(key);
+    EntityRenderer* usedRenderLayer = &getRenderLayerByEnemyKey(key)->renderer;
 
     if (!usedRenderLayer)
         return;
@@ -94,14 +104,20 @@ sf::Drawable* EntityManager::getDrawableLayer(const unsigned int& layer)
     return nullptr;
 }
 
-EntityRenderer* EntityManager::getRenderLayer(const size_t& key)
+EntityManager::RendererAndKeys* EntityManager::getRenderLayerByEnemyKey(const size_t& key)
 {
+    if (renderLayers.empty()) {
+        std::cerr << "RenderLayers is empty!" << std::endl;
+        return nullptr;
+    }
+
     for (RendererAndKeys& elem : renderLayers)
     {
+        if (elem.keys.empty())
+            continue;
+
         if (elem.keys.contains(key))
-        {
-            return &elem.renderer;
-        }
+            return &elem;
     }
 
     return nullptr;
@@ -191,14 +207,30 @@ void EntityManager::tick_entities(const float& deltaTime)
     for (const auto& pair : activeEntities)
     {
         if (!pair.second)
+        {
             continue;
+        }
         
         pair.second->tick(deltaTime);
 
         const size_t key = pair.first;
-        EntityRenderer* usedRenderLayer = getRenderLayer(key);
+        EntityRenderer* usedRenderLayer = &getRenderLayerByEnemyKey(key)->renderer;
+
+        if (usedRenderLayer == nullptr)
+        {
+            std::cerr << "Ticking Renderer invalid" << std::endl;
+            continue;
+        }
 
         usedRenderLayer->setVelocity(pair.first, pair.second->getVelocity());
         usedRenderLayer->setRotation(pair.first, pair.second->getRotation());
+    }
+}
+
+void EntityManager::tick_renderer(const float& deltaTime)
+{
+    for (RendererAndKeys& elem : renderLayers)
+    {
+        elem.renderer.tick(deltaTime);
     }
 }

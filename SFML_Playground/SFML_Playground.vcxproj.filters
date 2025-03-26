@@ -65,20 +65,11 @@
     <ClCompile Include="Slider.cpp">
       <Filter>Source\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Source\Widgets</Filter>
-    </ClCompile>
     <ClCompile Include="Widgets.cpp">
       <Filter>Source\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyManager.cpp">
-      <Filter>Source\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Source\Actors</Filter>
-    </ClCompile>
-    <ClCompile Include="ProjectileManager.cpp">
-      <Filter>Source\Managers</Filter>
     </ClCompile>
     <ClCompile Include="Projectile.cpp">
       <Filter>Source\Actors</Filter>
@@ -142,12 +133,6 @@
     <ClInclude Include="CollisionManager.h">
       <Filter>Source\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyManager.h">
-      <Filter>Source\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="ProjectileManager.h">
-      <Filter>Source\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer.h">
       <Filter>Source\Managers</Filter>
     </ClInclude>
@@ -194,9 +179,6 @@
       <Filter>Source\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Slider.h">
-      <Filter>Source\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
       <Filter>Source\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Widgets.h">

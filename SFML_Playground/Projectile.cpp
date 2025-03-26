@@ -1,9 +1,8 @@
 #pragma once
 
 #include "GameInstance.h"
-#include "ProjectileManager.h"
-#include "Enemy.h"
-#include "Health.h"
+#include "Projectile.h"
+#include "EntityManager.h"
 
 // PROJECTILE SPAWNER ----------------------------------------
  
@@ -28,7 +27,7 @@ void ProjectileSpawner::shoot()
 		.damage = getDamage()
 	};
 
-	ProjectileManager::getInstance().createProjectile(spawnInfo);
+	EntityManager::getInstance().spawnEntity<Projectile>(spawnInfo);
 }
 
 // PROJECTILE OBJECT ----------------------------------------
@@ -46,7 +45,7 @@ Projectile::Projectile(const RenderInfo& initRenderInfo)
 
 void Projectile::kill_self() const
 {
-	ProjectileManager::getInstance().callDelete(getID());
+	EntityManager::getInstance().callDelete(getID());
 }
 
 void Projectile::tick_move(const float& deltaTime)

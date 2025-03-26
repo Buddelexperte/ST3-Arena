@@ -609,6 +609,9 @@ bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 
 // W_Gameplay -------------------------------------------------------------------------------------
 
+#include "CollisionManager.h"
+#include "EntityManager.h"
+
 W_Gameplay::W_Gameplay(InputWidget* parent) 
 	: InputWidget(parent),
 	pauseMenu(this), gameOverScreen(this), 
@@ -685,7 +688,15 @@ InputWidget* W_Gameplay::getWidgetAtIndex(const int& atIndex)
 
 InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 {
-	shapes = { &background, &enemyManager, gameInstance().getPlayer(), &projectileManager};
+	EntityManager& manager = EntityManager::getInstance();
+	sf::Drawable* bottomRenderer = manager.getDrawableLayer(0);
+	sf::Drawable* topRenderer = manager.getDrawableLayer(1);
+	Player* player = gameInstance().getPlayer();
+
+	if (!bottomRenderer || !topRenderer)
+		return this;
+
+	shapes = { &background, bottomRenderer, player, topRenderer };
 
 	switch (widgetIndex = toIndex)
 	{
@@ -729,9 +740,8 @@ void W_Gameplay::tick(const float& deltaTime)
 	// If Gameplay is UnPaused
 	if (!gameInstance().getIsPaused())
 	{
-		enemyManager.tick(deltaTime);
-		projectileManager.tick(deltaTime);
-		collisionManager.tick(deltaTime);
+		EntityManager::getInstance().tick(deltaTime);
+		CollisionManager::getInstance().tick(deltaTime);
 		if (player->isDead())
 			lose();
 	}

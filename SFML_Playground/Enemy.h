@@ -17,9 +17,6 @@ class Enemy :
 {
 private:
 	CollisionBox collisionBox;
-	ValueBar healthBar;
-	virtual ValueBar& getHealthBar() override
-		{ return healthBar; }
 
 	const float WALK_SPEED = RNG::floatInRange(80.0f, 100.0f);
 	const float ROT_LERP_MULTIPLIER = RNG::floatInRange(0.3f, 0.8f);

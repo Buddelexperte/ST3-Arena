@@ -28,6 +28,11 @@ public:
 		return getHealthBar().setMaxValue(newMax);
 	}
 
+	virtual float getMaxHealth()
+	{
+		return getHealthBar().getMaxValue();
+	}
+
 	virtual float getHealth()
 	{
 		return getHealthBar().getValue();
@@ -36,5 +41,10 @@ public:
 	bool isDead()
 	{
 		return shouldZero(getHealth());
+	}
+
+	void resetHealth()
+	{
+		getHealthBar().reset();
 	}
 };

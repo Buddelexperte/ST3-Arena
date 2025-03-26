@@ -1,6 +1,7 @@
 #pragma once
 
-#include "ProjectileManager.h"
+#include "Projectile.h"
+#include "EntityManager.h"
 
 class PS_Rifle : public ProjectileSpawner
 {
@@ -46,7 +47,7 @@ public:
 			.damage = getDamage()
 		};
 
-		ProjectileManager::getInstance().createProjectile(spawnInfo);
+		EntityManager::getInstance().spawnEntity<Projectile>(spawnInfo);
 	}
 
 };

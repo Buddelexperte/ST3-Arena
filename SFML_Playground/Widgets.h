@@ -1,11 +1,6 @@
 #pragma once
 
 #include "Button.h"
-#include "Timer.h"
-//#include "TargetController.h" // Old EnemyManager
-#include "EnemyManager.h" // New EnemyManager
-#include "ProjectileManager.h"
-#include "CollisionManager.h"
 #include "Flashlight.h"
 
 const std::string WIDGET_EXP = "Widget is no longer available.\n";
@@ -156,10 +151,6 @@ public:
 class W_Gameplay : public InputWidget // Gameplay Widget ------------------------------------------
 {
 private:
-	EnemyManager& enemyManager = EnemyManager::getInstance();
-	ProjectileManager& projectileManager = ProjectileManager::getInstance();
-	CollisionManager& collisionManager = CollisionManager::getInstance();
-
 	W_Paused pauseMenu;
 	W_GameOver gameOverScreen;
 

@@ -1,13 +1,12 @@
 #pragma once
 
 #include "Enemy.h" // Own Header File
+#include "EntityManager.h"
 #include "GameInstance.h"
-#include "EnemyManager.h"
 #include "SaveGame.h"
 
 Enemy::Enemy()
 	: Entity(EntityType::Enemy),
-	healthBar(1.0f),
 	collisionBox(this, getPosition(), getSize())
 {}
 
@@ -25,10 +24,10 @@ void Enemy::tick(const float& deltaTime)
 	// Calculate movement and apply i
 	tick_move(deltaTime);
 
-	if (healthBar.isEmpty())
+	if (isDead())
 	{
 		constexpr bool diedByPlayer = true;
-		healthBar.reset();
+		resetHealth();
 		kill_self(diedByPlayer);
 	}
 
@@ -85,14 +84,14 @@ void Enemy::kill_self(const bool& bByPlayer = false) const
 		gameInstance().getPlayer()->getFlashlight().addDeathLight(getPosition());
 
 	}
-	EnemyManager::getInstance().callDelete(getID());
+	EntityManager::getInstance().callDelete(getID());
 }
 
 void Enemy::setPosition(const sf::Vector2f& pos)
 {
 	if (pos == getPosition()) return;
 	Entity::setPosition(pos);
-	EnemyManager::getInstance().callUpdate(getID(), InfoType::POSITION);
+	EntityManager::getInstance().callUpdate(getID(), InfoType::POSITION);
 	collisionBox.setPos(pos);
 }
 
@@ -107,7 +106,7 @@ void Enemy::setSize(const sf::Vector2f& size)
 {
 	if (size == getSize()) return;
 	Entity::setSize(size);
-	EnemyManager::getInstance().callUpdate(getID(), InfoType::SIZE);
+	EntityManager::getInstance().callUpdate(getID(), InfoType::SIZE);
 	collisionBox.setSize(size);
 }
 
@@ -115,7 +114,7 @@ void Enemy::setColor(const sf::Color& color)
 {
 	if (color == getColor()) return;
 	Entity::setColor(color);
-	EnemyManager::getInstance().callUpdate(getID(), InfoType::COLOR);
+	EntityManager::getInstance().callUpdate(getID(), InfoType::COLOR);
 }
 
 void Enemy::setRenderInfo(const RenderInfo& newRenderInfo)

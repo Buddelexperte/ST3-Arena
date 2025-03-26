@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Widgets.h"
+#include "EntityManager.h"
 
 
 GI_Arena::GI_Arena()
@@ -124,8 +125,7 @@ void GI_Arena::startRound()
 	if (gameState < GAME_LAUNCHING)
 		return;
 
-	EnemyManager::getInstance().deleteAll();
-	ProjectileManager::getInstance().deleteAll();
+	EntityManager::getInstance().deleteAll();
 	gameState = IN_GAME;
 	player->spawn();
 	resetViewPos();
