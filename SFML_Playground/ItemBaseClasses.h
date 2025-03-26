@@ -146,7 +146,7 @@ public:
     // Additional weapon-specific methods could be added (e.g., reload, update)
 };
 
-std::unique_ptr<Weapon> makeWeapon(const std::string& weaponName);
+std::unique_ptr<Weapon> makeWeapon(std::string weaponName);
 
 // =============================== PERK ===============================
 
