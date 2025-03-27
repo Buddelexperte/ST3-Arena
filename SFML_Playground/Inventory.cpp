@@ -55,11 +55,11 @@ void Inventory::addPerk(std::unique_ptr<Perk> perk)
 }
 
 // This function should be called when an in-game event occurs to trigger all relevant perks.
-void Inventory::triggerPerks(PerkTrigger trigger)
+void Inventory::triggerPerks(PerkTriggerInfo& triggerInfo)
 {
     for (auto& perk : perks)
     {
-        perk->onTrigger(trigger);
+        perk->onTrigger(triggerInfo);
     }
 }
 

@@ -16,6 +16,7 @@ void Enemy::spawn(const SpawnInformation& spawnInfo)
 {
 	setRenderInfo(spawnInfo.renderInfo);
 	setMaxHealth(spawnInfo.health);
+	resetHealth();
 	setDamage(spawnInfo.damage);
 }
 
@@ -27,11 +28,9 @@ void Enemy::tick(const float& deltaTime)
 	if (isDead())
 	{
 		constexpr bool diedByPlayer = true;
-		resetHealth();
 		kill_self(diedByPlayer);
+		return;
 	}
-
-	return;
 }
 
 void Enemy::releaseToPool()
@@ -76,7 +75,7 @@ void Enemy::tick_move(const float& deltaTime)
 	}
 }
 
-void Enemy::spawnExperience()
+void Enemy::spawnDeathParticle()
 {
 	static constexpr float EXPR_VALUE = 0.0f; // TODO: Implement experience value
 
@@ -85,7 +84,7 @@ void Enemy::spawnExperience()
 	expRenderInfo.color = sf::Color::Yellow;
 	expRenderInfo.velocity = sf::Vector2f(0.0f, 0.0f);
 
-	EntityManager::getInstance().spawnEntity<Pickup>(SpawnInformation(expRenderInfo, EXPR_VALUE, 0.0f)); // Expr value in Health slot
+	EntityManager::getInstance().spawnEntity<P_Sparkle>(SpawnInformation(expRenderInfo, EXPR_VALUE, 0.0f)); // Expr value in Health slot
 }
 
 void Enemy::kill_self(const bool& bByPlayer = false)
@@ -93,8 +92,7 @@ void Enemy::kill_self(const bool& bByPlayer = false)
 	if (bByPlayer)
 	{
 		SaveGame::currentData.score = (SaveGame::currentData.score + 1);
-		//gameInstance().getPlayer()->getFlashlight().addDeathLight(getPosition());
-		spawnExperience();
+		spawnDeathParticle();
 	}
 
 	Entity::kill_self();

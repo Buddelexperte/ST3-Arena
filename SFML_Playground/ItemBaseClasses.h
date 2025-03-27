@@ -207,8 +207,9 @@ public:
     }
 
     // Called when a game event occurs; checks if the perk should trigger.
-    void onTrigger(PerkTrigger trigger)
+    void onTrigger(PerkTriggerInfo& triggerInfo)
     {
+        PerkTrigger trigger = triggerInfo.trigger;
         if (vectorContains(triggers, trigger))
         {
             std::cout << "Perk \"" << info.name << "\" triggered on event: ";

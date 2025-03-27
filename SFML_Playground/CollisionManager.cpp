@@ -81,7 +81,7 @@ void CollisionManager::registerEntity(Collidable* collidable, const EntityType& 
 		pickupCollisions[collisionCounter] = collidable;
 		break;
 	default:
-		break;
+		return;
 	}
 
 	collidable->setCollisionID(collisionCounter);
@@ -114,7 +114,7 @@ void CollisionManager::unregisterEntity(const size_t& collisionID, const EntityT
 		}
 		break;
 	default:
-		break;
+		return;
 	}
 }
 

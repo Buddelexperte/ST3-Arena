@@ -7,7 +7,9 @@
 #include "Projectile.h"
 
 // PICKUPS ------------
-#include "Pickup.h"
 
 // PLAYER -------------
 #include "Player.h"
+
+// PARTICLES ----------
+#include "P_Sparkle.h"

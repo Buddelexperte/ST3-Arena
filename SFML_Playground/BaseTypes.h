@@ -6,7 +6,8 @@ enum class EntityType {
 	Enemy,
 	Projectile,
 	Pickup,
-	Indicator
+	Indicator, // After flashlight shader
+	PARTICLE // Before flashlight shader
 };
 
 enum InfoType {

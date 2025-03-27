@@ -2,7 +2,7 @@
 
 #include "Entity.h"
 
-class Pickup : public Entity
+class P_Sparkle : public Entity
 {
 private:
 	// EXperience Orb variables, need to be moved over TODO
@@ -20,8 +20,8 @@ protected:
 	float value = 0.0f;
 
 public:
-	Pickup();
-	~Pickup() = default;
+	P_Sparkle();
+	~P_Sparkle() = default;
 
 	virtual Collidable* getCollision() override
 		{ return &collisionBox; }

@@ -1,6 +1,13 @@
 #pragma once
 #include "ItemBaseClasses.h"
 
+struct PerkTriggerInfo
+{
+    PerkTrigger trigger;
+    sf::Vector2f pos;
+    Entity* actor;
+};
+
 class Player;
 
 // Inventory class: manages all items, ensuring that only one weapon is active at a time.
@@ -69,7 +76,7 @@ public:
     void addPerk(std::unique_ptr<Perk>);
 
     // This function should be called when an in-game event occurs to trigger all relevant perks.
-    void triggerPerks(PerkTrigger);
+    void triggerPerks(PerkTriggerInfo&);
 
     // Removes a weapon by index and returns the unique pointer.
     std::unique_ptr<Weapon> removeWeapon(size_t);

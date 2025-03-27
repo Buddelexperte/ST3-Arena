@@ -25,7 +25,7 @@ private:
 	using IMovable::setVelocity; // Make this function private for safety reasons
 
 	void tick_move(const float&) override;
-	void spawnExperience();
+	void spawnDeathParticle();
 	void kill_self(const bool&);
 
 public:

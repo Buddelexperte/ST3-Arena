@@ -139,7 +139,7 @@ void EntityManager::tick_kill(const float&)
 
 sf::Vector2f EntityManager::getNewSpawnPos() const
 {
-    constexpr float MIN_DISTANCE = 800.0; // 800
+    constexpr float MIN_DISTANCE = 400.0f; // 800
     constexpr float MAX_DISTANCE = 1200.0f; // 1200
 
     // Getting values for generating a position

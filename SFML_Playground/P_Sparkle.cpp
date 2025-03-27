@@ -1,14 +1,18 @@
 #pragma once
 
-#include "Pickup.h" // Own header
+#include "P_Sparkle.h" // Own header
 #include "GameInstance.h"
 
-// TODO: Move the weird experience orb logic into own class
+P_Sparkle::P_Sparkle()
+	: Entity(EntityType::PARTICLE),
+	collisionBox(this, getPosition(), getSize())
+{
 
-void Pickup::tick_move(const float& deltaTime)
+}
+
+void P_Sparkle::tick_move(const float& deltaTime)
 {
 	static constexpr float ROTATION_MULTIPLIER = 1000.0f;
-	// TODO: Add magnet towards player
 
 	// Normalize lifetime to scale correctly (assuming lifeTime goes from 1.0 to 0.0)
 	float normalizedLifetime = lifeTime.getPercentage(); // Ensure this is clamped between 0.0 and 1.0
@@ -22,7 +26,7 @@ void Pickup::tick_move(const float& deltaTime)
 	setRotation(getRotation() + rotationSpeed * deltaTime);
 }
 
-void Pickup::tick_lifetime(const float& deltaTime)
+void P_Sparkle::tick_lifetime(const float& deltaTime)
 {
 	lifeTime.addValue(-deltaTime);
 
@@ -32,25 +36,17 @@ void Pickup::tick_lifetime(const float& deltaTime)
 	}
 }
 
-
-Pickup::Pickup()
-	: Entity(EntityType::Pickup),
-	collisionBox(this, getPosition(), getSize())
-{
-
-}
-
-void Pickup::setValue(const float& newVal)
+void P_Sparkle::setValue(const float& newVal)
 {
 	value = newVal;
 }
 
-float Pickup::getValue() const
+float P_Sparkle::getValue() const
 {
 	return value;
 }
 
-void Pickup::spawn(const SpawnInformation& spawnInfo)
+void P_Sparkle::spawn(const SpawnInformation& spawnInfo)
 {
 	rotationSpeed = 0.0f;
 	setRenderInfo(spawnInfo.renderInfo);
@@ -60,24 +56,24 @@ void Pickup::spawn(const SpawnInformation& spawnInfo)
 	lifeTime.reset();
 }
 
-void Pickup::tick(const float& deltaTime)
+void P_Sparkle::tick(const float& deltaTime)
 {
 	tick_lifetime(deltaTime);
 
 	tick_move(deltaTime);
 }
 
-void Pickup::releaseToPool()
+void P_Sparkle::releaseToPool()
 {
-	GenericPool<Pickup>::instance().release(std::unique_ptr<Pickup>(this));
+	GenericPool<P_Sparkle>::instance().release(std::unique_ptr<P_Sparkle>(this));
 }
 
-void Pickup::onCollision(IHasCollision* other)
+void P_Sparkle::onCollision(IHasCollision* other)
 {
 	other->collideWithPickup(*this);
 }
 
-void Pickup::setSize(const sf::Vector2f& newSize)
+void P_Sparkle::setSize(const sf::Vector2f& newSize)
 {
 	Entity::setSize(newSize);
 	collisionBox.setSize(newSize);

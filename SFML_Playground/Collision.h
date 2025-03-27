@@ -6,7 +6,7 @@ class Collidable;
 class Enemy;
 class Player;
 class Projectile;
-class Pickup;
+class P_Sparkle;
 
 // Collision interface Class for actors
 class IHasCollision
@@ -22,7 +22,7 @@ public:
 	virtual void collideWithEnemy(Enemy& enemy) {};
 	virtual void collideWithPlayer(Player& player) {};
 	virtual void collideWithProjectile(Projectile& projectile) {};
-	virtual void collideWithPickup(Pickup& pickup) {};
+	virtual void collideWithPickup(P_Sparkle& pickup) {};
 };
 
 // Collision base class

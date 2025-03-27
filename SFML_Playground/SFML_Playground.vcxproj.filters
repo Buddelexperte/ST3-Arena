@@ -60,6 +60,9 @@
     <Filter Include="Source\Actors\Entities\Projectiles">
       <UniqueIdentifier>{83b09f9a-3a51-4552-b0a1-af70c154c201}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Actors\Entities\Particles">
+      <UniqueIdentifier>{8ccf1d1c-a71a-4cba-92d7-ea8931ac79fd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -134,8 +137,8 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Source\Actors\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="Pickup.cpp">
-      <Filter>Source\Actors\Entities</Filter>
+    <ClCompile Include="P_Sparkle.cpp">
+      <Filter>Source\Actors\Entities\Particles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -250,8 +253,8 @@
     <ClInclude Include="Enemy.h">
       <Filter>Source\Actors\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Pickup.h">
-      <Filter>Source\Actors\Entities</Filter>
+    <ClInclude Include="P_Sparkle.h">
+      <Filter>Source\Actors\Entities\Particles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

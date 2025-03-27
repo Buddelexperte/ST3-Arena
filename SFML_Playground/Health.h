@@ -11,7 +11,6 @@ private:
 public:
 	virtual void hurt(const float& delta)
 	{
-		std::cout << "Hurt with this much damage: " << delta << std::endl;
 		getHealthBar().addValue(-delta);
 	}
 
@@ -42,7 +41,7 @@ public:
 
 	bool isDead()
 	{
-		return shouldZero(getHealth());
+		return (getHealth() < SMALLEST_PRECISION);
 	}
 
 	void resetHealth()
