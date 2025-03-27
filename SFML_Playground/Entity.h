@@ -6,18 +6,14 @@
 #include "Damage.h"
 #include "GenericPool.h"
 
-enum class EntityType {
-	NoEntity = -1,
-	Player = 0,
-	Enemy,
-	Projectile
-};
+#include "BaseTypes.h"
 
 struct SpawnInformation
 {
 	IMovable::RenderInfo renderInfo;
 	float health;
 	float damage;
+	int flag = 0;
 };
 
 class Entity 
@@ -33,6 +29,9 @@ private:
 		return healthBar;
 	}
 
+protected:
+	virtual void kill_self();
+
 public:
 	Entity(const EntityType&);
 	~Entity() = default;
@@ -42,9 +41,16 @@ public:
 	void setID(const size_t& newID);
 	size_t getID() const;
 
+	// Using the CollisioNManager
+	void enableCollision();
+	void disableCollision();
+	// IHasCollision
+	virtual Collidable* getCollision() override = 0;
+
 	virtual void spawn(const SpawnInformation&) = 0;
 	virtual void tick(const float& deltaTime) = 0;
 	virtual void releaseToPool() = 0;
+
 
 	// RenderInfo + CallUpdate
 	void setRenderInfo(const RenderInfo&) override;

@@ -2,6 +2,7 @@
 
 #include "ValueBar.h"
 
+#include <iostream>
 class IHasHealth
 {
 private:
@@ -10,6 +11,7 @@ private:
 public:
 	virtual void hurt(const float& delta)
 	{
+		std::cout << "Hurt with this much damage: " << delta << std::endl;
 		getHealthBar().addValue(-delta);
 	}
 

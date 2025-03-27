@@ -10,9 +10,11 @@ class CollisionManager
 private:
 	static size_t collisionCounter;
 
+	std::unordered_map<EntityType, std::unordered_map<size_t, Collidable*>> collisionLayers;
 	Collidable* playerCollision = nullptr;
 	std::unordered_map<size_t, Collidable*> projectileCollisions;
 	std::unordered_map<size_t, Collidable*> enemyCollisions;
+	std::unordered_map<size_t, Collidable*> pickupCollisions;
 
 	// SINGLETON
 	CollisionManager();
@@ -21,7 +23,6 @@ private:
 
 	void tick_collision(const float&);
 
-
 public:
 	static CollisionManager& getInstance()
 	{
@@ -29,11 +30,8 @@ public:
 		return instance;
 	}
 
-	void unregisterPlayer();
-	void unregisterCollidable(const size_t&);
-	void registerPlayer(Collidable*);
-	void registerEnemy(Collidable*);
-	void registerProjectile(Collidable*);
+	void registerEntity(Collidable*, const EntityType&);
+	void unregisterEntity(const size_t&, const EntityType&);
 
 	void tick(const float& deltaTime);
 };

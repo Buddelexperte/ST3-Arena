@@ -10,7 +10,7 @@ private:
 	const int burstSize = 3;
 	int burstLeft = 0;
 
-	static constexpr float BASE_DAMAGE = 0.1f;
+	static constexpr float BASE_DAMAGE = 1.0f;
 	static constexpr float COOLDOWN = 0.8f;
 
 public:

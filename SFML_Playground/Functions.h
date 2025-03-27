@@ -80,6 +80,9 @@ inline void zeroPrecision(sf::Vector2f& value, const float& precision = SMALLEST
 
 
 // LERP -------------------------------------------------------------------------------------------
+
+static constexpr inline float LERP_SMOOTHNESS = 0.01f;
+
 inline float lerp(const float& currentRot, const float& targetRot, float factor)
 {
 	float diff = targetRot - currentRot;

@@ -25,7 +25,8 @@ private:
 	using IMovable::setVelocity; // Make this function private for safety reasons
 
 	void tick_move(const float&) override;
-	void kill_self(const bool&) const;
+	void spawnExperience();
+	void kill_self(const bool&);
 
 public:
 	Enemy();

@@ -141,6 +141,8 @@ void GI_Arena::preTick()
 
 void GI_Arena::tick(const float& deltaTime)
 {
+	globalTime += deltaTime;
+
 	tick_view(deltaTime);
 	IDrawableShapes::updateValues();
 

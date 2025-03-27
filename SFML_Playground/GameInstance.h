@@ -17,6 +17,7 @@ class GI_Arena // SINGLETON PATTERN
 private:
 	// Time calculation (deltaTime etc.)
 	sf::Clock clock;
+	static inline float globalTime = 0.0f;
 
 	// SINGELTON
 	GI_Arena();
@@ -65,6 +66,10 @@ public:
 	void startRound();
 	// Ticks
 	void tickLoop();
+	float getGlobalTime() const
+	{
+		return globalTime;
+	}
 	// Viewport
 	void updateScreen();
 	void resetViewPos();

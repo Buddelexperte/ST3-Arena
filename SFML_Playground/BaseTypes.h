@@ -1,6 +1,13 @@
 #pragma once
 
-static constexpr inline float LERP_SMOOTHNESS = 0.01f;
+enum class EntityType {
+	NoEntity = -1,
+	Player = 0,
+	Enemy,
+	Projectile,
+	Pickup,
+	Indicator
+};
 
 enum InfoType {
 	EMPTY_INFO	= 0,		// No info

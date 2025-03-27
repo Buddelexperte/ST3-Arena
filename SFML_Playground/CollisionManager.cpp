@@ -12,6 +12,25 @@ CollisionManager::CollisionManager()
 
 void CollisionManager::tick_collision(const float& deltaTime)
 {
+	// First calc pickups
+	for (auto& pickupPair : pickupCollisions)
+	{
+		if (!pickupPair.second)
+			continue;
+
+		// Pickup collision with player
+		if (playerCollision)
+		{
+			// Player collides with Pickup
+			if (pickupPair.second->isColliding(playerCollision))
+			{
+				playerCollision->onCollision(pickupPair.second);
+				pickupPair.second->onCollision(playerCollision);
+			}
+		}
+	}
+
+	// Then calc enemy/proj hits
 	for (auto& enemy_pair : enemyCollisions)
 	{
 		if (!enemy_pair.second)
@@ -45,49 +64,61 @@ void CollisionManager::tick_collision(const float& deltaTime)
 	}
 }
 
-void CollisionManager::unregisterPlayer()
+void CollisionManager::registerEntity(Collidable* collidable, const EntityType& type)
 {
-	playerCollision = nullptr;
-}
+	switch (type)
+	{
+	case EntityType::Player:
+		playerCollision = collidable;
+		break;
+	case EntityType::Enemy:
+		enemyCollisions[collisionCounter] = collidable;
+		break;
+	case EntityType::Projectile:
+		projectileCollisions[collisionCounter] = collidable;
+		break;
+	case EntityType::Pickup:
+		pickupCollisions[collisionCounter] = collidable;
+		break;
+	default:
+		break;
+	}
 
-void CollisionManager::unregisterCollidable(const size_t& key)
-{
-
-	if (projectileCollisions.find(key) != projectileCollisions.end())
-		projectileCollisions.erase(key);
-
-	if (enemyCollisions.find(key) != enemyCollisions.end())
-		enemyCollisions.erase(key);
-
-	//std::cout << "Collision [" << key << "] unregistered" << std::endl;
-}
-
-void CollisionManager::registerPlayer(Collidable* collidable)
-{
-	//std::cout << "Registered player Collision [" << collisionCounter << "]" << std::endl;
-	playerCollision = collidable;
 	collidable->setCollisionID(collisionCounter);
 	collisionCounter++;
 }
 
-void CollisionManager::registerEnemy(Collidable* collidable)
+void CollisionManager::unregisterEntity(const size_t& collisionID, const EntityType& type)
 {
-	//std::cout << "Registered enemy Collision [" << collisionCounter << "]" << std::endl;
-	enemyCollisions[collisionCounter] = collidable;
-	collidable->setCollisionID(collisionCounter);
-	collisionCounter++;
-}
-
-void CollisionManager::registerProjectile(Collidable* collidable)
-{
-	//std::cout << "Registered projectile Collision [" << collisionCounter << "]" << std::endl;
-	projectileCollisions[collisionCounter] = collidable;
-	collidable->setCollisionID(collisionCounter);
-	collisionCounter++;
+	switch (type)
+	{
+	case EntityType::Player:
+		playerCollision = nullptr;
+		break;
+	case EntityType::Enemy:
+		if (enemyCollisions.find(collisionID) != enemyCollisions.end())
+		{
+			enemyCollisions.erase(collisionID);
+		}
+		break;
+	case EntityType::Projectile:
+		if (projectileCollisions.find(collisionID) != projectileCollisions.end())
+		{
+			projectileCollisions.erase(collisionID);
+		}
+		break;
+	case EntityType::Pickup:
+		if (pickupCollisions.find(collisionID) != pickupCollisions.end())
+		{
+			pickupCollisions.erase(collisionID);
+		}
+		break;
+	default:
+		break;
+	}
 }
 
 void CollisionManager::tick(const float& deltaTime)
 {
 	tick_collision(deltaTime);
-	//std::cout << "### Collisions active: " << enemyCollisions.size() + projectileCollisions.size() + (playerCollision != nullptr) << std::endl;
 }

@@ -34,8 +34,6 @@ void EntityManager::tick(const float& deltaTime)
 
 void EntityManager::deleteEntity(const size_t& key)
 {
-    CollisionManager::getInstance().unregisterCollidable(activeEntities[key]->getCollision()->getCollisionID());
-
     auto it = activeEntities.find(key);
     if (it != activeEntities.end())
     {
@@ -53,6 +51,7 @@ void EntityManager::deleteEntity(const size_t& key)
                 break;
             }
 
+            entity->disableCollision();
             entity.release()->releaseToPool();  // Calls derived release function safely
         }
     }
@@ -73,13 +72,16 @@ void EntityManager::callUpdate(const size_t& key, const InfoType& updateFlags)
     if (!usedRenderLayer)
         return;
 
-    Entity* entity = activeEntities[key].get();  // Store pointer once
+    Entity* entity = activeEntities[key].get();  // Store raw pointer once
 
     if (updateFlags & InfoType::POSITION) {
         usedRenderLayer->setPosition(key, entity->getPosition());
     }
     if (updateFlags & InfoType::SIZE) {
         usedRenderLayer->setSize(key, entity->getSize());
+    }
+    if (updateFlags & InfoType::ROTATION) {
+        usedRenderLayer->setRotation(key, entity->getRotation());
     }
     if (updateFlags & InfoType::COLOR) {
         usedRenderLayer->setColor(key, entity->getColor());
@@ -137,8 +139,8 @@ void EntityManager::tick_kill(const float&)
 
 sf::Vector2f EntityManager::getNewSpawnPos() const
 {
-    constexpr float MIN_DISTANCE = 800.0f;
-    constexpr float MAX_DISTANCE = 1200.0f;
+    constexpr float MIN_DISTANCE = 800.0; // 800
+    constexpr float MAX_DISTANCE = 1200.0f; // 1200
 
     // Getting values for generating a position
     sf::Vector2f playerPos = gameInstance().getPlayer()->getPosition();
@@ -157,7 +159,7 @@ IMovable::RenderInfo EntityManager::makeSpawnRenderInfo()
     sf::Vector2f position = getNewSpawnPos();
     static constexpr float SIZE_X = 100.0f;
     static constexpr float SIZE_Y = 100.0f;
-    float rotation = getLookAtRot(position, playerPos);
+    float rotation = getLookAtRot(playerPos, position);
     static const float START_V_X = 0.0f;
     static const float START_V_Y = 0.0f;
     static const sf::Color COLOR = sf::Color(255, 255, 255, 255);
@@ -179,7 +181,7 @@ IMovable::RenderInfo EntityManager::makeSpawnRenderInfo()
 void EntityManager::tick_spawning(const float& deltaTime)
 {
     constexpr float SPAWN_INTERVAL = SMALLEST_PRECISION;
-    constexpr unsigned int MAX_ENEMIES = 9; // Temporary safe guard, replace with actual spawning logic later
+    constexpr unsigned int MAX_ENEMIES = 20; // Temporary safe guard, replace with actual spawning logic later
 
     // TODO: Temporary values, replace with spawning logic in EnemySpawner class
     constexpr float ENEMY_HEALTH = 1.0f;

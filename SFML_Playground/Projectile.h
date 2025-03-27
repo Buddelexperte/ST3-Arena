@@ -47,12 +47,10 @@ class Projectile :
     public Entity
 {
 private:
-    const float maxLifetime = 5.0f;
-    float lifetimeLeft = maxLifetime;
+    const float MAX_LIFETIME = 5.0f;
+    ValueBar lifetime;
 
     CollisionBox collisionBox;
-
-    void kill_self() const;
 
     void tick_move(const float&) override;
     void tick_lifetime(const float&);

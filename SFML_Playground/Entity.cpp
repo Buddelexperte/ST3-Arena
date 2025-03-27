@@ -3,7 +3,22 @@
 #include "Entity.h"
 #include "EntityManager.h"
 
-Entity::Entity(const EntityType& type) 
+void Entity::enableCollision()
+{
+	CollisionManager::getInstance().registerEntity(getCollision(), getType());
+}
+
+void Entity::disableCollision()
+{ 
+	CollisionManager::getInstance().unregisterEntity(getCollision()->getCollisionID(), getType());
+}
+
+void Entity::kill_self()
+{
+	EntityManager::getInstance().callDelete(getID());
+}
+
+Entity::Entity(const EntityType& type)
 	: ownType(type)
 {
 }
@@ -31,7 +46,7 @@ void Entity::setRenderInfo(const RenderInfo& renderInfo)
 void Entity::setPosition(const sf::Vector2f& newPos)
 {
 	IMovable::setPosition(newPos);
-	//entityManager().callUpdate(entityID, InfoType::POSITION);
+	EntityManager::getInstance().callUpdate(entityID, InfoType::POSITION);
 }
 
 void Entity::addPosition(const sf::Vector2f& delta)
@@ -43,23 +58,23 @@ void Entity::addPosition(const sf::Vector2f& delta)
 void Entity::setRotation(const float& newRot)
 {
 	IMovable::setRotation(newRot);
-	//entityManager().callUpdate(entityID, InfoType::ROTATION);
+	EntityManager::getInstance().callUpdate(entityID, InfoType::ROTATION);
 }
 
 void Entity::setSize(const sf::Vector2f& newSize)
 {
 	IMovable::setSize(newSize);
-	//entityManager().callUpdate(entityID, InfoType::SIZE);
+	EntityManager::getInstance().callUpdate(entityID, InfoType::SIZE);
 }
 
 void Entity::setColor(const sf::Color& newColor)
 {
 	IMovable::setColor(newColor);
-	//entityManager().callUpdate(entityID, InfoType::COLOR);
+	EntityManager::getInstance().callUpdate(entityID, InfoType::COLOR);
 }
 
 void Entity::setVelocity(const sf::Vector2f& newVelo)
 {
 	IMovable::setVelocity(newVelo);
-	//entityManager().callUpdate(entityID, InfoType::VELOCITY);
+	EntityManager::getInstance().callUpdate(entityID, InfoType::VELOCITY);
 }

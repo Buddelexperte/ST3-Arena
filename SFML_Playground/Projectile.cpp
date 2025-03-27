@@ -10,7 +10,9 @@ ProjectileSpawner::ProjectileSpawner(const RenderInfo& baseInfo, const float& da
 	:
 	baseInfo(baseInfo),
 	damage(damage)
-	{}
+{
+
+}
 
 void ProjectileSpawner::shoot()
 {
@@ -38,14 +40,10 @@ Projectile::Projectile()
 
 Projectile::Projectile(const RenderInfo& initRenderInfo)
 	: Entity(EntityType::Projectile), 
+	lifetime(MAX_LIFETIME),
 	collisionBox(this, initRenderInfo.pos, initRenderInfo.size)
 {
 	setRenderInfo(initRenderInfo);
-}
-
-void Projectile::kill_self() const
-{
-	EntityManager::getInstance().callDelete(getID());
 }
 
 void Projectile::tick_move(const float& deltaTime)
@@ -56,16 +54,17 @@ void Projectile::tick_move(const float& deltaTime)
 
 void Projectile::tick_lifetime(const float& deltaTime)
 {
-	lifetimeLeft -= deltaTime;
+	lifetime.addValue(deltaTime);
 
-	if (lifetimeLeft < SMALLEST_PRECISION)
+	if (lifetime.isEmpty())
+	{
 		kill_self();
+	}
 }
 
 void Projectile::spawn(const SpawnInformation& spawnInfo)
 {
-	CollisionManager::getInstance().registerProjectile(getCollision());
-	lifetimeLeft = maxLifetime;
+	lifetime.reset();
 	setRenderInfo(spawnInfo.renderInfo);
 	setDamage(spawnInfo.damage);
 }

@@ -156,6 +156,7 @@
     <ClCompile Include="GameInstance.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="ItemBaseClasses.cpp" />
+    <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Projectiles_Shotgun.h" />
     <ClCompile Include="Renderer.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="GenericPool.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Pickup.h" />
     <ClInclude Include="WidgetBase.h" />
     <ClInclude Include="BaseTypes.h" />
     <ClInclude Include="Button.h" />

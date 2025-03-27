@@ -8,12 +8,12 @@
 Enemy::Enemy()
 	: Entity(EntityType::Enemy),
 	collisionBox(this, getPosition(), getSize())
-{}
+{
+
+}
 
 void Enemy::spawn(const SpawnInformation& spawnInfo)
 {
-	CollisionManager::getInstance().registerEnemy(getCollision());
-
 	setRenderInfo(spawnInfo.renderInfo);
 	setMaxHealth(spawnInfo.health);
 	setDamage(spawnInfo.damage);
@@ -76,15 +76,28 @@ void Enemy::tick_move(const float& deltaTime)
 	}
 }
 
-void Enemy::kill_self(const bool& bByPlayer = false) const
+void Enemy::spawnExperience()
+{
+	static constexpr float EXPR_VALUE = 0.0f; // TODO: Implement experience value
+
+	IMovable::RenderInfo expRenderInfo = getRenderInfo();
+	expRenderInfo.size = getSize() / 2.0f;
+	expRenderInfo.color = sf::Color::Yellow;
+	expRenderInfo.velocity = sf::Vector2f(0.0f, 0.0f);
+
+	EntityManager::getInstance().spawnEntity<Pickup>(SpawnInformation(expRenderInfo, EXPR_VALUE, 0.0f)); // Expr value in Health slot
+}
+
+void Enemy::kill_self(const bool& bByPlayer = false)
 {
 	if (bByPlayer)
 	{
 		SaveGame::currentData.score = (SaveGame::currentData.score + 1);
-		gameInstance().getPlayer()->getFlashlight().addDeathLight(getPosition());
-
+		//gameInstance().getPlayer()->getFlashlight().addDeathLight(getPosition());
+		spawnExperience();
 	}
-	EntityManager::getInstance().callDelete(getID());
+
+	Entity::kill_self();
 }
 
 void Enemy::setPosition(const sf::Vector2f& pos)
@@ -97,7 +110,8 @@ void Enemy::setPosition(const sf::Vector2f& pos)
 
 void Enemy::addPosition(const sf::Vector2f& delta)
 {
-	if (shouldZero(delta)) return;
+	if (shouldZero(delta))
+		return;
 	Entity::addPosition(delta);
 	collisionBox.setPos(collisionBox.getPos() + delta);
 }
@@ -124,7 +138,6 @@ void Enemy::setRenderInfo(const RenderInfo& newRenderInfo)
 	collisionBox.setSize(newRenderInfo.size);
 }
 
-// TODO: Implement onCollision instead of constant checking in the loop
 void Enemy::onCollision(IHasCollision* other)
 {
 	other->collideWithEnemy(*this);

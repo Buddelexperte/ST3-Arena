@@ -6,7 +6,7 @@
 class Pistol : public Weapon
 {
 private:
-	static constexpr float BASE_DAMAGE = 0.2f;
+	static constexpr float BASE_DAMAGE = 1.0f;
 	static constexpr float COOLDOWN = 0.2f;
 
 public:

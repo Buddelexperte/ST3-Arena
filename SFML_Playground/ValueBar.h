@@ -57,6 +57,12 @@ public:
 		return maxValue;
 	} 
 
+	float getPercentage() const
+	{
+
+		return (currentValue / maxValue);
+	}
+
 	bool isMax() const
 	{
 		return currentValue >= maxValue;

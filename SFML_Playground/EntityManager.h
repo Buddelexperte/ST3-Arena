@@ -80,18 +80,20 @@ public:
 		//std::cout << "Using new enemy with ID [" << enemyKey << "]" << std::endl;
 		newEntity->setID(entityKey);
 		newEntity->spawn(spawnInfo);
+		newEntity->enableCollision();
 
 		// Extract render information and pass it to the renderer
 		IMovable::RenderInfo renderInfo = newEntity->getRenderInfo();
 
 		const EntityType type = newEntity->getType();
+		// Add Collision
 		switch (type)
 		{
 		case EntityType::Enemy:
 			numEnemies++;
 			renderLayers[0].addEntity(renderInfo, entityKey);
 			break;
-		case EntityType::Projectile:
+		case EntityType::Projectile: case EntityType::Pickup:
 			renderLayers[1].addEntity(renderInfo, entityKey);
 			break;
 		default:
