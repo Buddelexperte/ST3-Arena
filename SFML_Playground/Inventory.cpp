@@ -1,5 +1,6 @@
 #pragma once
-#include "Inventory.h"
+
+#include "Inventory.h" // Own header file
 #include "Player.h"
 #include "GameInstance.h"
 

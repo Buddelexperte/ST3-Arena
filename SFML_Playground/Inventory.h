@@ -1,12 +1,6 @@
 #pragma once
-#include "ItemBaseClasses.h"
 
-struct PerkTriggerInfo
-{
-    PerkTrigger trigger;
-    sf::Vector2f pos;
-    Entity* actor;
-};
+#include "ItemBaseClasses.h"
 
 class Player;
 

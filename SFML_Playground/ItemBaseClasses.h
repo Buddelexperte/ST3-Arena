@@ -180,6 +180,13 @@ enum class PerkTrigger
     // Extend with additional triggers as needed.
 };
 
+struct PerkTriggerInfo
+{
+    PerkTrigger trigger;
+    sf::Vector2f pos;
+    Entity* actor;
+};
+
 // Perk: passive boost that triggers on specific game events.
 class Perk : public Item
 {
