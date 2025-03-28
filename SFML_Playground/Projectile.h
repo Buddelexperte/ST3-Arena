@@ -42,18 +42,23 @@ public:
     }
 };
 
+#include "Lifetime.h"
+
 // The Projectile class now inherits from IMovable and ICollidable
 class Projectile : 
-    public Entity
+    public Entity, public IHasLifetime
 {
 private:
-    const float MAX_LIFETIME = 5.0f;
-    ValueBar lifetime;
+    static constexpr float MAX_LIFETIME = 5.0f;
 
     CollisionBox collisionBox;
 
     void tick_move(const float&) override;
-    void tick_lifetime(const float&);
+
+    virtual void timeout() override
+    {
+        kill_self();
+    }
 
 public:
     // Constructor initializes movement info and collision box.

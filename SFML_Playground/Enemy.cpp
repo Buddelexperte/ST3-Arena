@@ -77,14 +77,19 @@ void Enemy::tick_move(const float& deltaTime)
 
 void Enemy::spawnDeathParticle()
 {
-	static constexpr float EXPR_VALUE = 0.0f; // TODO: Implement experience value
+	static constexpr float P_LIFETIME = 1.0f;
 
 	IMovable::RenderInfo expRenderInfo = getRenderInfo();
 	expRenderInfo.size = getSize() / 2.0f;
 	expRenderInfo.color = sf::Color::Yellow;
 	expRenderInfo.velocity = sf::Vector2f(0.0f, 0.0f);
 
-	EntityManager::getInstance().spawnEntity<P_Sparkle>(SpawnInformation(expRenderInfo, EXPR_VALUE, 0.0f)); // Expr value in Health slot
+	SpawnInformation spawnInfo = {
+		.renderInfo = expRenderInfo,
+		.health = P_LIFETIME
+	};
+
+	EntityManager::getInstance().spawnEntity<P_Sparkle>(spawnInfo); // Expr value in Health slot
 }
 
 void Enemy::kill_self(const bool& bByPlayer = false)

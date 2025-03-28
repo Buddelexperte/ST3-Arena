@@ -39,8 +39,8 @@ Projectile::Projectile()
 {}
 
 Projectile::Projectile(const RenderInfo& initRenderInfo)
-	: Entity(EntityType::Projectile), 
-	lifetime(MAX_LIFETIME),
+	: Entity(EntityType::Projectile),
+	IHasLifetime(MAX_LIFETIME),
 	collisionBox(this, initRenderInfo.pos, initRenderInfo.size)
 {
 	setRenderInfo(initRenderInfo);
@@ -52,20 +52,10 @@ void Projectile::tick_move(const float& deltaTime)
 	addPosition(delta);
 }
 
-void Projectile::tick_lifetime(const float& deltaTime)
-{
-	lifetime.addValue(deltaTime);
-
-	if (lifetime.isEmpty())
-	{
-		kill_self();
-	}
-}
-
 void Projectile::spawn(const SpawnInformation& spawnInfo)
 {
-	lifetime.reset();
 	setRenderInfo(spawnInfo.renderInfo);
+	resetLifetime(MAX_LIFETIME);
 	setDamage(spawnInfo.damage);
 }
 

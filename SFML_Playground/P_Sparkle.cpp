@@ -5,6 +5,7 @@
 
 P_Sparkle::P_Sparkle()
 	: Entity(EntityType::PARTICLE),
+	IHasLifetime(0.0f),
 	collisionBox(this, getPosition(), getSize())
 {
 
@@ -15,7 +16,7 @@ void P_Sparkle::tick_move(const float& deltaTime)
 	static constexpr float ROTATION_MULTIPLIER = 1000.0f;
 
 	// Normalize lifetime to scale correctly (assuming lifeTime goes from 1.0 to 0.0)
-	float normalizedLifetime = lifeTime.getPercentage(); // Ensure this is clamped between 0.0 and 1.0
+	float normalizedLifetime = getLifetime().getPercentage(); // Ensure this is clamped between 0.0 and 1.0
 	// Lerp between original size and zero based on normalized lifetime
 	sf::Vector2f newSize = lerp(startSize, sf::Vector2f(0.0f, 0.0f), 1.0f - normalizedLifetime);
 
@@ -24,16 +25,6 @@ void P_Sparkle::tick_move(const float& deltaTime)
 	// Increase rotation speed over time
 	rotationSpeed += deltaTime * ROTATION_MULTIPLIER; // Adjust multiplier for desired acceleration
 	setRotation(getRotation() + rotationSpeed * deltaTime);
-}
-
-void P_Sparkle::tick_lifetime(const float& deltaTime)
-{
-	lifeTime.addValue(-deltaTime);
-
-	if (lifeTime.isEmpty())
-	{
-		kill_self();
-	}
 }
 
 void P_Sparkle::setValue(const float& newVal)
@@ -48,12 +39,11 @@ float P_Sparkle::getValue() const
 
 void P_Sparkle::spawn(const SpawnInformation& spawnInfo)
 {
-	rotationSpeed = 0.0f;
+	resetLifetime(spawnInfo.health);
 	setRenderInfo(spawnInfo.renderInfo);
+
+	rotationSpeed = 0.0f;
 	startSize = getRenderInfo().size;
-	resetHealth();
-	setValue(spawnInfo.health); // Health is used for value flag
-	lifeTime.reset();
 }
 
 void P_Sparkle::tick(const float& deltaTime)

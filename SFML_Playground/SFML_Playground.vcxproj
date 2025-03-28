@@ -180,6 +180,7 @@
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="GenericPool.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Lifetime.h" />
     <ClInclude Include="P_Sparkle.h" />
     <ClInclude Include="WidgetBase.h" />
     <ClInclude Include="BaseTypes.h" />

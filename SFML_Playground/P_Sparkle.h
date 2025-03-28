@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Entity.h"
+#include "Lifetime.h"
 
-class P_Sparkle : public Entity
+class P_Sparkle : public Entity, public IHasLifetime
 {
 private:
 	// EXperience Orb variables, need to be moved over TODO
@@ -11,10 +12,12 @@ private:
 
 	CollisionBox collisionBox;
 	
-	ValueBar lifeTime;
-
 	void tick_move(const float&) override;
-	void tick_lifetime(const float&);
+
+	virtual void timeout() override
+	{
+		kill_self();
+	}
 
 protected:
 	float value = 0.0f;

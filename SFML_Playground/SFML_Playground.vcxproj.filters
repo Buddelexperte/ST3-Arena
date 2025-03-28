@@ -256,6 +256,9 @@
     <ClInclude Include="P_Sparkle.h">
       <Filter>Source\Actors\Entities\Particles</Filter>
     </ClInclude>
+    <ClInclude Include="Lifetime.h">
+      <Filter>Source\Base\Abstracts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\openal32.dll">

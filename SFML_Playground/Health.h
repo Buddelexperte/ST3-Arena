@@ -44,6 +44,12 @@ public:
 		return (getHealth() < SMALLEST_PRECISION);
 	}
 
+	void resetHealth(const float& newMax)
+	{
+		getHealthBar().setMaxValue(newMax);
+		getHealthBar().reset();
+	}
+
 	void resetHealth()
 	{
 		getHealthBar().reset();
