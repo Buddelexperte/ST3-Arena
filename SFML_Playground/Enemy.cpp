@@ -22,7 +22,6 @@ void Enemy::spawn(const SpawnInformation& spawnInfo)
 
 void Enemy::tick(const float& deltaTime)
 {
-	// Calculate movement and apply i
 	tick_move(deltaTime);
 
 	if (isDead())
