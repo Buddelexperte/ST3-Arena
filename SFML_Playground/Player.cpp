@@ -108,9 +108,9 @@ void Player::tick_move(const float& deltaTime)
 {
 	// Movement
 
-	constexpr float WALKING_SPEED = 350.0f;
-	constexpr float LERP_SMOOTHNESS = 0.01f;		
-	constexpr float ROT_LERP_MULTIPLIER = 10.0f;
+	static constexpr float WALKING_SPEED = 350.0f;
+	static constexpr float LERP_SMOOTHNESS = 0.01f;
+	static constexpr float ROT_LERP_MULTIPLIER = 10.0f;
 
 	float x = 0.0f, y = 0.0f, multiplier = 1.0f;
 
@@ -123,22 +123,23 @@ void Player::tick_move(const float& deltaTime)
 	if (sf::Keyboard::isKeyPressed(KEY_D)) x += WALKING_SPEED;
 
 	sf::Vector2f targetVelo = sf::Vector2f{ x, y } * multiplier;
-	sf::Vector2f currVelo = getVelocity();
-	zeroPrecision(currVelo);
+	sf::Vector2f velocity = getVelocity();
+	zeroPrecision(velocity);
 
-	if (!shouldZero(targetVelo - currVelo))
+	sf::Vector2f veloDiff = targetVelo - velocity;
+	if (shouldZero(veloDiff))
 	{
-		currVelo = (lerp(currVelo, targetVelo, LERP_SMOOTHNESS));
+		velocity = targetVelo;
 	}
 	else
 	{
-		currVelo = targetVelo;
+		velocity = (lerp(velocity, targetVelo, LERP_SMOOTHNESS));
 	}
 
-	sf::Vector2f offset = currVelo * deltaTime;
+	sf::Vector2f deltaPos = velocity * deltaTime;
 
-	addPosition(offset);
-	setVelocity(currVelo);
+	addPosition(deltaPos);
+	setVelocity(velocity);
 
 	 // Rotation
 
@@ -147,14 +148,15 @@ void Player::tick_move(const float& deltaTime)
 	float rotation = getRotation();
 	const float targetRot = getLookAtRot(playerPos, mousePos);
 
-	if (!shouldZero(rotation - targetRot))
+	float rotDiff = rotation - targetRot;
+	if (shouldZero(rotDiff))
 	{
-		const float ROT_LERP = LERP_SMOOTHNESS * ROT_LERP_MULTIPLIER * multiplier;
-		rotation = lerp(rotation, targetRot, ROT_LERP);
+		rotation = targetRot;
 	}
 	else
 	{
-		rotation = targetRot;
+		const float ROT_LERP = LERP_SMOOTHNESS * ROT_LERP_MULTIPLIER * multiplier;
+		rotation = lerp(rotation, targetRot, ROT_LERP);
 	}
 
 	setRotation(rotation);
@@ -162,6 +164,7 @@ void Player::tick_move(const float& deltaTime)
 
 void Player::tick_health(const float&)
 {
+	// Add death code
 }
 
 void Player::tick_animation(const float& deltaTime)
@@ -189,6 +192,7 @@ bool Player::handleEvent(sf::Event* eventRef)
 	// If gameplay is paused, use gameInstance to relay event to activeWidget
 	if (gameInstance().getIsPaused())
 		return gameInstance().handleEvent(eventRef);
+
 	// if not, just continue with normal distributing of events
 	return IHasInput::handleEvent(eventRef);
 }
@@ -196,7 +200,7 @@ bool Player::handleEvent(sf::Event* eventRef)
 sf::Keyboard::Key Player::onKeyPressed(sf::Event* eventRef)
 {
 	const sf::Keyboard::Key inputKey = eventRef->key.code;
-	if (inputKey == sf::Keyboard::Escape)
+	if (inputKey == sf::Keyboard::Escape) // Esc-key should be handled inside GameInstance due to access to widgets
 		gameInstance().handleEvent(eventRef);
 	return inputKey;
 }
@@ -257,8 +261,10 @@ void Player::setRenderInfo(const RenderInfo& newRenderInfo)
 void Player::setPosition(const sf::Vector2f& newPos)
 {
 	IMovable::setPosition(newPos);
+
 	playerSprite.setPosition(newPos);
 	collisionBox.setPos(newPos);
+
 	if (inventory.getActiveWeapon())
 		inventory.getActiveWeapon()->setPosition(newPos);
 }
@@ -266,8 +272,10 @@ void Player::setPosition(const sf::Vector2f& newPos)
 void Player::addPosition(const sf::Vector2f& deltaPos)
 {
 	IMovable::addPosition(deltaPos);
+
 	playerSprite.move(deltaPos);
 	collisionBox.setPos(collisionBox.getPos() + deltaPos);
+
 	if (inventory.getActiveWeapon())
 		inventory.getActiveWeapon()->addPosition(deltaPos);
 
@@ -276,7 +284,9 @@ void Player::addPosition(const sf::Vector2f& deltaPos)
 void Player::setRotation(const float& newRot)
 {
 	IMovable::setRotation(newRot);
+
 	playerSprite.setRotation(newRot - 90.0f);
+
 	if (inventory.getActiveWeapon())
 		inventory.getActiveWeapon()->setRotation(newRot);
 }
@@ -302,6 +312,7 @@ void Player::setSize(const sf::Vector2f& newSize)
 void Player::setColor(const sf::Color& newColor)
 {
 	IMovable::setColor(sf::Color::White);
+
 	playerSprite.setColor(sf::Color::White);
 }
 
@@ -317,7 +328,7 @@ void Player::collideWithEnemy(Enemy& enemy)
 
 void Player::collideWithProjectile(Projectile& projectile)
 {
-	// Empty for now
+	// Empty for now (probably for long)
 }
 
 void Player::hurt(const float& delta)

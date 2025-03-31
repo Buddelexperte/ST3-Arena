@@ -88,7 +88,8 @@ public:
 	float getZoom() const { return zoomFactor; }
 	// Input stuff
 	bool handleEvent(sf::Event*);
-	sf::Vector2f getMousePos() { return window->mapPixelToCoords(sf::Mouse::getPosition(*window)); }
+	sf::Vector2f getMousePos() 
+		{ return window->mapPixelToCoords(sf::Mouse::getPosition(*window)); }
 	// GameState 
 	void setGameState(const GameState&);
 	GameState getGameState() const { return gameState; }
