@@ -2,11 +2,16 @@
 
 #include "ValueBar.h"
 
-#include <iostream>
 class IHasHealth
 {
 private:
-	virtual ValueBar& getHealthBar() = 0;
+	ValueBar healthBar;
+	ValueBar& getHealthBar()
+	{
+		return healthBar;
+	}
+
+	virtual void tick_health(const float&) = 0;
 
 public:
 	virtual void hurt(const float& delta)

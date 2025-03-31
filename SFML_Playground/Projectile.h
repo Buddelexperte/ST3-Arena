@@ -46,7 +46,7 @@ public:
 
 // The Projectile class now inherits from IMovable and ICollidable
 class Projectile : 
-    public Entity, public IHasLifetime
+    public Entity, public IHasLifetime, public IHasDamage
 {
 private:
     static constexpr float MAX_LIFETIME = 5.0f;
@@ -72,7 +72,6 @@ public:
 
     void onCollision(IHasCollision* other) override;
     void collideWithEnemy(Enemy& enemy) override;
-   
 
     void spawn(const SpawnInformation& spawnInfo) override;
     void tick(const float& deltaTime) override;

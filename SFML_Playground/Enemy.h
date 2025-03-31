@@ -8,12 +8,8 @@
 #include "RenderInfo.h"
 #include "Entity.h"
 
-// Forward Declarations
-class GI_Arena;
-class EnemyManager;
-
 class Enemy : 
-	public Entity
+	public Entity, public IHasDamage, public IHasHealth
 {
 private:
 	CollisionBox collisionBox;
@@ -24,7 +20,8 @@ private:
 
 	using IMovable::setVelocity; // Make this function private for safety reasons
 
-	void tick_move(const float&) override;
+	virtual void tick_move(const float&) override;
+	virtual void tick_health(const float&) override;
 	void spawnDeathParticle();
 	void kill_self(const bool&);
 

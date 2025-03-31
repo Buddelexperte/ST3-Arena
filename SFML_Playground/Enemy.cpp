@@ -15,8 +15,7 @@ Enemy::Enemy()
 void Enemy::spawn(const SpawnInformation& spawnInfo)
 {
 	setRenderInfo(spawnInfo.renderInfo);
-	setMaxHealth(spawnInfo.health);
-	resetHealth();
+	resetHealth(spawnInfo.health);
 	setDamage(spawnInfo.damage);
 }
 
@@ -24,12 +23,7 @@ void Enemy::tick(const float& deltaTime)
 {
 	tick_move(deltaTime);
 
-	if (isDead())
-	{
-		constexpr bool diedByPlayer = true;
-		kill_self(diedByPlayer);
-		return;
-	}
+	tick_health(deltaTime);
 }
 
 void Enemy::releaseToPool()
@@ -100,6 +94,16 @@ void Enemy::kill_self(const bool& bByPlayer = false)
 	}
 
 	Entity::kill_self();
+}
+
+void Enemy::tick_health(const float& deltaTime)
+{
+	if (isDead())
+	{
+		constexpr bool diedByPlayer = true;
+		kill_self(diedByPlayer);
+		return;
+	}
 }
 
 void Enemy::setPosition(const sf::Vector2f& pos)

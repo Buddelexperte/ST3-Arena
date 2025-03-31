@@ -11,7 +11,6 @@ Player::Player()
 	: 
 	Entity(EntityType::Player),
 	invincibility(0.5f), // 0.5 seconds of invincibility after hit
-	healthBar(1.0f), // 100% life from start on
 	collisionBox(this, getPosition(), HITBOX_SIZE) // Collision box centered on player, hals as big as sprite
 {
 
@@ -57,14 +56,52 @@ void Player::spawn()
 	setVelocity({ 0.0f, 0.0f });
 
 	inventory.reset();
-	healthBar.reset(); // 100% hp
-
+	resetHealth(); // 100% hp
 	invincibility.setValue(2.0f); // 2 seconds invincibility (Spawn protection)
 }
 
 void Player::spawn(const SpawnInformation&)
 {
 	spawn();
+}
+
+void Player::tick(const float& deltaTime)
+{
+	// Gameplay ticks
+	tick_gameplay(deltaTime);
+
+	// Flashlight tick
+	tick_flashlight(deltaTime);
+}
+
+void Player::tick_flashlight(const float& deltaTime)
+{
+	static constexpr bool bDrawFlashlight = true;
+	if (bDrawFlashlight)
+	{
+		flashlight.tick(deltaTime);
+	}
+}
+
+void Player::tick_gameplay(const float& deltaTime)
+{
+	// Checking for "holding" down a key
+	idleInputs();
+
+	bool bIsPaused = gameInstance().getIsPaused();
+
+	if (bIsPaused)
+		return;
+
+	// Player gameplay ticks
+	tick_move(deltaTime); // Movement inputs
+	tick_animation(deltaTime); // Animation update
+	tick_health(deltaTime);
+
+
+	// Component gameplay ticks
+	invincibility.addValue(-deltaTime); // Invinvibility update
+	inventory.getActiveWeapon()->tick(deltaTime); // Weapon cooldown update
 }
 
 void Player::tick_move(const float& deltaTime)
@@ -123,6 +160,10 @@ void Player::tick_move(const float& deltaTime)
 	setRotation(rotation);
 }
 
+void Player::tick_health(const float&)
+{
+}
+
 void Player::tick_animation(const float& deltaTime)
 {
 	if (!playerTextures.empty())
@@ -137,25 +178,6 @@ void Player::tick_animation(const float& deltaTime)
 	}
 }
 
-void Player::tick(const float& deltaTime)
-{
-	idleInputs();
-	// Gameplay ticks
-	if (!gameInstance().getIsPaused())
-	{
-		tick_move(deltaTime); // Movement inputs
-		tick_animation(deltaTime); // Animation update
-		invincibility.addValue(-deltaTime); // Invinvibility update
-		inventory.getActiveWeapon()->tick(deltaTime); // Weapon cooldown update
-	}
-
-	// Flashlight update
-	constexpr bool bDrawFlashlight = true;
-	if (bDrawFlashlight)
-	{
-		flashlight.tick(deltaTime);
-	}
-}
 
 void Player::releaseToPool()
 {

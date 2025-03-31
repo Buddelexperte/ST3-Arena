@@ -12,6 +12,7 @@
 
 class Player : 
 	public Entity,
+	public IHasHealth,
 	public IDrawableShapes,
 	public IHasInput
 {
@@ -26,9 +27,6 @@ private:
 
 	// Health bar
 	ValueBar invincibility;
-	ValueBar healthBar;
-	ValueBar& getHealthBar() override
-		{ return healthBar; }
 
 	// Animation
 	sf::Sprite playerSprite;
@@ -39,8 +37,12 @@ private:
 
 	using IMovable::setVelocity; // Make this function private
 
+	void tick_flashlight(const float&);
+	void tick_gameplay(const float&);
 	void tick_move(const float&) override;
+	void tick_health(const float&) override;
 	void tick_animation(const float&);
+
 protected:
 	sf::Keyboard::Key onKeyPressed(sf::Event*) override;
 	bool onMouseClickL(sf::Event*) override;
