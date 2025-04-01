@@ -14,6 +14,9 @@ class ProjectileSpawner
 protected:
     static inline RNG& random = RNG::getInstance();
 
+    // Offset distance from the player's center
+    static constexpr float SIM_ARM_LENGTH = 25.0f; // Adjust this value as needed
+
 private:
     const RenderInfo baseInfo = {
         {0.0f, 0.0f}, // Default offset
@@ -24,6 +27,8 @@ private:
     };
 
 	float damage = 1.0f;
+
+    void spawnParticle(const SpawnInformation&);
 
 public:
     ProjectileSpawner(const RenderInfo& baseInfo, const float& damage);

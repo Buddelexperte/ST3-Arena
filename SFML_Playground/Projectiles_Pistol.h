@@ -34,17 +34,24 @@ public:
 
 	virtual void shoot() override
 	{
+		// Get the forward direction vector
+		sf::Vector2f forwardDir = dirFromRot(getRotation());
+
+		// Calculate the new spawn position with the offset
+		sf::Vector2f spawnPosition = getPosition() + (forwardDir * SIM_ARM_LENGTH);
+
+		// Create projectile information with the adjusted position
 		RenderInfo projectileInfo = {
-			projectileInfo.pos = getPosition() + baseInfo.pos,
-			projectileInfo.size = baseInfo.size,
-			projectileInfo.rot = getRotation() + baseInfo.rot,
-			projectileInfo.velocity = dirFromRot(getRotation()) * baseInfo.velocity,
-			projectileInfo.color = baseInfo.color
+			.pos = spawnPosition + baseInfo.pos,  // Apply the offset
+			.size = baseInfo.size,
+			.rot = getRotation() + baseInfo.rot,
+			.velocity = forwardDir * baseInfo.velocity,  // Keep velocity aligned with direction
+			.color = baseInfo.color
 		};
 
 		SpawnInformation spawnInfo = {
-				.renderInfo = projectileInfo,
-				.damage = getDamage()
+			.renderInfo = projectileInfo,
+			.damage = getDamage()
 		};
 
 		ProjectileSpawner::shoot(spawnInfo);
