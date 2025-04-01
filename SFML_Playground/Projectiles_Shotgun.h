@@ -37,6 +37,7 @@ public:
 		:
 		ProjectileSpawner(baseInfo, damage)
 	{
+
 	}
 
 	virtual void shoot() override
@@ -62,7 +63,7 @@ public:
 				.damage = getDamage()
 			};
 
-			EntityManager::getInstance().spawnEntity<Projectile>(spawnInfo);
+			ProjectileSpawner::shoot(spawnInfo);
 		}
 	}
 };

@@ -47,6 +47,6 @@ public:
 				.damage = getDamage()
 		};
 
-		EntityManager::getInstance().spawnEntity<Projectile>(spawnInfo);
+		ProjectileSpawner::shoot(spawnInfo);
 	}
 };

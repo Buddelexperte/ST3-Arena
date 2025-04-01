@@ -29,7 +29,8 @@ public:
     ProjectileSpawner(const RenderInfo& baseInfo, const float& damage);
 	virtual ~ProjectileSpawner() = default;
 
-    virtual void shoot();
+    virtual void shoot() = 0;
+    void shoot(const SpawnInformation&);
 
 	float getDamage() const
 	{

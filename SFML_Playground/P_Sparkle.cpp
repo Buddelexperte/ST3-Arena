@@ -4,9 +4,7 @@
 #include "GameInstance.h"
 
 P_Sparkle::P_Sparkle()
-	: Entity(EntityType::PARTICLE),
-	IHasLifetime(0.0f),
-	collisionBox(this, getPosition(), getSize())
+	: Particle()
 {
 
 }
@@ -27,44 +25,15 @@ void P_Sparkle::tick_move(const float& deltaTime)
 	setRotation(getRotation() + rotationSpeed * deltaTime);
 }
 
-void P_Sparkle::setValue(const float& newVal)
-{
-	value = newVal;
-}
-
-float P_Sparkle::getValue() const
-{
-	return value;
-}
-
 void P_Sparkle::spawn(const SpawnInformation& spawnInfo)
 {
-	resetLifetime(spawnInfo.health);
-	setRenderInfo(spawnInfo.renderInfo);
+	Particle::spawn(spawnInfo);
 
 	rotationSpeed = 0.0f;
 	startSize = getRenderInfo().size;
 }
 
-void P_Sparkle::tick(const float& deltaTime)
-{
-	tick_lifetime(deltaTime);
-
-	tick_move(deltaTime);
-}
-
 void P_Sparkle::releaseToPool()
 {
 	GenericPool<P_Sparkle>::instance().release(std::unique_ptr<P_Sparkle>(this));
-}
-
-void P_Sparkle::onCollision(IHasCollision* other)
-{
-	other->collideWithPickup(*this);
-}
-
-void P_Sparkle::setSize(const sf::Vector2f& newSize)
-{
-	Entity::setSize(newSize);
-	collisionBox.setSize(newSize);
 }

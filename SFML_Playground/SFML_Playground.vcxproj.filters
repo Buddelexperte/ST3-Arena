@@ -140,6 +140,9 @@
     <ClCompile Include="P_Sparkle.cpp">
       <Filter>Source\Actors\Entities\Particles</Filter>
     </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Source\Actors\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionManager.h">
@@ -258,6 +261,9 @@
     </ClInclude>
     <ClInclude Include="Lifetime.h">
       <Filter>Source\Base\Abstracts</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Source\Actors\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

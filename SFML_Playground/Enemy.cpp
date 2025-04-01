@@ -72,17 +72,17 @@ void Enemy::spawnDeathParticle()
 {
 	static constexpr float P_LIFETIME = 1.0f;
 
-	IMovable::RenderInfo expRenderInfo = getRenderInfo();
-	expRenderInfo.size = getSize() / 2.0f;
-	expRenderInfo.color = sf::Color::Yellow;
-	expRenderInfo.velocity = sf::Vector2f(0.0f, 0.0f);
+	IMovable::RenderInfo particleRenderInfo = getRenderInfo();
+	particleRenderInfo.size = getSize() / 2.0f;
+	particleRenderInfo.color = sf::Color::Yellow;
+	particleRenderInfo.velocity = sf::Vector2f(0.0f, 0.0f);
 
-	SpawnInformation spawnInfo = {
-		.renderInfo = expRenderInfo,
+	SpawnInformation particleSpawnInfo = {
+		.renderInfo = particleRenderInfo,
 		.health = P_LIFETIME
 	};
 
-	EntityManager::getInstance().spawnEntity<P_Sparkle>(spawnInfo); // Expr value in Health slot
+	EntityManager::getInstance().spawnEntity<P_Sparkle>(particleSpawnInfo); // Expr value in Health slot
 }
 
 void Enemy::kill_self(const bool& bByPlayer = false)

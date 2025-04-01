@@ -4,6 +4,8 @@
 #include "Projectile.h"
 #include "EntityManager.h"
 
+#include "AllEntities.h"
+
 // PROJECTILE SPAWNER ----------------------------------------
  
 ProjectileSpawner::ProjectileSpawner(const RenderInfo& baseInfo, const float& damage)
@@ -14,22 +16,26 @@ ProjectileSpawner::ProjectileSpawner(const RenderInfo& baseInfo, const float& da
 
 }
 
-void ProjectileSpawner::shoot()
+void ProjectileSpawner::shoot(const SpawnInformation& spawnInfo)
 {
-	RenderInfo projectileInfo = {
-		projectileInfo.pos = getPosition() + baseInfo.pos,
-		projectileInfo.size = baseInfo.size,
-		projectileInfo.rot = getRotation() + baseInfo.rot,
-		projectileInfo.velocity = dirFromRot(getRotation()) * baseInfo.velocity,
-		projectileInfo.color = baseInfo.color
-	};
-	
-	SpawnInformation spawnInfo = {
-		.renderInfo = projectileInfo,
-		.damage = getDamage()
+	EntityManager::getInstance().spawnEntity<Projectile>(spawnInfo);
+
+	return; // TODO: Add good looking fire particles
+
+	static constexpr float P_LIFETIME = 0.8f;
+
+	IMovable::RenderInfo particleRenderInfo = getRenderInfo();
+	particleRenderInfo.pos = spawnInfo.renderInfo.pos;
+	particleRenderInfo.size = sf::Vector2f(50.0f, 50.0f);
+	particleRenderInfo.color = sf::Color(100, 100, 100, 255);
+	particleRenderInfo.velocity = sf::Vector2f(0.0f, 0.0f);
+
+	SpawnInformation particleInfo = {
+		.renderInfo = particleRenderInfo,
+		.health = P_LIFETIME
 	};
 
-	EntityManager::getInstance().spawnEntity<Projectile>(spawnInfo);
+	EntityManager::getInstance().spawnEntity<P_Sparkle>(particleInfo); // Expr value in Health slot
 }
 
 // PROJECTILE OBJECT ----------------------------------------
@@ -55,8 +61,8 @@ void Projectile::tick_move(const float& deltaTime)
 void Projectile::spawn(const SpawnInformation& spawnInfo)
 {
 	setRenderInfo(spawnInfo.renderInfo);
-	resetLifetime(MAX_LIFETIME);
 	setDamage(spawnInfo.damage);
+	resetLifetime(MAX_LIFETIME);
 }
 
 void Projectile::tick(const float& deltaTime)

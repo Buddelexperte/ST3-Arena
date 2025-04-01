@@ -22,7 +22,6 @@ public:
 	virtual void collideWithEnemy(Enemy& enemy) {};
 	virtual void collideWithPlayer(Player& player) {};
 	virtual void collideWithProjectile(Projectile& projectile) {};
-	virtual void collideWithPickup(P_Sparkle& pickup) {};
 };
 
 // Collision base class
