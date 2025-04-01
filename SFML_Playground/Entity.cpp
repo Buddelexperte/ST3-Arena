@@ -75,6 +75,9 @@ void Entity::setColor(const sf::Color& newColor)
 
 void Entity::setVelocity(const sf::Vector2f& newVelo)
 {
+	if (newVelo == getVelocity())
+		return;
+
 	IMovable::setVelocity(newVelo);
 	EntityManager::getInstance().callUpdate(entityID, InfoType::VELOCITY);
 }

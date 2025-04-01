@@ -3,10 +3,11 @@
 
 // Forward declarations
 class Collidable;
+
 class Enemy;
 class Player;
 class Projectile;
-class P_Sparkle;
+class Pickup;
 
 // Collision interface Class for actors
 class IHasCollision
@@ -22,6 +23,7 @@ public:
 	virtual void collideWithEnemy(Enemy& enemy) {};
 	virtual void collideWithPlayer(Player& player) {};
 	virtual void collideWithProjectile(Projectile& projectile) {};
+	virtual void collideWithPickup(Pickup& pickup) {};
 };
 
 // Collision base class

@@ -10,26 +10,7 @@
  
 void ProjectileSpawner::spawnParticle(const SpawnInformation& spawnInfo)
 {
-	static constexpr float P_LIFETIME = 0.8f;
-
-	static const sf::Vector2f P_VELOCITY = sf::Vector2f(0.0f, 0.0f);
-	static const sf::Vector2f P_SIZE = sf::Vector2f(50.0f, 50.0f);
-	static const sf::Color P_COLOR = sf::Color(100, 100, 100, 255);
-
-	IMovable::RenderInfo particleRenderInfo = {
-		.pos = spawnInfo.renderInfo.pos,
-		.size = P_SIZE,
-		.rot = spawnInfo.renderInfo.rot,
-		.velocity = P_VELOCITY,
-		.color = P_COLOR
-	};
-
-	SpawnInformation particleInfo = {
-		.renderInfo = particleRenderInfo,
-		.health = P_LIFETIME
-	};
-
-	EntityManager::getInstance().spawnEntity<P_Sparkle>(particleInfo); // Expr value in Health slot
+	//TODO: Muzzle Flash
 }
 
 ProjectileSpawner::ProjectileSpawner(const RenderInfo& baseInfo, const float& damage)

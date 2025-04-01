@@ -23,6 +23,7 @@ private:
 	virtual void tick_move(const float&) override;
 	virtual void tick_health(const float&) override;
 	void spawnDeathParticle();
+	void spawnExperience();
 	void kill_self(const bool&);
 
 public:

@@ -7,6 +7,8 @@
 #include "Projectile.h"
 
 // PICKUPS ------------
+#include "Pickup.h"
+#include "PU_ExperienceOrb.h"
 
 // PLAYER -------------
 #include "Player.h"

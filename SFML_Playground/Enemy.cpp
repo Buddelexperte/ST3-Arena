@@ -17,6 +17,8 @@ void Enemy::spawn(const SpawnInformation& spawnInfo)
 	setRenderInfo(spawnInfo.renderInfo);
 	resetHealth(spawnInfo.health);
 	setDamage(spawnInfo.damage);
+
+	
 }
 
 void Enemy::tick(const float& deltaTime)
@@ -61,7 +63,9 @@ void Enemy::tick_move(const float& deltaTime)
 	float rotation = getRotation();
 	float targetRot = getLookAtRot(playerPos, pos);
 	
-	if (!(shouldZero(rotation - targetRot)))
+	float rotDiff = rotation - targetRot;
+
+	if (!(shouldZero(rotDiff)))
 	{
 		float newRot = lerp(rotation, targetRot, ROT_LERP);
 		setRotation(newRot);
@@ -72,10 +76,13 @@ void Enemy::spawnDeathParticle()
 {
 	static constexpr float P_LIFETIME = 1.0f;
 
-	IMovable::RenderInfo particleRenderInfo = getRenderInfo();
-	particleRenderInfo.size = getSize() / 2.0f;
-	particleRenderInfo.color = sf::Color::Yellow;
-	particleRenderInfo.velocity = sf::Vector2f(0.0f, 0.0f);
+	IMovable::RenderInfo particleRenderInfo = {
+		.pos = getPosition(),
+		.size = getSize() / 2.0f,
+		.rot = static_cast<float>(getID() * getID()),
+		.velocity = sf::Vector2f(0.0f, 0.0f),
+		.color = sf::Color::Yellow
+	};
 
 	SpawnInformation particleSpawnInfo = {
 		.renderInfo = particleRenderInfo,
@@ -85,12 +92,31 @@ void Enemy::spawnDeathParticle()
 	EntityManager::getInstance().spawnEntity<P_Sparkle>(particleSpawnInfo); // Expr value in Health slot
 }
 
+void Enemy::spawnExperience()
+{
+	IMovable::RenderInfo pickupRenderInfo = {
+		.pos = getPosition(),
+		.size = getSize() / 4.0f,
+		.rot = static_cast<float>(getID() * getID()),
+		.velocity = sf::Vector2f(0.0f, 0.0f),
+		.color = sf::Color::Yellow
+	};
+
+	SpawnInformation pickupSpawnInfo = {
+		.renderInfo = pickupRenderInfo,
+		.flag = 1
+	};
+
+	EntityManager::getInstance().spawnEntity<PU_ExperienceOrb>(pickupSpawnInfo); // Expr value in Health slot
+}
+
 void Enemy::kill_self(const bool& bByPlayer = false)
 {
 	if (bByPlayer)
 	{
 		SaveGame::currentData.score = (SaveGame::currentData.score + 1);
 		spawnDeathParticle();
+		spawnExperience();
 	}
 
 	Entity::kill_self();
@@ -116,8 +142,6 @@ void Enemy::setPosition(const sf::Vector2f& pos)
 
 void Enemy::addPosition(const sf::Vector2f& delta)
 {
-	if (shouldZero(delta))
-		return;
 	Entity::addPosition(delta);
 	collisionBox.setPos(collisionBox.getPos() + delta);
 }

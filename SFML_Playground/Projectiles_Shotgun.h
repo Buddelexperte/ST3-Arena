@@ -42,20 +42,25 @@ public:
 
 	virtual void shoot() override
 	{
+		const sf::Vector2f lookingDir = dirFromRot(getRotation());
+
 		const float base_rotation = getRotation() - (SPREAD_DEGREES_TOTAL / 2.0f) + ANGLE_PER_SHELL;
-		const sf::Vector2f dir_offset = dirFromRot(getRotation()) * OFFSET_VARIETY;
+		const sf::Vector2f dir_offset = lookingDir * OFFSET_VARIETY;
+    
+		// Offset the shotgun shells forward to avoid spawning inside the player
+		sf::Vector2f forwardOffset = lookingDir * SIM_ARM_LENGTH;
 
 		for (int i = 0; i < NUM_SHELLS; i++)
 		{
 			float shell_rotation = base_rotation + (i * ANGLE_PER_SHELL);
-			sf::Vector2f offset = (i % 2 == 0) ? sf::Vector2f(0.f, 0.f) : dir_offset;
+			sf::Vector2f spreadOffset = (i % 2 == 0) ? sf::Vector2f(0.0f, 0.0f) : dir_offset;
 
 			RenderInfo projectileInfo{
-				projectileInfo.pos = getPosition() + baseInfo.pos + offset,
-				projectileInfo.size = baseInfo.size,
-				projectileInfo.rot = shell_rotation + baseInfo.rot,
-				projectileInfo.velocity = dirFromRot(shell_rotation) * baseInfo.velocity,
-				projectileInfo.color = baseInfo.color
+				.pos = getPosition() + baseInfo.pos + forwardOffset + spreadOffset, // Apply both forward and spread offsets
+				.size = baseInfo.size,
+				.rot = shell_rotation + baseInfo.rot,
+				.velocity = dirFromRot(shell_rotation) * baseInfo.velocity,
+				.color = baseInfo.color
 			};
 
 			SpawnInformation spawnInfo = {
@@ -66,4 +71,5 @@ public:
 			ProjectileSpawner::shoot(spawnInfo);
 		}
 	}
+
 };

@@ -24,6 +24,16 @@ private:
 	const EntityType ownType;
 
 protected:
+	float timeAlive = 0.0f;
+	void resetTimeAlive()
+	{
+		timeAlive = 0.0f;
+	}
+	void updateTimeAlive(const float& deltaTime)
+	{
+		timeAlive += deltaTime;
+	}
+
 	virtual void kill_self();
 
 public:
