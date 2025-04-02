@@ -5,14 +5,15 @@
 #include "Widgets.h"
 #include "EntityManager.h"
 
-
 GI_Arena::GI_Arena()
 {
 	const sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-	//window = new sf::RenderWindow(desktop, "SFML_Arena", sf::Style::Fullscreen);
+	window = new sf::RenderWindow(desktop, "SFML_Arena", sf::Style::Fullscreen);
 
 	// Only use for crash heavy debug !
-	window = new sf::RenderWindow(desktop, "SFML_Arena", sf::Style::Titlebar | sf::Style::Default);
+	//window = new sf::RenderWindow(desktop, "SFML_Arena", sf::Style::Titlebar | sf::Style::Default);
+
+	//window->setFramerateLimit(60);
 
 	std::cout << "RenderWindow created." << std::endl;
 	sf::Vector2f desktopSize = { static_cast<float>(desktop.width), static_cast<float>(desktop.height) };
