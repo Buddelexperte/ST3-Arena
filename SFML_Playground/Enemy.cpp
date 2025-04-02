@@ -104,7 +104,7 @@ void Enemy::spawnExperience()
 
 	SpawnInformation pickupSpawnInfo = {
 		.renderInfo = pickupRenderInfo,
-		.flag = 1
+		.damage = 1.0f // Experience worth, TODO: Change to more dynamic number gen
 	};
 
 	EntityManager::getInstance().spawnEntity<PU_ExperienceOrb>(pickupSpawnInfo); // Expr value in Health slot

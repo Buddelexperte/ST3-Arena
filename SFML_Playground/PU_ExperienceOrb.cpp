@@ -48,12 +48,14 @@ void PU_ExperienceOrb::tick_move(const float& deltaTime)
 
 void PU_ExperienceOrb::onPickup()
 {
-    SaveGame::currentData.score++;
+    SaveGame::currentData.score += getExp();
 }
 
 void PU_ExperienceOrb::spawn(const SpawnInformation& spawnInfo)
 {
     setRenderInfo(spawnInfo.renderInfo);
+
+    experienceValue = spawnInfo.damage;
 
 	resetTimeAlive();
 
@@ -88,4 +90,14 @@ void PU_ExperienceOrb::addPosition(const sf::Vector2f& delta)
     Pickup::addPosition(delta);
 
     collisionBox.setPos(collisionBox.getPos() + delta);
+}
+
+void PU_ExperienceOrb::setExp(const float& newVal)
+{
+    experienceValue = newVal;
+}
+
+float PU_ExperienceOrb::getExp() const
+{
+    return experienceValue;
 }

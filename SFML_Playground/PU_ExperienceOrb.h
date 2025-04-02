@@ -7,6 +7,8 @@ class PU_ExperienceOrb : public Pickup
 private:
 	virtual void tick_move(const float& deltaTime) override;
 
+	float experienceValue = 0.0f;
+
 	CollisionBox collisionBox;
 
 protected:
@@ -32,4 +34,7 @@ public:
 	virtual void releaseToPool() override;
 	
 	virtual void addPosition(const sf::Vector2f& delta) override;
+
+	void setExp(const float&);
+	float getExp() const;
 };
