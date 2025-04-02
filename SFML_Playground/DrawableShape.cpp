@@ -12,7 +12,7 @@ sf::Vector2f IDrawableShapes::viewHalfSize = { 0.0f, 0.0f };
 sf::Vector2f IDrawableShapes::viewCenter = { 0.0f, 0.0f };
 sf::Vector2f IDrawableShapes::widgetOffset = { 0.0f, 0.0f };
 
-void IDrawableShapes::updateValues()
+void IDrawableShapes::initValues()
 {
 	// Everything sf::RenderWindow related
 	window = gameInstance().getWindow();
@@ -20,9 +20,16 @@ void IDrawableShapes::updateValues()
 	windowCenter = sf::Vector2f{ windowSize.x / 2.0f, windowSize.y / 2.0f };
 	// Everything sf::View related
 	view = gameInstance().getView();
+
+	updateValues();
+}
+
+void IDrawableShapes::updateValues()
+{
 	viewSize = view->getSize();
 	viewHalfSize = viewSize / 2.0f;
 	viewCenter = view->getCenter();
+
 	widgetOffset = gameInstance().getWidgetOffset();
 }
 

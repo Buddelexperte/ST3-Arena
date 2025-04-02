@@ -8,16 +8,17 @@
 GI_Arena::GI_Arena()
 {
 	const sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-	window = new sf::RenderWindow(desktop, "SFML_Arena", sf::Style::Fullscreen);
+	window = std::make_unique<sf::RenderWindow>(desktop, "SFML_Arena", sf::Style::Fullscreen);
 
 	// Only use for crash heavy debug !
 	//window = new sf::RenderWindow(desktop, "SFML_Arena", sf::Style::Titlebar | sf::Style::Default);
 
-	//window->setFramerateLimit(60);
+	//window->setFramerateLimit(MAX_FPS);
+	//window->setVerticalSyncEnabled(true);
 
 	std::cout << "RenderWindow created." << std::endl;
 	sf::Vector2f desktopSize = { static_cast<float>(desktop.width), static_cast<float>(desktop.height) };
-	view = new sf::View(desktopSize / 2.0f, desktopSize);
+	view = std::make_unique<sf::View>(desktopSize / 2.0f, desktopSize);
 	prevCamPos = widgetOffset = view->getCenter();
 	std::cout << "View created" << std::endl;
 	window->setView(*view);
@@ -59,17 +60,16 @@ Player* GI_Arena::makePlayer()
 {
 	if (player)
 	{
-		return player;
+		return player.get();
 	}
 
-	player = new Player;
-	return player;
+	player = std::make_unique<Player>();
+	return player.get();
 }
 
 void GI_Arena::start()
 {
-
-	IDrawableShapes::updateValues();
+	IDrawableShapes::initValues();
 
 	makePlayer();
 	std::cout << "Player created" << std::endl;
@@ -79,6 +79,21 @@ void GI_Arena::start()
 	std::cout << "\n### Starting Game ###\n" << std::endl;
 
 	tickLoop();
+}
+
+void GI_Arena::tickLoop()
+{
+	// Main Game Loop
+	while (window->isOpen())
+	{
+		sf::Clock debugClock;
+		preTick();
+		// Calculate deltaTime for time corrected physics
+		const float deltaTime = clock.restart().asSeconds();
+		tick(deltaTime);
+		postTick();
+		std::cout << "tick loop time: " << debugClock.restart().asMilliseconds() << "ms" << std::endl;
+	}
 }
 
 void GI_Arena::correctWidget()
@@ -135,18 +150,20 @@ void GI_Arena::startRound()
 void GI_Arena::preTick()
 {
 	prevCamPos = view->getCenter();
-	IDrawableShapes::updateValues();
-
 	SoundManager::getInstance().cleanUp();
 }
 
 void GI_Arena::tick(const float& deltaTime)
 {
+	// Time variables
 	globalTime += deltaTime;
 
+	// Update sf::View based on rescaling or ...
 	tick_view(deltaTime);
+
 	IDrawableShapes::updateValues();
 
+	// Event management
 	sf::Event event;
 	while (window->pollEvent(event) && gameState > QUIT)
 	{
@@ -155,15 +172,19 @@ void GI_Arena::tick(const float& deltaTime)
 			window->close();
 			break;
 		}
+		// Player gets to distribute the events and inputs
 		player->handleEvent(&event);
 	}
 
-	// Tick all actors
+	// Tick compound actors
 	player->tick(deltaTime);
 	correctWidget();
 
-	if (activeMenu)
+	// Tick active Environment
+	if (activeMenu != nullptr)
+	{
 		activeMenu->tick(deltaTime);
+	}
 }
 
 void GI_Arena::postTick()
@@ -172,18 +193,6 @@ void GI_Arena::postTick()
 	updateScreen();
 }
 
-void GI_Arena::tickLoop()
-{
-	// Main Game Loop
-	while (window->isOpen())
-	{
-		preTick();
-		// Calculate deltaTime for time corrected physics
-		const float deltaTime = clock.restart().asSeconds();
-		tick(deltaTime);
-		postTick();
-	}
-}
 
 void GI_Arena::setViewPos(const sf::Vector2f& newPos)
 {
@@ -220,13 +229,12 @@ void GI_Arena::tick_view(const float& deltaTime)
 	const sf::Vector2f mousePos = getMousePos();
 
 	static sf::Vector2f mouseOffset;
-	static float offsetLength;
 
 	// Calculate the mouse offset relative to the player
 	if (bWidgetParallax || !getIsPaused())
 	{
 		mouseOffset = mousePos - playerPos;
-		offsetLength = std::sqrt(mouseOffset.x * mouseOffset.x + mouseOffset.y * mouseOffset.y);
+		float offsetLength = std::sqrt(mouseOffset.x * mouseOffset.x + mouseOffset.y * mouseOffset.y);
 
 		// Clamp the mouse offset so it doesn't exceed MAX_DISTANCE
 		if (offsetLength > MAX_DISTANCE)
@@ -291,7 +299,7 @@ Player* GI_Arena::getPlayer()
 {
 	if (player)
 	{
-		return player;
+		return player.get();
 	}
 
 	return makePlayer();

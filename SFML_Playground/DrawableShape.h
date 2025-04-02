@@ -20,6 +20,7 @@ protected:
 
 public:
 	static void updateValues();
+	static void initValues();
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };

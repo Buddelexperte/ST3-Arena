@@ -18,6 +18,7 @@ private:
 	// Time calculation (deltaTime etc.)
 	sf::Clock clock;
 	static inline float globalTime = 0.0f;
+	static constexpr unsigned int MAX_FPS = 60;
 
 	// SINGELTON
 	GI_Arena();
@@ -25,8 +26,8 @@ private:
 	GI_Arena& operator=(const GI_Arena&) = delete; // Block the '=' operator to stop copies being made of this class
 	
 	// SFML Viewport objects
-	sf::RenderWindow* window = nullptr;
-	sf::View* view = nullptr;
+	std::unique_ptr<sf::RenderWindow> window = nullptr;
+	std::unique_ptr<sf::View> view = nullptr;
 	sf::RenderStates states;
 	// Custom GameState
 	GameState gameState = MENU_SCREEN;
@@ -38,7 +39,7 @@ private:
 
 	// Player
 	Player* makePlayer();
-	Player* player = nullptr;
+	std::unique_ptr<Player> player = nullptr;
 
 	// View related
 	sf::Vector2f prevCamPos;
@@ -75,8 +76,8 @@ public:
 	void resetViewPos();
 	void setViewPos(const sf::Vector2f&);
 	// Setters and Getters of pointers and important variables
-	sf::RenderWindow* getWindow() const { return window; }
-	sf::View* getView() const { return view; }
+	sf::RenderWindow* getWindow() const { return window.get(); }
+	sf::View* getView() const { return view.get(); }
 	sf::Vector2f getWidgetOffset() const;
 	sf::RenderStates getRenderStates() const { return states; }
 	Player* getPlayer();

@@ -8,7 +8,7 @@
 WidgetElement::WidgetElement(InputWidget* parentWidget)
 	: parent(parentWidget)
 {
-	updateValues();
+
 }
 
 // InputWidget ------------------------------------------------------------------------------------
