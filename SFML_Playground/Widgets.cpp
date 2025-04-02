@@ -11,7 +11,7 @@ W_MainMenu::W_MainMenu(InputWidget* parent)
 {
 	const std::vector<RawButton> MAIN_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100,	"ARENA",													sf::Color::White},
-		{viewCenter + sf::Vector2f{ 0, -200 },    sf::Vector2f{ 100, 100 }, sf::Color::Transparent,   16,	"Higscore: " + std::to_string(SaveGame::storedData.score),	sf::Color::White},
+		{viewCenter + sf::Vector2f{ 0, -200 },    sf::Vector2f{ 100, 100 }, sf::Color::Transparent,   16,	"Higscore: " + std::to_string(SaveGame::storedData.enemiesKilled),	sf::Color::White},
 		{viewCenter + sf::Vector2f{ 0, 0 },       sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"START",													sf::Color::Black},
 		{viewCenter + sf::Vector2f{ 0, 150 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"OPTIONS",													sf::Color::Black},
 		{viewCenter + sf::Vector2f{ 0, 300 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"QUIT",														sf::Color::Black}
@@ -30,7 +30,7 @@ W_MainMenu::W_MainMenu(InputWidget* parent)
 void W_MainMenu::construct()
 {
 	setWidgetIndex(0);
-	menu_highscore.setText("Highscore: " + std::to_string(SaveGame::storedData.score));
+	menu_highscore.setText("Highscore: " + std::to_string(SaveGame::storedData.enemiesKilled));
 }
 
 InputWidget* W_MainMenu::getWidgetAtIndex(const int& index)
@@ -570,14 +570,16 @@ W_GameOver::W_GameOver(InputWidget* parent) : InputWidget(parent)
 	const std::vector<RawButton> GAME_OVER_CONSTR = {
 		{viewCenter + sf::Vector2f{ 0.0f, -300.0f },	sf::Vector2f{ 350.0f, 120.0f }, sf::Color::Transparent,   100, "GAME OVER",						sf::Color::White},
 		{viewCenter + sf::Vector2f{ 0.0f, -200.0f },	sf::Vector2f{ 100.0f, 100.0f }, sf::Color::Transparent,   16, "Score: " + std::to_string(0),	sf::Color::White},
+		{viewCenter + sf::Vector2f{ 0.0f, -180.0f },	sf::Vector2f{ 100.0f, 100.0f }, sf::Color::Transparent,   16, "Kills: " + std::to_string(0),	sf::Color::White},
 		{viewCenter + sf::Vector2f{ 0.0f, 0.0f },		sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "QUIT",							sf::Color::Black}
 	};
 
 	gameOver_title.construct(GAME_OVER_CONSTR[0]);
 	gameOver_score.construct(GAME_OVER_CONSTR[1]);
-	gameOver_quitButton.construct(GAME_OVER_CONSTR[2]);
+	gameOver_kills.construct(GAME_OVER_CONSTR[2]);
+	gameOver_quitButton.construct(GAME_OVER_CONSTR[3]);
 
-	shapes = { &gameOver_title, &gameOver_score, &gameOver_quitButton };
+	shapes = { &gameOver_title, &gameOver_score, &gameOver_kills, &gameOver_quitButton };
 }
 
 void W_GameOver::tick(const float& deltaTime)
@@ -586,12 +588,14 @@ void W_GameOver::tick(const float& deltaTime)
 
 	gameOver_title.setPos(widgetOffset + sf::Vector2f{ 0.0f, -300.0f });
 	gameOver_score.setPos(widgetOffset + sf::Vector2f{ 0.0f, -200.0f });
+	gameOver_kills.setPos(widgetOffset + sf::Vector2f{ 0.0f, -180.0f });
 	gameOver_quitButton.setPos(widgetOffset + sf::Vector2f{ 0.0f, 0.0f });
 }
 
-void W_GameOver::changeScore(const int& currScore = 0)
+void W_GameOver::changeStats(const SaveGame_Struct& currData)
 {
-	gameOver_score.setText("Score: " + std::to_string(currScore));
+	gameOver_score.setText("Score: " + std::to_string(currData.score));
+	gameOver_kills.setText("Kills: " + std::to_string(currData.enemiesKilled));
 }
 
 bool W_GameOver::isMouseOver(const bool& checkForClick = false)
@@ -626,6 +630,8 @@ W_Gameplay::W_Gameplay(InputWidget* parent)
 
 	// Done out
 	std::cout << "- Constructed GameplayWidget" << std::endl;
+	tick_background(0.0f);
+	window->draw(background, &backgroundTexture);
 }
 
 void W_Gameplay::construct()
@@ -644,6 +650,7 @@ void W_Gameplay::construct()
 		// Add Gameplay objects to shapes vector to draw them
 	}
 	setWidgetIndex(0);
+
 }
 
 void W_Gameplay::tick_background(const float& deltaTime)
@@ -726,9 +733,9 @@ void W_Gameplay::lose()
 	// Add GameOver Screen to shapes list
 	setWidgetIndex(2)->construct();
 	gameInstance().setIsPaused(true);
-	gameOverScreen.changeScore(SaveGame::currentData.score);
+	gameOverScreen.changeStats(SaveGame::currentData);
 	// Only save if higher than stored highscore
-	if (SaveGame::currentData.score > SaveGame::storedData.score)
+	if (SaveGame::currentData.enemiesKilled > SaveGame::storedData.enemiesKilled)
 		SaveGame::saveData();
 }
 

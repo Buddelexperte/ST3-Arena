@@ -2,6 +2,7 @@
 
 #include "Button.h"
 #include "Flashlight.h"
+#include "SaveGame.h"
 
 const std::string WIDGET_EXP = "Widget is no longer available.\n";
 
@@ -140,11 +141,12 @@ class W_GameOver : public InputWidget
 private:
 	Button gameOver_title;
 	Button gameOver_score;
+	Button gameOver_kills;
 	Button gameOver_quitButton;
 public:
 	W_GameOver(InputWidget*);
 	void tick(const float& deltaTime) override;
-	void changeScore(const int&);
+	void changeStats(const SaveGame_Struct&);
 	bool isMouseOver(const bool&) override;
 };
 

@@ -107,10 +107,8 @@ void Player::tick_gameplay(const float& deltaTime)
 void Player::tick_move(const float& deltaTime)
 {
 	// Movement
-
 	static constexpr float WALKING_SPEED = 350.0f;
-	static constexpr float LERP_SMOOTHNESS = 0.01f;
-	static constexpr float ROT_LERP_MULTIPLIER = 10.0f;
+	static constexpr float ROT_LERP_MULTIPLIER = 2.0f;
 
 	float x = 0.0f, y = 0.0f, multiplier = 1.0f;
 

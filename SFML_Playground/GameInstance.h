@@ -17,10 +17,15 @@ class GI_Arena // SINGLETON PATTERN
 private:
 	// Time calculation (deltaTime etc.)
 	sf::Clock clock;
-	static inline float globalTime = 0.0f;
-	static constexpr unsigned int MAX_FPS = 60;
+	static float globalTime;
 
-	// SINGELTON
+	// CONFIG
+	static constexpr unsigned int MAX_FPS = 144;
+	static constexpr bool bUseVSync = true;
+
+	static constexpr bool bWidgetParallax = false;
+
+	// SINGLETON
 	GI_Arena();
 	GI_Arena(const GI_Arena&) = delete;
 	GI_Arena& operator=(const GI_Arena&) = delete; // Block the '=' operator to stop copies being made of this class

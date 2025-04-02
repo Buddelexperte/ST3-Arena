@@ -5,7 +5,7 @@
 
 void PU_ExperienceOrb::tick_move(const float& deltaTime)
 {
-    static constexpr float DELTA_TIME_CORRECTION = 100.0f;
+    static constexpr float DELTA_TIME_CORRECTION = 10.0f;
 
     const sf::Vector2f playerPos = gameInstance().getPlayer()->getPosition();
     const sf::Vector2f pickupPos = getPosition();
@@ -48,7 +48,7 @@ void PU_ExperienceOrb::tick_move(const float& deltaTime)
 
 void PU_ExperienceOrb::onPickup()
 {
-
+    SaveGame::currentData.score = (SaveGame::currentData.score + 1);
 }
 
 void PU_ExperienceOrb::spawn(const SpawnInformation& spawnInfo)

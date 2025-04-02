@@ -4,6 +4,7 @@
 
 
 Flashlight::Flashlight()
+    : animWait(ANIM_FRAME_WAIT)
 {
     constexpr float SPRITE_SIZE = 512.0f;
     flashlightSprite.setOrigin(SPRITE_SIZE / 2.0f, SPRITE_SIZE / 2.0f);
@@ -70,16 +71,19 @@ void Flashlight::tick(const float& deltaTime)
 
 void Flashlight::tick_animation(const float& deltaTime)
 {
-    static int steps = 0;
-    if (++steps % 128 == 0)
+    animWait.addValue(-deltaTime);
+    if (animWait.isEmpty())
     {
-        int textureIndex = steps % textures.size();
+        animFrameCount++;
+        int textureIndex = animFrameCount % textures.size();
         static int lastTextureIndex = -1; // Track last assigned texture index
         if (textureIndex != lastTextureIndex)
         {
             flashlightSprite.setTexture(textures[textureIndex]);
             lastTextureIndex = textureIndex;
         }
+
+        animWait.reset();
     }
 }
 

@@ -5,6 +5,8 @@
 #include "Widgets.h"
 #include "EntityManager.h"
 
+float GI_Arena::globalTime = 0.0f;
+
 GI_Arena::GI_Arena()
 {
 	const sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
@@ -13,8 +15,8 @@ GI_Arena::GI_Arena()
 	// Only use for crash heavy debug !
 	//window = new sf::RenderWindow(desktop, "SFML_Arena", sf::Style::Titlebar | sf::Style::Default);
 
-	//window->setFramerateLimit(MAX_FPS);
-	//window->setVerticalSyncEnabled(true);
+	window->setFramerateLimit(MAX_FPS);
+	window->setVerticalSyncEnabled(bUseVSync);
 
 	std::cout << "RenderWindow created." << std::endl;
 	sf::Vector2f desktopSize = { static_cast<float>(desktop.width), static_cast<float>(desktop.height) };
@@ -86,6 +88,7 @@ void GI_Arena::tickLoop()
 	// Main Game Loop
 	while (window->isOpen())
 	{
+		// Debug time measuring only TEMPORARY, disbale if needed
 		sf::Clock debugClock;
 		preTick();
 		// Calculate deltaTime for time corrected physics
@@ -101,7 +104,9 @@ void GI_Arena::correctWidget()
 	// If GameState changed in earlier loop, construct new activeMenu;
 	static GameState oldGS = QUIT;
 
-	if (gameState == oldGS) return;
+	// On no change, don't call
+	if (gameState == oldGS) 
+		return;
 
 	switch (oldGS = gameState)
 	{
@@ -118,6 +123,7 @@ void GI_Arena::correctWidget()
 		break;
 	}
 
+	// If new widget not valid, close game / end loop
 	if (activeMenu == nullptr)
 	{
 		window->close();
@@ -220,7 +226,6 @@ void GI_Arena::tick_view(const float& deltaTime)
 	constexpr float MAX_DISTANCE = 100.0f;                // Maximum allowed mouse influence
 
 	// A factor for widgetOffset interpolation (tweak for less aggressive movement)
-	constexpr bool bWidgetParallax = false;
 	constexpr float WIDGET_LERP_ALPHA = 0.5f;             // Lower value = slower, snappier response
 
 	// Get current camera, player, and mouse positions

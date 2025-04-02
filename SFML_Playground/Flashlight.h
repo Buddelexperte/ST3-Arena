@@ -1,6 +1,7 @@
 #pragma once
 
 #include "WidgetBase.h"
+#include "ValueBar.h"
 
 // TODO: Add enemy DeathLights
 
@@ -137,6 +138,9 @@ private:
     static const inline sf::Vector2f SHADER_SPRITE_RATIO { 2.1f / SHADER_RADIUS, 2.1f / SHADER_RADIUS };
 
     std::vector<sf::Texture> textures = {};
+    static constexpr float ANIM_FRAME_WAIT = 0.075f;
+    unsigned int animFrameCount = 0;
+    ValueBar animWait;
     sf::Sprite flashlightSprite;
 
 

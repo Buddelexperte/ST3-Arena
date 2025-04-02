@@ -78,13 +78,21 @@ inline void zeroPrecision(sf::Vector2f& value, const float& precision = SMALLEST
 	zeroPrecision(value.y, precision);
 }
 
+// CLAMP ------------------------------------------------------------------------------------------
+inline void clamp(float& value, const float& min, const float& max)
+{
+	if (value < min) value = min;
+	if (value > max) value = max;
+}
 
 // LERP -------------------------------------------------------------------------------------------
 
-static constexpr inline float LERP_SMOOTHNESS = 0.01f;
+static constexpr inline float LERP_SMOOTHNESS = 0.2f;
 
 inline float lerp(const float& currentRot, const float& targetRot, float factor)
 {
+	clamp(factor, 0.0f, 1.0f);
+
 	float diff = targetRot - currentRot;
 
 	// Wrap difference to the range [-180, 180] for degrees
@@ -96,6 +104,8 @@ inline float lerp(const float& currentRot, const float& targetRot, float factor)
 
 inline sf::Vector2f lerp(const sf::Vector2f& currentCenter, const sf::Vector2f& targetCenter, float factor)
 {
+	clamp(factor, 0.0f, 1.0f);
+
 	return currentCenter + factor * (targetCenter - currentCenter);
 }
 
