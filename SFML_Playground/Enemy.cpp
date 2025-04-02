@@ -114,7 +114,8 @@ void Enemy::kill_self(const bool& bByPlayer = false)
 {
 	if (bByPlayer)
 	{
-		SaveGame::currentData.enemiesKilled = (SaveGame::currentData.enemiesKilled + 1);
+		SaveGame::currentData.enemiesKilled++;
+
 		spawnDeathParticle();
 		spawnExperience();
 	}

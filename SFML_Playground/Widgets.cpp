@@ -10,11 +10,11 @@ W_MainMenu::W_MainMenu(InputWidget* parent)
 	: InputWidget(parent), optionsMenu(this), levelMenu(this), selectWeapon(this)
 {
 	const std::vector<RawButton> MAIN_MENU_CONSTR = {
-		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100,	"ARENA",													sf::Color::White},
-		{viewCenter + sf::Vector2f{ 0, -200 },    sf::Vector2f{ 100, 100 }, sf::Color::Transparent,   16,	"Higscore: " + std::to_string(SaveGame::storedData.enemiesKilled),	sf::Color::White},
-		{viewCenter + sf::Vector2f{ 0, 0 },       sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"START",													sf::Color::Black},
-		{viewCenter + sf::Vector2f{ 0, 150 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"OPTIONS",													sf::Color::Black},
-		{viewCenter + sf::Vector2f{ 0, 300 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"QUIT",														sf::Color::Black}
+		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100,	"ARENA",								sf::Color::White},
+		{viewCenter + sf::Vector2f{ 0, -200 },    sf::Vector2f{ 100, 100 }, sf::Color::Transparent,   16,	"Higscore: " + std::to_string(0),		sf::Color::White},
+		{viewCenter + sf::Vector2f{ 0, 0 },       sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"START",								sf::Color::Black},
+		{viewCenter + sf::Vector2f{ 0, 150 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"OPTIONS",								sf::Color::Black},
+		{viewCenter + sf::Vector2f{ 0, 300 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"QUIT",									sf::Color::Black}
 	};
 
 	menu_title.construct(MAIN_MENU_CONSTR[0]);
@@ -30,7 +30,7 @@ W_MainMenu::W_MainMenu(InputWidget* parent)
 void W_MainMenu::construct()
 {
 	setWidgetIndex(0);
-	menu_highscore.setText("Highscore: " + std::to_string(SaveGame::storedData.enemiesKilled));
+	menu_highscore.setText("Highscore: " + std::to_string(SaveGame::storedData.score));
 }
 
 InputWidget* W_MainMenu::getWidgetAtIndex(const int& index)
@@ -733,10 +733,13 @@ void W_Gameplay::lose()
 	// Add GameOver Screen to shapes list
 	setWidgetIndex(2)->construct();
 	gameInstance().setIsPaused(true);
+
 	gameOverScreen.changeStats(SaveGame::currentData);
 	// Only save if higher than stored highscore
-	if (SaveGame::currentData.enemiesKilled > SaveGame::storedData.enemiesKilled)
+	if (SaveGame::currentData.score > SaveGame::storedData.score)
+	{
 		SaveGame::saveData();
+	}
 }
 
 void W_Gameplay::tick(const float& deltaTime)

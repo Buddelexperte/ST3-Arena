@@ -48,7 +48,7 @@ void PU_ExperienceOrb::tick_move(const float& deltaTime)
 
 void PU_ExperienceOrb::onPickup()
 {
-    SaveGame::currentData.score = (SaveGame::currentData.score + 1);
+    SaveGame::currentData.score++;
 }
 
 void PU_ExperienceOrb::spawn(const SpawnInformation& spawnInfo)
