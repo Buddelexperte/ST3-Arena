@@ -12,7 +12,7 @@ Enemy::Enemy()
 
 }
 
-void Enemy::spawn(const SpawnInformation& spawnInfo)
+void Enemy::spawn(SpawnInformation spawnInfo)
 {
 	setRenderInfo(spawnInfo.renderInfo);
 	resetHealth(spawnInfo.health);
@@ -94,17 +94,15 @@ void Enemy::spawnDeathParticle()
 
 void Enemy::spawnExperience()
 {
+	const float expVal = std::trunc(RNG::floatInRange(1.0f, RNG::floatInRange(1.0f, RNG::floatInRange(1.0f, 10.0f)))); // Experience worth, TODO: Change to more dynamic number gen
+
 	IMovable::RenderInfo pickupRenderInfo = {
 		.pos = getPosition(),
-		.size = getSize() / 4.0f,
-		.rot = static_cast<float>(getID() * getID()),
-		.velocity = sf::Vector2f(0.0f, 0.0f),
-		.color = sf::Color::Yellow
 	};
 
 	SpawnInformation pickupSpawnInfo = {
 		.renderInfo = pickupRenderInfo,
-		.damage = 1.0f // Experience worth, TODO: Change to more dynamic number gen
+		.damage = expVal 
 	};
 
 	EntityManager::getInstance().spawnEntity<PU_ExperienceOrb>(pickupSpawnInfo); // Expr value in Health slot

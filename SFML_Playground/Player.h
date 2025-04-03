@@ -55,7 +55,7 @@ public:
 	~Player() = default;
 
 	// Entity
-	void spawn(const SpawnInformation&) override;
+	void spawn( SpawnInformation) override;
 	void spawn();
 	void tick(const float&) override;
 	void releaseToPool() override;

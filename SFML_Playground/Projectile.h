@@ -79,7 +79,7 @@ public:
     void onCollision(IHasCollision* other) override;
     void collideWithEnemy(Enemy& enemy) override;
 
-    void spawn(const SpawnInformation& spawnInfo) override;
+    void spawn( SpawnInformation spawnInfo) override;
     void tick(const float& deltaTime) override;
     void releaseToPool() override;
 

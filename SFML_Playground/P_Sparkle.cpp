@@ -25,7 +25,7 @@ void P_Sparkle::tick_move(const float& deltaTime)
 	setRotation(getRotation() + rotationSpeed * deltaTime);
 }
 
-void P_Sparkle::spawn(const SpawnInformation& spawnInfo)
+void P_Sparkle::spawn( SpawnInformation spawnInfo)
 {
 	Particle::spawn(spawnInfo);
 

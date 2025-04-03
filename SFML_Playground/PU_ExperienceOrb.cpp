@@ -51,16 +51,69 @@ void PU_ExperienceOrb::onPickup()
     SaveGame::currentData.score += getExp();
 }
 
-void PU_ExperienceOrb::spawn(const SpawnInformation& spawnInfo)
+void PU_ExperienceOrb::spawn(SpawnInformation spawnInfo)
 {
+    setExp(spawnInfo.damage);
+
+    unsigned int experienceGroup = static_cast<unsigned int>(getExp());
+    spawnInfo.renderInfo.color = getCorrectColor(experienceGroup);
+    spawnInfo.renderInfo.size = getCorrectSize(experienceGroup);
+
     setRenderInfo(spawnInfo.renderInfo);
 
-    experienceValue = spawnInfo.damage;
 
 	resetTimeAlive();
 
     collisionBox.setPos(getPosition());
     collisionBox.setSize(getSize());
+}
+
+sf::Color PU_ExperienceOrb::getCorrectColor(const unsigned int experienceGroup)
+{
+    return sf::Color::Yellow;
+
+    switch (experienceGroup)
+    {
+    case 1:
+        return sf::Color::Green;
+        break;
+    case 2:
+        return sf::Color::Blue;
+        break;
+    case 5:
+        return sf::Color::Cyan;
+        break;
+    case 10:
+        return sf::Color::Yellow;
+        break;
+    default:
+        break;
+    }
+    
+    return sf::Color::White;
+}
+
+sf::Vector2f PU_ExperienceOrb::getCorrectSize(const unsigned int experienceGroup)
+{
+    switch (experienceGroup)
+    {
+    case 1:
+        return sf::Vector2f(10.0f, 10.0f);
+        break;
+    case 2:
+        return sf::Vector2f(20.0f, 20.0f);
+        break;
+    case 5:
+        return sf::Vector2f(30.0f, 30.0f);
+        break;
+    case 10:
+        return sf::Vector2f(50.0f, 50.0f);
+        break;
+    default:
+        break;
+    }
+
+    return sf::Vector2f(50.0f, 50.0f);
 }
 
 void PU_ExperienceOrb::tick(const float& deltaTime)
@@ -100,4 +153,26 @@ void PU_ExperienceOrb::setExp(const float& newVal)
 float PU_ExperienceOrb::getExp() const
 {
     return experienceValue;
+}
+
+void PU_ExperienceOrb::setRenderInfo(const IMovable::RenderInfo& newRenderInfo)
+{
+    Pickup::setRenderInfo(newRenderInfo);
+
+    collisionBox.setPos(getPosition());
+    collisionBox.setSize(getSize());
+}
+
+void PU_ExperienceOrb::setPosition(const sf::Vector2f& newPos)
+{
+    Pickup::setPosition(newPos);
+
+    collisionBox.setPos(newPos);
+}
+
+void PU_ExperienceOrb::setSize(const sf::Vector2f& newSize)
+{
+    Pickup::setSize(newSize);
+
+    collisionBox.setSize(newSize);
 }

@@ -48,7 +48,7 @@ void Projectile::tick_move(const float& deltaTime)
 	addPosition(delta);
 }
 
-void Projectile::spawn(const SpawnInformation& spawnInfo)
+void Projectile::spawn( SpawnInformation spawnInfo)
 {
 	setRenderInfo(spawnInfo.renderInfo);
 	setDamage(spawnInfo.damage);

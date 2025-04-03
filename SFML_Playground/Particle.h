@@ -26,7 +26,7 @@ public:
 		return &collisionBox;
 	}
 
-	void spawn(const SpawnInformation&) override;
+	void spawn(SpawnInformation) override;
 	void tick(const float&) override;
 	void releaseToPool() override;
 };

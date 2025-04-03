@@ -13,7 +13,7 @@ public:
 
     virtual Collidable* getCollision() override = 0;
 
-    virtual void spawn(const SpawnInformation& spawnInfo) = 0;
+    virtual void spawn(SpawnInformation) override = 0;
     virtual void tick(const float& deltaTime) override = 0;
     virtual void releaseToPool() override = 0;
 

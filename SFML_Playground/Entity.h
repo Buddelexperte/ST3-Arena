@@ -51,7 +51,7 @@ public:
 	// IHasCollision
 	virtual Collidable* getCollision() override = 0;
 
-	virtual void spawn(const SpawnInformation&) = 0;
+	virtual void spawn(SpawnInformation) = 0;
 	virtual void tick(const float& deltaTime) = 0;
 	virtual void releaseToPool() = 0;
 

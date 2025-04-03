@@ -14,6 +14,6 @@ public:
 	P_Sparkle();
 	~P_Sparkle() = default;
 
-	void spawn(const SpawnInformation&) override;
+	void spawn(SpawnInformation) override;
 	void releaseToPool() override;
 };

@@ -11,7 +11,7 @@ Particle::Particle()
 
 }
 
-void Particle::spawn(const SpawnInformation& spawnInfo)
+void Particle::spawn(SpawnInformation spawnInfo)
 {
 	setRenderInfo(spawnInfo.renderInfo);
 	resetLifetime(spawnInfo.health);

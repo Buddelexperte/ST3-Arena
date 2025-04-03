@@ -60,7 +60,7 @@ void Player::spawn()
 	invincibility.setValue(2.0f); // 2 seconds invincibility (Spawn protection)
 }
 
-void Player::spawn(const SpawnInformation&)
+void Player::spawn(SpawnInformation spawnInfo)
 {
 	spawn();
 }

@@ -30,7 +30,7 @@ public:
 	Enemy();
 	~Enemy() = default;
 
-	void spawn(const SpawnInformation&) override;
+	void spawn( SpawnInformation) override;
 	void tick(const float&) override;
 	void releaseToPool() override;
 
