@@ -58,7 +58,7 @@ public:
 	// RenderInfo + CallUpdate
 	void setRenderInfo(const RenderInfo&) override;
 	void setPosition(const sf::Vector2f&) override;
-	void addPosition(const sf::Vector2f&) override;
+	void addPosition(const sf::Vector2f&, const bool& bVelocityBased = true) override;
 	void setRotation(const float&) override;
 	void setSize(const sf::Vector2f&) override;
 	void setColor(const sf::Color&) override;

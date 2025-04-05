@@ -54,7 +54,18 @@ inline std::string normalizeWeaponName(const std::string& name) {
 	return normalized;
 }
 
-// PRECISION -------------------------------------------------------------------------------------------
+// ROTATION ---------------------------------------------------------------------------------------
+inline float normalizeAngle(float angle) {
+	// Normalize the angle to be within the range [0, 360)
+	while (angle < 0.0f) 
+		angle += 360.0f;
+	while (angle >= 360.0f) 
+		angle -= 360.0f;
+
+	return angle;
+}
+
+// PRECISION --------------------------------------------------------------------------------------
 inline bool shouldZero(const float& value, const float& precision = SMALLEST_PRECISION)
 {
 	const float epsilon = precision;
@@ -94,10 +105,6 @@ inline float lerp(const float& currentRot, const float& targetRot, float factor)
 	clamp(factor, 0.0f, 1.0f);
 
 	float diff = targetRot - currentRot;
-
-	// Wrap difference to the range [-180, 180] for degrees
-	if (diff > 180.0f) diff -= 360.0f;
-	if (diff < -180.0f) diff += 360.0f;
 
 	return currentRot + factor * diff;
 }

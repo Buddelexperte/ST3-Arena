@@ -59,17 +59,23 @@ void Enemy::tick_move(const float& deltaTime)
 
 	// Rotation
 	
+	// Calculate the angle to look at the player
 	const sf::Vector2f pos = getPosition();
 	float rotation = getRotation();
 	float targetRot = getLookAtRot(playerPos, pos);
-	
-	float rotDiff = rotation - targetRot;
 
-	if (!(shouldZero(rotDiff)))
+	// Check if the difference between the current rotation and target rotation is small enough
+	float newRot = rotation;
+	bool bRotDiffZero = shouldZero(rotation - targetRot);
+	if (!bRotDiffZero)
 	{
-		float newRot = lerp(rotation, targetRot, ROT_LERP);
-		setRotation(newRot);
+		static constexpr float ROT_LERP = LERP_SMOOTHNESS * 0.5f; // Adjust this value for smoother or faster rotation
+		// If the difference is greater than 180 degrees, we need to adjust the target rotation
+		targetRot = normalizeAngle(targetRot);
+		// Lerp the rotation towards the target rotation
+		newRot = lerp(rotation, targetRot, ROT_LERP);
 	}
+	setRotation(newRot);
 }
 
 void Enemy::spawnDeathParticle()
@@ -139,9 +145,9 @@ void Enemy::setPosition(const sf::Vector2f& pos)
 	collisionBox.setPos(pos);
 }
 
-void Enemy::addPosition(const sf::Vector2f& delta)
+void Enemy::addPosition(const sf::Vector2f& delta, const bool& bVelocityBased)
 {
-	Entity::addPosition(delta);
+	Entity::addPosition(delta, bVelocityBased);
 	collisionBox.setPos(collisionBox.getPos() + delta);
 }
 

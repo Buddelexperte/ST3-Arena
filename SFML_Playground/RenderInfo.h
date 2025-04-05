@@ -10,6 +10,14 @@ public:
 		float rot = 0;
 		sf::Vector2f velocity = sf::Vector2f(0.0f, 0.0f);
 		sf::Color color = sf::Color::White;
+
+		bool operator==(const RenderInfo& other) const {
+			return pos == other.pos &&
+				size == other.size &&
+				rot == other.rot &&
+				velocity == other.velocity &&
+				color == other.color;
+		}
 	};
 private:
 	RenderInfo renderInfo;
@@ -28,7 +36,7 @@ public:
 	virtual void setPosition(const sf::Vector2f& newPos)
 		{ renderInfo.pos = newPos; }
 
-	virtual void addPosition(const sf::Vector2f& deltaPos)
+	virtual void addPosition(const sf::Vector2f& deltaPos, const bool& bVelocityBased = true)
 		{ renderInfo.pos += deltaPos; }
 
 	virtual sf::Vector2f getPosition() const

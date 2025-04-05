@@ -138,9 +138,9 @@ void PU_ExperienceOrb::releaseToPool()
     GenericPool<PU_ExperienceOrb>::instance().release(std::unique_ptr<PU_ExperienceOrb>(this));
 }
 
-void PU_ExperienceOrb::addPosition(const sf::Vector2f& delta)
+void PU_ExperienceOrb::addPosition(const sf::Vector2f& delta, const bool& bVelocityBased)
 {
-    Pickup::addPosition(delta);
+    Pickup::addPosition(delta, bVelocityBased);
 
     collisionBox.setPos(collisionBox.getPos() + delta);
 }

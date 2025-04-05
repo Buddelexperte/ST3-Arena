@@ -97,9 +97,9 @@ public:
     }
 
 
-    void addPosition(const sf::Vector2f& deltaPos) override
+    void addPosition(const sf::Vector2f& deltaPos, const bool& bVelocityBased = true) override
     {
-        Entity::addPosition(deltaPos);
+        Entity::addPosition(deltaPos, bVelocityBased);
         collisionBox.setPos(collisionBox.getPos() + deltaPos);
     }
 

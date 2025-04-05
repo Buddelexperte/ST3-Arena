@@ -129,10 +129,10 @@ public:
         projSpawner->setPosition(newPos);
     }
 
-    void addPosition(const sf::Vector2f& delta) override
+    void addPosition(const sf::Vector2f& delta, const bool& bVelocityBased = true) override
     {
-        IMovable::addPosition(delta);
-        projSpawner->addPosition(delta);
+        IMovable::addPosition(delta, bVelocityBased);
+        projSpawner->addPosition(delta, bVelocityBased);
     }
 
     void setRotation(const float& newRot) override

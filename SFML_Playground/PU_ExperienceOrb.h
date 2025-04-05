@@ -37,7 +37,7 @@ public:
 	virtual void tick(const float& deltaTime) override;
 	virtual void releaseToPool() override;
 	
-	virtual void addPosition(const sf::Vector2f& delta) override;
+	virtual void addPosition(const sf::Vector2f& delta, const bool& bVelocityBased = true) override;
 
 	void setExp(const float&);
 	float getExp() const;

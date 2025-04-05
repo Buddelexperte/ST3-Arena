@@ -267,15 +267,15 @@ void Player::setPosition(const sf::Vector2f& newPos)
 		inventory.getActiveWeapon()->setPosition(newPos);
 }
 
-void Player::addPosition(const sf::Vector2f& deltaPos)
+void Player::addPosition(const sf::Vector2f& deltaPos, const bool& bVelocityBased)
 {
-	IMovable::addPosition(deltaPos);
+	IMovable::addPosition(deltaPos, bVelocityBased);
 
 	playerSprite.move(deltaPos);
 	collisionBox.setPos(collisionBox.getPos() + deltaPos);
 
 	if (inventory.getActiveWeapon())
-		inventory.getActiveWeapon()->addPosition(deltaPos);
+		inventory.getActiveWeapon()->addPosition(deltaPos, bVelocityBased);
 
 }
 

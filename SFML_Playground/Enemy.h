@@ -16,7 +16,6 @@ private:
 
 	const float WALK_SPEED = RNG::floatInRange(80.0f, 100.0f);
 	const float ROT_LERP_MULTIPLIER = RNG::floatInRange(0.3f, 0.8f);
-	const float ROT_LERP = LERP_SMOOTHNESS * ROT_LERP_MULTIPLIER;
 
 	using IMovable::setVelocity; // Make this function private for safety reasons
 
@@ -38,7 +37,7 @@ public:
 	void setRenderInfo(const RenderInfo& newRenderInfo) override;
 	// Position
 	void setPosition(const sf::Vector2f& pos) override;
-	void addPosition(const sf::Vector2f& delta) override;
+	void addPosition(const sf::Vector2f& delta, const bool& bVelocityBased = true) override;
 	// Size
 	void setSize(const sf::Vector2f& size) override;
 	// Color
