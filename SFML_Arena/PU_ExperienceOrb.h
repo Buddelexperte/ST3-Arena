@@ -6,9 +6,7 @@ class PU_ExperienceOrb : public Pickup
 {
 private:
 
-	float experienceValue = 0.0f;
-	unsigned int getExperienceGroup() const;
-
+	unsigned int experienceValue = 0;
 
 	CollisionBox collisionBox;
 
@@ -41,8 +39,7 @@ public:
 	
 	virtual void addPosition(const sf::Vector2f& delta, const bool& bVelocityBased = true) override;
 
-	void setExp(const float&);
-	float getExp() const;
+	unsigned int getExp() const;
 
 	virtual void setRenderInfo(const IMovable::RenderInfo&) override;
 	virtual void setPosition(const sf::Vector2f&) override;

@@ -23,10 +23,10 @@ void PU_ExperienceOrb::tick_move(const float& deltaTime)
 
     direction /= distance;
 
-    float MAGNETIC_RANGE = playerRef->getInventory().getMagneticRange();    // Start pulling from this distance
-    constexpr float BASE_SPEED = 10.0f;                                     // Base movement speed
-    constexpr float MAX_SPEED = 100.0f;                                     // Maximum pull speed
-    constexpr float ACCELERATION_FACTOR = 20.0f;                            // Speed multiplier for acceleration
+    const float MAGNETIC_RANGE = playerRef->getInventory().getMagneticRange();  // Start pulling from this distance
+    static constexpr float BASE_SPEED = 10.0f;                                  // Base movement speed
+    static constexpr float MAX_SPEED = 700.0f;                                  // Maximum pull speed
+    static constexpr float ACCELERATION_FACTOR = 10.0f;                         // Speed multiplier for acceleration
     
     sf::Vector2f newVelo = sf::Vector2f(0.0f, 0.0f);
     if (distance < MAGNETIC_RANGE)
@@ -53,12 +53,10 @@ void PU_ExperienceOrb::onPickup()
 
 void PU_ExperienceOrb::spawn(SpawnInformation spawnInfo)
 {
-    setExp(spawnInfo.damage);
+    experienceValue = static_cast<unsigned int>(spawnInfo.damage);
 
-	const unsigned int experienceGroup = getExperienceGroup();
-
-    spawnInfo.renderInfo.color = getCorrectColor(experienceGroup);
-    spawnInfo.renderInfo.size = getCorrectSize(experienceGroup);
+    spawnInfo.renderInfo.color = getCorrectColor(experienceValue);
+    spawnInfo.renderInfo.size = getCorrectSize(experienceValue);
 
     setRenderInfo(spawnInfo.renderInfo);
 
@@ -67,11 +65,6 @@ void PU_ExperienceOrb::spawn(SpawnInformation spawnInfo)
 
     collisionBox.setPos(getPosition());
     collisionBox.setSize(getSize());
-}
-
-unsigned int PU_ExperienceOrb::getExperienceGroup() const
-{
-    return static_cast<unsigned int>(experienceValue);
 }
 
 sf::Color PU_ExperienceOrb::getCorrectColor(const unsigned int& experienceGroup) const
@@ -152,13 +145,7 @@ void PU_ExperienceOrb::addPosition(const sf::Vector2f& delta, const bool& bVeloc
     collisionBox.setPos(collisionBox.getPos() + delta);
 }
 
-void PU_ExperienceOrb::setExp(const float& newVal)
-{
-    experienceValue = newVal;
-    static_cast<unsigned int>(newVal);
-}
-
-float PU_ExperienceOrb::getExp() const
+unsigned int PU_ExperienceOrb::getExp() const
 {
     return experienceValue;
 }
