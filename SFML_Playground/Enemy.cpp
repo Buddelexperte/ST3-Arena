@@ -92,26 +92,25 @@ void Enemy::spawnDeathParticle()
 
 	SpawnInformation particleSpawnInfo = {
 		.renderInfo = particleRenderInfo,
-		.health = P_LIFETIME
+		.health = P_LIFETIME // Lifetime value in Health slot
 	};
 
-	EntityManager::getInstance().spawnEntity<P_Sparkle>(particleSpawnInfo); // Expr value in Health slot
+	EntityManager::getInstance().spawnEntity<P_Sparkle>(particleSpawnInfo); 
 }
 
 void Enemy::spawnExperience()
 {
-	const float expVal = std::trunc(RNG::floatInRange(1.0f, RNG::floatInRange(1.0f, RNG::floatInRange(1.0f, 10.0f)))); // Experience worth, TODO: Change to more dynamic number gen
 
 	IMovable::RenderInfo pickupRenderInfo = {
-		.pos = getPosition(),
+		.pos = getPosition(), 
 	};
 
 	SpawnInformation pickupSpawnInfo = {
-		.renderInfo = pickupRenderInfo,
-		.damage = expVal 
+		.renderInfo = pickupRenderInfo, 
+		.damage = experienceValue // exp value in Damage slot
 	};
 
-	EntityManager::getInstance().spawnEntity<PU_ExperienceOrb>(pickupSpawnInfo); // Expr value in Health slot
+	EntityManager::getInstance().spawnEntity<PU_ExperienceOrb>(pickupSpawnInfo);
 }
 
 void Enemy::kill_self(const bool& bByPlayer = false)

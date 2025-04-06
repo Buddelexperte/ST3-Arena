@@ -5,16 +5,16 @@
 
 void PU_ExperienceOrb::tick_move(const float& deltaTime)
 {
-    static constexpr float DELTA_TIME_CORRECTION = 10.0f;
 
-    const sf::Vector2f playerPos = gameInstance().getPlayer()->getPosition();
+	Player* playerRef = gameInstance().getPlayer();
+    const sf::Vector2f playerPos = playerRef->getPosition();
     const sf::Vector2f pickupPos = getPosition();
 
     sf::Vector2f direction = playerPos - pickupPos;
     float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
     // Normalize direction vector
-    bool bDistanceNearZero = shouldZero(distance);
+    const bool bDistanceNearZero = shouldZero(distance);
     if (bDistanceNearZero)
     {
         setVelocity(sf::Vector2f(0.0f, 0.0f));
@@ -23,17 +23,17 @@ void PU_ExperienceOrb::tick_move(const float& deltaTime)
 
     direction /= distance;
 
-    constexpr float MAGNETIC_RANGE = 200.0f;    // Start pulling from this distance
-    constexpr float BASE_SPEED = 10.0f;         // Base movement speed
-    constexpr float MAX_SPEED = 500.0f;         // Maximum pull speed
-    constexpr float ACCELERATION_FACTOR = 20.0f; // Speed multiplier for acceleration
+    float MAGNETIC_RANGE = playerRef->getInventory().getMagneticRange();    // Start pulling from this distance
+    constexpr float BASE_SPEED = 10.0f;                                     // Base movement speed
+    constexpr float MAX_SPEED = 100.0f;                                     // Maximum pull speed
+    constexpr float ACCELERATION_FACTOR = 20.0f;                            // Speed multiplier for acceleration
     
     sf::Vector2f newVelo = sf::Vector2f(0.0f, 0.0f);
     if (distance < MAGNETIC_RANGE)
     {
         // Calculate speed based on proximity (closer = faster)
         float speed = BASE_SPEED + (1.0f - (distance / MAGNETIC_RANGE)) * (MAX_SPEED - BASE_SPEED);
-        speed *= ACCELERATION_FACTOR * deltaTime * DELTA_TIME_CORRECTION;
+        speed *= ACCELERATION_FACTOR;
 
         newVelo = direction * speed;
     }
@@ -41,8 +41,8 @@ void PU_ExperienceOrb::tick_move(const float& deltaTime)
     newVelo = lerp(getVelocity(), newVelo, LERP_SMOOTHNESS);
     sf::Vector2f offset = getVelocity() * deltaTime;
 
-    addPosition(offset);
     setVelocity(newVelo);
+    addPosition(offset);
 }
 
 
@@ -55,7 +55,8 @@ void PU_ExperienceOrb::spawn(SpawnInformation spawnInfo)
 {
     setExp(spawnInfo.damage);
 
-    unsigned int experienceGroup = static_cast<unsigned int>(getExp());
+	const unsigned int experienceGroup = getExperienceGroup();
+
     spawnInfo.renderInfo.color = getCorrectColor(experienceGroup);
     spawnInfo.renderInfo.size = getCorrectSize(experienceGroup);
 
@@ -68,7 +69,12 @@ void PU_ExperienceOrb::spawn(SpawnInformation spawnInfo)
     collisionBox.setSize(getSize());
 }
 
-sf::Color PU_ExperienceOrb::getCorrectColor(const unsigned int experienceGroup)
+unsigned int PU_ExperienceOrb::getExperienceGroup() const
+{
+    return static_cast<unsigned int>(experienceValue);
+}
+
+sf::Color PU_ExperienceOrb::getCorrectColor(const unsigned int& experienceGroup) const
 {
     return sf::Color::Yellow;
 
@@ -89,11 +95,12 @@ sf::Color PU_ExperienceOrb::getCorrectColor(const unsigned int experienceGroup)
     default:
         break;
     }
-    
+
+	// Default color if no match is found
     return sf::Color::White;
 }
 
-sf::Vector2f PU_ExperienceOrb::getCorrectSize(const unsigned int experienceGroup)
+sf::Vector2f PU_ExperienceOrb::getCorrectSize(const unsigned int& experienceGroup) const
 {
     switch (experienceGroup)
     {
@@ -113,7 +120,8 @@ sf::Vector2f PU_ExperienceOrb::getCorrectSize(const unsigned int experienceGroup
         break;
     }
 
-    return sf::Vector2f(50.0f, 50.0f);
+	// Default size if no match is found
+    return sf::Vector2f(30.0f, 30.0f);
 }
 
 void PU_ExperienceOrb::tick(const float& deltaTime)
@@ -122,14 +130,13 @@ void PU_ExperienceOrb::tick(const float& deltaTime)
 
     tick_move(deltaTime);
 
+	// Update alpha based on time alive
 	sf::Color currColor = getColor();
 	currColor.a = static_cast<sf::Uint8>(((sin(timeAlive) + 2.0f) * 0.33f) * 255.0f);
-
 	setColor(currColor);
 	
-	static constexpr float ROTATION_SPEED = 100.0f;
-
 	// Increase rotation speed over time
+	static constexpr float ROTATION_SPEED = 100.0f;
 	setRotation(getRotation() + ROTATION_SPEED * deltaTime);
 }
 
@@ -148,6 +155,7 @@ void PU_ExperienceOrb::addPosition(const sf::Vector2f& delta, const bool& bVeloc
 void PU_ExperienceOrb::setExp(const float& newVal)
 {
     experienceValue = newVal;
+    static_cast<unsigned int>(newVal);
 }
 
 float PU_ExperienceOrb::getExp() const

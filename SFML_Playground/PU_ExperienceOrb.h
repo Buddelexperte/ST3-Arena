@@ -7,11 +7,13 @@ class PU_ExperienceOrb : public Pickup
 private:
 
 	float experienceValue = 0.0f;
+	unsigned int getExperienceGroup() const;
+
 
 	CollisionBox collisionBox;
 
-	virtual sf::Color getCorrectColor(const unsigned int experienceGroup);
-	virtual sf::Vector2f getCorrectSize(const unsigned int experienceGroup);
+	virtual sf::Color getCorrectColor(const unsigned int& experienceGroup) const;
+	virtual sf::Vector2f getCorrectSize(const unsigned int& experienceGroup) const;
 
 	virtual void tick_move(const float& deltaTime) override;
 

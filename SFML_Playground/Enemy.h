@@ -17,6 +17,8 @@ private:
 	const float WALK_SPEED = RNG::floatInRange(80.0f, 100.0f);
 	const float ROT_LERP_MULTIPLIER = RNG::floatInRange(0.3f, 0.8f);
 
+	const float experienceValue = RNG::floatInRange(1.0f, 5.0f);
+
 	using IMovable::setVelocity; // Make this function private for safety reasons
 
 	virtual void tick_move(const float&) override;

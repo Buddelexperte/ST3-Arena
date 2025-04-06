@@ -21,6 +21,9 @@ private:
     float cooldownMultiplier = 1.0f;
     float cooldownSubtractor = 0.0f;
 
+    // Pickup configs
+	float MAGNETIC_DISTANCE = 200.0f; // Distance at which the player can pick up items
+
 public:
     Inventory() = default;
     Inventory(std::unique_ptr<Weapon>);
@@ -43,6 +46,16 @@ public:
 
     float getCooldownSubtractor() const
         { return cooldownSubtractor; }
+
+    void setMagneticRange(const float& newRange)
+    {
+        MAGNETIC_DISTANCE = newRange;
+    }
+
+	float getMagneticRange() const
+	{
+		return MAGNETIC_DISTANCE;
+	}
 
     std::string getStartWeapon() const
     {
