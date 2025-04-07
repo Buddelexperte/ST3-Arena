@@ -24,4 +24,6 @@ public:
 	bool canSpawn() const;
 
 	void trySpawnEnemy();
+
+	void setSpawnWave(std::unique_ptr<EnemySpawnWave>);
 };

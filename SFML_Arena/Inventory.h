@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ItemBaseClasses.h"
+#include "LevelSystem.h"
 
 class Player;
 
@@ -12,9 +13,10 @@ private:
     // Store all acquired weapons.
     std::string startWeaponName;
     std::vector<std::unique_ptr<Weapon>> weapons;
-    int activeWeaponIndex = -1; // -1 means no active weapon
+	int activeWeaponIndex = -1; // -1 means no active weapon or invalid index
 
     // Store all acquired perks.
+    LevelSystem levelSystem;
     std::vector<std::unique_ptr<Perk>> perks;
 
     // Multipliers
@@ -25,9 +27,14 @@ private:
 	float MAGNETIC_DISTANCE = 200.0f; // Distance at which the player can pick up items
 
 public:
-    Inventory() = default;
-    Inventory(std::unique_ptr<Weapon>);
+    Inventory(Player*); // Always need to set the owning playerRef
+    Inventory(Player*, std::unique_ptr<Weapon>);
     ~Inventory() = default;
+
+	LevelSystem& getLevelSystem()
+	{
+		return levelSystem;
+	}
 
     size_t getNumWeapons() const
         { return weapons.size(); }

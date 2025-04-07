@@ -45,19 +45,23 @@ IMovable::RenderInfo EnemySpawnWave::makeSpawnRenderInfo()
 
 SpawnInformation EnemySpawnWave::makeSpawnInfo()
 {
-    // TODO: Temporary values, replace with spawning logic in EnemySpawner class
+    // TODO: Temporary values, replace with spawning logic
     static constexpr float ENEMY_HEALTH = 1.0f;
     static constexpr float ENEMY_DAMAGE = 0.1f;
 
     return SpawnInformation(makeSpawnRenderInfo(), ENEMY_HEALTH, ENEMY_DAMAGE);
 }
 
+void EnemySpawnWave::spawnEnemy()
+{
+    SpawnInformation spawnInfo = makeSpawnInfo();
+    EntityManager::getInstance().spawnEntity<Enemy>(spawnInfo);
+}
+
 void EnemySpawnWave::spawnInterval()
 {
 	for (enemiesSpawned = 0; enemiesSpawned < enemiesPerInterval; enemiesSpawned++)
 	{
-		// Spawn the enemy at the new position
-		SpawnInformation spawnInfo = makeSpawnInfo();
-		EntityManager::getInstance().spawnEntity<Enemy>(spawnInfo);
+        spawnEnemy();
 	}
 }

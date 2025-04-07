@@ -66,6 +66,9 @@
     <Filter Include="Source\Managers\EnemySpawner">
       <UniqueIdentifier>{08f025f9-890c-4983-9d4c-afbb7cd3ad99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Managers\EnemySpawner\SpawnWaves">
+      <UniqueIdentifier>{cf2cfde1-dcf4-4056-a83d-922a19397ec4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -157,6 +160,12 @@
     </ClCompile>
     <ClCompile Include="SpawnWave.cpp">
       <Filter>Source\Managers\EnemySpawner</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelSystem.cpp">
+      <Filter>Source\Actors\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="SW_Stage1.h">
+      <Filter>Source\Managers\EnemySpawner\SpawnWaves</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -292,11 +301,17 @@
     <ClInclude Include="SpawnWave.h">
       <Filter>Source\Managers\EnemySpawner</Filter>
     </ClInclude>
-    <ClInclude Include="SW_Default.h">
-      <Filter>Source\Managers\EnemySpawner</Filter>
-    </ClInclude>
     <ClInclude Include="AllEnemyWaves.h">
       <Filter>Source\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelSystem.h">
+      <Filter>Source\Actors\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="SW_Default.h">
+      <Filter>Source\Managers\EnemySpawner\SpawnWaves</Filter>
+    </ClInclude>
+    <ClInclude Include="SW_Stage2.h">
+      <Filter>Source\Managers\EnemySpawner\SpawnWaves</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

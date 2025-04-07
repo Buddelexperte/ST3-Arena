@@ -4,10 +4,18 @@
 #include "Player.h"
 #include "GameInstance.h"
 
-Inventory::Inventory(std::unique_ptr<Weapon> initialWeapon)
-    : Inventory()
+Inventory::Inventory(Player* playerRef)
+	: owner(playerRef),
+    levelSystem(this), // Initialize the level system with a reference to this inventory
+	startWeaponName("StartWeapon") // Default starting weapon name
+    
 {
-    owner = GI_Arena::getInstance().getPlayer(); 
+
+}
+
+Inventory::Inventory(Player* playerRef, std::unique_ptr<Weapon> initialWeapon)
+    : Inventory(playerRef)
+{
     addWeapon(std::move(initialWeapon));
 }
 
@@ -71,7 +79,7 @@ std::unique_ptr<Weapon> Inventory::removeWeapon(size_t index)
         return nullptr;
 
     // Move the unique_ptr out of the vector.
-    auto removedWeapon = std::move(weapons[index]);
+    std::unique_ptr<Weapon> removedWeapon = std::move(weapons[index]);
     weapons.erase(weapons.begin() + index);
 
     // Update the active weapon index.
@@ -93,7 +101,7 @@ std::unique_ptr<Perk> Inventory::removePerk(size_t index)
         return nullptr;
 
     // Move the unique_ptr out of the vector.
-    auto removedPerk = std::move(perks[index]);
+    std::unique_ptr<Perk> removedPerk = std::move(perks[index]);
     perks.erase(perks.begin() + index);
     return removedPerk;
 }

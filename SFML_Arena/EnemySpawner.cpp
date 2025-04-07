@@ -7,7 +7,7 @@
 EnemySpawner::EnemySpawner()
 {
 	// TODO: Add dynamic Wave progression
-	spawnWave = std::make_unique<SW_Default>();
+	spawnWave = std::make_unique<SW_Stage1>();
 }
 
 void EnemySpawner::spawnEnemy(const SpawnInformation& spawnInfo)
@@ -33,4 +33,15 @@ void EnemySpawner::trySpawnEnemy()
         return;
 
 	spawnWave->trySpawn();
+}
+
+void EnemySpawner::setSpawnWave(std::unique_ptr<EnemySpawnWave> newSW)
+{
+	if (newSW)
+	{
+		spawnWave = std::move(newSW);
+		return;
+	}
+
+	spawnWave = std::make_unique<SW_Default>();
 }

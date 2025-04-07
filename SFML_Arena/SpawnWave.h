@@ -18,6 +18,7 @@ private:
 	virtual IMovable::RenderInfo makeSpawnRenderInfo();
 	virtual SpawnInformation makeSpawnInfo();
 
+	virtual void spawnEnemy();
 	virtual void spawnInterval();
 public:
 	EnemySpawnWave(float sInterval, unsigned int enemiesPerInterval, unsigned int maxIntervals)

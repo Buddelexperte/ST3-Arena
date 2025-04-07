@@ -89,13 +89,13 @@ void GI_Arena::tickLoop()
 	while (window->isOpen())
 	{
 		// Debug time measuring only TEMPORARY, disbale if needed
-		sf::Clock debugClock;
+		//sf::Clock debugClock;
 		preTick();
 		// Calculate deltaTime for time corrected physics
 		const float deltaTime = clock.restart().asSeconds();
 		tick(deltaTime);
 		postTick();
-		std::cout << "tick loop time: " << debugClock.restart().asMilliseconds() << "ms" << std::endl;
+		//std::cout << "tick loop time: " << debugClock.restart().asMilliseconds() << "ms" << std::endl; // Debug
 	}
 }
 

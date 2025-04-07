@@ -687,6 +687,8 @@ InputWidget* W_Gameplay::getWidgetAtIndex(const int& atIndex)
 	case 2: // GAME_OVER
 		return &gameOverScreen;
 		break;
+	case 3:// LEVEL UP (PauseMenu is Placeholder!!!)
+		return &pauseMenu;
 	default:
 		break;
 	}
@@ -720,6 +722,12 @@ InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 		gameInstance().setIsPaused(true);
 		gameInstance().setGameState(GAME_OVER);
 		shapes.push_back(& gameOverScreen);
+		break;
+	case 3:
+		// TODO: Implement Level Up Screen
+		gameInstance().setIsPaused(true);
+		gameInstance().setGameState(GAME_PAUSED);
+		shapes.push_back(&pauseMenu); // Placeholder
 		break;
 	default:
 		shapes = {};

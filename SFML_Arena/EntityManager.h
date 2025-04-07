@@ -111,4 +111,9 @@ public:
 	}
 
 	sf::Drawable* getDrawableLayer(const unsigned int& layer);
+
+	EnemySpawner& getEnemySpawner()
+	{
+		return enemySpawner;
+	}
 };

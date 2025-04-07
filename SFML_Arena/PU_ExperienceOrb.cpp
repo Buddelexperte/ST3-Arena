@@ -48,7 +48,8 @@ void PU_ExperienceOrb::tick_move(const float& deltaTime)
 
 void PU_ExperienceOrb::onPickup()
 {
-    SaveGame::currentData.score += getExp();
+    unsigned int expToAdd = getExp();
+    gameInstance().getPlayer()->getInventory().getLevelSystem().addPoints(expToAdd);
 }
 
 void PU_ExperienceOrb::spawn(SpawnInformation spawnInfo)
