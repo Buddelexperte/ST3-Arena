@@ -140,23 +140,24 @@ void Player::tick_move(const float& deltaTime)
 	setVelocity(velocity);
 
 	 // Rotation
-
-	const sf::Vector2f playerPos = getPosition();
+	sf::Vector2f pos = getPosition();
 	const sf::Vector2f mousePos = gameInstance().getMousePos();
-	float rotation = getRotation();
-	const float targetRot = getLookAtRot(playerPos, mousePos);
+	float rotation = getRotation(); // Current rotation (0 to 360)
+	const float targetRot = getLookAtRot(pos, mousePos);
 
-	float rotDiff = rotation - targetRot;
-	if (shouldZero(rotDiff))
+	float angleDiff = getShortestAngle(rotation, targetRot);
+
+	if (shouldZero(angleDiff))
 	{
 		rotation = targetRot;
 	}
 	else
 	{
 		const float ROT_LERP = LERP_SMOOTHNESS * ROT_LERP_MULTIPLIER * multiplier;
-		rotation = lerp(rotation, targetRot, ROT_LERP);
+		rotation += angleDiff * ROT_LERP;
 	}
 
+	rotation = fmod(rotation + 360.f, 360.f);
 	setRotation(rotation);
 }
 

@@ -148,6 +148,7 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="DrawableShape.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="Flashlight.cpp" />
@@ -167,6 +168,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="SpawnWave.cpp" />
     <ClCompile Include="WidgetBase.cpp" />
     <ClCompile Include="SaveGame.cpp" />
     <ClCompile Include="Slider.cpp" />
@@ -174,10 +176,12 @@
     <ClCompile Include="Widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AllEnemyWaves.h" />
     <ClInclude Include="AllEntities.h" />
     <ClInclude Include="AllPerks.h" />
     <ClInclude Include="AllWeapons.h" />
     <ClInclude Include="Damage.h" />
+    <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="DrawableShape.h" />
     <ClInclude Include="EntityManager.h" />
@@ -188,6 +192,8 @@
     <ClInclude Include="Pickup.h" />
     <ClInclude Include="PU_ExperienceOrb.h" />
     <ClInclude Include="P_Sparkle.h" />
+    <ClInclude Include="SpawnWave.h" />
+    <ClInclude Include="SW_Default.h" />
     <ClInclude Include="WidgetBase.h" />
     <ClInclude Include="BaseTypes.h" />
     <ClInclude Include="Button.h" />

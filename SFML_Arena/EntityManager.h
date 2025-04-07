@@ -2,6 +2,7 @@
 #include <unordered_set>
 
 #include "Entity.h"
+#include "EnemySpawner.h"
 #include "Renderer.h"
 
 #include "AllEntities.h"
@@ -28,11 +29,13 @@ private:
 		}
 	};
 
+	static int entityCount;
+
 	static unsigned int numEnemies;
-	static int entityID;
+	EnemySpawner enemySpawner;
 
 	std::vector<RendererAndKeys> renderLayers = { RendererAndKeys(), RendererAndKeys()};
-	std::unordered_map<size_t, std::unique_ptr<Entity>> activeEntities; // Random Access to Enemies
+	std::unordered_map<size_t, std::unique_ptr<Entity>> activeEntities; // Random Access to Entites
 	std::unordered_set<size_t> pendingKill;
 
 	// SINGLETON
@@ -48,9 +51,6 @@ private:
 	void tick_entities(const float&);
 	void tick_renderer(const float&);
 
-	sf::Vector2f getNewSpawnPos() const;
-	IMovable::RenderInfo makeSpawnRenderInfo();
-
 	void deleteEntity(const size_t&);
 
 public:
@@ -59,6 +59,9 @@ public:
 		static EntityManager instance;
 		return instance;
 	}
+
+	unsigned int getNumEnemies() const 
+		{ return numEnemies; }
 
 	void tick(const float& deltaTime);
 
@@ -76,7 +79,7 @@ public:
 		std::unique_ptr<Entity> newEntity = GenericPool<T>::instance().get();
 
 		// Set the enemy's index and add it to the activeEnemies vector
-		const size_t entityKey = entityID++;
+		const size_t entityKey = entityCount++;
 		//std::cout << "Using new enemy with ID [" << enemyKey << "]" << std::endl;
 		newEntity->setID(entityKey);
 		newEntity->spawn(spawnInfo);

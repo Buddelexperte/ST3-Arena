@@ -52,6 +52,7 @@ void Enemy::tick_move(const float& deltaTime)
 	// Calculate velocity: scale the direction vector by speed/normalized length
 	sf::Vector2f targetVelo = distance * (WALK_SPEED / norm);
 	sf::Vector2f newVelo = lerp(getVelocity(), targetVelo, LERP_SMOOTHNESS);
+
 	sf::Vector2f offset = newVelo * deltaTime;
 
 	addPosition(offset);
@@ -60,22 +61,24 @@ void Enemy::tick_move(const float& deltaTime)
 	// Rotation
 	
 	// Calculate the angle to look at the player
-	const sf::Vector2f pos = getPosition();
-	float rotation = getRotation();
-	float targetRot = getLookAtRot(playerPos, pos);
+	sf::Vector2f pos = getPosition();
+	float rotation = getRotation(); // Current rotation (0 to 360)
+	float targetRot = getLookAtRot(pos, playerPos); // Target rotation (0 to 360)
 
-	// Check if the difference between the current rotation and target rotation is small enough
-	float newRot = rotation;
-	bool bRotDiffZero = shouldZero(rotation - targetRot);
-	if (!bRotDiffZero)
+	float angleDiff = getShortestAngle(rotation, targetRot);
+
+	if (shouldZero(angleDiff))
 	{
-		static constexpr float ROT_LERP = LERP_SMOOTHNESS * 0.5f; // Adjust this value for smoother or faster rotation
-		// If the difference is greater than 180 degrees, we need to adjust the target rotation
-		targetRot = normalizeAngle(targetRot);
-		// Lerp the rotation towards the target rotation
-		newRot = lerp(rotation, targetRot, ROT_LERP);
+		rotation = targetRot;
 	}
-	setRotation(newRot);
+	else
+	{
+		const float ROT_LERP = LERP_SMOOTHNESS * ROT_LERP_MULTIPLIER;
+		rotation += angleDiff * ROT_LERP;
+	}
+
+	rotation = fmod(rotation + 360.f, 360.f);
+	setRotation(rotation);
 }
 
 void Enemy::spawnDeathParticle()

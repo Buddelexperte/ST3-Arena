@@ -63,6 +63,9 @@
     <Filter Include="Source\Actors\Entities\Particles">
       <UniqueIdentifier>{8ccf1d1c-a71a-4cba-92d7-ea8931ac79fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Managers\EnemySpawner">
+      <UniqueIdentifier>{08f025f9-890c-4983-9d4c-afbb7cd3ad99}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -148,6 +151,12 @@
     </ClCompile>
     <ClCompile Include="PU_ExperienceOrb.cpp">
       <Filter>Source\Actors\Entities\Pickups</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemySpawner.cpp">
+      <Filter>Source\Managers\EnemySpawner</Filter>
+    </ClCompile>
+    <ClCompile Include="SpawnWave.cpp">
+      <Filter>Source\Managers\EnemySpawner</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -276,6 +285,18 @@
     </ClInclude>
     <ClInclude Include="PU_ExperienceOrb.h">
       <Filter>Source\Actors\Entities\Pickups</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemySpawner.h">
+      <Filter>Source\Managers\EnemySpawner</Filter>
+    </ClInclude>
+    <ClInclude Include="SpawnWave.h">
+      <Filter>Source\Managers\EnemySpawner</Filter>
+    </ClInclude>
+    <ClInclude Include="SW_Default.h">
+      <Filter>Source\Managers\EnemySpawner</Filter>
+    </ClInclude>
+    <ClInclude Include="AllEnemyWaves.h">
+      <Filter>Source\libs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

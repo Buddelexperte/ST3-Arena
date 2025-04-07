@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-class IMovable
+class IMovable  // Interface for movable entities
 {
 public:
 	struct RenderInfo {

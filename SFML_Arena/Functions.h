@@ -55,15 +55,12 @@ inline std::string normalizeWeaponName(const std::string& name) {
 }
 
 // ROTATION ---------------------------------------------------------------------------------------
-inline float normalizeAngle(float angle) {
-	// Normalize the angle to be within the range [0, 360)
-	while (angle < 0.0f) 
-		angle += 360.0f;
-	while (angle >= 360.0f) 
-		angle -= 360.0f;
-
-	return angle;
+inline float getShortestAngle(float from, float to)
+{
+	float diff = fmod(to - from + 540.f, 360.f) - 180.f;
+	return diff;
 }
+
 
 // PRECISION --------------------------------------------------------------------------------------
 inline bool shouldZero(const float& value, const float& precision = SMALLEST_PRECISION)
