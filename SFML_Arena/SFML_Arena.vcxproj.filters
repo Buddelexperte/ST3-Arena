@@ -75,13 +75,19 @@
     <Filter Include="Source\VisualInterfaces\Components">
       <UniqueIdentifier>{2d820b32-c64a-4a0e-8469-159a3859fb27}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\VisualInterfaces\Widgets\MainMenu">
+      <UniqueIdentifier>{3909683b-5a37-4264-843c-c747b5928342}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\VisualInterfaces\Widgets\Gameplay">
+      <UniqueIdentifier>{da909f34-0adb-4fd1-8009-59a1cbcdb0fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\VisualInterfaces\Widgets\Options">
+      <UniqueIdentifier>{5c67917d-6ecf-4c8d-8452-a942ce7701de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Widgets.cpp">
-      <Filter>Source\VisualInterfaces</Filter>
     </ClCompile>
     <ClCompile Include="Inventory.cpp">
       <Filter>Source\Actors\Inventory</Filter>
@@ -174,10 +180,40 @@
       <Filter>Source\VisualInterfaces\Components</Filter>
     </ClCompile>
     <ClCompile Include="W_Hud.cpp">
-      <Filter>Source\VisualInterfaces\Widgets</Filter>
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Options.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\Options</Filter>
+    </ClCompile>
+    <ClCompile Include="W_OptionsSounds.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\Options</Filter>
+    </ClCompile>
+    <ClCompile Include="W_OptionsGraphics.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\Options</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameplay.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="W_GameOver.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="W_Paused.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="W_LevelMenu.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="W_SelectWeapon.h">
+      <Filter>Source\VisualInterfaces\Widgets\MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="W_SelectWeapon.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenu.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\MainMenu</Filter>
     </ClCompile>
     <ClCompile Include="W_LevelUp.cpp">
-      <Filter>Source</Filter>
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -319,9 +355,6 @@
     <ClInclude Include="SW_Stage2.h">
       <Filter>Source\Managers\EnemySpawner\SpawnWaves</Filter>
     </ClInclude>
-    <ClInclude Include="W_Hud.h">
-      <Filter>Source\VisualInterfaces\Widgets</Filter>
-    </ClInclude>
     <ClInclude Include="Button.h">
       <Filter>Source\VisualInterfaces\Components</Filter>
     </ClInclude>
@@ -329,7 +362,40 @@
       <Filter>Source\VisualInterfaces\Components</Filter>
     </ClInclude>
     <ClInclude Include="W_LevelUp.h">
-      <Filter>Source\VisualInterfaces\Widgets</Filter>
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuSubWidgets.h">
+      <Filter>Source\VisualInterfaces\Widgets\MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="GameplaySubWidgets.h">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Options.h">
+      <Filter>Source\VisualInterfaces\Widgets\Options</Filter>
+    </ClInclude>
+    <ClInclude Include="W_Paused.h">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="W_GameOver.h">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="W_Hud.h">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameplay.h">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="W_OptionsGraphics.h">
+      <Filter>Source\VisualInterfaces\Widgets\Options</Filter>
+    </ClInclude>
+    <ClInclude Include="W_OptionsSounds.h">
+      <Filter>Source\VisualInterfaces\Widgets\Options</Filter>
+    </ClInclude>
+    <ClInclude Include="W_LevelMenu.h">
+      <Filter>Source\VisualInterfaces\Widgets\MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Source\VisualInterfaces\Widgets\MainMenu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

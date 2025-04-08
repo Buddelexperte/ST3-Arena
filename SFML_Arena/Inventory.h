@@ -18,6 +18,7 @@ private:
     // Store all acquired perks.
     LevelSystem levelSystem;
     std::vector<std::unique_ptr<Perk>> perks;
+    bool bLevelUpQueued = false;
 
     // Multipliers
     float cooldownMultiplier = 1.0f;
@@ -34,6 +35,16 @@ public:
 	LevelSystem& getLevelSystem()
 	{
 		return levelSystem;
+	}
+
+    void setShouldLevelUp(const bool& newVal)
+    {
+		bLevelUpQueued = newVal;
+    }
+
+	bool getShouldLevelUp() const
+	{
+		return bLevelUpQueued;
 	}
 
     size_t getNumWeapons() const

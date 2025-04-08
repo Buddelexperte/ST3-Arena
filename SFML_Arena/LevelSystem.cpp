@@ -5,6 +5,7 @@
 #include "EntityManager.h"
 #include "Functions.h"
 #include "AllEnemyWaves.h"
+#include "SaveGame.h"
 
 void LevelSystem::onUpdateScore()
 {
@@ -15,7 +16,7 @@ void LevelSystem::onUpdateScore()
 void LevelSystem::checkLevelUp()
 {
 	// Check if the player has enough points to level up
-	if (collectedPoints >= stage * 100) // Example condition for leveling up
+	if (collectedPoints >= stage * 2) // Example condition for leveling up
 	{
 		onLevelUp();
 	}
@@ -23,7 +24,7 @@ void LevelSystem::checkLevelUp()
 
 void LevelSystem::onLevelUp()
 {
-	lockWeakPtr(gameInstance().getActiveWidget())->setWidgetIndex(3)->construct();
+	owningInv->setShouldLevelUp(true); // Set the level up flag in the inventory
 
 	stage++;
 	std::cout << "Level Up! Current Stage: " << stage << std::endl;

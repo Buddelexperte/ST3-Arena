@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Widgets.h"
 #include "EntityManager.h"
+#include "Player.h"
 
 float GI_Arena::globalTime = 0.0f;
 
@@ -167,8 +168,6 @@ void GI_Arena::tick(const float& deltaTime)
 	// Update sf::View based on rescaling or ...
 	tick_view(deltaTime);
 
-	IDrawableShapes::updateValues();
-
 	// Event management
 	sf::Event event;
 	while (window->pollEvent(event) && gameState > QUIT)
@@ -280,6 +279,8 @@ void GI_Arena::tick_view(const float& deltaTime)
 	{
 		widgetOffset = view->getCenter();
 	}
+
+	IDrawableShapes::updateValues();
 }
 
 

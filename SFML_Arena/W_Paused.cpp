@@ -1,0 +1,89 @@
+#pragma once
+
+#include "W_Paused.h" // Own header file
+#include "GameInstance.h"
+
+W_Paused::W_Paused(InputWidget* parent) : InputWidget(parent), optionsMenu(this)
+{
+	const std::vector<RawButton> PAUSED_CONSTR = {
+		{viewCenter + sf::Vector2f{ 0.0f, -300.0f },    sf::Vector2f{ 350.0f, 120.0f }, sf::Color::Transparent,   100, "PAUSE",		sf::Color::White},
+		{viewCenter + sf::Vector2f{ 0.0f, 0.0f },       sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "RESUME",		sf::Color::Black},
+		{viewCenter + sf::Vector2f{ 0.0f, 150.0f },     sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "OPTIONS",	sf::Color::Black},
+		{viewCenter + sf::Vector2f{ 0.0f, 300.0f },     sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "QUIT",		sf::Color::Black}
+	};
+
+	pause_title.construct(PAUSED_CONSTR[0]);
+	pause_resumeButton.construct(PAUSED_CONSTR[1]);
+	pause_optionsButton.construct(PAUSED_CONSTR[2]);
+	pause_quitButton.construct(PAUSED_CONSTR[3]);
+}
+
+void W_Paused::construct()
+{
+	InputWidget::construct();
+	setWidgetIndex(0);
+}
+
+InputWidget* W_Paused::getWidgetAtIndex(const int& atIndex)
+{
+	switch (atIndex)
+	{
+	case 0:
+		return this;
+		break;
+	case 1:
+		return &optionsMenu;
+		break;
+	default:
+		break;
+	}
+	return nullptr;
+}
+
+InputWidget* W_Paused::setWidgetIndex(const int& newIndex)
+{
+	switch (widgetIndex = newIndex)
+	{
+	case 0:
+		shapes = { &pause_title, &pause_resumeButton, &pause_optionsButton, &pause_quitButton };
+		break;
+	default:
+		shapes = { getActiveChild() };
+		break;
+	}
+	return getActiveChild();
+}
+
+void W_Paused::tick(const float& deltaTime)
+{
+	InputWidget::tick(deltaTime);
+
+	pause_title.setPos(widgetOffset + sf::Vector2f{ 0.0f, -300.0f });
+	pause_resumeButton.setPos(widgetOffset + sf::Vector2f{ 0.0f, 0.0f });
+	pause_optionsButton.setPos(widgetOffset + sf::Vector2f{ 0.0f, 150.0f });
+	pause_quitButton.setPos(widgetOffset + sf::Vector2f{ 0.0f, 300.0f });
+}
+
+bool W_Paused::isMouseOver(const bool& checkForClick = false)
+{
+	if (isChildActive())
+		return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
+
+	if (pause_resumeButton.isMouseOver(checkForClick))
+	{
+		input_esc();
+		return true;
+	}
+	if (pause_optionsButton.isMouseOver(checkForClick))
+	{
+		if (checkForClick) setWidgetIndex(1)->construct();
+		return true;
+	}
+	if (pause_quitButton.isMouseOver(checkForClick))
+	{
+		if (checkForClick) gameInstance().setGameState(MENU_SCREEN);
+		return true;
+	}
+	// On no button-mouse overlap
+	return false;
+}

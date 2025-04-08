@@ -1,16 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+#include "BaseTypes.h"
+#include "WidgetBase.h"
 #include "Player.h"
-#include "Functions.h"
-#include "RandomNumbers.h"
-#include "SoundManager.h"
-#include "FontManager.h"
-#include "CollisionManager.h"
-#include "SaveGame.h"
 
 // Global Game Instance ---------------------------------------------------------------------------
-
 
 class GI_Arena // SINGLETON PATTERN
 {
@@ -63,6 +58,7 @@ public:
 		static GI_Arena instance;
 		return instance;
 	}
+
 	// Basics
 	void start(); // Function to call from main()
 	bool initWidgets();

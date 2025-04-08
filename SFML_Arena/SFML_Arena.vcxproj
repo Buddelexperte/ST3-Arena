@@ -155,9 +155,12 @@
     <ClCompile Include="FontManager.cpp" />
     <ClCompile Include="FontManager.h" />
     <ClCompile Include="GameInstance.cpp" />
+    <ClCompile Include="Gameplay.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="ItemBaseClasses.cpp" />
     <ClCompile Include="LevelSystem.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="Options.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="PU_ExperienceOrb.cpp" />
@@ -175,9 +178,15 @@
     <ClCompile Include="SaveGame.cpp" />
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="Weapon_Rifle_Burst.h" />
-    <ClCompile Include="Widgets.cpp" />
+    <ClCompile Include="W_GameOver.cpp" />
     <ClCompile Include="W_Hud.cpp" />
+    <ClCompile Include="W_LevelMenu.cpp" />
     <ClCompile Include="W_LevelUp.cpp" />
+    <ClCompile Include="W_OptionsGraphics.cpp" />
+    <ClCompile Include="W_OptionsSounds.cpp" />
+    <ClCompile Include="W_Paused.cpp" />
+    <ClCompile Include="W_SelectWeapon.cpp" />
+    <ClCompile Include="W_SelectWeapon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AllEnemyWaves.h" />
@@ -189,10 +198,15 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="DrawableShape.h" />
     <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="Gameplay.h" />
+    <ClInclude Include="GameplaySubWidgets.h" />
     <ClInclude Include="GenericPool.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="LevelSystem.h" />
     <ClInclude Include="Lifetime.h" />
+    <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="MainMenuSubWidgets.h" />
+    <ClInclude Include="Options.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Pickup.h" />
     <ClInclude Include="PU_ExperienceOrb.h" />
@@ -228,8 +242,13 @@
     <ClInclude Include="Weapon_Rifle.h" />
     <ClInclude Include="Weapon_Shotgun.h" />
     <ClInclude Include="Widgets.h" />
+    <ClInclude Include="W_GameOver.h" />
     <ClInclude Include="W_Hud.h" />
+    <ClInclude Include="W_LevelMenu.h" />
     <ClInclude Include="W_LevelUp.h" />
+    <ClInclude Include="W_OptionsGraphics.h" />
+    <ClInclude Include="W_OptionsSounds.h" />
+    <ClInclude Include="W_Paused.h" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\openal32.dll">

@@ -12,14 +12,34 @@ void W_LevelUp::tick(const float& deltaTime)
 
 void W_LevelUp::construct()
 {
+
 }
 
-InputWidget* W_LevelUp::setWidgetIndex(const int&)
+InputWidget* W_LevelUp::setWidgetIndex(const int& toIndex)
 {
-	return this;
+	shapes = { };
+
+	switch ((widgetIndex = toIndex))
+	{
+	case 0: // SELF
+		break;
+	default:
+		break;
+	}
+
+	return getWidgetAtIndex(widgetIndex);
 }
 
-InputWidget* W_LevelUp::getWidgetAtIndex(const int&)
+InputWidget* W_LevelUp::getWidgetAtIndex(const int& atIndex)
 {
-	return this;
+	switch (atIndex)
+	{
+	case 0: // SELF
+		return this;
+		break;
+	default:
+		break;
+	}
+
+	return nullptr;
 }
