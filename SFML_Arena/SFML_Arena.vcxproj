@@ -176,6 +176,8 @@
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="Weapon_Rifle_Burst.h" />
     <ClCompile Include="Widgets.cpp" />
+    <ClCompile Include="W_Hud.cpp" />
+    <ClCompile Include="W_LevelUp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AllEnemyWaves.h" />
@@ -226,6 +228,8 @@
     <ClInclude Include="Weapon_Rifle.h" />
     <ClInclude Include="Weapon_Shotgun.h" />
     <ClInclude Include="Widgets.h" />
+    <ClInclude Include="W_Hud.h" />
+    <ClInclude Include="W_LevelUp.h" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\openal32.dll">

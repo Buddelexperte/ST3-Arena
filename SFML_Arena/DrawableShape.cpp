@@ -35,5 +35,8 @@ void IDrawableShapes::updateValues()
 
 void IDrawableShapes::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	for (const auto& elem : shapes) target.draw(*elem, states);
+	for (const auto& elem : shapes)
+	{
+		target.draw(*elem, states);
+	}
 }

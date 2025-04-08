@@ -54,6 +54,4 @@ public:
 	int getWidgetIndex() const { return widgetIndex; }
 	bool isChildActive() const { return (widgetIndex > 0); }
 	InputWidget* getActiveChild() { return getWidgetAtIndex(widgetIndex); }
-
-
 };

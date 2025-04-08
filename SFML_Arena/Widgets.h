@@ -1,7 +1,10 @@
 #pragma once
 
+#include "WidgetBase.h"
+
 #include "Button.h"
 #include "Flashlight.h"
+
 #include "SaveGame.h"
 
 const std::string WIDGET_EXP = "Widget is no longer available.\n";
@@ -146,15 +149,18 @@ private:
 public:
 	W_GameOver(InputWidget*);
 	void tick(const float& deltaTime) override;
-	void changeStats(const SaveGame_Struct&);
+	void updateStats(const SaveGame_Struct&);
 	bool isMouseOver(const bool&) override;
 };
+
+#include "W_Hud.h"
 
 class W_Gameplay : public InputWidget // Gameplay Widget ------------------------------------------
 {
 private:
 	W_Paused pauseMenu;
 	W_GameOver gameOverScreen;
+	W_Hud hud;
 
 	static constexpr float TILING_SCALE = 0.1f; // Larger = more tiling
 	sf::Vector2f backgroundPos;
@@ -164,14 +170,18 @@ private:
 	void tick_background(const float& deltaTime);
 
 	void lose();
+
 	bool input_esc() override;
 	bool onMouseClickR(sf::Event*) override;
 public:
-	void tick(const float& deltaTime) override;
 	W_Gameplay(InputWidget*);
+
+	void tick(const float& deltaTime) override;
 	void construct() override;
+
 	bool isMouseOver(const bool&) override;
 	InputWidget* setWidgetIndex(const int&) override;
 	InputWidget* getWidgetAtIndex(const int&) override;
+
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };

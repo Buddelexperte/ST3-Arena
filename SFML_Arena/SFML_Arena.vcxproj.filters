@@ -5,9 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Source\Widgets">
-      <UniqueIdentifier>{768c09ac-d6fa-4f9e-b491-e337e312c543}</UniqueIdentifier>
-    </Filter>
     <Filter Include="zDeprecated">
       <UniqueIdentifier>{c66aa173-4673-49a6-af36-9bbb5e0cdd79}</UniqueIdentifier>
     </Filter>
@@ -69,19 +66,22 @@
     <Filter Include="Source\Managers\EnemySpawner\SpawnWaves">
       <UniqueIdentifier>{cf2cfde1-dcf4-4056-a83d-922a19397ec4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\VisualInterfaces">
+      <UniqueIdentifier>{768c09ac-d6fa-4f9e-b491-e337e312c543}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\VisualInterfaces\Widgets">
+      <UniqueIdentifier>{518dc37e-3c66-4310-9066-10faf35ded48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\VisualInterfaces\Components">
+      <UniqueIdentifier>{2d820b32-c64a-4a0e-8469-159a3859fb27}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>Source\Widgets</Filter>
-    </ClCompile>
-    <ClCompile Include="Slider.cpp">
-      <Filter>Source\Widgets</Filter>
-    </ClCompile>
     <ClCompile Include="Widgets.cpp">
-      <Filter>Source\Widgets</Filter>
+      <Filter>Source\VisualInterfaces</Filter>
     </ClCompile>
     <ClCompile Include="Inventory.cpp">
       <Filter>Source\Actors\Inventory</Filter>
@@ -167,6 +167,18 @@
     <ClCompile Include="SW_Stage1.h">
       <Filter>Source\Managers\EnemySpawner\SpawnWaves</Filter>
     </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source\VisualInterfaces\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Slider.cpp">
+      <Filter>Source\VisualInterfaces\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="W_Hud.cpp">
+      <Filter>Source\VisualInterfaces\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="W_LevelUp.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionManager.h">
@@ -202,14 +214,8 @@
     <ClInclude Include="Flashlight.h">
       <Filter>Source\Actors\Inventory\Items</Filter>
     </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>Source\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="Slider.h">
-      <Filter>Source\Widgets</Filter>
-    </ClInclude>
     <ClInclude Include="Widgets.h">
-      <Filter>Source\Widgets</Filter>
+      <Filter>Source\VisualInterfaces</Filter>
     </ClInclude>
     <ClInclude Include="WidgetBase.h">
       <Filter>Source\Base</Filter>
@@ -312,6 +318,18 @@
     </ClInclude>
     <ClInclude Include="SW_Stage2.h">
       <Filter>Source\Managers\EnemySpawner\SpawnWaves</Filter>
+    </ClInclude>
+    <ClInclude Include="W_Hud.h">
+      <Filter>Source\VisualInterfaces\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Source\VisualInterfaces\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Slider.h">
+      <Filter>Source\VisualInterfaces\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="W_LevelUp.h">
+      <Filter>Source\VisualInterfaces\Widgets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

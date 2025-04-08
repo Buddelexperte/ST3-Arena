@@ -1,8 +1,7 @@
 #pragma once
 
-#include "Widgets.h" // Header File
+#include "Widgets.h" // Own header File
 #include "GameInstance.h"
-#include "SaveGame.h"
 
 // W_MainMenu -------------------------------------------------------------------------------------
 
@@ -592,7 +591,7 @@ void W_GameOver::tick(const float& deltaTime)
 	gameOver_quitButton.setPos(widgetOffset + sf::Vector2f{ 0.0f, 0.0f });
 }
 
-void W_GameOver::changeStats(const SaveGame_Struct& currData)
+void W_GameOver::updateStats(const SaveGame_Struct& currData)
 {
 	gameOver_score.setText("Score: " + std::to_string(currData.score));
 	gameOver_kills.setText("Kills: " + std::to_string(currData.enemiesKilled));
@@ -618,7 +617,7 @@ bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 
 W_Gameplay::W_Gameplay(InputWidget* parent) 
 	: InputWidget(parent),
-	pauseMenu(this), gameOverScreen(this), 
+	pauseMenu(this), gameOverScreen(this), hud(this),
 	background(sf::Quads, 4)
 {
 	// Load texture
@@ -705,7 +704,7 @@ InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 	if (!bottomRenderer || !topRenderer)
 		return this;
 
-	shapes = { &background, bottomRenderer, player, topRenderer };
+	shapes = { &background, bottomRenderer, player, topRenderer, &hud };
 
 	switch (widgetIndex = toIndex)
 	{
@@ -739,10 +738,9 @@ InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 void W_Gameplay::lose()
 {
 	// Add GameOver Screen to shapes list
-	setWidgetIndex(2)->construct();
-	gameInstance().setIsPaused(true);
+	setWidgetIndex(GAME_OVER)->construct();
 
-	gameOverScreen.changeStats(SaveGame::currentData);
+	gameOverScreen.updateStats(SaveGame::currentData);
 	// Only save if higher than stored highscore
 	if (SaveGame::currentData.score > SaveGame::storedData.score)
 	{
