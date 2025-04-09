@@ -43,6 +43,8 @@ private:
 	void tick_health(const float&) override;
 	void tick_animation(const float&);
 
+	void onHealthChanged() override;
+
 protected:
 	sf::Keyboard::Key onKeyPressed(sf::Event*) override;
 	bool onMouseClickL(sf::Event*) override;

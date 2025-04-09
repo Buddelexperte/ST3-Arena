@@ -52,6 +52,8 @@ private:
 	void tick(const float&); // Player Input and window.draw()
 	void postTick(); // Logic after Player Input (Checks for game closing etc.)
 
+	void correctWidget();
+
 public:
 	static GI_Arena& getInstance() // SINGLETON getInstance()
 	{
@@ -62,7 +64,6 @@ public:
 	// Basics
 	void start(); // Function to call from main()
 	bool initWidgets();
-	void correctWidget();
 
 	void launchGame();
 	void startRound();

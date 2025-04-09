@@ -12,6 +12,7 @@ private:
 
 	unsigned int nInterval = 0;
 	unsigned int enemiesSpawned = 0; // Number of enemies spawned in the current interval
+	unsigned int maxEnemiesPerInterval = 20; // Safe guard to be overridden
 
 
 	virtual sf::Vector2f getNewSpawnPos();
@@ -21,10 +22,19 @@ private:
 	virtual void spawnEnemy();
 	virtual void spawnInterval();
 public:
-	EnemySpawnWave(float sInterval, unsigned int enemiesPerInterval, unsigned int maxIntervals)
+	EnemySpawnWave(float sInterval, unsigned int enemiesPerInterval, unsigned int maxIntervals, unsigned int maxEnemiesPerInterval)
 		: intervalTimer(sInterval),
 		enemiesPerInterval(enemiesPerInterval),
-		maxIntervals(maxIntervals)
+		maxIntervals(maxIntervals),
+		maxEnemiesPerInterval(maxEnemiesPerInterval),
+		enemiesSpawned(0)
+	{
+
+	}
+
+	// TODO: remove this default 20 max enemies and replace with dynamic logic
+	EnemySpawnWave(float sInterval, unsigned int enemiesPerInterval, unsigned int maxIntervals)
+		: EnemySpawnWave(sInterval, enemiesPerInterval, maxIntervals, 20)
 	{
 
 	}
@@ -50,17 +60,26 @@ public:
 		return enemiesSpawned;
 	}
 
+	virtual bool canSpawn() const
+	{
+		if (enemiesSpawned >= maxEnemiesPerInterval)
+			return false;
+
+		if (nInterval >= maxIntervals && maxIntervals > 0)
+			return false;
+	
+		return true;
+	}
+
 	virtual void trySpawn()
 	{
-		if (nInterval >= maxIntervals && maxIntervals > 0)
-			return;
-
 		if (intervalTimer.isEmpty())
 		{
 			spawnInterval();
 			nInterval++;
 			// Reset the timer for the next interval
 			intervalTimer.reset();
+			resetEnemiesSpawned();
 		}
 	}
 };

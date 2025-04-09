@@ -12,11 +12,12 @@ enum class EntityType {
 
 enum InfoType {
 	EMPTY_INFO	= 0,		// No info
-	POSITION	= 1 << 0,	// 00001: Position
-	SIZE		= 1 << 1,	// 00010: Size
-	VELOCITY	= 1 << 2,	// 00100: Velocity
-	COLOR		= 1 << 3,	// 01000: Color
-	ROTATION	= 1 << 4	// 10000: Rotation
+	POSITION	= 1 << 0,	// 000001: Position
+	SIZE		= 1 << 1,	// 000010: Size
+	VELOCITY	= 1 << 2,	// 000100: Velocity
+	COLOR		= 1 << 3,	// 001000: Color
+	ROTATION	= 1 << 4,	// 010000: Rotation
+	HEALTH		= 1 << 5	// 100000: Health
 };
 
 // Overload bitwise operators for InfoType if necessary:

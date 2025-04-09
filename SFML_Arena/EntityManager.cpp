@@ -10,6 +10,7 @@ unsigned int EntityManager::numEnemies = 0;
 int EntityManager::entityCount = 0;
 
 EntityManager::EntityManager()
+    : spawnWave(std::make_unique<SW_Stage1>())
 {
 
 }
@@ -137,14 +138,17 @@ void EntityManager::tick_kill(const float&)
 
 void EntityManager::tick_spawning(const float& deltaTime)
 {
-    // If the number of active enemies would exceed the maximum allowed cancel any spawning attempt
-    if (!enemySpawner.canSpawn())
+    // If spawnWave is valid continue
+    if (spawnWave == nullptr)
+        return;
+
+    // Check if spawnWave can even spawn right now, if yes, tick it's timer
+    if (!spawnWave->canSpawn())
         return;
 
     // Decrease spawnTimer (Countdown)
-	enemySpawner.tick_timer(deltaTime);
-	// If the timer is empty, spawn a new enemy
-	enemySpawner.trySpawnEnemy();
+    spawnWave->tick_timer(deltaTime);
+    spawnWave->trySpawn();
 }
 
 void EntityManager::tick_entities(const float& deltaTime)

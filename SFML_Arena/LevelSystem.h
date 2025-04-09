@@ -11,7 +11,7 @@ private:
 	unsigned int stage = 1; // Current stage (1 by default)
 
 	void onUpdateScore(); // Update score function
-	void checkLevelUp(); // Check if the player leveled up
+	void tryLevelUp(); // Check if the player leveled up
 	void onLevelUp(); // Function to handle level up events
 
 public:

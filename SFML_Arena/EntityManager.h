@@ -2,7 +2,7 @@
 #include <unordered_set>
 
 #include "Entity.h"
-#include "EnemySpawner.h"
+#include "AllEnemyWaves.h"
 #include "Renderer.h"
 
 #include "AllEntities.h"
@@ -32,7 +32,7 @@ private:
 	static int entityCount;
 
 	static unsigned int numEnemies;
-	EnemySpawner enemySpawner;
+	std::unique_ptr<EnemySpawnWave> spawnWave;
 
 	std::vector<RendererAndKeys> renderLayers = { RendererAndKeys(), RendererAndKeys()};
 	std::unordered_map<size_t, std::unique_ptr<Entity>> activeEntities; // Random Access to Entites
@@ -112,8 +112,19 @@ public:
 
 	sf::Drawable* getDrawableLayer(const unsigned int& layer);
 
-	EnemySpawner& getEnemySpawner()
+	template <typename S>
+	void setSpawnWave()
 	{
-		return enemySpawner;
+		static_assert(std::is_base_of_v<EnemySpawnWave, S>, "S must be derived from EnemySpawnWave");
+
+		if (spawnWave != nullptr)
+			spawnWave.release();
+		
+		spawnWave = std::make_unique<S>();
+	}
+
+	EnemySpawnWave* getSpawnWave()
+	{
+		return spawnWave.get();
 	}
 };

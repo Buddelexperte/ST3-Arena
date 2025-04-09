@@ -13,7 +13,7 @@ private:
 	sf::Text scoreText;
 	sf::Text levelText;
 
-	void tick_lifeBar(const float& deltaTime);
+	void updateLifeBar();
 
 public:
 	W_Hud(InputWidget*);

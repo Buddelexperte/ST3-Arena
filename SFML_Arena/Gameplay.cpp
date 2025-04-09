@@ -37,6 +37,7 @@ void W_Gameplay::construct()
 		gameInstance().startRound();
 		// Add Gameplay objects to shapes vector to draw them
 	}
+
 	setWidgetIndex(0);
 	hud.construct();
 }

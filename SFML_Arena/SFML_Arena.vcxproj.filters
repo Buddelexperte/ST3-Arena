@@ -161,9 +161,6 @@
     <ClCompile Include="PU_ExperienceOrb.cpp">
       <Filter>Source\Actors\Entities\Pickups</Filter>
     </ClCompile>
-    <ClCompile Include="EnemySpawner.cpp">
-      <Filter>Source\Managers\EnemySpawner</Filter>
-    </ClCompile>
     <ClCompile Include="SpawnWave.cpp">
       <Filter>Source\Managers\EnemySpawner</Filter>
     </ClCompile>
@@ -336,9 +333,6 @@
     </ClInclude>
     <ClInclude Include="PU_ExperienceOrb.h">
       <Filter>Source\Actors\Entities\Pickups</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemySpawner.h">
-      <Filter>Source\Managers\EnemySpawner</Filter>
     </ClInclude>
     <ClInclude Include="SpawnWave.h">
       <Filter>Source\Managers\EnemySpawner</Filter>

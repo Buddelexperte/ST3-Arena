@@ -58,6 +58,7 @@ void Player::spawn()
 
 	inventory.reset();
 	resetHealth(); // 100% hp
+	std::cout << "New Player health after spawn = " << getHealth() << std::endl;
 	invincibility.setValue(2.0f); // 2 seconds invincibility (Spawn protection)
 }
 
@@ -338,4 +339,9 @@ void Player::hurt(const float& delta)
 		IHasHealth::hurt(delta);
 		invincibility.reset();
 	}
+}
+
+void Player::onHealthChanged()
+{
+
 }

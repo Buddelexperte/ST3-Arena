@@ -9,11 +9,11 @@
 
 void LevelSystem::onUpdateScore()
 {
-	checkLevelUp();
 	SaveGame::currentData.score = collectedPoints;
+	tryLevelUp();
 }
 
-void LevelSystem::checkLevelUp()
+void LevelSystem::tryLevelUp()
 {
 	// Check if the player has enough points to level up
 	if (collectedPoints >= stage * 100) // Example condition for leveling up
@@ -29,21 +29,19 @@ void LevelSystem::onLevelUp()
 	stage++;
 	std::cout << "Level Up! Current Stage: " << stage << std::endl;
 
-	std::unique_ptr<EnemySpawnWave> newWave = nullptr;
+	EntityManager& manager = EntityManager::getInstance();
 
 	switch (stage)
 	{
 	case 1: case 0:
-		newWave = std::make_unique<SW_Stage1>();
+		manager.setSpawnWave<SW_Stage1>();
 		break;
 	case 2:
-		newWave = std::make_unique<SW_Stage2>();
+		manager.setSpawnWave<SW_Stage2>();
 		break;
 	default:
 		break;
 	}
-
-	EntityManager::getInstance().getEnemySpawner().setSpawnWave(std::move(newWave));
 }
 
 LevelSystem::LevelSystem(Inventory* owningInv)
