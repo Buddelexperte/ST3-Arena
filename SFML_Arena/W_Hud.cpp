@@ -8,8 +8,8 @@ W_Hud::W_Hud(InputWidget* parent)
 	: InputWidget(parent)
 {
 	const std::vector<RawButton> HUD_CONSTR = {
-		{viewTL + sf::Vector2f{ 0.0f, 70.0f / 2.0f },			sf::Vector2f{viewSize.x, 70.0f},	sf::Color::Green,	70, "100",	sf::Color::Black, EAlignment::LEFT, EAlignment::LEFT},
-		{viewTL + sf::Vector2f{ 0.0f, 70.0f / 2.0f },			sf::Vector2f{viewSize.x, 70.0f},	sf::Color::Red,		0, "",	sf::Color::Transparent, EAlignment::LEFT, EAlignment::LEFT}
+		{viewTL + sf::Vector2f{ 0.0f, 0.0f },			sf::Vector2f{viewSize.x, 70.0f},	sf::Color::Green,	70, "100",	sf::Color::Black, EAlignment::LEFT_TOP, EAlignment::LEFT},
+		{viewTL + sf::Vector2f{ 0.0f, 0.0f },			sf::Vector2f{viewSize.x, 70.0f},	sf::Color::Red,		0, "",	sf::Color::Transparent, EAlignment::LEFT_TOP, EAlignment::LEFT}
 	};
 
 	lifeBar.construct(HUD_CONSTR[0]);
@@ -25,8 +25,8 @@ void W_Hud::construct()
 void W_Hud::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
-	lifeBar.setPos(viewTL		+ sf::Vector2(0.0f, 70.0f / 2.0f));
-	lifeBar_bg.setPos(viewTL	+ sf::Vector2(0.0f, 70.0f / 2.0f));
+	lifeBar.setPos(viewTL		+ sf::Vector2(0.0f, 0.0f));
+	lifeBar_bg.setPos(viewTL	+ sf::Vector2(0.0f, 0.0f));
 
 	tick_lifeBar(deltaTime);
 }
@@ -35,13 +35,18 @@ void W_Hud::tick_lifeBar(const float& deltaTime)
 {
 	Player* playerRef = gameInstance().getPlayer();
 	float playerHealth = playerRef->getHealth();
-	float playerMaxHealth = playerRef->getMaxHealth();
 
-	std::string healthAsString = std::to_string(static_cast<int>(std::round(playerHealth * 100.0f)));
-	lifeBar.setText(healthAsString);
+	int health_asInt = static_cast<int>(std::round(playerHealth * 100.0f));
+	std::string health_asString = std::to_string(health_asInt);
+
+
+	// If nothing changed, skip calculations
+	if (health_asString == lifeBar.getText())
+		return;
+
+	lifeBar.setText(health_asString);
 
 	sf::Vector2f lifeBarSize = lifeBar.getSize();
-
 	float newLifeBarWidth = viewSize.x * playerHealth;
 	newLifeBarWidth = lerp(lifeBarSize.x, newLifeBarWidth, LERP_SMOOTHNESS);
 	sf::Vector2f newLifeBarSize = sf::Vector2f(newLifeBarWidth, lifeBarSize.y);
