@@ -8,6 +8,8 @@ private:
 	Button lifeBar;
 	Button lifeBar_bg;
 
+	float displayedHealth = 1.0f;
+
 	sf::Text scoreText;
 	sf::Text levelText;
 

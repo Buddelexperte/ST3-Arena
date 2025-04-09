@@ -36,14 +36,12 @@ void W_Hud::tick_lifeBar(const float& deltaTime)
 	Player* playerRef = gameInstance().getPlayer();
 	float playerHealth = playerRef->getHealth();
 
-	int health_asInt = static_cast<int>(std::round(playerHealth * 100.0f));
-	std::string health_asString = std::to_string(health_asInt);
-
-
 	// If nothing changed, skip calculations
-	if (health_asString == lifeBar.getText())
+	if (displayedHealth == playerHealth)
 		return;
 
+	int health_asInt = static_cast<int>(std::round(playerHealth * 100.0f));
+	std::string health_asString = std::to_string(health_asInt);
 	lifeBar.setText(health_asString);
 
 	sf::Vector2f lifeBarSize = lifeBar.getSize();
