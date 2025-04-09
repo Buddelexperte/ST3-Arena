@@ -20,7 +20,8 @@ void W_Hud::construct()
 {
 	InputWidget::construct();
 	setWidgetIndex(0);
-	updateLifeBar();
+
+	resetLifeBar();
 }
 
 void W_Hud::tick(const float& deltaTime)
@@ -32,17 +33,30 @@ void W_Hud::tick(const float& deltaTime)
 	updateLifeBar();
 }
 
+void W_Hud::resetLifeBar()
+{
+	sf::Vector2f size = sf::Vector2f(viewSize.x, lifeBar.getSize().y);
+	lifeBar.setSize(size);
+}
+
 void W_Hud::updateLifeBar()
 {
 	Player* playerRef = gameInstance().getPlayer();
 	float playerHealth = playerRef->getHealth();
 
-	int health_asInt = static_cast<int>(std::round(playerHealth * 100.0f));
-	std::string health_asString = std::to_string(health_asInt);
-	lifeBar.setText(health_asString);
+	if (playerHealth != displayedHealth)
+	{
+		int health_asInt = static_cast<int>(std::round(playerHealth * 100.0f));
+		std::string health_asString = std::to_string(health_asInt);
+		lifeBar.setText(health_asString);
+	}
 
 	sf::Vector2f lifeBarSize = lifeBar.getSize();
 	float newLifeBarWidth = viewSize.x * playerHealth;
+
+	if (lifeBarSize.x == newLifeBarWidth)
+		return;
+
 	newLifeBarWidth = lerp(lifeBarSize.x, newLifeBarWidth, LERP_SMOOTHNESS);
 	sf::Vector2f newLifeBarSize = sf::Vector2f(newLifeBarWidth, lifeBarSize.y);
 	lifeBar.setSize(newLifeBarSize);

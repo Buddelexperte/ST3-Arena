@@ -13,6 +13,7 @@ private:
 	sf::Text scoreText;
 	sf::Text levelText;
 
+	void resetLifeBar();
 	void updateLifeBar();
 
 public:
