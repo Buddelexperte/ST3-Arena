@@ -71,6 +71,7 @@ InputWidget* W_Hud::getWidgetAtIndex(const int& atIndex)
 		return this;
 		break;
 	default:
+		return this;
 		break;
 	}
 
