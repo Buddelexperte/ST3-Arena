@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Widgets.h"
 #include "EntityManager.h"
+#include "SoundManager.h"
 #include "Player.h"
 
 float GI_Arena::globalTime = 0.0f;

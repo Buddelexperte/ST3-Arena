@@ -38,7 +38,7 @@ void W_Gameplay::construct()
 		// Add Gameplay objects to shapes vector to draw them
 	}
 	setWidgetIndex(0);
-
+	hud.construct();
 }
 
 void W_Gameplay::tick_background(const float& deltaTime)
@@ -128,6 +128,11 @@ void W_Gameplay::lose()
 {
 	// Add GameOver Screen to shapes list
 	setWidgetIndex(2)->construct();
+	// Only save if higher than stored highscore
+	if (SaveGame::currentData.score > SaveGame::storedData.score)
+	{
+		SaveGame::saveData();
+	}
 }
 
 void W_Gameplay::tick(const float& deltaTime)
@@ -153,6 +158,7 @@ void W_Gameplay::tick(const float& deltaTime)
 	if (isChildActive())
 		getActiveChild()->tick(deltaTime);
 
+	hud.tick(deltaTime);
 	tick_background(deltaTime);
 
 	// Make sure flashlight draws shader onto environment

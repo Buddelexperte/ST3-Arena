@@ -1,11 +1,16 @@
 #pragma once
 // Own libraries
-#include "SoundManager.h"
 #include "FontManager.h"
 #include "DrawableShape.h"
 
-class GI_Arena;
+enum EAlignment
+{
+	LEFT,
+	CENTER,
+	RIGHT
+};
 
+// Pos, Size, Color, TextSize, TextString, TextColor, Alignment, TextAlignment
 struct RawButton
 {
 	sf::Vector2f pos = sf::Vector2f(0.0f, 0.0f);
@@ -14,6 +19,8 @@ struct RawButton
 	unsigned int textSize = 0;
 	std::string text = "Button Text";
 	sf::Color textColor = sf::Color::White;
+	EAlignment alignment = EAlignment::CENTER;
+	EAlignment textAlignment = EAlignment::CENTER;
 };
 
 class Button : public IDrawableShapes
@@ -46,7 +53,14 @@ public:
 	sf::Vector2f getPos() const { return B_Box.getPosition(); }
 	void setRot(const float& newRot) { B_Box.setRotation(newRot); }
 	float getRot() const { return B_Box.getRotation(); }
+	void setSize(const sf::Vector2f&);
 	sf::Vector2f getSize() const { return buttonData.size; }
+
+	void setAlignment(const EAlignment& alignment);
+	void setTextAlignment(const EAlignment& alignment);
+	EAlignment getAlignment() const { return buttonData.alignment; }
+	EAlignment getTextAlignment() const { return buttonData.textAlignment; }
+
 
 	bool isMouseOver(const bool& = false); // Check if mouse is over button
 	void onClick() const;

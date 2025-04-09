@@ -25,11 +25,6 @@ void W_GameOver::construct()
 	InputWidget::construct();
 
 	updateStats(SaveGame::currentData);
-	// Only save if higher than stored highscore
-	if (SaveGame::currentData.score > SaveGame::storedData.score)
-	{
-		SaveGame::saveData();
-	}
 }
 
 void W_GameOver::tick(const float& deltaTime)

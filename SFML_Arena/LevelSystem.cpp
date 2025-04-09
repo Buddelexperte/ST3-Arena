@@ -16,7 +16,7 @@ void LevelSystem::onUpdateScore()
 void LevelSystem::checkLevelUp()
 {
 	// Check if the player has enough points to level up
-	if (collectedPoints >= stage * 2) // Example condition for leveling up
+	if (collectedPoints >= stage * 100) // Example condition for leveling up
 	{
 		onLevelUp();
 	}

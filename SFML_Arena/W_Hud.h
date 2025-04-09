@@ -5,6 +5,13 @@
 class W_Hud : public InputWidget
 {
 private:
+	Button lifeBar;
+	Button lifeBar_bg;
+
+	sf::Text scoreText;
+	sf::Text levelText;
+
+	void tick_lifeBar(const float& deltaTime);
 
 public:
 	W_Hud(InputWidget*);

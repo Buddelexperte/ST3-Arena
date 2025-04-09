@@ -10,5 +10,6 @@ public:
 	{
 
 	}
+
 	~SW_Stage1() = default;
 };
