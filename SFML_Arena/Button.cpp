@@ -36,117 +36,283 @@ void Button::construct(const RawButton& constr)
 
 void Button::setAlignment(const EAlignment& alignment)
 {
-	buttonData.alignment = alignment;
+    buttonData.alignment = alignment;
 
-	const sf::Vector2f& size = B_Box.getSize();
+    const sf::Vector2f& size = B_Box.getSize();
 
-	switch (alignment)
-	{
-	case EAlignment::LEFT:
-		B_Box.setOrigin(0.f, size.y / 2.f);
-		break;
-	case EAlignment::RIGHT:
-		B_Box.setOrigin(size.x, size.y / 2.f);
-		break;
-	case EAlignment::CENTER:
-	default:
-		B_Box.setOrigin(size.x / 2.f, size.y / 2.f);
-		break;
-	}
+    switch (alignment)
+    {
+    case EAlignment::LEFT_TOP:
+        // Anchor at the top left corner.
+        B_Box.setOrigin(0.f, 0.f);
+        break;
+    case EAlignment::LEFT:
+        // Anchor at the left edge, vertically centered.
+        B_Box.setOrigin(0.f, size.y / 2.f);
+        break;
+    case EAlignment::LEFT_BOTTOM:
+        // Anchor at the bottom left corner.
+        B_Box.setOrigin(0.f, size.y);
+        break;
+    case EAlignment::CENTER:
+        // Anchor at the center (both horizontally and vertically).
+        B_Box.setOrigin(size.x / 2.f, size.y / 2.f);
+        break;
+    case EAlignment::RIGHT_TOP:
+        // Anchor at the top right corner.
+        B_Box.setOrigin(size.x, 0.f);
+        break;
+    case EAlignment::RIGHT:
+        // Anchor at the right edge, vertically centered.
+        B_Box.setOrigin(size.x, size.y / 2.f);
+        break;
+    case EAlignment::RIGHT_BOTTOM:
+        // Anchor at the bottom right corner.
+        B_Box.setOrigin(size.x, size.y);
+        break;
+    default:
+        // Fallback: center alignment.
+        B_Box.setOrigin(size.x / 2.f, size.y / 2.f);
+        break;
+    }
 }
 
 void Button::setTextAlignment(const EAlignment& alignment)
 {
     buttonData.textAlignment = alignment;
 
-    // Get text local bounds
+    // Get text local bounds.
     sf::FloatRect bounds = T_Text.getLocalBounds();
 
-    // Compute vertical center correction
-    float yOrigin = bounds.top + bounds.height / 2.f;
+    // Compute text origin based on both horizontal and vertical alignment.
     float xOrigin = 0.f;
+    float yOrigin = 0.f;
 
-    // Set text origin based on its alignment
+    // Determine horizontal origin.
     switch (alignment)
     {
     case EAlignment::LEFT:
+    case EAlignment::LEFT_TOP:
+    case EAlignment::LEFT_BOTTOM:
         xOrigin = 0.f;
         break;
     case EAlignment::RIGHT:
+    case EAlignment::RIGHT_TOP:
+    case EAlignment::RIGHT_BOTTOM:
         xOrigin = bounds.width;
         break;
     case EAlignment::CENTER:
+    case EAlignment::CENTER_TOP:
+    case EAlignment::CENTER_BOTTOM:
     default:
         xOrigin = bounds.width / 2.f;
         break;
     }
+
+    // Determine vertical origin.
+    switch (alignment)
+    {
+    case EAlignment::LEFT_TOP:
+    case EAlignment::CENTER_TOP:
+    case EAlignment::RIGHT_TOP:
+        // Top: use the top edge (bounds.top) as the origin.
+        yOrigin = bounds.top;
+        break;
+    case EAlignment::LEFT_BOTTOM:
+    case EAlignment::CENTER_BOTTOM:
+    case EAlignment::RIGHT_BOTTOM:
+        // Bottom: use the bottom edge.
+        yOrigin = bounds.top + bounds.height;
+        break;
+    case EAlignment::LEFT:
+    case EAlignment::RIGHT:
+    case EAlignment::CENTER:
+    default:
+        // Center vertically.
+        yOrigin = bounds.top + bounds.height / 2.f;
+        break;
+    }
+
     T_Text.setOrigin(xOrigin, yOrigin);
 
-    // Get box position and size
+    // Get box position and size.
     sf::Vector2f boxPos = B_Box.getPosition();
     sf::Vector2f boxSize = B_Box.getSize();
     constexpr float padding = 10.f;
 
-    // Position text within the box based on text alignment
+    // Position text within the box based on text alignment.
+    // Begin with the box position.
     sf::Vector2f textPos = boxPos;
-    // Box alignment affects where the origin is within the box
-    // We need to adjust the text position accordingly
-    switch (buttonData.alignment) // Use the BOX alignment here
+
+    // First adjust horizontally based on the BOX alignment.
+    switch (buttonData.alignment)
     {
+        // When the box is aligned on the left:
     case EAlignment::LEFT:
-        // Box origin is at left center
-        switch (alignment) // Text alignment
+    case EAlignment::LEFT_TOP:
+    case EAlignment::LEFT_BOTTOM:
+        switch (alignment)
         {
         case EAlignment::LEFT:
+        case EAlignment::LEFT_TOP:
+        case EAlignment::LEFT_BOTTOM:
             textPos.x += padding;
             break;
         case EAlignment::RIGHT:
+        case EAlignment::RIGHT_TOP:
+        case EAlignment::RIGHT_BOTTOM:
             textPos.x += boxSize.x - padding;
             break;
         case EAlignment::CENTER:
+        case EAlignment::CENTER_TOP:
+        case EAlignment::CENTER_BOTTOM:
+        default:
             textPos.x += boxSize.x / 2.f;
             break;
         }
         break;
 
+        // When the box is aligned on the right:
     case EAlignment::RIGHT:
-        // Box origin is at right center
-        switch (alignment) // Text alignment
+    case EAlignment::RIGHT_TOP:
+    case EAlignment::RIGHT_BOTTOM:
+        switch (alignment)
         {
         case EAlignment::LEFT:
+        case EAlignment::LEFT_TOP:
+        case EAlignment::LEFT_BOTTOM:
             textPos.x -= boxSize.x - padding;
             break;
         case EAlignment::RIGHT:
+        case EAlignment::RIGHT_TOP:
+        case EAlignment::RIGHT_BOTTOM:
             textPos.x -= padding;
             break;
         case EAlignment::CENTER:
+        case EAlignment::CENTER_TOP:
+        case EAlignment::CENTER_BOTTOM:
+        default:
             textPos.x -= boxSize.x / 2.f;
             break;
         }
         break;
 
+        // When the box is centered:
     case EAlignment::CENTER:
+    case EAlignment::CENTER_TOP:
+    case EAlignment::CENTER_BOTTOM:
     default:
-        // Box origin is at center
-        switch (alignment) // Text alignment
+        switch (alignment)
         {
         case EAlignment::LEFT:
+        case EAlignment::LEFT_TOP:
+        case EAlignment::LEFT_BOTTOM:
             textPos.x -= boxSize.x / 2.f - padding;
             break;
         case EAlignment::RIGHT:
+        case EAlignment::RIGHT_TOP:
+        case EAlignment::RIGHT_BOTTOM:
             textPos.x += boxSize.x / 2.f - padding;
             break;
         case EAlignment::CENTER:
-            // Text aligns with box center, no adjustment needed
+        case EAlignment::CENTER_TOP:
+        case EAlignment::CENTER_BOTTOM:
+        default:
+            // No horizontal adjustment needed.
             break;
         }
         break;
     }
 
-    // Y position stays the same since vertical centering is consistent
+    // Next adjust vertically based on the BOX alignment.
+    switch (buttonData.alignment)
+    {
+        // When the box is aligned on the top:
+    case EAlignment::LEFT_TOP:
+    case EAlignment::CENTER_TOP:
+    case EAlignment::RIGHT_TOP:
+        switch (alignment)
+        {
+        case EAlignment::LEFT_TOP:
+        case EAlignment::RIGHT_TOP:
+            // For top aligned text, move text down by padding.
+            textPos.y += padding;
+            break;
+        case EAlignment::LEFT_BOTTOM:
+        case EAlignment::RIGHT_BOTTOM:
+            // For bottom aligned text, move text up by (boxSize - padding).
+            textPos.y += boxSize.y - padding;
+            break;
+        case EAlignment::LEFT:
+        case EAlignment::RIGHT:
+        case EAlignment::CENTER:
+        default:
+            // For center aligned text, no additional vertical offset.
+            textPos.y += boxSize.y / 2.f;
+            break;
+        }
+        break;
+
+        // When the box is aligned on the center y:
+    case EAlignment::LEFT:
+    case EAlignment::CENTER:
+    case EAlignment::RIGHT:
+        switch (alignment)
+        {
+        case EAlignment::LEFT_TOP:
+        case EAlignment::CENTER_TOP:
+        case EAlignment::RIGHT_TOP:
+            // For top aligned text, move text down by padding.
+            textPos.y -= boxSize.y / 2.f - padding;
+            break;
+        case EAlignment::LEFT_BOTTOM:
+        case EAlignment::CENTER_BOTTOM:
+        case EAlignment::RIGHT_BOTTOM:
+            // For bottom aligned text, move text up by (boxSize - padding).
+            textPos.y += boxSize.y / 2.f - padding;
+            break;
+        case EAlignment::LEFT:
+        case EAlignment::RIGHT:
+        case EAlignment::CENTER:
+        default:
+            // For center aligned text, no additional vertical offset.
+            break;
+        }
+        break;
+
+        // When the box is aligned on the bottom:
+    case EAlignment::LEFT_BOTTOM:
+    case EAlignment::CENTER_BOTTOM:
+    case EAlignment::RIGHT_BOTTOM:
+    default:
+        switch (alignment)
+        {
+        case EAlignment::LEFT_TOP:
+        case EAlignment::CENTER_TOP:
+        case EAlignment::RIGHT_TOP:
+            // For top aligned text, move text down by padding.
+            textPos.y -= boxSize.y - padding;
+            break;
+        case EAlignment::LEFT_BOTTOM:
+        case EAlignment::CENTER_BOTTOM:
+        case EAlignment::RIGHT_BOTTOM:
+            // For bottom aligned text, move text up by (boxSize - padding).
+            textPos.y -= padding;
+            break;
+        case EAlignment::LEFT:
+        case EAlignment::RIGHT:
+        case EAlignment::CENTER:
+        default:
+            textPos.y -= boxSize.y / 2.f;
+            break;
+        }
+        break;
+    }
+
+    
+
     T_Text.setPosition(textPos);
 }
-
 
 void Button::setPos(const sf::Vector2f& newPos)
 {
@@ -171,6 +337,7 @@ void Button::setText(const std::string& newText)
 {
 	buttonData.text = newText;
 	T_Text.setString(newText);
+
 }
 
 void Button::setColor(const sf::Color& color, const bool& bTextColor)

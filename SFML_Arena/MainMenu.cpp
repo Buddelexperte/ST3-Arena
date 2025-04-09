@@ -12,7 +12,7 @@ W_MainMenu::W_MainMenu(InputWidget* parent)
 	const std::vector<RawButton> MAIN_MENU_CONSTR = {
 		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100,	"ARENA",								sf::Color::White},
 		{viewCenter + sf::Vector2f{ 0, -200 },    sf::Vector2f{ 100, 100 }, sf::Color::Transparent,   16,	"Higscore: " + std::to_string(0),		sf::Color::White},
-		{viewCenter + sf::Vector2f{ 0, 0 },       sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"START",								sf::Color::Black},
+		{viewCenter + sf::Vector2f{ 0, 0 },       sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"START",								sf::Color::Red},
 		{viewCenter + sf::Vector2f{ 0, 150 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"OPTIONS",								sf::Color::Black},
 		{viewCenter + sf::Vector2f{ 0, 300 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"QUIT",									sf::Color::Black}
 	};

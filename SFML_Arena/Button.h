@@ -5,9 +5,15 @@
 
 enum EAlignment
 {
+	LEFT_BOTTOM,
 	LEFT,
+	LEFT_TOP,
+	CENTER_BOTTOM,
 	CENTER,
-	RIGHT
+	CENTER_TOP,
+	RIGHT_BOTTOM,
+	RIGHT,
+	RIGHT_TOP
 };
 
 // Pos, Size, Color, TextSize, TextString, TextColor, Alignment, TextAlignment
