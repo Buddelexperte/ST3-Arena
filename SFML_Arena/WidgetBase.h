@@ -19,9 +19,10 @@ public:
 	WidgetElement(InputWidget* parentWidget);
 	virtual ~WidgetElement() = default;
 
-	virtual void construct() {};
+	virtual void construct() {}
+	virtual void tick(const float& deltaTime) {}
+
 	InputWidget* getParent() const { return parent; }
-	virtual void tick(const float& deltaTime) {};
 };
 
 class InputWidget : public WidgetElement, public IHasInput
@@ -45,8 +46,8 @@ public:
 	};
 
 	// Input stuff
-	virtual sf::Keyboard::Key onKeyPressed(sf::Event*);
-	virtual bool input_esc() override;
+	virtual bool onKeyEscape() override;
+	virtual bool onKeyTab() override;
 
 	// Sub widget stuff
 	virtual InputWidget* setWidgetIndex(const int&);

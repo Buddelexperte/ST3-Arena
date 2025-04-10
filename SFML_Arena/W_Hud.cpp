@@ -4,8 +4,8 @@
 #include "GameInstance.h"
 
 
-W_Hud::W_Hud(InputWidget* parent)
-	: InputWidget(parent)
+W_Hud::W_Hud()
+	: InputWidget(nullptr)
 {
 	const std::vector<RawButton> HUD_CONSTR = {
 		{viewTL + sf::Vector2f{ 0.0f, 0.0f },	sf::Vector2f{viewSize.x, 60.0f},	sf::Color(255, 255, 255, 255),	50, "100",	sf::Color::Black,		EAlignment::LEFT_TOP, EAlignment::LEFT},
@@ -18,17 +18,14 @@ W_Hud::W_Hud(InputWidget* parent)
 
 void W_Hud::construct()
 {
-	InputWidget::construct();
 	setWidgetIndex(0);
-
-	resetLifeBar();
 }
 
 void W_Hud::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
-	lifeBar.setPos(viewTL		+ sf::Vector2(0.0f, 0.0f));
-	lifeBar_bg.setPos(viewTL	+ sf::Vector2(0.0f, 0.0f));
+	lifeBar.setPos(	  viewTL + sf::Vector2(0.0f, 0.0f));
+	lifeBar_bg.setPos(viewTL + sf::Vector2(0.0f, 0.0f));
 
 	updateLifeBar();
 }
@@ -70,7 +67,7 @@ InputWidget* W_Hud::setWidgetIndex(const int& newIndex)
 		shapes = { &lifeBar_bg, &lifeBar };
 		break;
 	default:
-		shapes = { getActiveChild() };
+		shapes = { };
 		break;
 	}
 

@@ -51,7 +51,7 @@ bool W_LevelMenu::isMouseOver(const bool& checkForClick = false)
 	}
 	if (return_Button.isMouseOver(checkForClick))
 	{
-		if (checkForClick) input_esc();
+		if (checkForClick) onKeyEscape();
 		return true;
 	}
 	return false;

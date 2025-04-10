@@ -8,8 +8,9 @@ class W_Gameplay : public InputWidget // Gameplay Widget -----------------------
 private:
 	W_Paused pauseMenu;
 	W_GameOver gameOverScreen;
-	W_Hud hud;
+	W_Inventory inventoryScreen;
 	W_LevelUp levelUpScreen;
+	W_Hud& hud;
 
 	static constexpr float TILING_SCALE = 0.1f; // Larger = more tiling
 	sf::Vector2f backgroundPos;
@@ -20,7 +21,8 @@ private:
 
 	void lose();
 
-	bool input_esc() override;
+	bool onKeyEscape() override;
+	bool onKeyTab() override;
 	bool onMouseClickR(sf::Event*) override;
 public:
 	W_Gameplay(InputWidget*);

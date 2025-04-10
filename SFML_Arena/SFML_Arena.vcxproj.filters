@@ -212,6 +212,9 @@
     <ClCompile Include="W_LevelUp.cpp">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="W_Inventory.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionManager.h">
@@ -390,6 +393,9 @@
     </ClInclude>
     <ClInclude Include="MainMenu.h">
       <Filter>Source\VisualInterfaces\Widgets\MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="W_Inventory.h">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

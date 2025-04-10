@@ -2,25 +2,14 @@
 
 #include "WidgetBase.h"
 
-class W_Hud : public InputWidget
+class W_Inventory : public InputWidget
 {
 private:
-	Button lifeBar;
-	Button lifeBar_bg;
-
-	float displayedHealth = 1.0f;
-
-	sf::Text scoreText;
-	sf::Text levelText;
-
 
 public:
-	W_Hud();
+	W_Inventory(InputWidget*);
 	void tick(const float& deltaTime) override;
 	void construct() override;
-
-	void resetLifeBar();
-	void updateLifeBar();
 
 	InputWidget* setWidgetIndex(const int&) override;
 	InputWidget* getWidgetAtIndex(const int&) override;

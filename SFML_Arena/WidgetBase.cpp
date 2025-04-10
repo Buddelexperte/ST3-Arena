@@ -2,6 +2,7 @@
 
 #include "WidgetBase.h"
 #include "GameInstance.h"
+#include "SoundManager.h"
 
 // WidgetMenu Code --------------------------------------------------------------------------------
 
@@ -27,23 +28,12 @@ InputWidget* InputWidget::setWidgetIndex(const int& toIndex)
 	return getWidgetAtIndex(toIndex);
 }
 
-sf::Keyboard::Key InputWidget::onKeyPressed(sf::Event* eventRef)
+bool InputWidget::onKeyEscape()
 {
-	switch (eventRef->key.code)
+	if (isChildActive())
 	{
-	case sf::Keyboard::Escape:
-		lockWeakPtr( gameInstance().getActiveWidget())->input_esc();
-		break;
-	default:
-		break;
+		return getActiveChild()->onKeyEscape();
 	}
-	return eventRef->key.code;
-}
-
-bool InputWidget::input_esc()
-{
-	if (isChildActive()) 
-		return getActiveChild()->input_esc();
 	
 	if (parent != nullptr)
 	{
@@ -51,5 +41,10 @@ bool InputWidget::input_esc()
 		return true;
 	}
 
+	return false;
+}
+
+bool InputWidget::onKeyTab()
+{
 	return false;
 }

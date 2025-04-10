@@ -3,10 +3,11 @@
 #include "Gameplay.h" // Own header file
 #include "GameInstance.h"
 #include "EntityManager.h"
+#include "SoundManager.h"
 
 W_Gameplay::W_Gameplay(InputWidget* parent)
 	: InputWidget(parent),
-	pauseMenu(this), gameOverScreen(this), hud(this), levelUpScreen(this),
+	pauseMenu(this), gameOverScreen(this), inventoryScreen(this), hud(gameInstance().getHud()), levelUpScreen(this),
 	background(sf::Quads, 4)
 {
 	// Load texture
@@ -34,19 +35,18 @@ void W_Gameplay::construct()
 	if (gameState == GAME_LAUNCHING)
 	{
 		// Reset values to game start values
+		hud.construct();
 		gameInstance().startRound();
-		// Add Gameplay objects to shapes vector to draw them
 	}
 
 	setWidgetIndex(0);
-	hud.construct();
 }
 
 void W_Gameplay::tick_background(const float& deltaTime)
 {
 	// This creates the parallax effect: background moves as the sf::View moves
 	constexpr float parallaxStrength = 1.0f;
-	backgroundPos = viewCenter * parallaxStrength;  // Adjust this factor for stronger/weaker parallax
+	backgroundPos = viewCenter * parallaxStrength; // Adjust this factor for stronger/weaker parallax
 
 	// Background will cover the entire view area
 	background[0].position = sf::Vector2f(viewCenter.x - viewSize.x / 2.0f, viewCenter.y - viewSize.y / 2.0f);
@@ -78,6 +78,10 @@ InputWidget* W_Gameplay::getWidgetAtIndex(const int& atIndex)
 		break;
 	case 3: // LEVEL UP
 		return &levelUpScreen;
+		break;
+	case 4: // INVENTPRY
+		return &inventoryScreen;
+		break;
 	default:
 		break;
 	}
@@ -117,6 +121,11 @@ InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 		gameInstance().setGameState(GAME_PAUSED);
 		shapes.push_back(&levelUpScreen);
 		break;
+	case 4: // INVENTORY
+		gameInstance().setIsPaused(true);
+		gameInstance().setGameState(GAME_PAUSED);
+		shapes.push_back(&inventoryScreen);
+		break;
 	default:
 		shapes = {};
 		break;
@@ -139,6 +148,9 @@ void W_Gameplay::lose()
 void W_Gameplay::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
+	hud.tick(deltaTime);
+	tick_background(deltaTime);
+
 	Player* player = gameInstance().getPlayer();
 
 	if (player->getInventory().getShouldLevelUp())
@@ -159,9 +171,6 @@ void W_Gameplay::tick(const float& deltaTime)
 	if (isChildActive())
 		getActiveChild()->tick(deltaTime);
 
-	hud.tick(deltaTime);
-	tick_background(deltaTime);
-
 	// Make sure flashlight draws shader onto environment
 	for (sf::Drawable* elem : shapes)
 	{
@@ -169,13 +178,24 @@ void W_Gameplay::tick(const float& deltaTime)
 	}
 }
 
-bool W_Gameplay::input_esc()
+bool W_Gameplay::onKeyEscape()
 {
 	if (isChildActive())
-		return getWidgetAtIndex(widgetIndex)->input_esc();
+		return getActiveChild()->onKeyEscape();
 
 	// If no sub widget open, open optionsMenu
+	SoundManager& soundManager = SoundManager::getInstance();
+	soundManager.play(soundManager.getSound_ReturnClick());
 	setWidgetIndex(1)->construct();
+	return true;
+}
+
+bool W_Gameplay::onKeyTab()
+{
+	if (isChildActive())
+		return getActiveChild()->onKeyTab();
+
+	setWidgetIndex(4)->construct();
 	return true;
 }
 

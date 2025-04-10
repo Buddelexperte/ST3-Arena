@@ -16,7 +16,7 @@ private:
 	W_LevelMenu levelMenu;
 	W_SelectWeapon selectWeapon;
 
-	virtual bool input_esc() override;
+	virtual bool onKeyEscape() override;
 public:
 	void tick(const float& deltaTime) override;
 	W_MainMenu(InputWidget*);

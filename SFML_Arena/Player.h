@@ -2,6 +2,7 @@
 
 #include "Collision.h"
 #include "Health.h"
+#include "W_Hud.h"
 #include "Flashlight.h"
 #include "DrawableShape.h"
 #include "Inventory.h"
@@ -22,6 +23,7 @@ private:
 	static const inline sf::Vector2f HITBOX_SIZE = sf::Vector2f(80.0f, 80.0f);
 	CollisionBox collisionBox;
 
+	W_Hud hud;
 	Flashlight flashlight;
 	Inventory inventory;
 
@@ -42,8 +44,6 @@ private:
 	void tick_move(const float&) override;
 	void tick_health(const float&) override;
 	void tick_animation(const float&);
-
-	void onHealthChanged() override;
 
 protected:
 	sf::Keyboard::Key onKeyPressed(sf::Event*) override;
@@ -85,5 +85,16 @@ public:
 	void collideWithProjectile(Projectile& projectile) override;
 
 	// Health
+	void resetHealth() override
+	{
+		IHasHealth::resetHealth();
+		hud.resetLifeBar();
+	}
+
 	void hurt(const float& delta) override;
+
+	W_Hud& getHud()
+	{
+		return hud;
+	}
 };

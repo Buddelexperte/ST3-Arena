@@ -1,13 +1,28 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 class IHasInput
 {
 protected:
 	virtual sf::Keyboard::Key onKeyPressed(sf::Event* eventRef)
 	{
-		return eventRef->key.code;
+		const sf::Keyboard::Key keyboardInput = eventRef->key.code;
+
+		switch (keyboardInput)
+		{
+		case sf::Keyboard::Escape:
+			onKeyEscape();
+			break;
+		case sf::Keyboard::Tab:
+			onKeyTab();
+			break;
+		default:
+			break;
+		}
+
+		return keyboardInput;
 	}
 	virtual sf::Mouse::Button onMouseButtonPressed(sf::Event* eventRef)
 	{
@@ -64,6 +79,9 @@ protected:
 	virtual bool onMouseReleaseR(sf::Event*) { return false; };
 	virtual bool onMouseReleaseM(sf::Event*) { return false; };
 
+	virtual bool onKeyTab() { return false; }
+	virtual bool onKeyEscape() { return false; }
+
 public:
 	virtual bool handleEvent(sf::Event* eventRef)
 	{
@@ -100,5 +118,4 @@ public:
 	}
 
 	virtual bool isMouseOver(const bool& = false) { return false; }
-	virtual bool input_esc() { return false; };
 };

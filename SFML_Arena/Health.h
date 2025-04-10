@@ -60,7 +60,7 @@ public:
 		resetHealth();
 	}
 
-	void resetHealth()
+	virtual void resetHealth()
 	{
 		getHealthBar().reset();
 		onHealthChanged();

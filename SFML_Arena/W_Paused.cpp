@@ -71,7 +71,7 @@ bool W_Paused::isMouseOver(const bool& checkForClick = false)
 
 	if (pause_resumeButton.isMouseOver(checkForClick))
 	{
-		input_esc();
+		onKeyEscape();
 		return true;
 	}
 	if (pause_optionsButton.isMouseOver(checkForClick))

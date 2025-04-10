@@ -60,7 +60,7 @@ bool GI_Arena::initWidgets()
 	return true;
 }
 
-Player* GI_Arena::makePlayer()
+Player* GI_Arena::validPlayer()
 {
 	if (player)
 	{
@@ -75,7 +75,7 @@ void GI_Arena::start()
 {
 	IDrawableShapes::initValues();
 
-	makePlayer();
+	validPlayer();
 	std::cout << "Player created" << std::endl;
 
 	initWidgets();
@@ -284,9 +284,6 @@ void GI_Arena::tick_view(const float& deltaTime)
 	IDrawableShapes::updateValues();
 }
 
-
-
-
 void GI_Arena::updateScreen()
 {
 	// Clear viewport for new draw
@@ -309,12 +306,13 @@ Player* GI_Arena::getPlayer()
 		return player.get();
 	}
 
-	return makePlayer();
+	return validPlayer();
 }
 
 bool GI_Arena::handleEvent(sf::Event* eventRef)
 {
 	if (activeMenu)
 		return activeMenu->handleEvent(eventRef);
+
 	return false;
 }

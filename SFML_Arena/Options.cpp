@@ -37,9 +37,9 @@ InputWidget* W_Options::getWidgetAtIndex(const int& atIndex)
 		return &graphicMenu;
 		break;
 	default:
-		return nullptr;
 		break;
 	}
+
 	return nullptr;
 }
 
@@ -57,12 +57,11 @@ InputWidget* W_Options::setWidgetIndex(const int& newIndex)
 		shapes = { &graphicMenu };
 		break;
 	default:
-		shapes = {};
+		shapes = { };
 		break;
 	}
 	return getActiveChild();
 }
-
 
 void W_Options::tick(const float& deltaTime)
 {
@@ -81,7 +80,7 @@ bool W_Options::isMouseOver(const bool& checkForClick)
 
 	if (options_return.isMouseOver(checkForClick))
 	{
-		if (checkForClick) parent->construct();
+		if (checkForClick) onKeyEscape();
 		return true;
 	}
 	if (options_graphics.isMouseOver(checkForClick))

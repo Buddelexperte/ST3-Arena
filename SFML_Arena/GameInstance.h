@@ -2,7 +2,8 @@
 #include <SFML/Graphics.hpp>
 
 #include "BaseTypes.h"
-#include "WidgetBase.h"
+#include "MainMenu.h"
+#include "Gameplay.h"
 #include "Player.h"
 
 // Global Game Instance ---------------------------------------------------------------------------
@@ -38,7 +39,7 @@ private:
 	bool bIsGameplayPaused = true;
 
 	// Player
-	Player* makePlayer();
+	Player* validPlayer();
 	std::unique_ptr<Player> player = nullptr;
 
 	// View related
@@ -96,6 +97,11 @@ public:
 	// GameState 
 	void setGameState(const GameState&);
 	GameState getGameState() const { return gameState; }
+
+	W_Hud& getHud()
+	{
+		return validPlayer()->getHud();
+	}
 };
 
 static inline GI_Arena& gameInstance()

@@ -6,11 +6,12 @@ W_LevelUp::W_LevelUp(InputWidget* parent)
 
 }
 
-void W_LevelUp::tick(const float& deltaTime)
+void W_LevelUp::construct()
 {
+
 }
 
-void W_LevelUp::construct()
+void W_LevelUp::tick(const float& deltaTime)
 {
 
 }

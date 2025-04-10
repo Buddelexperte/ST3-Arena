@@ -69,7 +69,7 @@ bool W_SelectWeapon::isMouseOver(const bool& checkForClick = false)
 	{
 		if (checkForClick)
 		{
-			input_esc();
+			onKeyEscape();
 		}
 		return true;
 	}

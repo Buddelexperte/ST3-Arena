@@ -52,13 +52,12 @@ Player::Player()
 
 void Player::spawn()
 {
-	const sf::Vector2f spawnPos = { 0.0f, 0.0f };
+	const sf::Vector2f spawnPos = sf::Vector2( 0.0f, 0.0f );
 	setPosition(spawnPos);
-	setVelocity({ 0.0f, 0.0f });
+	setVelocity(sf::Vector2f(0.0f, 0.0f));
 
 	inventory.reset();
 	resetHealth(); // 100% hp
-	std::cout << "New Player health after spawn = " << getHealth() << std::endl;
 	invincibility.setValue(2.0f); // 2 seconds invincibility (Spawn protection)
 }
 
@@ -201,8 +200,17 @@ bool Player::handleEvent(sf::Event* eventRef)
 sf::Keyboard::Key Player::onKeyPressed(sf::Event* eventRef)
 {
 	const sf::Keyboard::Key inputKey = eventRef->key.code;
-	if (inputKey == sf::Keyboard::Escape) // Esc-key should be handled inside GameInstance due to access to widgets
+
+	switch (inputKey)
+	{
+	case KEY_ESC:
+	case KEY_TAB:
 		gameInstance().handleEvent(eventRef);
+		break;
+	default:
+		break;
+	}
+
 	return inputKey;
 }
 
@@ -339,9 +347,4 @@ void Player::hurt(const float& delta)
 		IHasHealth::hurt(delta);
 		invincibility.reset();
 	}
-}
-
-void Player::onHealthChanged()
-{
-
 }

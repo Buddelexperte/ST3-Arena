@@ -111,10 +111,10 @@ bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 	return false;
 }
 
-bool W_MainMenu::input_esc()
+bool W_MainMenu::onKeyEscape()
 {
 	if (isChildActive())
-		getActiveChild()->input_esc();
+		getActiveChild()->onKeyEscape();
 	else
 		gameInstance().setGameState(QUIT);
 	return true;

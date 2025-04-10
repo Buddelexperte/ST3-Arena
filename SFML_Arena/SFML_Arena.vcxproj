@@ -179,6 +179,7 @@
     <ClCompile Include="Weapon_Rifle_Burst.h" />
     <ClCompile Include="W_GameOver.cpp" />
     <ClCompile Include="W_Hud.cpp" />
+    <ClCompile Include="W_Inventory.cpp" />
     <ClCompile Include="W_LevelMenu.cpp" />
     <ClCompile Include="W_LevelUp.cpp" />
     <ClCompile Include="W_OptionsGraphics.cpp" />
@@ -242,6 +243,7 @@
     <ClInclude Include="Widgets.h" />
     <ClInclude Include="W_GameOver.h" />
     <ClInclude Include="W_Hud.h" />
+    <ClInclude Include="W_Inventory.h" />
     <ClInclude Include="W_LevelMenu.h" />
     <ClInclude Include="W_LevelUp.h" />
     <ClInclude Include="W_OptionsGraphics.h" />
