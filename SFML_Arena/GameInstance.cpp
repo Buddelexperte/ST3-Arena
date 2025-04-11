@@ -79,6 +79,7 @@ void GI_Arena::start()
 	std::cout << "Player created" << std::endl;
 
 	initWidgets();
+	std::cout << "Widgets created" << std::endl;
 
 	std::cout << "\n### Starting Game ###\n" << std::endl;
 
@@ -146,13 +147,16 @@ void GI_Arena::launchGame()
 
 void GI_Arena::startRound()
 {
+	// Only activate Gameplay phase when at least launch phase
 	if (gameState < GAME_LAUNCHING)
 		return;
 
+	// Resetting gameplay aspects
 	EntityManager::getInstance().deleteAll();
-	gameState = IN_GAME;
 	player->spawn();
 	resetViewPos();
+	// Set gameState to IN_GAME
+	setGameState(IN_GAME);
 }
 
 void GI_Arena::preTick()

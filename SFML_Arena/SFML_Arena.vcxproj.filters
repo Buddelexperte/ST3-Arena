@@ -215,6 +215,9 @@
     <ClCompile Include="W_Inventory.cpp">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionManager.h">
@@ -396,6 +399,9 @@
     </ClInclude>
     <ClInclude Include="W_Inventory.h">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Background.h">
+      <Filter>Source\VisualInterfaces\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

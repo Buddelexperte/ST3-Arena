@@ -144,19 +144,8 @@ private:
     sf::Sprite flashlightSprite;
 
 
-    // Scrapped Light for dead enemies
-    static constexpr bool bRenderDeathLights = false; // DESIGN CHOICE, DON'T TURN ON
-    struct DeathLight
-    {
-        sf::Vector2f position;
-        float timeRemaining;
-    };
-    std::vector<DeathLight> deathLights;
-
-
     void tick_animation(const float&);
     void tick_shader(const float&);
-    void tick_deathLights(const float&);
     void tick_display(const float&);
 
 public:
@@ -175,6 +164,7 @@ public:
     sf::Shader* getActiveShader();
 
     void drawOtherScene(sf::Drawable* drawable);
+    void drawOtherScene(sf::Drawable& drawable);
 
     void setRadius(const float& newRadius);
 
@@ -182,8 +172,4 @@ public:
 
     void setPosition(const sf::Vector2f& newPos) override;
     void setRotation(const float& newRot) override;
-
-    // Additional Lights
-    void addDeathLight(const sf::Vector2f&);
-
 };

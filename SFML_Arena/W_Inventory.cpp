@@ -11,6 +11,11 @@ void W_Inventory::construct()
 	setWidgetIndex(0);
 }
 
+bool W_Inventory::onKeyTab()
+{
+	return onKeyEscape();
+}
+
 void W_Inventory::tick(const float& deltaTime)
 {
 

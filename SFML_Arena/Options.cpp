@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Options.h" // Own header file
+#include "SoundManager.h"
 
 W_Options::W_Options(InputWidget* parent = nullptr) : InputWidget(parent), soundMenu(this), graphicMenu(this)
 {

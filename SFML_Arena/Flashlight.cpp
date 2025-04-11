@@ -54,8 +54,6 @@ Flashlight::Flashlight()
     sceneSprite.setTexture(sceneRenderTexture.getTexture());
 
     shapes = { &sceneSprite };
-
-    addDeathLight(sf::Vector2f(0.0f, 0.0f));
 }
 
 void Flashlight::tick(const float& deltaTime)
@@ -63,8 +61,6 @@ void Flashlight::tick(const float& deltaTime)
     tick_animation(deltaTime);
 
     tick_shader(deltaTime);
-
-    tick_deathLights(deltaTime);
 
     tick_display(deltaTime);
 }
@@ -148,35 +144,6 @@ void Flashlight::tick_shader(const float& deltaTime)
     }
 }
 
-void Flashlight::tick_deathLights(const float& deltaTime)
-{
-    if (!bRenderDeathLights)
-        return;
-
-    // Remove expired death lights
-    std::vector<sf::Glsl::Vec2> lightPositions;
-    for (auto it = deathLights.begin(); it != deathLights.end();)
-    {
-        it->timeRemaining -= deltaTime;
-        if (shouldZero(it->timeRemaining))
-        {
-            it = deathLights.erase(it);
-        }
-        else
-        {
-            lightPositions.push_back(sf::Glsl::Vec2(it->position - viewCenter + viewHalfSize));
-            it++;
-        }
-    }
-
-    // Pass death light information to shader using uniform params
-    currShader->setUniform("numDeathLights", static_cast<int>(lightPositions.size()));
-    if (lightPositions.size() > 0)
-    {
-        currShader->setUniformArray("deathLightPos", lightPositions.data(), lightPositions.size());
-    }
-}
-
 void Flashlight::tick_display(const float& deltaTime)
 {
     // Set the render texture's view to match the player's view
@@ -222,8 +189,13 @@ sf::Shader* Flashlight::getActiveShader()
 
 void Flashlight::drawOtherScene(sf::Drawable* drawable)
 {
+	drawOtherScene(*drawable);
+}
+
+void Flashlight::drawOtherScene(sf::Drawable& drawable)
+{
     // Draw your scene here (make sure to render the actual scene)
-    sceneRenderTexture.draw(*drawable);
+    sceneRenderTexture.draw(drawable);
     sf::BlendMode blendMode = sf::BlendMin;
     sceneRenderTexture.draw(flashlightSprite, blendMode);
 
@@ -262,9 +234,4 @@ void Flashlight::setRotation(const float& newRot)
             flashlightSprite.setRotation(newRot);
         }
     }
-}
-
-void Flashlight::addDeathLight(const sf::Vector2f& position)
-{
-    deathLights.push_back({ position, 5.0f }); // Lasts 5 seconds
 }

@@ -144,6 +144,7 @@
     <Content Include="Content\**\*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Background.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="DrawableShape.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="AllEntities.h" />
     <ClInclude Include="AllPerks.h" />
     <ClInclude Include="AllWeapons.h" />
+    <ClInclude Include="Background.h" />
     <ClInclude Include="Damage.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="DrawableShape.h" />

@@ -30,6 +30,8 @@ void EntityManager::tick(const float& deltaTime)
     // Tick the render layers
     tick_renderer(deltaTime);
 
+    CollisionManager::getInstance().tick(deltaTime);
+
     return;
 }
 

@@ -1,7 +1,8 @@
 #pragma once
 
-#include "WidgetBase.h"
 #include "GameplaySubWidgets.h" // Own header file
+#include "WidgetBase.h"
+#include "Background.h"
 
 class W_Gameplay : public InputWidget // Gameplay Widget ------------------------------------------
 {
@@ -12,12 +13,7 @@ private:
 	W_LevelUp levelUpScreen;
 	W_Hud& hud;
 
-	static constexpr float TILING_SCALE = 0.1f; // Larger = more tiling
-	sf::Vector2f backgroundPos;
-	sf::Texture backgroundTexture;
-	sf::VertexArray background;  // 4 vertices for the rectangle (quad), specified in Widget Constructor
-
-	void tick_background(const float& deltaTime);
+	BackgroundElement background;
 
 	void lose();
 

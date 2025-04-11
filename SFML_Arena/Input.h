@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+#include "SoundManager.h"
+
 class IHasInput
 {
 protected:
@@ -13,8 +15,13 @@ protected:
 		switch (keyboardInput)
 		{
 		case sf::Keyboard::Escape:
+		{
+			// If no sub widget open, open optionsMenu
+			SoundManager& soundManager = SoundManager::getInstance();
+			soundManager.play(soundManager.getSound_ReturnClick());
 			onKeyEscape();
 			break;
+		}
 		case sf::Keyboard::Tab:
 			onKeyTab();
 			break;

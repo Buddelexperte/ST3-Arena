@@ -11,6 +11,8 @@ public:
 	void tick(const float& deltaTime) override;
 	void construct() override;
 
+	bool onKeyTab() override;
+
 	InputWidget* setWidgetIndex(const int&) override;
 	InputWidget* getWidgetAtIndex(const int&) override;
 };
