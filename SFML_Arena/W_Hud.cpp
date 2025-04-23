@@ -48,9 +48,10 @@ void W_Hud::resetLifeBar()
 	// Reset life bar to default values
 
 	lifeBar.setText("100");
+	displayedHealth = 100.0f;
 
-	const sf::Vector2f DEF_LIFE_BAR_SIZE = sf::Vector2f(viewSize.x, lifeBar.getSize().y);
-	lifeBar.setSize(DEF_LIFE_BAR_SIZE);
+	const sf::Vector2f DEFAULT_LIFE_BAR_SIZE = sf::Vector2f(viewSize.x, lifeBar.getSize().y);
+	lifeBar.setSize(DEFAULT_LIFE_BAR_SIZE);
 }
 
 void W_Hud::updateLifeBar()
@@ -64,6 +65,8 @@ void W_Hud::updateLifeBar()
 	// Update string displayed only if displayed health is different from actual health
 	if (playerHealth != displayedHealth)
 	{
+		displayedHealth = playerHealth;
+
 		int health_asInt = static_cast<int>(std::round(playerHealth * 100.0f));
 		std::string health_asString = std::to_string(health_asInt);
 		lifeBar.setText(health_asString);
@@ -87,6 +90,7 @@ void W_Hud::resetScoreBar()
 	// Reset score bar to default values
 
 	levelDisplay.setText("1");
+	displayedLevel = 1;
 
 	const sf::Vector2f DEF_SCORE_BAR_SIZE = sf::Vector2f(0.0f, scoreBar.getSize().y);
 	scoreBar.setSize(DEF_SCORE_BAR_SIZE);
@@ -99,22 +103,24 @@ void W_Hud::updateScoreBar()
 	// Get players health
 	Player* playerRef = gameInstance().getPlayer();
 	LevelSystem& ls = playerRef->getInventory().getLevelSystem();
-	int playerScore = ls.getPoints();
-	int playerScoreNeeded = ls.getPointsNeeded();
+	unsigned int playerScore = ls.getPoints();
+	unsigned int pointsLastNeeded = ls.getLastPointsNeeded();
+	unsigned int playerScoreNeeded = ls.getPointsNeeded();
 	unsigned int playerLevel = ls.getStage();
 
 	// Update string displayed only if displayed stage is different from actual stage
 	if (playerLevel != displayedLevel)
 	{
+		displayedLevel = playerLevel;
+
 		std::string levelAsString = std::to_string(playerLevel);
 		levelDisplay.setText(levelAsString);
-		displayedLevel = playerLevel;
 	}
 
 	// Get needed width for score bar
 	sf::Vector2f scoreBarSize = scoreBar.getSize();
-	float maxWidth = viewSize.x / 3.0f;
-	float newScoreBarWidth = maxWidth * (static_cast<float>(playerScore) / static_cast<float>(playerScoreNeeded));
+	const float maxWidth = viewSize.x / 3.0f;
+	float newScoreBarWidth = maxWidth * (static_cast<float>(playerScore - pointsLastNeeded) / static_cast<float>(playerScoreNeeded));
 
 	// Update life bar size if current width differs from desired width
 	if (scoreBarSize.x != newScoreBarWidth)

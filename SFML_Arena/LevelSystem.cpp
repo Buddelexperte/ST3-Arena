@@ -27,7 +27,6 @@ void LevelSystem::onLevelUp()
 	owningInv->setShouldLevelUp(true); // Set the level up flag in the inventory
 
 	setStage(stage + 1);  // Increment the stage / level
-	setPoints(POINTS_AFTER_LEVEL_UP); // Reset points after leveling up
 
 	std::cout << "Level Up! Current Stage: " << stage << std::endl;
 }
@@ -58,7 +57,7 @@ LevelSystem::LevelSystem(Inventory* owningInv)
 
 void LevelSystem::reset()
 {
-	setPoints(POINTS_AFTER_LEVEL_UP);
+	setPoints(STARTING_POINTS);
 	setStage(START_STAGE);
 }
 
@@ -89,9 +88,14 @@ int LevelSystem::getPoints() const
 	return collectedPoints;
 }
 
-int LevelSystem::getPointsNeeded() const
+unsigned int LevelSystem::getPointsNeeded() const
 {
 	return (stage * 100);
+}
+
+unsigned int LevelSystem::getLastPointsNeeded() const
+{
+	return ((stage - 1) * 100);
 }
 
 unsigned int LevelSystem::getStage() const

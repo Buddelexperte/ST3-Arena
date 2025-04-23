@@ -12,10 +12,10 @@ float GI_Arena::globalTime = 0.0f;
 GI_Arena::GI_Arena()
 {
 	const sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-	//window = std::make_unique<sf::RenderWindow>(desktop, "SFML_Arena", sf::Style::Fullscreen);
+	window = std::make_unique<sf::RenderWindow>(desktop, "SFML_Arena", sf::Style::Fullscreen);
 
 	// Only use for crash heavy debug !
-	window = std::make_unique<sf::RenderWindow>(desktop, "SFML_Arena", sf::Style::Titlebar | sf::Style::Default);
+	//window = std::make_unique<sf::RenderWindow>(desktop, "SFML_Arena", sf::Style::Titlebar | sf::Style::Default);
 
 	window->setFramerateLimit(MAX_FPS);
 	window->setVerticalSyncEnabled(bUseVSync);

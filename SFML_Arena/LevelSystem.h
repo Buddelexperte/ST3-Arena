@@ -9,7 +9,7 @@ private:
 
 	// CONFIGS
 	static constexpr unsigned int START_STAGE = 1; // Starting stage
-	static constexpr unsigned int POINTS_AFTER_LEVEL_UP = 0; // Points needed to level up
+	static constexpr unsigned int STARTING_POINTS = 0; // Points needed to level up
 
 	unsigned int collectedPoints = 0; // Current score
 	unsigned int stage = START_STAGE; // Current stage (1 by default) (level of the player essentially)
@@ -31,7 +31,8 @@ public:
 	void addPoints(unsigned int points);
 	void setPoints(unsigned int points);
 	int getPoints() const;
-	int getPointsNeeded() const;
+	unsigned int getPointsNeeded() const;
+	unsigned int getLastPointsNeeded() const;
 
 	unsigned int getStage() const;
 };
