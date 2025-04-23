@@ -12,6 +12,8 @@ sf::Vector2f IDrawableShapes::viewHalfSize = { 0.0f, 0.0f };
 sf::Vector2f IDrawableShapes::viewTL = { 0.0f, 0.0f };
 sf::Vector2f IDrawableShapes::viewCenter = { 0.0f, 0.0f };
 sf::Vector2f IDrawableShapes::widgetOffset = { 0.0f, 0.0f };
+sf::Vector2f IDrawableShapes::buttonSize = { 300.0f, 100.0f };
+sf::Vector2f IDrawableShapes::viewSizeNorm = { 1.0f, 1.0f };
 
 void IDrawableShapes::initValues()
 {
@@ -33,6 +35,8 @@ void IDrawableShapes::updateValues()
 	viewTL = viewCenter - viewHalfSize;
 
 	widgetOffset = gameInstance().getWidgetOffset();
+	viewSizeNorm = sf::Vector2f(2560.0f / viewSize.x, 1440.0f / viewSize.y);
+	buttonSize = buttonRatio * viewSizeNorm;
 }
 
 void IDrawableShapes::draw(sf::RenderTarget& target, sf::RenderStates states) const

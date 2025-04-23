@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
+#include "design.h"
 
 class GI_Arena;
 
@@ -16,6 +16,9 @@ protected:
 	static sf::Vector2f viewTL;
 	static sf::Vector2f viewCenter;
 	static sf::Vector2f widgetOffset;
+	static sf::Vector2f viewSizeNorm;
+
+	static sf::Vector2f buttonSize;
 
 	std::vector<sf::Drawable*> shapes;
 

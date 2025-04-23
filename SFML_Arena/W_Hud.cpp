@@ -9,13 +9,13 @@ W_Hud::W_Hud()
 {
 	const std::vector<RawButton> HUD_CONSTR = {
 		// Health bar
-		{viewTL + sf::Vector2f{ 0.0f, 0.0f },						sf::Vector2f{viewSize.x, 60.0f},		sf::Color(255, 255, 255, 255),	50, "100",	sf::Color::Black,		EAlignment::LEFT_TOP,		EAlignment::LEFT},
-		{viewTL + sf::Vector2f{ 0.0f, 0.0f },						sf::Vector2f{viewSize.x, 60.0f},		sf::Color(255, 100, 100, 100),	0,	"",		sf::Color::Transparent, EAlignment::LEFT_TOP,		EAlignment::LEFT},
+		{viewTL + (sf::Vector2f{ 0.0f, 0.0f }							),	sf::Vector2f{viewSize.x, 60.0f},		sf::Color(255, 255, 255, 255),	50, "100",	sf::Color::Black,		EAlignment::LEFT_TOP,		EAlignment::LEFT},
+		{viewTL + (sf::Vector2f{ 0.0f, 0.0f }							),	sf::Vector2f{viewSize.x, 60.0f},		sf::Color(255, 100, 100, 100),	0,	"",		sf::Color::Transparent, EAlignment::LEFT_TOP,		EAlignment::LEFT},
 		// Score Bar
-		{viewTL + sf::Vector2f{ viewSize.x / 2.0f, viewSize.y },	sf::Vector2f{0.0f, 10.0f},				sf::Color(255, 255, 255, 255),	0,	"",		sf::Color::Transparent, EAlignment::CENTER_BOTTOM,	EAlignment::LEFT},
-		{viewTL + sf::Vector2f{ viewSize.x / 2.0f, viewSize.y },	sf::Vector2f{viewSize.x / 3.0f, 10.0f},	sf::Color(255, 255, 255, 100),	0,	"",		sf::Color::Transparent, EAlignment::CENTER_BOTTOM,	EAlignment::RIGHT},
+		{viewTL + (sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }		),	sf::Vector2f{0.0f, 10.0f},				sf::Color(255, 255, 255, 255),	0,	"",		sf::Color::Transparent, EAlignment::CENTER_BOTTOM,	EAlignment::LEFT},
+		{viewTL + (sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }		),	sf::Vector2f{viewSize.x / 3.0f, 10.0f},	sf::Color(255, 255, 255, 100),	0,	"",		sf::Color::Transparent, EAlignment::CENTER_BOTTOM,	EAlignment::RIGHT},
 		// Level Display
-		{viewTL + sf::Vector2f{ viewSize.x / 2.0f, viewSize.y - 30.0f },	sf::Vector2f{50.0f, 50.0f},		sf::Color::Transparent,			30,	"1",	sf::Color::White,		EAlignment::CENTER_BOTTOM,	EAlignment::CENTER_BOTTOM}
+		{viewTL + (sf::Vector2f{ viewSize.x / 2.0f, viewSize.y - 30.0f }),	sf::Vector2f{50.0f, 50.0f},				sf::Color::Transparent,			30,	"1",	sf::Color::White,		EAlignment::CENTER_BOTTOM,	EAlignment::CENTER_BOTTOM}
 	};
 
 	lifeBar.construct(HUD_CONSTR[0]);
@@ -33,11 +33,11 @@ void W_Hud::construct()
 void W_Hud::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
-	lifeBar.setPos(	  viewTL + sf::Vector2(0.0f, 0.0f));
-	lifeBar_bg.setPos(viewTL + sf::Vector2(0.0f, 0.0f));
-	scoreBar.setPos(viewTL + sf::Vector2f{ viewSize.x / 2.0f, viewSize.y });
-	scoreBar_bg.setPos(viewTL + sf::Vector2f{ viewSize.x / 2.0f, viewSize.y });
-	levelDisplay.setPos(viewTL + sf::Vector2f{ viewSize.x / 2.0f, viewSize.y });
+	lifeBar.setPos(		viewTL +	(sf::Vector2{ 0.0f, 0.0f }					));
+	lifeBar_bg.setPos(	viewTL +	(sf::Vector2{ 0.0f, 0.0f }					));
+	scoreBar.setPos(	viewTL +	(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }));
+	scoreBar_bg.setPos(	viewTL +	(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }));
+	levelDisplay.setPos(viewTL +	(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }));
 
 	updateLifeBar();
 	updateScoreBar();
@@ -46,9 +46,6 @@ void W_Hud::tick(const float& deltaTime)
 void W_Hud::resetLifeBar()
 {
 	// Reset life bar to default values
-
-	lifeBar.setText("100");
-	displayedHealth = 100.0f;
 
 	const sf::Vector2f DEFAULT_LIFE_BAR_SIZE = sf::Vector2f(viewSize.x, lifeBar.getSize().y);
 	lifeBar.setSize(DEFAULT_LIFE_BAR_SIZE);
@@ -89,9 +86,6 @@ void W_Hud::resetScoreBar()
 {
 	// Reset score bar to default values
 
-	levelDisplay.setText("1");
-	displayedLevel = 1;
-
 	const sf::Vector2f DEF_SCORE_BAR_SIZE = sf::Vector2f(0.0f, scoreBar.getSize().y);
 	scoreBar.setSize(DEF_SCORE_BAR_SIZE);
 }
@@ -113,7 +107,7 @@ void W_Hud::updateScoreBar()
 	{
 		displayedLevel = playerLevel;
 
-		std::string levelAsString = std::to_string(playerLevel);
+		std::string levelAsString = toRoman(playerLevel);
 		levelDisplay.setText(levelAsString);
 	}
 

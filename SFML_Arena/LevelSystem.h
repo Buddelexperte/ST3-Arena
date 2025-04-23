@@ -33,6 +33,8 @@ public:
 	int getPoints() const;
 	unsigned int getPointsNeeded() const;
 	unsigned int getLastPointsNeeded() const;
+	unsigned int getPointsNeeded(const unsigned int) const; // For specific stages
+	unsigned int getLastPointsNeeded(const unsigned int) const; // For specific stages
 
 	unsigned int getStage() const;
 };

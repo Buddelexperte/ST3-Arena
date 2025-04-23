@@ -403,6 +403,9 @@
     <ClInclude Include="Background.h">
       <Filter>Source\VisualInterfaces\Components</Filter>
     </ClInclude>
+    <ClInclude Include="design.h">
+      <Filter>Source\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\openal32.dll">

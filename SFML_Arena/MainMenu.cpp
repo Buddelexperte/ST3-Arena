@@ -10,11 +10,11 @@ W_MainMenu::W_MainMenu(InputWidget* parent)
 	: InputWidget(parent), optionsMenu(this), levelMenu(this), selectWeapon(this)
 {
 	const std::vector<RawButton> MAIN_MENU_CONSTR = {
-		{viewCenter + sf::Vector2f{ 0, -300 },    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100,	"ARENA",								sf::Color::White},
-		{viewCenter + sf::Vector2f{ 0, -200 },    sf::Vector2f{ 100, 100 }, sf::Color::Transparent,   16,	"Higscore: " + std::to_string(0),		sf::Color::White},
-		{viewCenter + sf::Vector2f{ 0, 0 },       sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"START",								sf::Color::Black},
-		{viewCenter + sf::Vector2f{ 0, 150 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"OPTIONS",								sf::Color::Black},
-		{viewCenter + sf::Vector2f{ 0, 300 },     sf::Vector2f{ 300, 100 }, sf::Color::White,         24,	"QUIT",									sf::Color::Black}
+		{viewCenter + (sf::Vector2f{ 0, -300 }	 * viewSizeNorm),    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,		100,"ARENA",							sf::Color::White},
+		{viewCenter + (sf::Vector2f{ 0, -200 }	 * viewSizeNorm),    sf::Vector2f{ 100, 100 }, sf::Color::Transparent,		16,	"Higscore: " + std::to_string(0),	sf::Color::White},
+		{viewCenter + (sf::Vector2f{ 0, 0 }		 * viewSizeNorm),       buttonSize,				sf::Color::White,			24,	"START",							sf::Color::Black},
+		{viewCenter + (sf::Vector2f{ 0, 150 }	 * viewSizeNorm),     buttonSize,				sf::Color::White,			24,	"OPTIONS",							sf::Color::Black},
+		{viewCenter + (sf::Vector2f{ 0, 300 }	 * viewSizeNorm),     buttonSize,				sf::Color::White,			24,	"QUIT",								sf::Color::Black}
 	};
 
 	menu_title.construct(MAIN_MENU_CONSTR[0]);
@@ -72,11 +72,11 @@ void W_MainMenu::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 
-	menu_title.setPos(widgetOffset + sf::Vector2f{ 0, -300 });
-	menu_highscore.setPos(widgetOffset + sf::Vector2f{ 0, -200 });
-	menu_startButton.setPos(widgetOffset + sf::Vector2f{ 0, 0 });
-	menu_optionsButton.setPos(widgetOffset + sf::Vector2f{ 0, 150 });
-	menu_quitButton.setPos(widgetOffset + sf::Vector2f{ 0, 300 });
+	menu_title.setPos(widgetOffset + (sf::Vector2f{ 0, -300 } * viewSizeNorm));
+	menu_highscore.setPos(widgetOffset + (sf::Vector2f{ 0, -200 } * viewSizeNorm));
+	menu_startButton.setPos(widgetOffset + (sf::Vector2f{ 0, 0 } * viewSizeNorm));
+	menu_optionsButton.setPos(widgetOffset + (sf::Vector2f{ 0, 150 } * viewSizeNorm));
+	menu_quitButton.setPos(widgetOffset + (sf::Vector2f{ 0, 300 } * viewSizeNorm));
 }
 
 bool W_MainMenu::isMouseOver(const bool& checkForClick = false)

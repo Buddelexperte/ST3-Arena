@@ -90,12 +90,22 @@ int LevelSystem::getPoints() const
 
 unsigned int LevelSystem::getPointsNeeded() const
 {
-	return (stage * 100);
+	return getPointsNeeded(stage); // Call the overloaded function with the current stage
 }
 
 unsigned int LevelSystem::getLastPointsNeeded() const
 {
-	return ((stage - 1) * 100);
+	return getLastPointsNeeded(stage); // Call the overloaded function with the current stage
+}
+
+unsigned int LevelSystem::getPointsNeeded(const unsigned int forStage) const
+{
+	return (forStage * 100);
+}
+
+unsigned int LevelSystem::getLastPointsNeeded(const unsigned int forStage) const
+{
+	return getPointsNeeded(forStage - 1); // Call the overloaded function with the previous stage
 }
 
 unsigned int LevelSystem::getStage() const

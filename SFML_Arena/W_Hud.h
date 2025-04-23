@@ -8,14 +8,14 @@ private:
 	// Life bar
 	Button lifeBar;
 	Button lifeBar_bg;
-	float displayedHealth = 1.0f;
+	float displayedHealth = 0.0f;
 
 	// Score bar
 	Button scoreBar;
 	Button scoreBar_bg;
 
 	Button levelDisplay;
-	unsigned int displayedLevel = 1;
+	unsigned int displayedLevel = 0;
 
 public:
 	W_Hud();

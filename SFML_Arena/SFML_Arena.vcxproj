@@ -196,6 +196,7 @@
     <ClInclude Include="AllWeapons.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="Damage.h" />
+    <ClInclude Include="design.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="DrawableShape.h" />
     <ClInclude Include="EntityManager.h" />
