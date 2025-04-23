@@ -32,15 +32,23 @@ void W_Hud::tick(const float& deltaTime)
 
 void W_Hud::resetLifeBar()
 {
-	sf::Vector2f size = sf::Vector2f(viewSize.x, lifeBar.getSize().y);
-	lifeBar.setSize(size);
+	// Reset life bar to default values
+
+	lifeBar.setText("100");
+
+	const sf::Vector2f DEF_LIFE_BAR_SIZE = sf::Vector2f(viewSize.x, lifeBar.getSize().y);
+	lifeBar.setSize(DEF_LIFE_BAR_SIZE);
 }
 
 void W_Hud::updateLifeBar()
 {
+	// Update the life bar based on the player's health
+
+	// Get players health
 	Player* playerRef = gameInstance().getPlayer();
 	float playerHealth = playerRef->getHealth();
 
+	// Update string displayed only if displayed health is different from actual health
 	if (playerHealth != displayedHealth)
 	{
 		int health_asInt = static_cast<int>(std::round(playerHealth * 100.0f));
@@ -48,15 +56,18 @@ void W_Hud::updateLifeBar()
 		lifeBar.setText(health_asString);
 	}
 
+	// Get needed width for life bar
+
 	sf::Vector2f lifeBarSize = lifeBar.getSize();
 	float newLifeBarWidth = viewSize.x * playerHealth;
 
-	if (lifeBarSize.x == newLifeBarWidth)
-		return;
-
-	newLifeBarWidth = lerp(lifeBarSize.x, newLifeBarWidth, LERP_SMOOTHNESS);
-	sf::Vector2f newLifeBarSize = sf::Vector2f(newLifeBarWidth, lifeBarSize.y);
-	lifeBar.setSize(newLifeBarSize);
+	// Update life bar size if current width differs from desired width
+	if (lifeBarSize.x != newLifeBarWidth)
+	{
+		newLifeBarWidth = lerp(lifeBarSize.x, newLifeBarWidth, LERP_SMOOTHNESS);
+		sf::Vector2f newLifeBarSize = sf::Vector2f(newLifeBarWidth, lifeBarSize.y);
+		lifeBar.setSize(newLifeBarSize);
+	}
 }
 
 InputWidget* W_Hud::setWidgetIndex(const int& newIndex)
