@@ -71,6 +71,8 @@ WeaponType getWeaponTypeFromText(const std::string& buttonText)
     }
     return UNKNOWN_WEAPON;
 }
+
+// Factory function for weapons from their weapon anme (string)
 std::unique_ptr<Weapon> makeWeapon(const std::string& selectWeaponText)
 {
     const WeaponType type = getWeaponTypeFromText(selectWeaponText);

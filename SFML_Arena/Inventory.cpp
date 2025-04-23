@@ -108,6 +108,7 @@ std::unique_ptr<Perk> Inventory::removePerk(size_t index)
 
 void Inventory::reset()
 {
+	levelSystem.reset();
     clear();
     // Get wepaon by StartWeaponName
     std::unique_ptr<Weapon> startWeapon = makeWeapon(startWeaponName);

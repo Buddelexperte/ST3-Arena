@@ -26,13 +26,17 @@ void LevelSystem::onLevelUp()
 {
 	owningInv->setShouldLevelUp(true); // Set the level up flag in the inventory
 
-	stage++; // Increment the stage / level
-	setPoints(0); // Reset points after leveling up
+	setStage(stage + 1);  // Increment the stage / level
+	setPoints(POINTS_AFTER_LEVEL_UP); // Reset points after leveling up
 
 	std::cout << "Level Up! Current Stage: " << stage << std::endl;
+}
+
+void LevelSystem::setStage(const unsigned int newStage)
+{
+	stage = newStage;
 
 	EntityManager& manager = EntityManager::getInstance();
-
 	switch (stage)
 	{
 	case 1: case 0:
@@ -50,6 +54,12 @@ LevelSystem::LevelSystem(Inventory* owningInv)
 	: owningInv(owningInv)
 {
 
+}
+
+void LevelSystem::reset()
+{
+	setPoints(POINTS_AFTER_LEVEL_UP);
+	setStage(START_STAGE);
 }
 
 void LevelSystem::addPoint()
