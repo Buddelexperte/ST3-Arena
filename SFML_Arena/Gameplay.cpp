@@ -125,17 +125,18 @@ void W_Gameplay::tick(const float& deltaTime)
 
 	if (player->getInventory().getShouldLevelUp())
 	{
-		setWidgetIndex(3)->construct();
-		player->getInventory().setShouldLevelUp(false);
+		setWidgetIndex(3)->construct(); // Open level up screen
+		player->getInventory().setShouldLevelUp(false); // Reset level up flag
+		player->resetHealth(); // Reset health after leveling up
 	}
 
 	// If Gameplay is UnPaused
 	if (!gameInstance().getIsPaused())
 	{
-		EntityManager::getInstance().tick(deltaTime);
-		CollisionManager::getInstance().tick(deltaTime);
-		if (player->isDead())
-			lose();
+		EntityManager::getInstance().tick(deltaTime); // Update all entities
+		CollisionManager::getInstance().tick(deltaTime); // Update all collisions
+		if (player->isDead()) 
+			lose(); // Check if player is dead and call lose if so
 	}
 
 	if (isChildActive())

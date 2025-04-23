@@ -15,8 +15,9 @@ private:
     std::vector<std::unique_ptr<Weapon>> weapons;
 	int activeWeaponIndex = -1; // -1 means no active weapon or invalid index
 
-    // Store all acquired perks.
+    // Level up System
     LevelSystem levelSystem;
+    // Store all acquired perks.
     std::vector<std::unique_ptr<Perk>> perks;
     bool bLevelUpQueued = false;
 

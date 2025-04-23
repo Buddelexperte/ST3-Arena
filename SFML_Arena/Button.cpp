@@ -330,6 +330,7 @@ void Button::setSize(const sf::Vector2f& newSize)
 {
     buttonData.size = newSize;
     B_Box.setSize(newSize);
+	setAlignment(buttonData.alignment);
     setTextAlignment(buttonData.textAlignment);
 }
 

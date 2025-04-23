@@ -8,12 +8,21 @@ W_Hud::W_Hud()
 	: InputWidget(nullptr)
 {
 	const std::vector<RawButton> HUD_CONSTR = {
-		{viewTL + sf::Vector2f{ 0.0f, 0.0f },	sf::Vector2f{viewSize.x, 60.0f},	sf::Color(255, 255, 255, 255),	50, "100",	sf::Color::Black,		EAlignment::LEFT_TOP, EAlignment::LEFT},
-		{viewTL + sf::Vector2f{ 0.0f, 0.0f },	sf::Vector2f{viewSize.x, 60.0f},	sf::Color(255, 100, 100, 100),	0,	"",		sf::Color::Transparent, EAlignment::LEFT_TOP, EAlignment::LEFT}
+		// Health bar
+		{viewTL + sf::Vector2f{ 0.0f, 0.0f },						sf::Vector2f{viewSize.x, 60.0f},		sf::Color(255, 255, 255, 255),	50, "100",	sf::Color::Black,		EAlignment::LEFT_TOP,		EAlignment::LEFT},
+		{viewTL + sf::Vector2f{ 0.0f, 0.0f },						sf::Vector2f{viewSize.x, 60.0f},		sf::Color(255, 100, 100, 100),	0,	"",		sf::Color::Transparent, EAlignment::LEFT_TOP,		EAlignment::LEFT},
+		// Score Bar
+		{viewTL + sf::Vector2f{ viewSize.x / 2.0f, viewSize.y },	sf::Vector2f{0.0f, 10.0f},				sf::Color(255, 255, 255, 255),	0,	"",		sf::Color::Transparent, EAlignment::CENTER_BOTTOM,	EAlignment::LEFT},
+		{viewTL + sf::Vector2f{ viewSize.x / 2.0f, viewSize.y },	sf::Vector2f{viewSize.x / 3.0f, 10.0f},	sf::Color(255, 255, 255, 100),	0,	"",		sf::Color::Transparent, EAlignment::CENTER_BOTTOM,	EAlignment::RIGHT},
+		// Level Display
+		{viewTL + sf::Vector2f{ viewSize.x / 2.0f, viewSize.y - 30.0f },	sf::Vector2f{50.0f, 50.0f},		sf::Color::Transparent,			30,	"1",	sf::Color::White,		EAlignment::CENTER_BOTTOM,	EAlignment::CENTER_BOTTOM}
 	};
 
 	lifeBar.construct(HUD_CONSTR[0]);
 	lifeBar_bg.construct(HUD_CONSTR[1]);
+	scoreBar.construct(HUD_CONSTR[2]);
+	scoreBar_bg.construct(HUD_CONSTR[3]);
+	levelDisplay.construct(HUD_CONSTR[4]);
 }
 
 void W_Hud::construct()
@@ -26,8 +35,12 @@ void W_Hud::tick(const float& deltaTime)
 	InputWidget::tick(deltaTime);
 	lifeBar.setPos(	  viewTL + sf::Vector2(0.0f, 0.0f));
 	lifeBar_bg.setPos(viewTL + sf::Vector2(0.0f, 0.0f));
+	scoreBar.setPos(viewTL + sf::Vector2f{ viewSize.x / 2.0f, viewSize.y });
+	scoreBar_bg.setPos(viewTL + sf::Vector2f{ viewSize.x / 2.0f, viewSize.y });
+	levelDisplay.setPos(viewTL + sf::Vector2f{ viewSize.x / 2.0f, viewSize.y });
 
 	updateLifeBar();
+	updateScoreBar();
 }
 
 void W_Hud::resetLifeBar()
@@ -57,7 +70,6 @@ void W_Hud::updateLifeBar()
 	}
 
 	// Get needed width for life bar
-
 	sf::Vector2f lifeBarSize = lifeBar.getSize();
 	float newLifeBarWidth = viewSize.x * playerHealth;
 
@@ -70,12 +82,57 @@ void W_Hud::updateLifeBar()
 	}
 }
 
+void W_Hud::resetScoreBar()
+{
+	// Reset score bar to default values
+
+	levelDisplay.setText("1");
+
+	const sf::Vector2f DEF_SCORE_BAR_SIZE = sf::Vector2f(0.0f, scoreBar.getSize().y);
+	scoreBar.setSize(DEF_SCORE_BAR_SIZE);
+}
+
+void W_Hud::updateScoreBar()
+{
+	// Update the score bar based on the player's score
+
+	// Get players health
+	Player* playerRef = gameInstance().getPlayer();
+	LevelSystem& ls = playerRef->getInventory().getLevelSystem();
+	int playerScore = ls.getPoints();
+	int playerScoreNeeded = ls.getPointsNeeded();
+	unsigned int playerLevel = ls.getStage();
+
+	// Update string displayed only if displayed stage is different from actual stage
+	if (playerLevel != displayedLevel)
+	{
+		std::string levelAsString = std::to_string(playerLevel);
+		levelDisplay.setText(levelAsString);
+		displayedLevel = playerLevel;
+	}
+
+	// Get needed width for score bar
+	sf::Vector2f scoreBarSize = scoreBar.getSize();
+	float maxWidth = viewSize.x / 3.0f;
+	float newScoreBarWidth = maxWidth * (static_cast<float>(playerScore) / static_cast<float>(playerScoreNeeded));
+
+	// Update life bar size if current width differs from desired width
+	if (scoreBarSize.x != newScoreBarWidth)
+	{
+		newScoreBarWidth = lerp(scoreBarSize.x, newScoreBarWidth, LERP_SMOOTHNESS);
+		sf::Vector2f newScoreBarSize = sf::Vector2f(newScoreBarWidth, scoreBarSize.y);
+		scoreBar.setSize(newScoreBarSize);
+	}
+}
+
 InputWidget* W_Hud::setWidgetIndex(const int& newIndex)
 {
+	// Default drawables used
+	shapes = { &lifeBar_bg, &lifeBar, &scoreBar, &scoreBar_bg, &levelDisplay };
+
 	switch (widgetIndex = newIndex)
 	{
-	case 0:
-		shapes = { &lifeBar_bg, &lifeBar };
+	case 0: // SELF
 		break;
 	default:
 		shapes = { };
@@ -93,7 +150,6 @@ InputWidget* W_Hud::getWidgetAtIndex(const int& atIndex)
 		return this;
 		break;
 	default:
-		return this;
 		break;
 	}
 

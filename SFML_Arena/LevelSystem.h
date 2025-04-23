@@ -8,7 +8,7 @@ private:
 	Inventory* owningInv = nullptr; // Pointer to the owning inventory
 
 	unsigned int collectedPoints = 0; // Current score
-	unsigned int stage = 1; // Current stage (1 by default)
+	unsigned int stage = 1; // Current stage (1 by default) (level of the player essentially)
 
 	void onUpdateScore(); // Update score function
 	void tryLevelUp(); // Check if the player leveled up
@@ -23,5 +23,8 @@ public:
 	void addPoints(unsigned int points);
 	void setPoints(unsigned int points);
 	int getPoints() const;
+	int getPointsNeeded() const;
+
+	unsigned int getStage() const;
 };
 
