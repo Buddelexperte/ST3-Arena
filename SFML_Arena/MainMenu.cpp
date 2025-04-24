@@ -10,11 +10,11 @@ W_MainMenu::W_MainMenu(InputWidget* parent)
 	: InputWidget(parent), optionsMenu(this), levelMenu(this), selectWeapon(this)
 {
 	const std::vector<RawButton> MAIN_MENU_CONSTR = {
-		{viewCenter + (sf::Vector2f{ 0, -300 }	 * viewSizeNorm),    sf::Vector2f{ 350, 120 }, sf::Color::Transparent,		100,"ARENA",							sf::Color::White},
-		{viewCenter + (sf::Vector2f{ 0, -200 }	 * viewSizeNorm),    sf::Vector2f{ 100, 100 }, sf::Color::Transparent,		16,	"Higscore: " + std::to_string(0),	sf::Color::White},
-		{viewCenter + (sf::Vector2f{ 0, 0 }		 * viewSizeNorm),       buttonSize,				sf::Color::White,			24,	"START",							sf::Color::Black},
-		{viewCenter + (sf::Vector2f{ 0, 150 }	 * viewSizeNorm),     buttonSize,				sf::Color::White,			24,	"OPTIONS",							sf::Color::Black},
-		{viewCenter + (sf::Vector2f{ 0, 300 }	 * viewSizeNorm),     buttonSize,				sf::Color::White,			24,	"QUIT",								sf::Color::Black}
+		{viewCenter + (sf::Vector2f{ 0, -300 }	 * viewSizeNorm),    sf::Vector2f{ 350, 120 } * viewSizeNorm, sf::Color::Transparent,		100,"ARENA",							sf::Color::White},
+		{viewCenter + (sf::Vector2f{ 0, -200 }	 * viewSizeNorm),    sf::Vector2f{ 100, 100 } * viewSizeNorm, sf::Color::Transparent,		16,	"Higscore: " + std::to_string(0),	sf::Color::White},
+		{viewCenter + (sf::Vector2f{ 0, 0 }		 * viewSizeNorm),    buttonSize,				sf::Color::White,			24,	"START",							sf::Color::Black},
+		{viewCenter + (sf::Vector2f{ 0, 150 }	 * viewSizeNorm),    buttonSize,				sf::Color::White,			24,	"OPTIONS",							sf::Color::Black},
+		{viewCenter + (sf::Vector2f{ 0, 300 }	 * viewSizeNorm),    buttonSize,				sf::Color::White,			24,	"QUIT",								sf::Color::Black}
 	};
 
 	menu_title.construct(MAIN_MENU_CONSTR[0]);

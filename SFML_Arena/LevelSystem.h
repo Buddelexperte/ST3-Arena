@@ -20,6 +20,8 @@ private:
 
 	void setStage(const unsigned int newStage);
 
+	unsigned int calculatePointsNeeded(const unsigned int stage) const; // Calculate points needed for a specific stage
+
 public:
 	LevelSystem(Inventory*);
 	~LevelSystem() = default;

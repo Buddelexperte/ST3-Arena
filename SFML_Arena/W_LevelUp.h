@@ -8,7 +8,6 @@ private:
 
 	Button bg;
 	Button B_Cancel;
-	Button B_Submit;
 
 public:
 	W_LevelUp(InputWidget*);

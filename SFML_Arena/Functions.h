@@ -17,7 +17,8 @@ static constexpr inline float SMALLEST_PRECISION = 1e-3f;
 // WEAK POINTER -------------------------------------------------------------------------------------------
 // Lock weak pointer into shared pointer
 template <typename T>
-std::shared_ptr<T> lockWeakPtr(const std::weak_ptr<T>& weakPtr) {
+std::shared_ptr<T> lockWeakPtr(const std::weak_ptr<T>& weakPtr)
+{
 	if (auto lockedPtr = weakPtr.lock()) {
 		return lockedPtr;
 	}
@@ -26,7 +27,8 @@ std::shared_ptr<T> lockWeakPtr(const std::weak_ptr<T>& weakPtr) {
 }
 
 // STRING -------------------------------------------------------------------------------------------
-inline std::string normalizeWeaponName(const std::string& name) {
+inline std::string normalizeWeaponName(const std::string& name)
+{
 	std::string normalized;
 	bool lastWasSpace = true; // To collapse multiple spaces
 
@@ -56,7 +58,8 @@ inline std::string normalizeWeaponName(const std::string& name) {
 	return normalized;
 }
 
-inline std::string toRoman(unsigned int number) {
+inline std::string toRoman(unsigned int number)
+{
 	static const std::pair<unsigned int, const char*> romanMap[] = {
 		{1000, "M"}, {900, "CM"}, {500, "D"}, {400, "CD"},
 		{100, "C"},  {90, "XC"},  {50, "L"},  {40, "XL"},

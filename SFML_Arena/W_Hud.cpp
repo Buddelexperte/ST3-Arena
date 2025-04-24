@@ -9,13 +9,13 @@ W_Hud::W_Hud()
 {
 	const std::vector<RawButton> HUD_CONSTR = {
 		// Health bar
-		{viewTL + (sf::Vector2f{ 0.0f, 0.0f }							),	sf::Vector2f{viewSize.x, 60.0f},		sf::Color(255, 255, 255, 255),	50, "100",	sf::Color::Black,		EAlignment::LEFT_TOP,		EAlignment::LEFT},
-		{viewTL + (sf::Vector2f{ 0.0f, 0.0f }							),	sf::Vector2f{viewSize.x, 60.0f},		sf::Color(255, 100, 100, 100),	0,	"",		sf::Color::Transparent, EAlignment::LEFT_TOP,		EAlignment::LEFT},
+		{viewTL + (sf::Vector2f{20.0f, 20.0f} * viewSizeNorm),									sf::Vector2f{maxHealthBarWidth, 60.0f} *viewSizeNorm,						sf::Color(255, 255, 255, 255),	50, "100",	sf::Color::Black,		EAlignment::LEFT_TOP,		EAlignment::LEFT},
+		{viewTL + (sf::Vector2f{20.0f, 20.0f} * viewSizeNorm),									sf::Vector2f{maxHealthBarWidth, 60.0f} * viewSizeNorm,						sf::Color(100, 0, 0, 255),	0,	"",		sf::Color::Transparent,		EAlignment::LEFT_TOP,		EAlignment::LEFT},
 		// Score Bar
-		{viewTL + (sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }		),	sf::Vector2f{0.0f, 10.0f},				sf::Color(255, 255, 255, 255),	0,	"",		sf::Color::Transparent, EAlignment::CENTER_BOTTOM,	EAlignment::LEFT},
-		{viewTL + (sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }		),	sf::Vector2f{viewSize.x / 3.0f, 10.0f},	sf::Color(255, 255, 255, 100),	0,	"",		sf::Color::Transparent, EAlignment::CENTER_BOTTOM,	EAlignment::RIGHT},
+		{viewTL + (sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }		),						sf::Vector2f{0.0f, 5.0f * viewSizeNorm.y},									sf::Color(255, 255, 255, 255),	0,	"",		sf::Color::Transparent, EAlignment::CENTER_BOTTOM,	EAlignment::LEFT},
+		{viewTL + (sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }		),						sf::Vector2f{viewSize.x / 3.0f, 5.0f * viewSizeNorm.y},					sf::Color(255, 255, 255, 100),	0,	"",		sf::Color::Transparent, EAlignment::CENTER_BOTTOM,	EAlignment::RIGHT},
 		// Level Display
-		{viewTL + (sf::Vector2f{ viewSize.x / 2.0f, viewSize.y - 30.0f }),	sf::Vector2f{50.0f, 50.0f},				sf::Color::Transparent,			30,	"1",	sf::Color::White,		EAlignment::CENTER_BOTTOM,	EAlignment::CENTER_BOTTOM}
+		{viewTL + (sf::Vector2f{ viewSize.x / 2.0f, viewSize.y - (20.0f * viewSizeNorm.y) }),	sf::Vector2f{50.0f, 50.0f} * viewSizeNorm,	sf::Color::Transparent,			30,	"1",	sf::Color::White,		EAlignment::CENTER_BOTTOM,	EAlignment::CENTER_BOTTOM}
 	};
 
 	lifeBar.construct(HUD_CONSTR[0]);
@@ -33,11 +33,12 @@ void W_Hud::construct()
 void W_Hud::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
-	lifeBar.setPos(		viewTL +	(sf::Vector2{ 0.0f, 0.0f }					));
-	lifeBar_bg.setPos(	viewTL +	(sf::Vector2{ 0.0f, 0.0f }					));
+
+	lifeBar.setPos(viewTL + (sf::Vector2f{ 20.0f, 20.0f } * viewSizeNorm));
+	lifeBar_bg.setPos(viewTL + (sf::Vector2f{ 20.0f, 20.0f } * viewSizeNorm));
 	scoreBar.setPos(	viewTL +	(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }));
 	scoreBar_bg.setPos(	viewTL +	(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }));
-	levelDisplay.setPos(viewTL +	(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }));
+	levelDisplay.setPos(viewTL +	(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y - (20.0f * viewSizeNorm.y) }));
 
 	updateLifeBar();
 	updateScoreBar();
@@ -47,7 +48,7 @@ void W_Hud::resetLifeBar()
 {
 	// Reset life bar to default values
 
-	const sf::Vector2f DEFAULT_LIFE_BAR_SIZE = sf::Vector2f(viewSize.x, lifeBar.getSize().y);
+	const sf::Vector2f DEFAULT_LIFE_BAR_SIZE = sf::Vector2f(maxHealthBarWidth, lifeBar.getSize().y);
 	lifeBar.setSize(DEFAULT_LIFE_BAR_SIZE);
 }
 
@@ -71,7 +72,7 @@ void W_Hud::updateLifeBar()
 
 	// Get needed width for life bar
 	sf::Vector2f lifeBarSize = lifeBar.getSize();
-	float newLifeBarWidth = viewSize.x * playerHealth;
+	float newLifeBarWidth = maxHealthBarWidth * playerHealth;
 
 	// Update life bar size if current width differs from desired width
 	if (lifeBarSize.x != newLifeBarWidth)
@@ -112,7 +113,7 @@ void W_Hud::updateScoreBar()
 	}
 
 	// Get needed width for score bar
-	sf::Vector2f scoreBarSize = scoreBar.getSize();
+	const sf::Vector2f scoreBarSize = scoreBar.getSize();
 	const float maxWidth = viewSize.x / 3.0f;
 	float newScoreBarWidth = maxWidth * (static_cast<float>(playerScore - pointsLastNeeded) / static_cast<float>(playerScoreNeeded));
 

@@ -6,6 +6,7 @@ class W_Hud : public InputWidget
 {
 private:
 	// Life bar
+	static constexpr float maxHealthBarWidth = 650.0f;
 	Button lifeBar;
 	Button lifeBar_bg;
 	float displayedHealth = 0.0f;

@@ -54,9 +54,17 @@ void Button::setAlignment(const EAlignment& alignment)
         // Anchor at the bottom left corner.
         B_Box.setOrigin(0.f, size.y);
         break;
+    case EAlignment::CENTER_TOP:
+        // Anchor at the center (both horizontally and vertically).
+        B_Box.setOrigin(size.x / 2.f, 0.0f);
+        break;
     case EAlignment::CENTER:
         // Anchor at the center (both horizontally and vertically).
         B_Box.setOrigin(size.x / 2.f, size.y / 2.f);
+        break;
+    case EAlignment::CENTER_BOTTOM:
+        // Anchor at the center (both horizontally and vertically).
+        B_Box.setOrigin(size.x / 2.f, size.y);
         break;
     case EAlignment::RIGHT_TOP:
         // Anchor at the top right corner.
