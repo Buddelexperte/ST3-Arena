@@ -84,6 +84,9 @@
     <Filter Include="Source\VisualInterfaces\Widgets\Options">
       <UniqueIdentifier>{5c67917d-6ecf-4c8d-8452-a942ce7701de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks">
+      <UniqueIdentifier>{ab0f80ee-67fb-492d-88d2-f16f76fb31a8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -209,14 +212,17 @@
     <ClCompile Include="MainMenu.cpp">
       <Filter>Source\VisualInterfaces\Widgets\MainMenu</Filter>
     </ClCompile>
-    <ClCompile Include="W_LevelUp.cpp">
-      <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
-    </ClCompile>
     <ClCompile Include="W_Inventory.cpp">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
     </ClCompile>
     <ClCompile Include="Background.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="W_LevelUp.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks</Filter>
+    </ClCompile>
+    <ClCompile Include="PerkFamilyDisplay.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -361,9 +367,6 @@
     <ClInclude Include="Slider.h">
       <Filter>Source\VisualInterfaces\Components</Filter>
     </ClInclude>
-    <ClInclude Include="W_LevelUp.h">
-      <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
-    </ClInclude>
     <ClInclude Include="MainMenuSubWidgets.h">
       <Filter>Source\VisualInterfaces\Widgets\MainMenu</Filter>
     </ClInclude>
@@ -405,6 +408,12 @@
     </ClInclude>
     <ClInclude Include="design.h">
       <Filter>Source\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="W_LevelUp.h">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks</Filter>
+    </ClInclude>
+    <ClInclude Include="PerkFamilyDisplay.h">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -162,6 +162,7 @@
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="PerkFamilyDisplay.cpp" />
     <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="PU_ExperienceOrb.cpp" />
     <ClCompile Include="P_Sparkle.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="MainMenuSubWidgets.h" />
     <ClInclude Include="Options.h" />
     <ClInclude Include="Particle.h" />
+    <ClInclude Include="PerkFamilyDisplay.h" />
     <ClInclude Include="Pickup.h" />
     <ClInclude Include="PU_ExperienceOrb.h" />
     <ClInclude Include="P_Sparkle.h" />

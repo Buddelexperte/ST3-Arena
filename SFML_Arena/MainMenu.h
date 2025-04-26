@@ -21,6 +21,7 @@ public:
 	void tick(const float& deltaTime) override;
 	W_MainMenu(InputWidget*);
 	void construct() override;
+
 	bool isMouseOver(const bool&) override;
 
 	InputWidget* setWidgetIndex(const int&) override;

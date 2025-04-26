@@ -54,7 +54,7 @@ public:
 	void clearTexture() { return B_Box.setTexture(nullptr); };
 	sf::Texture getTexture() const { return *B_Box.getTexture(); }
 
-	void setPos(const sf::Vector2f&); // Move the whole button to a new position
+	void setPos(const sf::Vector2f&, const bool& = true); // Move the whole button to a new position
 	void addPos(const sf::Vector2f&);
 	sf::Vector2f getPos() const { return B_Box.getPosition(); }
 	void setRot(const float& newRot) { B_Box.setRotation(newRot); }
@@ -73,4 +73,12 @@ public:
 	void onHover();
 	void onUnhover();
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+	// Update position based on the parent widget's "withPos" (viewTL or viewCenter eg)
+	void tick_pos(const sf::Vector2f& withPos)
+	{
+		static constexpr bool updateButtonData = false;
+		setPos(withPos + buttonData.pos, updateButtonData);
+	}
+	RawButton getButtonData() const { return buttonData; }
 };

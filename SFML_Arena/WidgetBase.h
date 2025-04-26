@@ -5,6 +5,8 @@
 #include "Input.h"
 #include "DrawableShape.h"
 
+#include "Functions.h" // For sf::Vector2f maths
+
 class GI_Arena;
 class InputWidget;
 
@@ -20,7 +22,9 @@ public:
 	virtual ~WidgetElement() = default;
 
 	virtual void construct() {}
+	virtual void construct(const sf::Vector2f&) {}
 	virtual void tick(const float& deltaTime) {}
+	virtual void tick_pos(const sf::Vector2f&) {}
 
 	InputWidget* getParent() const { return parent; }
 };

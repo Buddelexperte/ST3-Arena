@@ -322,9 +322,12 @@ void Button::setTextAlignment(const EAlignment& alignment)
     T_Text.setPosition(textPos);
 }
 
-void Button::setPos(const sf::Vector2f& newPos)
+void Button::setPos(const sf::Vector2f& newPos, const bool& updateButtonData)
 {
-	buttonData.pos = newPos;
+	// Update the buttonData position if required.
+    if (updateButtonData)
+	    buttonData.pos = newPos;
+
 	B_Box.setPosition(newPos);
 	setTextAlignment(buttonData.textAlignment);
 }
