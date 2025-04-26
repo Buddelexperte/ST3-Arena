@@ -51,7 +51,7 @@ void LevelSystem::setStage(const unsigned int newStage)
 
 unsigned int LevelSystem::calculatePointsNeeded(const unsigned int stage) const
 {
-	return (stage * 1);
+	return (stage * 100);
 }
 
 LevelSystem::LevelSystem(Inventory* owningInv)
