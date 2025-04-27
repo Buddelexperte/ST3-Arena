@@ -1,6 +1,6 @@
 #pragma once
 
-#include "WidgetBase.h"
+#include "WidgetElements.h"
 #include "SaveGame.h"
 
 class W_GameOver : public InputWidget

@@ -1,7 +1,7 @@
 #pragma once
 // Own libraries
 #include "FontManager.h"
-#include "DrawableShape.h"
+#include "WidgetBase.h"
 
 enum EAlignment
 {
@@ -29,12 +29,13 @@ struct RawButton
 	EAlignment textAlignment = EAlignment::CENTER;
 };
 
-class Button : public IDrawableShapes
+class Button : public WidgetElement
 {
 private:
 	FontManager::Font font = FontManager::Font::BUTTON_FONT; // [0] in FontManager.h
 	
 	RawButton buttonData;
+	static inline const sf::Color hoverColor_diff = sf::Color(-50, -50, -50, 0); // Color difference when hovering
 public:
 	sf::RectangleShape B_Box;
 	sf::Text T_Text;
@@ -42,29 +43,31 @@ public:
 
 	Button();
 	Button(const RawButton& constr);
+	Button(const RawButton& constr, InputWidget* parent);
 
 	void construct(const RawButton&);
 
+	// Text
 	void setText(const std::string&); // Set the texts content
 	std::string getText() const { return buttonData.text; }
 	void setColor(const sf::Color&, const bool& = false); // Set the color of the text or the button fill
 	sf::Color getColor(const bool& = false) const; // Get the color of the text or the button fill
 
+	// Texture
 	void setTexture(const sf::Texture&, const bool);
 	void clearTexture() { return B_Box.setTexture(nullptr); };
 	sf::Texture getTexture() const { return *B_Box.getTexture(); }
 
-	void setPos(const sf::Vector2f&, const bool& = true); // Move the whole button to a new position
-	void addPos(const sf::Vector2f&);
-	sf::Vector2f getPos() const { return B_Box.getPosition(); }
-	void setRot(const float& newRot) { B_Box.setRotation(newRot); }
-	float getRot() const { return B_Box.getRotation(); }
-	void setSize(const sf::Vector2f&);
-	sf::Vector2f getSize() const { return buttonData.size; }
+	// RenderInfo
+	void setPosition(const sf::Vector2f& newPos) override; // Move the whole button to a new position
+	void addPosition(const sf::Vector2f& deltaPos, const bool& bTickBased = true) override;
+	void setRotation(const float& newRot) override;
+	void setSize(const sf::Vector2f& newSize) override;
 
+	// Alignment
 	void setAlignment(const EAlignment& alignment);
-	void setTextAlignment(const EAlignment& alignment);
 	EAlignment getAlignment() const { return buttonData.alignment; }
+	void setTextAlignment(const EAlignment& alignment);
 	EAlignment getTextAlignment() const { return buttonData.textAlignment; }
 
 
@@ -74,11 +77,5 @@ public:
 	void onUnhover();
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-	// Update position based on the parent widget's "withPos" (viewTL or viewCenter eg)
-	void tick_pos(const sf::Vector2f& withPos)
-	{
-		static constexpr bool updateButtonData = false;
-		setPos(withPos + buttonData.pos, updateButtonData);
-	}
 	RawButton getButtonData() const { return buttonData; }
 };

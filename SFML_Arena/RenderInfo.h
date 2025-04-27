@@ -4,6 +4,7 @@
 class IMovable  // Interface for movable entities
 {
 public:
+	// Pos, Size, Rot, Velocity, Color
 	struct RenderInfo {
 		sf::Vector2f pos = sf::Vector2f(0.0f, 0.0f);
 		sf::Vector2f size = sf::Vector2f(100.0f, 100.0f);
@@ -12,7 +13,8 @@ public:
 		sf::Color color = sf::Color::White;
 
 		bool operator==(const RenderInfo& other) const {
-			return pos == other.pos &&
+			return 
+				pos == other.pos &&
 				size == other.size &&
 				rot == other.rot &&
 				velocity == other.velocity &&
@@ -36,7 +38,7 @@ public:
 	virtual void setPosition(const sf::Vector2f& newPos)
 		{ renderInfo.pos = newPos; }
 
-	virtual void addPosition(const sf::Vector2f& deltaPos, const bool& bVelocityBased = true)
+	virtual void addPosition(const sf::Vector2f& deltaPos, const bool& bTickBased = true)
 		{ renderInfo.pos += deltaPos; }
 
 	virtual sf::Vector2f getPosition() const

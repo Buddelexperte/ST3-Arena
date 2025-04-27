@@ -72,11 +72,11 @@ void W_MainMenu::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 
-	menu_title.setPos(widgetOffset + (sf::Vector2f{ 0, -300 } * viewSizeNorm));
-	menu_highscore.setPos(widgetOffset + (sf::Vector2f{ 0, -200 } * viewSizeNorm));
-	menu_startButton.setPos(widgetOffset + (sf::Vector2f{ 0, 0 } * viewSizeNorm));
-	menu_optionsButton.setPos(widgetOffset + (sf::Vector2f{ 0, 150 } * viewSizeNorm));
-	menu_quitButton.setPos(widgetOffset + (sf::Vector2f{ 0, 300 } * viewSizeNorm));
+	menu_title.setPosition(widgetOffset + (sf::Vector2f{ 0, -300 } * viewSizeNorm));
+	menu_highscore.setPosition(widgetOffset + (sf::Vector2f{ 0, -200 } * viewSizeNorm));
+	menu_startButton.setPosition(widgetOffset + (sf::Vector2f{ 0, 0 } * viewSizeNorm));
+	menu_optionsButton.setPosition(widgetOffset + (sf::Vector2f{ 0, 150 } * viewSizeNorm));
+	menu_quitButton.setPosition(widgetOffset + (sf::Vector2f{ 0, 300 } * viewSizeNorm));
 }
 
 bool W_MainMenu::isMouseOver(const bool& checkForClick = false)

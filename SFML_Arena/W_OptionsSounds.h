@@ -1,6 +1,6 @@
 #pragma once
 
-#include "WidgetBase.h"
+#include "WidgetElements.h"
 
 class W_OptionsSounds : public InputWidget // OptionSoundMenu Widget ------------------------------------------
 {

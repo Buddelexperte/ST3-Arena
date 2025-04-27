@@ -24,10 +24,10 @@ W_LevelUp::W_LevelUp(InputWidget* parent)
 	// Perk Family constructors
 
 	const std::vector<sf::Vector2f> FAMILY_POS = {
-		(sf::Vector2f{ -690.0f, -100.0f } * viewSizeNorm),
-		(sf::Vector2f{ -230.0f, -100.0f } * viewSizeNorm),
-		(sf::Vector2f{ 230.0f, -100.0f } * viewSizeNorm),
-		(sf::Vector2f{ 690.0f, -100.0f } * viewSizeNorm)
+		(sf::Vector2f{ -690.0f, -50.0f } * viewSizeNorm),
+		(sf::Vector2f{ -230.0f, -50.0f } * viewSizeNorm),
+		(sf::Vector2f{ 230.0f, -50.0f } * viewSizeNorm),
+		(sf::Vector2f{ 690.0f, -50.0f } * viewSizeNorm)
 	};
 
 	pf_display_1.construct(FAMILY_POS[0]);
@@ -62,13 +62,13 @@ void W_LevelUp::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 
-	bg.tick_pos(widgetOffset);
-	B_Skip.tick_pos(widgetOffset);
+	bg.tick(deltaTime);
+	B_Skip.tick(deltaTime);
 
-	pf_display_1.tick_pos(widgetOffset);
-	pf_display_2.tick_pos(widgetOffset);
-	pf_display_3.tick_pos(widgetOffset);
-	pf_display_4.tick_pos(widgetOffset);
+	pf_display_1.tick(deltaTime);
+	pf_display_2.tick(deltaTime);
+	pf_display_3.tick(deltaTime);
+	pf_display_4.tick(deltaTime);
 }
 
 InputWidget* W_LevelUp::setWidgetIndex(const int& toIndex)

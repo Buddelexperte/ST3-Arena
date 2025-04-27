@@ -23,11 +23,11 @@ void W_LevelMenu::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 
-	levelmenu_title.setPos(widgetOffset + sf::Vector2f(0.0f, -300.0f));
-	level1_Button.setPos(widgetOffset + sf::Vector2f(-500.0f, 0.0f));
-	level2_Button.setPos(widgetOffset + sf::Vector2f(0.0f, 0.0f));
-	level3_Button.setPos(widgetOffset + sf::Vector2f(500.0f, 0.0f));
-	return_Button.setPos(widgetOffset + sf::Vector2f(0.0f, 300.0f));
+	levelmenu_title.setPosition(widgetOffset + sf::Vector2f(0.0f, -300.0f));
+	level1_Button.setPosition(widgetOffset + sf::Vector2f(-500.0f, 0.0f));
+	level2_Button.setPosition(widgetOffset + sf::Vector2f(0.0f, 0.0f));
+	level3_Button.setPosition(widgetOffset + sf::Vector2f(500.0f, 0.0f));
+	return_Button.setPosition(widgetOffset + sf::Vector2f(0.0f, 300.0f));
 }
 
 void W_LevelMenu::construct()

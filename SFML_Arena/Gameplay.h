@@ -1,8 +1,6 @@
 #pragma once
 
 #include "GameplaySubWidgets.h" // Own header file
-#include "WidgetBase.h"
-#include "Background.h"
 
 class W_Gameplay : public InputWidget // Gameplay Widget ------------------------------------------
 {

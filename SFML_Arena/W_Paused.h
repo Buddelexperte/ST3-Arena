@@ -1,7 +1,7 @@
 #pragma once
 
-#include "WidgetBase.h"
-#include "Options.h"
+#include "WidgetElements.h"
+#include "Options.h" // Component
 
 class W_Paused : public InputWidget
 {

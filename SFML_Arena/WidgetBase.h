@@ -1,5 +1,4 @@
 #pragma once
-#include "Button.h"
 #include "BaseTypes.h"
 #include "RenderInfo.h"
 #include "Input.h"
@@ -23,8 +22,17 @@ public:
 
 	virtual void construct() {}
 	virtual void construct(const sf::Vector2f&) {}
-	virtual void tick(const float& deltaTime) {}
-	virtual void tick_pos(const sf::Vector2f&) {}
+	virtual void tick(const float& deltaTime)
+	{
+		tick_pos(widgetOffset);
+	}
+
+	virtual void tick_pos(const sf::Vector2f& withPos)
+	{
+		const bool bTickUpdate = true;
+
+		addPosition(withPos, bTickUpdate);
+	}
 
 	InputWidget* getParent() const { return parent; }
 };

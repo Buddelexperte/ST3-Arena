@@ -34,11 +34,11 @@ void W_Hud::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 
-	lifeBar.setPos(viewTL + (sf::Vector2f{ 20.0f, 20.0f } * viewSizeNorm));
-	lifeBar_bg.setPos(viewTL + (sf::Vector2f{ 20.0f, 20.0f } * viewSizeNorm));
-	scoreBar.setPos(	viewTL +	(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }));
-	scoreBar_bg.setPos(	viewTL +	(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }));
-	levelDisplay.setPos(viewTL +	(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y - (20.0f * viewSizeNorm.y) }));
+	lifeBar.setPosition(viewTL + (sf::Vector2f{ 20.0f, 20.0f } * viewSizeNorm));
+	lifeBar_bg.setPosition(viewTL + (sf::Vector2f{ 20.0f, 20.0f } * viewSizeNorm));
+	scoreBar.setPosition(	viewTL +	(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }));
+	scoreBar_bg.setPosition(	viewTL +	(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }));
+	levelDisplay.setPosition(viewTL +	(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y - (20.0f * viewSizeNorm.y) }));
 
 	updateLifeBar();
 	updateScoreBar();

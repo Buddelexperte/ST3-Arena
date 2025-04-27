@@ -58,10 +58,10 @@ void W_Paused::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 
-	pause_title.setPos(widgetOffset + sf::Vector2f{ 0.0f, -300.0f });
-	pause_resumeButton.setPos(widgetOffset + sf::Vector2f{ 0.0f, 0.0f });
-	pause_optionsButton.setPos(widgetOffset + sf::Vector2f{ 0.0f, 150.0f });
-	pause_quitButton.setPos(widgetOffset + sf::Vector2f{ 0.0f, 300.0f });
+	pause_title.setPosition(widgetOffset + sf::Vector2f{ 0.0f, -300.0f });
+	pause_resumeButton.setPosition(widgetOffset + sf::Vector2f{ 0.0f, 0.0f });
+	pause_optionsButton.setPosition(widgetOffset + sf::Vector2f{ 0.0f, 150.0f });
+	pause_quitButton.setPosition(widgetOffset + sf::Vector2f{ 0.0f, 300.0f });
 }
 
 bool W_Paused::isMouseOver(const bool& checkForClick = false)

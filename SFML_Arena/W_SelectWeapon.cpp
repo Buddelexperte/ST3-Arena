@@ -35,14 +35,14 @@ void W_SelectWeapon::tick(const float& deltaTime)
 
 	WEAPON_SPACING_X = (viewHalfSize.x / NUM_WEAPONS);
 
-	inventory_title.setPos(widgetOffset + sf::Vector2f(0.0f, -300.0f));
+	inventory_title.setPosition(widgetOffset + sf::Vector2f(0.0f, -300.0f));
 
-	item1_Button.setPos(widgetOffset + sf::Vector2f(-1.5f * WEAPON_SPACING_X, 0.0f));
-	item2_Button.setPos(widgetOffset + sf::Vector2f(-0.5f * WEAPON_SPACING_X, 0.0f));
-	item3_Button.setPos(widgetOffset + sf::Vector2f(0.5f * WEAPON_SPACING_X, 0.0f));
-	item4_Button.setPos(widgetOffset + sf::Vector2f(1.5f * WEAPON_SPACING_X, 0.0f));
+	item1_Button.setPosition(widgetOffset + sf::Vector2f(-1.5f * WEAPON_SPACING_X, 0.0f));
+	item2_Button.setPosition(widgetOffset + sf::Vector2f(-0.5f * WEAPON_SPACING_X, 0.0f));
+	item3_Button.setPosition(widgetOffset + sf::Vector2f(0.5f * WEAPON_SPACING_X, 0.0f));
+	item4_Button.setPosition(widgetOffset + sf::Vector2f(1.5f * WEAPON_SPACING_X, 0.0f));
 
-	return_Button.setPos(widgetOffset + sf::Vector2f(0.0f, 300.0f));
+	return_Button.setPosition(widgetOffset + sf::Vector2f(0.0f, 300.0f));
 }
 
 InputWidget* W_SelectWeapon::setWidgetIndex(const int& newIndex)

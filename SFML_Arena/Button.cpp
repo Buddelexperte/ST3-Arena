@@ -10,6 +10,11 @@ Button::Button()
 }
 
 Button::Button(const RawButton& constr)
+	: Button(constr, nullptr)
+{}
+
+Button::Button(const RawButton& constr, InputWidget* parent)
+	: WidgetElement(parent)
 {
 	construct(constr);
 }
@@ -31,7 +36,11 @@ void Button::construct(const RawButton& constr)
 	// Apply alignment and position
 	setAlignment(constr.alignment);
 	setTextAlignment(constr.textAlignment);
-	setPos(constr.pos);
+	setPosition(constr.pos);
+
+    // 
+	RenderInfo renderInfo = { buttonData.pos, buttonData.size, 0.0f, { 0.f, 0.f }, buttonData.color };
+	setRenderInfo(renderInfo);
 }
 
 void Button::setAlignment(const EAlignment& alignment)
@@ -322,23 +331,40 @@ void Button::setTextAlignment(const EAlignment& alignment)
     T_Text.setPosition(textPos);
 }
 
-void Button::setPos(const sf::Vector2f& newPos, const bool& updateButtonData)
+void Button::setPosition(const sf::Vector2f& newPos)
 {
-	// Update the buttonData position if required.
-    if (updateButtonData)
-	    buttonData.pos = newPos;
+	WidgetElement::setPosition(newPos);
 
+    buttonData.pos = newPos;
+
+	// Update the buttonData position if required.
 	B_Box.setPosition(newPos);
 	setTextAlignment(buttonData.textAlignment);
 }
 
-void Button::addPos(const sf::Vector2f& delta)
+void Button::addPosition(const sf::Vector2f& deltaPos, const bool& bTickBased)
 {
-	setPos(buttonData.pos + delta);
+	WidgetElement::addPosition(deltaPos, bTickBased);
+
+    if (!bTickBased)
+		buttonData.pos += deltaPos;
+
+    B_Box.setPosition(buttonData.pos + deltaPos);
+    setTextAlignment(buttonData.textAlignment);
+}
+
+void Button::setRotation(const float& newRot)
+{
+	WidgetElement::setRotation(newRot);
+
+    B_Box.setRotation(newRot);
+	T_Text.setRotation(newRot);
 }
 
 void Button::setSize(const sf::Vector2f& newSize)
 {
+    WidgetElement::setSize(newSize);
+
     buttonData.size = newSize;
     B_Box.setSize(newSize);
 	setAlignment(buttonData.alignment);
@@ -399,9 +425,22 @@ void Button::onClick() const
 		soundManager.play(soundManager.getSound_Click());
 }
 
-void Button::onHover() { /* Optional hover logic */ }
+void Button::onHover() 
+{ 
+	// Change color on hover
+	sf::Color newColor = buttonData.color + hoverColor_diff;
+	sf::Color newTextColor = buttonData.textColor + hoverColor_diff;
 
-void Button::onUnhover() { /* Optional unhover logic */ }
+	B_Box.setFillColor(newColor);
+	T_Text.setFillColor(newTextColor);
+}
+
+void Button::onUnhover() 
+{
+	// Reset color
+	B_Box.setFillColor(buttonData.color);
+	T_Text.setFillColor(buttonData.textColor);
+}
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {

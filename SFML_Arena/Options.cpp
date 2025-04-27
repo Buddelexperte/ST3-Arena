@@ -68,10 +68,10 @@ void W_Options::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 
-	options_title.setPos(widgetOffset + sf::Vector2f{ 0, -300 });
-	options_graphics.setPos(widgetOffset + sf::Vector2f{ 0, 0 });
-	options_sounds.setPos(widgetOffset + sf::Vector2f{ 0, 150 });
-	options_return.setPos(widgetOffset + sf::Vector2f{ 0, 300 });
+	options_title.setPosition(widgetOffset + sf::Vector2f{ 0, -300 });
+	options_graphics.setPosition(widgetOffset + sf::Vector2f{ 0, 0 });
+	options_sounds.setPosition(widgetOffset + sf::Vector2f{ 0, 150 });
+	options_return.setPosition(widgetOffset + sf::Vector2f{ 0, 300 });
 }
 
 bool W_Options::isMouseOver(const bool& checkForClick)

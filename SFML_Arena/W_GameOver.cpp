@@ -31,10 +31,10 @@ void W_GameOver::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 
-	gameOver_title.setPos(widgetOffset + sf::Vector2f{ 0.0f, -300.0f });
-	gameOver_score.setPos(widgetOffset + sf::Vector2f{ 0.0f, -200.0f });
-	gameOver_kills.setPos(widgetOffset + sf::Vector2f{ 0.0f, -180.0f });
-	gameOver_quitButton.setPos(widgetOffset + sf::Vector2f{ 0.0f, 0.0f });
+	gameOver_title.setPosition(widgetOffset + sf::Vector2f{ 0.0f, -300.0f });
+	gameOver_score.setPosition(widgetOffset + sf::Vector2f{ 0.0f, -200.0f });
+	gameOver_kills.setPosition(widgetOffset + sf::Vector2f{ 0.0f, -180.0f });
+	gameOver_quitButton.setPosition(widgetOffset + sf::Vector2f{ 0.0f, 0.0f });
 }
 
 void W_GameOver::updateStats(const SaveGame_Struct& currData)

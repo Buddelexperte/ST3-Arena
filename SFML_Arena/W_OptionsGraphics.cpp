@@ -23,7 +23,7 @@ void W_OptionsGraphics::construct()
 void W_OptionsGraphics::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
-	optionsGraphics_test.setPos(widgetOffset + sf::Vector2f{ 0, -300 });
+	optionsGraphics_test.setPosition(widgetOffset + sf::Vector2f{ 0, -300 });
 }
 
 bool W_OptionsGraphics::isMouseOver(const bool& checkForClick = false)

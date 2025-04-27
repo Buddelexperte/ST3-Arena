@@ -7,7 +7,7 @@ enum class EntityType {
 	Projectile,
 	Pickup,
 	Indicator, // After flashlight shader
-	PARTICLE // Before flashlight shader
+	Particle // Before flashlight shader
 };
 
 enum InfoType {
@@ -19,6 +19,8 @@ enum InfoType {
 	ROTATION	= 1 << 4,	// 010000: Rotation
 	HEALTH		= 1 << 5	// 100000: Health
 };
+
+#include <cstdint>
 
 // Overload bitwise operators for InfoType if necessary:
 inline InfoType operator|(InfoType a, InfoType b) {

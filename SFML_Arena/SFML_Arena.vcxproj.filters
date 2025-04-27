@@ -415,6 +415,9 @@
     <ClInclude Include="PerkFamilyDisplay.h">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks</Filter>
     </ClInclude>
+    <ClInclude Include="WidgetElements.h">
+      <Filter>Source\libs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\openal32.dll">

@@ -23,7 +23,7 @@ void W_OptionsSounds::construct()
 void W_OptionsSounds::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
-	optionsSounds_test.setPos(widgetOffset + sf::Vector2f{ 0, -300 });
+	optionsSounds_test.setPosition(widgetOffset + sf::Vector2f{ 0, -300 });
 }
 
 bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)

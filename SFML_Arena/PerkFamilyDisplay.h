@@ -1,6 +1,6 @@
 #pragma once
 
-#include "WidgetBase.h"
+#include "WidgetElements.h"
 
 class PerkFamily_Display : public WidgetElement
 {
@@ -19,36 +19,26 @@ public:
 
 	void construct(const sf::Vector2f& startPos)
 	{
-		addPosition(startPos);
-	}
-
-	void tick_pos(const sf::Vector2f& withPos)
-	{
-		WidgetElement::tick_pos(withPos);
-
-		border.tick_pos(withPos);
-		T_name.tick_pos(withPos);
-		I_Icon.tick_pos(withPos);
-		T_desc.tick_pos(withPos);
+		setPosition(startPos);
 	}
 
 	void setPosition(const sf::Vector2f& pos) override
 	{
-		const bool bVelocityBased = false;
+		constexpr bool bTickBased = false;
 		sf::Vector2f posDiff = pos - getPosition();
 
 		WidgetElement::setPosition(pos);
 
-		addPosition(posDiff, bVelocityBased);
+		addPosition(posDiff, bTickBased);
 	}
 
-	void addPosition(const sf::Vector2f& delta, const bool& = true) override
+	void addPosition(const sf::Vector2f& delta, const bool& bTickBased = true) override
 	{
-		WidgetElement::addPosition(delta);
+		WidgetElement::addPosition(delta, bTickBased);
 
-		border.addPos(delta);
-		T_name.addPos(delta);
-		T_desc.addPos(delta);
-		I_Icon.addPos(delta);
+		border.addPosition(delta, bTickBased);
+		T_name.addPosition(delta, bTickBased);
+		T_desc.addPosition(delta, bTickBased);
+		I_Icon.addPosition(delta, bTickBased);
 	}
 };

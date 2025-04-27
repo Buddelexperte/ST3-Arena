@@ -4,7 +4,7 @@
 #include "GameInstance.h"
 
 Particle::Particle()
-	: Entity(EntityType::PARTICLE),
+	: Entity(EntityType::Particle),
 	IHasLifetime(0.0f),
 	collisionBox(this, getPosition(), getSize())
 {

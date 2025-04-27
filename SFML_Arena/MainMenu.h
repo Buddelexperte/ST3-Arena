@@ -1,7 +1,6 @@
 #pragma once
 
-#include "WidgetBase.h"
-#include "MainMenuSubWidgets.h"
+#include "MainMenuSubWidgets.h" // Own header
 
 class W_MainMenu : public InputWidget // MainMenu Widget ------------------------------------------
 {

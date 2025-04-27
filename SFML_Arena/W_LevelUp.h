@@ -1,8 +1,7 @@
 #pragma once
 
-#include "WidgetBase.h"
-
-#include "PerkFamilyDisplay.h"
+#include "WidgetElements.h"
+#include "PerkFamilyDisplay.h" // Component
 
 class W_LevelUp : public InputWidget
 {

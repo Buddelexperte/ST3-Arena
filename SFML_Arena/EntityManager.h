@@ -99,7 +99,7 @@ public:
 		case EntityType::Enemy: case EntityType::Pickup:
 			renderLayers[0].addEntity(renderInfo, entityKey);
 			break;
-		case EntityType::Projectile: case EntityType::PARTICLE:
+		case EntityType::Projectile: case EntityType::Particle:
 			renderLayers[1].addEntity(renderInfo, entityKey);
 			break;
 		default:

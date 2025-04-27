@@ -245,6 +245,7 @@
     <ClInclude Include="Weapon_Pistol.h" />
     <ClInclude Include="Weapon_Rifle.h" />
     <ClInclude Include="Weapon_Shotgun.h" />
+    <ClInclude Include="WidgetElements.h" />
     <ClInclude Include="Widgets.h" />
     <ClInclude Include="W_GameOver.h" />
     <ClInclude Include="W_Hud.h" />

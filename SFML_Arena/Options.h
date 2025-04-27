@@ -1,6 +1,7 @@
 #pragma once
 
-#include "WidgetBase.h"
+#include "WidgetElements.h"
+
 #include "W_OptionsGraphics.h"
 #include "W_OptionsSounds.h"
 
