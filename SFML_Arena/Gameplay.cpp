@@ -7,7 +7,8 @@
 
 W_Gameplay::W_Gameplay(InputWidget* parent)
 	: InputWidget(parent),
-	pauseMenu(this), gameOverScreen(this), inventoryScreen(this), hud(gameInstance().getHud()), levelUpScreen(this), background(this)
+	pauseMenu(this), gameOverScreen(this), inventoryScreen(this), levelUpScreen(this), background(this),
+	hud(gameInstance().getHud())
 {
 	// Done out
 	std::cout << "- Constructed GameplayWidget" << std::endl;

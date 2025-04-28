@@ -2,14 +2,16 @@
 
 #include "W_LevelMenu.h" // Own header file
 
-W_LevelMenu::W_LevelMenu(InputWidget* parent) : InputWidget(parent)
+W_LevelMenu::W_LevelMenu(InputWidget* parent) 
+	: InputWidget(parent),
+	levelmenu_title(this), level1_Button(this), level2_Button(this), level3_Button(this), return_Button(this)
 {
 	const std::vector<RawButton> LEVEL_MENU_CONSTR = {
-		{viewCenter + sf::Vector2f(0.0f, -300.0f),	sf::Vector2f(100.0f, 100.0f),	sf::Color::Transparent,		100,	"LEVEL SELECT", sf::Color::White},
-		{viewCenter + sf::Vector2f(-500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"LEVEL 1",		sf::Color::White},
-		{viewCenter + sf::Vector2f(0.0f, 0.0f),		sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"LEVEL 2",		sf::Color::White},
-		{viewCenter + sf::Vector2f(500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"LEVEL 3",		sf::Color::White},
-		{viewCenter + sf::Vector2f(0.0f, 300.0f),	sf::Vector2f(200.0f, 100.0f),	sf::Color::White,			24,		"RETURN",		sf::Color::Black}
+		{sf::Vector2f(0.0f, -300.0f),	sf::Vector2f(100.0f, 100.0f),	sf::Color::Transparent,		100,	"LEVEL SELECT", sf::Color::White},
+		{sf::Vector2f(-500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"LEVEL 1",		sf::Color::White},
+		{sf::Vector2f(0.0f, 0.0f),		sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"LEVEL 2",		sf::Color::White},
+		{sf::Vector2f(500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"LEVEL 3",		sf::Color::White},
+		{sf::Vector2f(0.0f, 300.0f),	sf::Vector2f(200.0f, 100.0f),	sf::Color::White,			24,		"RETURN",		sf::Color::Black}
 	};
 
 	levelmenu_title.construct(LEVEL_MENU_CONSTR[0]);
@@ -23,11 +25,11 @@ void W_LevelMenu::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 
-	levelmenu_title.setPosition(widgetOffset + sf::Vector2f(0.0f, -300.0f));
-	level1_Button.setPosition(widgetOffset + sf::Vector2f(-500.0f, 0.0f));
-	level2_Button.setPosition(widgetOffset + sf::Vector2f(0.0f, 0.0f));
-	level3_Button.setPosition(widgetOffset + sf::Vector2f(500.0f, 0.0f));
-	return_Button.setPosition(widgetOffset + sf::Vector2f(0.0f, 300.0f));
+	levelmenu_title.tick(deltaTime);
+	level1_Button.tick(deltaTime);
+	level2_Button.tick(deltaTime);
+	level3_Button.tick(deltaTime);
+	return_Button.tick(deltaTime);
 }
 
 void W_LevelMenu::construct()

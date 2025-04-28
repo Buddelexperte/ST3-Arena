@@ -11,6 +11,7 @@ Player::Player()
 	: 
 	Entity(EntityType::Player),
 	inventory(this), // Player inventory
+	hud(nullptr), // Player HUD (no owner)
 	invincibility(0.5f), // 0.5 seconds of invincibility after hit
 	collisionBox(this, getPosition(), HITBOX_SIZE) // Collision box centered on player, hals as big as sprite
 {

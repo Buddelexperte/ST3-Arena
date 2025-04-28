@@ -6,6 +6,16 @@
 
 // WidgetMenu Code --------------------------------------------------------------------------------
 
+sf::Vector2f WidgetElement::getCorrectTickCorrection() const
+{
+	if (parent != nullptr)
+	{
+		return parent->getCorrectTickCorrection();
+	}
+
+	return IDrawableShapes::viewCenter;
+}
+
 WidgetElement::WidgetElement(InputWidget* parentWidget)
 	: parent(parentWidget)
 {

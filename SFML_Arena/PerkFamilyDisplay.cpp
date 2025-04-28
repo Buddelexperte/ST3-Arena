@@ -3,7 +3,8 @@
 #include "PerkFamilyDisplay.h" // Own header file
 
 PerkFamily_Display::PerkFamily_Display(InputWidget* parent)
-	: WidgetElement(parent)
+	: WidgetElement(parent),
+	border(parent), T_name(parent), I_Icon(parent), T_desc(parent)
 {
 	const std::vector<RawButton> PERK_FAMILY_CONSTR = {
 		// Background (border)

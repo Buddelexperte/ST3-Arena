@@ -41,9 +41,7 @@ public:
 	sf::Text T_Text;
 	// Constructors
 
-	Button();
-	Button(const RawButton& constr);
-	Button(const RawButton& constr, InputWidget* parent);
+	Button(InputWidget* parent);
 
 	void construct(const RawButton&);
 

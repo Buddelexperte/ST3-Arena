@@ -3,13 +3,15 @@
 #include "W_GameOver.h" // Own header file
 #include "GameInstance.h"
 
-W_GameOver::W_GameOver(InputWidget* parent) : InputWidget(parent)
+W_GameOver::W_GameOver(InputWidget* parent) 
+	: InputWidget(parent),
+	gameOver_title(this), gameOver_score(this), gameOver_kills(this), gameOver_quitButton(this)
 {
 	const std::vector<RawButton> GAME_OVER_CONSTR = {
-		{viewCenter + sf::Vector2f{ 0.0f, -300.0f },	sf::Vector2f{ 350.0f, 120.0f }, sf::Color::Transparent,   100, "GAME OVER",						sf::Color::White},
-		{viewCenter + sf::Vector2f{ 0.0f, -200.0f },	sf::Vector2f{ 100.0f, 100.0f }, sf::Color::Transparent,   16, "Score: " + std::to_string(0),	sf::Color::White},
-		{viewCenter + sf::Vector2f{ 0.0f, -180.0f },	sf::Vector2f{ 100.0f, 100.0f }, sf::Color::Transparent,   16, "Kills: " + std::to_string(0),	sf::Color::White},
-		{viewCenter + sf::Vector2f{ 0.0f, 0.0f },		sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "QUIT",							sf::Color::Black}
+		{sf::Vector2f{ 0.0f, -300.0f },		sf::Vector2f{ 350.0f, 120.0f },		sf::Color::Transparent, 100,	"GAME OVER",					sf::Color::White},
+		{sf::Vector2f{ 0.0f, -200.0f },		sf::Vector2f{ 100.0f, 100.0f },		sf::Color::Transparent, 16,		"Score: " + std::to_string(0),	sf::Color::White},
+		{sf::Vector2f{ 0.0f, -180.0f },		sf::Vector2f{ 100.0f, 100.0f },		sf::Color::Transparent, 16,		"Kills: " + std::to_string(0),	sf::Color::White},
+		{sf::Vector2f{ 0.0f, 0.0f },		sf::Vector2f{ 300.0f, 100.0f },		sf::Color::White,	24,			"QUIT",							sf::Color::Black}
 	};
 
 	gameOver_title.construct(GAME_OVER_CONSTR[0]);
@@ -31,10 +33,10 @@ void W_GameOver::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 
-	gameOver_title.setPosition(widgetOffset + sf::Vector2f{ 0.0f, -300.0f });
-	gameOver_score.setPosition(widgetOffset + sf::Vector2f{ 0.0f, -200.0f });
-	gameOver_kills.setPosition(widgetOffset + sf::Vector2f{ 0.0f, -180.0f });
-	gameOver_quitButton.setPosition(widgetOffset + sf::Vector2f{ 0.0f, 0.0f });
+	gameOver_title.tick(deltaTime);
+	gameOver_score.tick(deltaTime);
+	gameOver_kills.tick(deltaTime);
+	gameOver_quitButton.tick(deltaTime);
 }
 
 void W_GameOver::updateStats(const SaveGame_Struct& currData)

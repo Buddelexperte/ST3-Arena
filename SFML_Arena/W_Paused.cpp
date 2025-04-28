@@ -3,19 +3,31 @@
 #include "W_Paused.h" // Own header file
 #include "GameInstance.h"
 
-W_Paused::W_Paused(InputWidget* parent) : InputWidget(parent), optionsMenu(this)
+W_Paused::W_Paused(InputWidget* parent) 
+	: InputWidget(parent), optionsMenu(this),
+	pause_title(this), pause_resumeButton(this), pause_optionsButton(this), pause_quitButton(this)
 {
 	const std::vector<RawButton> PAUSED_CONSTR = {
-		{viewCenter + sf::Vector2f{ 0.0f, -300.0f },    sf::Vector2f{ 350.0f, 120.0f }, sf::Color::Transparent,   100, "PAUSE",		sf::Color::White},
-		{viewCenter + sf::Vector2f{ 0.0f, 0.0f },       sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "RESUME",		sf::Color::Black},
-		{viewCenter + sf::Vector2f{ 0.0f, 150.0f },     sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "OPTIONS",	sf::Color::Black},
-		{viewCenter + sf::Vector2f{ 0.0f, 300.0f },     sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "QUIT",		sf::Color::Black}
+		{sf::Vector2f{ 0.0f, -300.0f },    sf::Vector2f{ 350.0f, 120.0f }, sf::Color::Transparent,   100, "PAUSE",		sf::Color::White},
+		{sf::Vector2f{ 0.0f, 0.0f },       sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "RESUME",		sf::Color::Black},
+		{sf::Vector2f{ 0.0f, 150.0f },     sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "OPTIONS",	sf::Color::Black},
+		{sf::Vector2f{ 0.0f, 300.0f },     sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "QUIT",		sf::Color::Black}
 	};
 
 	pause_title.construct(PAUSED_CONSTR[0]);
 	pause_resumeButton.construct(PAUSED_CONSTR[1]);
 	pause_optionsButton.construct(PAUSED_CONSTR[2]);
 	pause_quitButton.construct(PAUSED_CONSTR[3]);
+}
+
+void W_Paused::tick(const float& deltaTime)
+{
+	InputWidget::tick(deltaTime);
+
+	pause_title.tick(deltaTime);
+	pause_resumeButton.tick(deltaTime);
+	pause_optionsButton.tick(deltaTime);
+	pause_quitButton.tick(deltaTime);
 }
 
 void W_Paused::construct()
@@ -52,16 +64,6 @@ InputWidget* W_Paused::setWidgetIndex(const int& newIndex)
 		break;
 	}
 	return getActiveChild();
-}
-
-void W_Paused::tick(const float& deltaTime)
-{
-	InputWidget::tick(deltaTime);
-
-	pause_title.setPosition(widgetOffset + sf::Vector2f{ 0.0f, -300.0f });
-	pause_resumeButton.setPosition(widgetOffset + sf::Vector2f{ 0.0f, 0.0f });
-	pause_optionsButton.setPosition(widgetOffset + sf::Vector2f{ 0.0f, 150.0f });
-	pause_quitButton.setPosition(widgetOffset + sf::Vector2f{ 0.0f, 300.0f });
 }
 
 bool W_Paused::isMouseOver(const bool& checkForClick = false)

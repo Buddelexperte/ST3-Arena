@@ -3,16 +3,20 @@
 #include "W_SelectWeapon.h" // Own header file
 #include "GameInstance.h"
 
-W_SelectWeapon::W_SelectWeapon(InputWidget* parent) : InputWidget(parent),
-WEAPON_SPACING_X(viewHalfSize.x / NUM_WEAPONS)
+W_SelectWeapon::W_SelectWeapon(InputWidget* parent) 
+	: InputWidget(parent),
+	WEAPON_SPACING_X(viewHalfSize.x / NUM_WEAPONS),
+	inventory_title(this), 
+	item1_Button(this), item2_Button(this), item3_Button(this), item4_Button(this), 
+	return_Button(this)
 {
 	const std::vector<RawButton> INVENTORY_MENU_CONSTR = {
-		{viewCenter + sf::Vector2f(0.0f, -300.0f),					sf::Vector2f(100.0f, 100.0f),		sf::Color::Transparent,	100,	"INVENTORY",	sf::Color::White},
-		{viewCenter + sf::Vector2f(-1.5f * WEAPON_SPACING_X, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"PISTOL",		sf::Color::White},
-		{viewCenter + sf::Vector2f(-0.5f * WEAPON_SPACING_X, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"SHOTGUN",		sf::Color::White},
-		{viewCenter + sf::Vector2f(0.5f * WEAPON_SPACING_X, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"RIFLE",		sf::Color::White},
-		{viewCenter + sf::Vector2f(1.5f * WEAPON_SPACING_X, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"BURST RIFLE",	sf::Color::White},
-		{viewCenter + sf::Vector2f(0.0f, 200.0f),					sf::Vector2f(200.0f, 100.0f),		sf::Color::White, 24,			"RETURN",		sf::Color::Black}
+		{sf::Vector2f(0.0f, -300.0f),					sf::Vector2f(100.0f, 100.0f),		sf::Color::Transparent,	100,	"INVENTORY",	sf::Color::White},
+		{sf::Vector2f(-1.5f * WEAPON_SPACING_X, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"PISTOL",		sf::Color::White},
+		{sf::Vector2f(-0.5f * WEAPON_SPACING_X, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"SHOTGUN",		sf::Color::White},
+		{sf::Vector2f(0.5f * WEAPON_SPACING_X, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"RIFLE",		sf::Color::White},
+		{sf::Vector2f(1.5f * WEAPON_SPACING_X, 0.0f),	sf::Vector2f(200.0f, 200.0f),		sf::Color(100, 100, 100), 24,	"BURST RIFLE",	sf::Color::White},
+		{sf::Vector2f(0.0f, 200.0f),					sf::Vector2f(200.0f, 100.0f),		sf::Color::White, 24,			"RETURN",		sf::Color::Black}
 	};
 
 	inventory_title.construct(INVENTORY_MENU_CONSTR[0]);
@@ -33,16 +37,12 @@ void W_SelectWeapon::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 
-	WEAPON_SPACING_X = (viewHalfSize.x / NUM_WEAPONS);
-
-	inventory_title.setPosition(widgetOffset + sf::Vector2f(0.0f, -300.0f));
-
-	item1_Button.setPosition(widgetOffset + sf::Vector2f(-1.5f * WEAPON_SPACING_X, 0.0f));
-	item2_Button.setPosition(widgetOffset + sf::Vector2f(-0.5f * WEAPON_SPACING_X, 0.0f));
-	item3_Button.setPosition(widgetOffset + sf::Vector2f(0.5f * WEAPON_SPACING_X, 0.0f));
-	item4_Button.setPosition(widgetOffset + sf::Vector2f(1.5f * WEAPON_SPACING_X, 0.0f));
-
-	return_Button.setPosition(widgetOffset + sf::Vector2f(0.0f, 300.0f));
+	inventory_title.tick(deltaTime);
+	item1_Button.tick(deltaTime);
+	item2_Button.tick(deltaTime);
+	item3_Button.tick(deltaTime);
+	item4_Button.tick(deltaTime);
+	return_Button.tick(deltaTime);
 }
 
 InputWidget* W_SelectWeapon::setWidgetIndex(const int& newIndex)

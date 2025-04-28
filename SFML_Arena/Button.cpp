@@ -3,20 +3,10 @@
 #include "SoundManager.h"
 #include "FontManager.h"
 
-Button::Button()
-	: Button(RawButton{ { 0, 0 }, { 100.f, 40.f }, sf::Color::White, 24, "Text", sf::Color::Black })
-{
-
-}
-
-Button::Button(const RawButton& constr)
-	: Button(constr, nullptr)
-{}
-
-Button::Button(const RawButton& constr, InputWidget* parent)
+Button::Button(InputWidget* parent)
 	: WidgetElement(parent)
 {
-	construct(constr);
+
 }
 
 void Button::construct(const RawButton& constr)

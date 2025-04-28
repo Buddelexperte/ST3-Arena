@@ -18,7 +18,7 @@ bool W_Inventory::onKeyTab()
 
 void W_Inventory::tick(const float& deltaTime)
 {
-
+	InputWidget::tick(deltaTime);
 }
 
 InputWidget* W_Inventory::setWidgetIndex(const int& toIndex)

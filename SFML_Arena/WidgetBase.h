@@ -13,8 +13,12 @@ class InputWidget;
 
 class WidgetElement : public IMovable, public IDrawableShapes
 {
+private:
+	sf::Vector2f tickPosCorrection = viewCenter;
+
 protected:
 	InputWidget* parent;
+	virtual sf::Vector2f getCorrectTickCorrection() const;
 
 public:
 	WidgetElement(InputWidget* parentWidget);
@@ -24,7 +28,12 @@ public:
 	virtual void construct(const sf::Vector2f&) {}
 	virtual void tick(const float& deltaTime)
 	{
-		tick_pos(widgetOffset);
+		if (tickPosCorrection != getCorrectTickCorrection())
+		{
+			tickPosCorrection = getCorrectTickCorrection();
+		}
+
+		tick_pos(tickPosCorrection);
 	}
 
 	virtual void tick_pos(const sf::Vector2f& withPos)

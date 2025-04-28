@@ -6,7 +6,7 @@ class W_OptionsGraphics : public InputWidget // OptionsGraphicsMenu Widget -----
 {
 private:
 	Button optionsGraphics_test;
-	Button optionsGraphicsReturn;
+	Button optionsGraphics_return;
 
 public:
 	void tick(const float& deltaTime) override;

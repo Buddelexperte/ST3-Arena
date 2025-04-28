@@ -18,8 +18,14 @@ private:
 	Button levelDisplay;
 	unsigned int displayedLevel = 0;
 
+protected:
+	virtual sf::Vector2f getCorrectTickCorrection() const override
+	{
+		return IDrawableShapes::viewTL;
+	}
+
 public:
-	W_Hud();
+	W_Hud(InputWidget* parent);
 	void tick(const float& deltaTime) override;
 	void construct() override;
 

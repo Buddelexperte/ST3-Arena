@@ -6,6 +6,7 @@
 
 W_LevelUp::W_LevelUp(InputWidget* parent)
 	: InputWidget(parent), 
+	bg(this), B_Skip(this),
 	pf_display_1(this), pf_display_2(this), pf_display_3(this), pf_display_4(this)
 {
 

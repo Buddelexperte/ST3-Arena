@@ -6,7 +6,7 @@ class W_OptionsSounds : public InputWidget // OptionSoundMenu Widget -----------
 {
 private:
 	Button optionsSounds_test;
-	Button optionsSoundsReturn;
+	Button optionsSounds_return;
 
 public:
 	void tick(const float& deltaTime) override;
