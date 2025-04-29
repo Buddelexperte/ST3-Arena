@@ -22,16 +22,23 @@ void HealthBar::tick_bar(const float& deltaTime)
 	}
 
 	// Get needed width for life bar
-	const sf::Vector2f lifeBarSize = lifeBar.getSize();
 	float newLifeBarWidth = maxHealthBarWidth * playerHealth;
 	newLifeBarWidth = std::clamp(newLifeBarWidth, 0.0f, maxHealthBarWidth);
 
-	// Update life bar size if current width differs from desired width
+	const sf::Vector2f lifeBarSize = lifeBar.getSize();
 	if (lifeBarSize.x != newLifeBarWidth)
 	{
 		newLifeBarWidth = lerp(lifeBarSize.x, newLifeBarWidth, LERP_SMOOTHNESS);
 		sf::Vector2f newLifeBarSize = sf::Vector2f(newLifeBarWidth, lifeBarSize.y);
 		lifeBar.setSize(newLifeBarSize);
+	}
+
+	const sf::Vector2f lifeBarBgSize = lifeBar_bg.getSize();
+	if (lifeBarBgSize.x != maxHealthBarWidth)
+	{
+		newLifeBarWidth = lerp(lifeBarBgSize.x, maxHealthBarWidth, LERP_SMOOTHNESS);
+		sf::Vector2f newLifeBarBgSize = sf::Vector2f(newLifeBarWidth, lifeBarBgSize.y);
+		lifeBar_bg.setSize(newLifeBarBgSize);
 	}
 }
 
@@ -40,8 +47,8 @@ HealthBar::HealthBar(InputWidget* parent)
 	lifeBar(parent), lifeBar_bg(parent)
 {
 	const std::vector<RawButton> HUD_CONSTR = {
-		{(sf::Vector2f{20.0f, 20.0f} * viewSizeNorm),									sf::Vector2f{maxHealthBarWidth, 60.0f} *viewSizeNorm,		sf::Color(255, 255, 255, 255),	50, "100",	sf::Color::Black,			EAlignment::LEFT_TOP,		EAlignment::LEFT},
-		{(sf::Vector2f{20.0f, 20.0f} * viewSizeNorm),									sf::Vector2f{maxHealthBarWidth, 60.0f} *viewSizeNorm,		sf::Color(100, 0, 0, 255),		0,	"",		sf::Color::Transparent,		EAlignment::LEFT_TOP,		EAlignment::LEFT},
+		{(sf::Vector2f{20.0f, 20.0f} * viewSizeNorm),									sf::Vector2f{0.0f, 60.0f} * viewSizeNorm,		sf::Color(255, 255, 255, 255),	50, "100",	sf::Color::Black,			EAlignment::LEFT_TOP,		EAlignment::LEFT},
+		{(sf::Vector2f{20.0f, 20.0f} * viewSizeNorm),									sf::Vector2f{0.0f, 60.0f} * viewSizeNorm,		sf::Color(100, 0, 0, 255),		0,	"",		sf::Color::Transparent,		EAlignment::LEFT_TOP,		EAlignment::LEFT},
 	};
 
 	lifeBar.construct(HUD_CONSTR[0]);
@@ -62,12 +69,13 @@ void HealthBar::tick(const float& deltaTime)
 
 void HealthBar::construct()
 {
-	reset();
+	lifeBar.setSize(sf::Vector2f(0.0f, lifeBar.getSize().y));
+	lifeBar_bg.setSize(sf::Vector2f(0.0f, lifeBar_bg.getSize().y));
 }
 
 void HealthBar::reset()
 {
 	// Reset life bar to default values
-	const sf::Vector2f DEFAULT_LIFE_BAR_SIZE = sf::Vector2f(maxHealthBarWidth * viewSizeNorm.x, lifeBar.getSize().y);
+	const sf::Vector2f DEFAULT_LIFE_BAR_SIZE = sf::Vector2f(0.0f, lifeBar.getSize().y);
 	lifeBar.setSize(DEFAULT_LIFE_BAR_SIZE);
 }

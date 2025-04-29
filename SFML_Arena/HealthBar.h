@@ -6,7 +6,7 @@ class HealthBar : public WidgetElement
 {
 private:
 	// Life bar
-	static constexpr float maxHealthBarWidth = 650.0f;
+	const float maxHealthBarWidth = 650.0f * viewSizeNorm.x;
 	Button lifeBar;
 	Button lifeBar_bg;
 	float displayedHealth = 0.0f;

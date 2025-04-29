@@ -5,6 +5,7 @@
 class ScoreBar : public WidgetElement
 {
 private:
+	const float maxScoreBarWidth = viewSize.x / 3.0f ;
 	Button scoreBar;
 	Button scoreBar_bg;
 

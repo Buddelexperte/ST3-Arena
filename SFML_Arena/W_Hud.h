@@ -4,9 +4,13 @@
 #include "HealthBar.h"
 #include "ScoreBar.h"
 
+#include "ColorFade.h"
+
 class W_Hud : public InputWidget
 {
 private:
+	ColorFade fadeScreen;
+
 	HealthBar healthBar;
 	ScoreBar scoreBar;
 

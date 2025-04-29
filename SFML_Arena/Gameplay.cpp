@@ -128,7 +128,7 @@ void W_Gameplay::tick(const float& deltaTime)
 	{
 		setWidgetIndex(3)->construct(); // Open level up screen
 		player->getInventory().setShouldLevelUp(false); // Reset level up flag
-		player->setHealth(player->getMaxHealth()); // Reset health after leveling up
+		player->resetHealth(); // Reset health after leveling up
 	}
 
 	// If Gameplay is UnPaused

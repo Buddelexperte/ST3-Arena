@@ -11,15 +11,22 @@ sf::Vector2f W_Hud::getCorrectTickCorrection() const
 
 W_Hud::W_Hud(InputWidget* parent)
 	: InputWidget(parent),
-	healthBar(this), scoreBar(this)
+	healthBar(this), scoreBar(this), fadeScreen(this)
 {
-	
+	// Setting fade from black to transparent for spawn visuals
+	fadeScreen.setFadeColor(sf::Color::Black, sf::Color::Transparent, 0.7f);
+	fadeScreen.setPosition(viewCenter);
+	fadeScreen.setSize(viewSize);
 }
 
 void W_Hud::construct()
 {
 	setWidgetIndex(0);
-	reset();
+
+	fadeScreen.startFade();
+
+	healthBar.construct();
+	scoreBar.construct();
 }
 
 void W_Hud::reset()
@@ -45,13 +52,13 @@ void W_Hud::tick(const float& deltaTime)
 
 	healthBar.tick(deltaTime);
 	scoreBar.tick(deltaTime);
+	fadeScreen.tick(deltaTime);
 }
-
 
 InputWidget* W_Hud::setWidgetIndex(const int& newIndex)
 {
 	// Default drawables used
-	shapes = { &healthBar, &scoreBar };
+	shapes = { &healthBar, &scoreBar, &fadeScreen };
 
 	switch (widgetIndex = newIndex)
 	{

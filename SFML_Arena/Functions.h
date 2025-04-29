@@ -119,20 +119,43 @@ inline void clamp(float& value, const float& min, const float& max)
 
 static constexpr inline float LERP_SMOOTHNESS = 0.1f;
 
-inline float lerp(const float& currentRot, const float& targetRot, float factor)
+inline float lerp(const float& a, const float& b, float factor)
 {
 	clamp(factor, 0.0f, 1.0f);
 
-	float diff = targetRot - currentRot;
-
-	return currentRot + factor * diff;
+	return a + factor * (b - a);
 }
 
-inline sf::Vector2f lerp(const sf::Vector2f& currentCenter, const sf::Vector2f& targetCenter, float factor)
+inline int lerp(const int& a, const int& b, float factor)
 {
 	clamp(factor, 0.0f, 1.0f);
 
-	return currentCenter + factor * (targetCenter - currentCenter);
+	float res = a + factor * (b - a);
+
+	return static_cast<int>(res);
+}
+
+inline sf::Vector2f lerp(const sf::Vector2f& a, const sf::Vector2f& b, float factor)
+{
+	clamp(factor, 0.0f, 1.0f);
+
+	return a + factor * (b - a);
+}
+
+inline sf::Color lerp(const sf::Color& currColor, const sf::Color& targetColor, float factor)
+{
+	clamp(factor, 0.0f, 1.0f);
+
+	sf::Color colorDiff = targetColor - currColor;
+
+	sf::Color newColor = {
+		static_cast<sf::Uint8>(lerp(currColor.r, targetColor.r, factor)),
+		static_cast<sf::Uint8>(lerp(currColor.g, targetColor.g, factor)),
+		static_cast<sf::Uint8>(lerp(currColor.b, targetColor.b, factor)),
+		static_cast<sf::Uint8>(lerp(currColor.a, targetColor.a, factor))
+	};
+
+	return newColor;
 }
 
 
