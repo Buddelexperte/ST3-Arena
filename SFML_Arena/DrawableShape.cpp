@@ -35,7 +35,7 @@ void IDrawableShapes::updateValues()
 	viewTL = viewCenter - viewHalfSize;
 
 	widgetOffset = gameInstance().getWidgetOffset();
-	viewSizeNorm = sf::Vector2f(2560.0f / viewSize.x, 1440.0f / viewSize.y);
+	viewSizeNorm = sf::Vector2f( viewSize.x / 2560.0f, viewSize.y / 1440.0f);
 	buttonSize = buttonRatio * viewSizeNorm;
 }
 
