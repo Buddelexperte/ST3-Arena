@@ -27,7 +27,9 @@ void ScoreBar::tick_bar(const float& deltaTime)
 
 	// Get needed width for score bar
 	const sf::Vector2f scoreBarSize = scoreBar.getSize();
-	float newScoreBarWidth = maxScoreBarWidth * (static_cast<float>(playerScore - pointsLastNeeded) / static_cast<float>(playerScoreNeeded));
+	float pointPercentageReached = static_cast<float>(playerScore - pointsLastNeeded) / static_cast<float>(playerScoreNeeded);
+	pointPercentageReached = std::clamp(pointPercentageReached, 0.0f, 1.0f); // Clamp to [0, 1]
+	float newScoreBarWidth = maxScoreBarWidth * pointPercentageReached;
 
 	if (scoreBarSize.x != newScoreBarWidth)
 	{
@@ -51,10 +53,10 @@ ScoreBar::ScoreBar(InputWidget* parent)
 {
 	const std::vector<RawButton> HUD_CONSTR = {
 		// Score Bar
-		{(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }),								sf::Vector2f{0.0f, 5.0f * viewSizeNorm.y},					sf::Color(255, 255, 255, 255),	0,	"",		sf::Color::Transparent,		EAlignment::CENTER_BOTTOM,	EAlignment::LEFT},
-		{(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }),								sf::Vector2f{0.0f, 5.0f * viewSizeNorm.y},		sf::Color(255, 255, 255, 100),	0,	"",		sf::Color::Transparent,		EAlignment::CENTER_BOTTOM,	EAlignment::RIGHT},
+		{(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }),								sf::Vector2f{0.0f, 5.0f * viewSizeNorm.y},	sf::Color(255, 255, 255, 255),	0,	"",		sf::Color::Transparent,		EAlignment::CENTER_BOTTOM,	EAlignment::LEFT},
+		{(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }),								sf::Vector2f{0.0f, 5.0f * viewSizeNorm.y},	sf::Color(255, 255, 255, 100),	0,	"",		sf::Color::Transparent,		EAlignment::CENTER_BOTTOM,	EAlignment::RIGHT},
 		// Level Display
-		{(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y - (20.0f * viewSizeNorm.y) }),	sf::Vector2f{50.0f, 50.0f} *viewSizeNorm,					sf::Color::Transparent,			30,	"1",	sf::Color::White,			EAlignment::CENTER_BOTTOM,	EAlignment::CENTER_BOTTOM}
+		{(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y - (20.0f * viewSizeNorm.y) }),	sf::Vector2f{50.0f, 50.0f} * viewSizeNorm,	sf::Color::Transparent,			30,	"",		sf::Color::White,			EAlignment::CENTER_BOTTOM,	EAlignment::CENTER_BOTTOM}
 	};
 
 	scoreBar.construct(HUD_CONSTR[0]);
@@ -77,7 +79,7 @@ void ScoreBar::tick(const float& deltaTime)
 
 void ScoreBar::construct()
 {
-	scoreBar.setSize(sf::Vector2f(0.0f, scoreBar.getSize().y));
+	scoreBar.setSize(sf::Vector2f(0.0f, scoreBar_bg.getSize().y));
 	scoreBar_bg.setSize(sf::Vector2f(0.0f, scoreBar_bg.getSize().y));
 }
 

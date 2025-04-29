@@ -69,13 +69,17 @@ void HealthBar::tick(const float& deltaTime)
 
 void HealthBar::construct()
 {
-	lifeBar.setSize(sf::Vector2f(0.0f, lifeBar.getSize().y));
+	lifeBar.setSize(sf::Vector2f(0.0f, lifeBar_bg.getSize().y));
 	lifeBar_bg.setSize(sf::Vector2f(0.0f, lifeBar_bg.getSize().y));
 }
 
 void HealthBar::reset()
 {
 	// Reset life bar to default values
+
+	if (displayedHealth == 1.0f)
+		return;
+
 	const sf::Vector2f DEFAULT_LIFE_BAR_SIZE = sf::Vector2f(0.0f, lifeBar.getSize().y);
 	lifeBar.setSize(DEFAULT_LIFE_BAR_SIZE);
 }

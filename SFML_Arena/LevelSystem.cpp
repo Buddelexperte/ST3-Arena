@@ -51,7 +51,7 @@ void LevelSystem::setStage(const unsigned int newStage)
 
 unsigned int LevelSystem::calculatePointsNeeded(const unsigned int stage) const
 {
-	return (stage * 100);
+	return (10 + stage * 100);
 }
 
 LevelSystem::LevelSystem(Inventory* owningInv)
@@ -110,6 +110,9 @@ unsigned int LevelSystem::getPointsNeeded(const unsigned int forStage) const
 
 unsigned int LevelSystem::getLastPointsNeeded(const unsigned int fromStage) const
 {
+	if (fromStage == 0)
+		return 0;
+
 	return getPointsNeeded(fromStage - 1); // Call the overloaded function with the previous stage
 }
 

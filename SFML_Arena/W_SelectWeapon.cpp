@@ -11,12 +11,12 @@ W_SelectWeapon::W_SelectWeapon(InputWidget* parent)
 	return_Button(this)
 {
 	const std::vector<RawButton> INVENTORY_MENU_CONSTR = {
-		{sf::Vector2f(0.0f, -300.0f) * viewSizeNorm,					sf::Vector2f(100.0f, 100.0f) * viewSizeNorm,		sf::Color::Transparent,		100,	"INVENTORY",	sf::Color::White},
-		{sf::Vector2f(-1.5f * WEAPON_SPACING_X, -75.0f) * viewSizeNorm,	sf::Vector2f(200.0f, 200.0f) * viewSizeNorm,		sf::Color(100, 100, 100),	24,		"PISTOL",		sf::Color::White},
-		{sf::Vector2f(-0.5f * WEAPON_SPACING_X, -75.0f) * viewSizeNorm,	sf::Vector2f(200.0f, 200.0f) * viewSizeNorm,		sf::Color(100, 100, 100),	24,		"SHOTGUN",		sf::Color::White},
-		{sf::Vector2f(0.5f * WEAPON_SPACING_X, -75.0f) * viewSizeNorm,	sf::Vector2f(200.0f, 200.0f) * viewSizeNorm,		sf::Color(100, 100, 100),	24,		"RIFLE",		sf::Color::White},
-		{sf::Vector2f(1.5f * WEAPON_SPACING_X, -75.0f) * viewSizeNorm,	sf::Vector2f(200.0f, 200.0f) * viewSizeNorm,		sf::Color(100, 100, 100),	24,		"BURST RIFLE",	sf::Color::White},
-		{sf::Vector2f(0.0f, 150.0f) * viewSizeNorm,						buttonSize,											sf::Color::White,			24,		"RETURN",		sf::Color::Black}
+		{sf::Vector2f(0.0f,						-300.0f) * viewSizeNorm,	sf::Vector2f(100.0f, 100.0f) * viewSizeNorm,	sf::Color::Transparent,		100,	"INVENTORY",	sf::Color::White},
+		{sf::Vector2f(-1.5f * WEAPON_SPACING_X, -75.0f) * viewSizeNorm,		sf::Vector2f(200.0f, 200.0f) * viewSizeNorm,	sf::Color(100, 100, 100),	24,		"PISTOL",		sf::Color::White},
+		{sf::Vector2f(-0.5f * WEAPON_SPACING_X, -75.0f) * viewSizeNorm,		sf::Vector2f(200.0f, 200.0f) * viewSizeNorm,	sf::Color(100, 100, 100),	24,		"SHOTGUN",		sf::Color::White},
+		{sf::Vector2f(0.5f * WEAPON_SPACING_X,	-75.0f) * viewSizeNorm,		sf::Vector2f(200.0f, 200.0f) * viewSizeNorm,	sf::Color(100, 100, 100),	24,		"RIFLE",		sf::Color::White},
+		{sf::Vector2f(1.5f * WEAPON_SPACING_X,	-75.0f) * viewSizeNorm,		sf::Vector2f(200.0f, 200.0f) * viewSizeNorm,	sf::Color(100, 100, 100),	24,		"BURST RIFLE",	sf::Color::White},
+		{sf::Vector2f(0.0f,						150.0f) * viewSizeNorm,		buttonSize,										sf::Color::White,			24,		"RETURN",		sf::Color::Black}
 	};
 
 	inventory_title.construct(INVENTORY_MENU_CONSTR[0]);

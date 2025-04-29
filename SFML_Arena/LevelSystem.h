@@ -8,7 +8,7 @@ private:
 	Inventory* owningInv = nullptr; // Pointer to the owning inventory
 
 	// CONFIGS
-	static constexpr unsigned int START_STAGE = 1; // Starting stage
+	static constexpr unsigned int START_STAGE = 0; // Starting stage
 	static constexpr unsigned int STARTING_POINTS = 0; // Points needed to level up
 
 	unsigned int collectedPoints = 0; // Current score
