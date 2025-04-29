@@ -173,7 +173,7 @@ bool W_Gameplay::onKeyTab()
 	if (isChildActive())
 		return getActiveChild()->onKeyTab();
 
-	setWidgetIndex(3)->construct();
+	setWidgetIndex(4)->construct();
 	return true;
 }
 
