@@ -156,6 +156,7 @@
     <ClCompile Include="FontManager.h" />
     <ClCompile Include="GameInstance.cpp" />
     <ClCompile Include="Gameplay.cpp" />
+    <ClCompile Include="HealthBar.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="ItemBaseClasses.cpp" />
     <ClCompile Include="LevelSystem.cpp" />
@@ -172,6 +173,7 @@
     <ClCompile Include="RenderInfo.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="ScoreBar.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="SpawnWave.cpp" />
     <ClCompile Include="SW_Stage1.h" />
@@ -204,6 +206,7 @@
     <ClInclude Include="Gameplay.h" />
     <ClInclude Include="GameplaySubWidgets.h" />
     <ClInclude Include="GenericPool.h" />
+    <ClInclude Include="HealthBar.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="LevelSystem.h" />
     <ClInclude Include="Lifetime.h" />
@@ -215,6 +218,7 @@
     <ClInclude Include="Pickup.h" />
     <ClInclude Include="PU_ExperienceOrb.h" />
     <ClInclude Include="P_Sparkle.h" />
+    <ClInclude Include="ScoreBar.h" />
     <ClInclude Include="SpawnWave.h" />
     <ClInclude Include="SW_Default.h" />
     <ClInclude Include="SW_Stage2.h" />

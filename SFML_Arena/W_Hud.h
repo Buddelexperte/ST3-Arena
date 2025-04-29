@@ -1,22 +1,14 @@
 #pragma once
 
 #include "WidgetElements.h"
+#include "HealthBar.h"
+#include "ScoreBar.h"
 
 class W_Hud : public InputWidget
 {
 private:
-	// Life bar
-	static constexpr float maxHealthBarWidth = 650.0f;
-	Button lifeBar;
-	Button lifeBar_bg;
-	float displayedHealth = 0.0f;
-
-	// Score bar
-	Button scoreBar;
-	Button scoreBar_bg;
-
-	Button levelDisplay;
-	unsigned int displayedLevel = 0;
+	HealthBar healthBar;
+	ScoreBar scoreBar;
 
 protected:
 	virtual sf::Vector2f getCorrectTickCorrection() const override;
@@ -26,11 +18,9 @@ public:
 	void tick(const float& deltaTime) override;
 	void construct() override;
 
-	void resetLifeBar();
-	void updateLifeBar();
-
-	void resetScoreBar();
-	void updateScoreBar();
+	void reset() override;
+	void reset_health();
+	void reset_score();
 
 	InputWidget* setWidgetIndex(const int&) override;
 	InputWidget* getWidgetAtIndex(const int&) override;

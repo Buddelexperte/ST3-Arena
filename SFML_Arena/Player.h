@@ -88,7 +88,7 @@ public:
 	void resetHealth() override
 	{
 		IHasHealth::resetHealth();
-		hud.resetLifeBar();
+		hud.reset_health();
 	}
 
 	void hurt(const float& delta) override;

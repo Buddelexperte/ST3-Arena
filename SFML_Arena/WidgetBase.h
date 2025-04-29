@@ -25,6 +25,7 @@ public:
 	virtual ~WidgetElement() = default;
 
 	virtual void construct() {}
+	virtual void reset() {}
 	virtual void construct(const sf::Vector2f&) {}
 	virtual void tick(const float& deltaTime)
 	{

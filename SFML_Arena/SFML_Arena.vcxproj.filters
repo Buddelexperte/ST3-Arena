@@ -87,6 +87,9 @@
     <Filter Include="Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks">
       <UniqueIdentifier>{ab0f80ee-67fb-492d-88d2-f16f76fb31a8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\VisualInterfaces\Widgets\Gameplay\HUD">
+      <UniqueIdentifier>{a0582402-9fb4-4572-9889-2cd66d7c388e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -179,9 +182,6 @@
     <ClCompile Include="Slider.cpp">
       <Filter>Source\VisualInterfaces\Components</Filter>
     </ClCompile>
-    <ClCompile Include="W_Hud.cpp">
-      <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
-    </ClCompile>
     <ClCompile Include="Options.cpp">
       <Filter>Source\VisualInterfaces\Widgets\Options</Filter>
     </ClCompile>
@@ -223,6 +223,15 @@
     </ClCompile>
     <ClCompile Include="PerkFamilyDisplay.cpp">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks</Filter>
+    </ClCompile>
+    <ClCompile Include="W_Hud.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthBar.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreBar.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay\HUD</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -382,9 +391,6 @@
     <ClInclude Include="W_GameOver.h">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="W_Hud.h">
-      <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
-    </ClInclude>
     <ClInclude Include="Gameplay.h">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
     </ClInclude>
@@ -417,6 +423,15 @@
     </ClInclude>
     <ClInclude Include="WidgetElements.h">
       <Filter>Source\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="W_Hud.h">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthBar.h">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreBar.h">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay\HUD</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
