@@ -3,6 +3,11 @@
 #include "W_Hud.h" // Own header file
 #include "GameInstance.h"
 
+// Important for HUD display on screen
+sf::Vector2f W_Hud::getCorrectTickCorrection() const
+{
+	return IDrawableShapes::viewTL;
+}
 
 W_Hud::W_Hud(InputWidget* parent)
 	: InputWidget(parent),
@@ -49,7 +54,7 @@ void W_Hud::resetLifeBar()
 {
 	// Reset life bar to default values
 
-	const sf::Vector2f DEFAULT_LIFE_BAR_SIZE = sf::Vector2f(maxHealthBarWidth, lifeBar.getSize().y);
+	const sf::Vector2f DEFAULT_LIFE_BAR_SIZE = sf::Vector2f(maxHealthBarWidth * viewSizeNorm.x, lifeBar.getSize().y);
 	lifeBar.setSize(DEFAULT_LIFE_BAR_SIZE);
 }
 
@@ -72,8 +77,9 @@ void W_Hud::updateLifeBar()
 	}
 
 	// Get needed width for life bar
-	sf::Vector2f lifeBarSize = lifeBar.getSize();
+	const sf::Vector2f lifeBarSize = lifeBar.getSize();
 	float newLifeBarWidth = maxHealthBarWidth * playerHealth;
+	newLifeBarWidth = std::clamp(newLifeBarWidth, 0.0f, maxHealthBarWidth);
 
 	// Update life bar size if current width differs from desired width
 	if (lifeBarSize.x != newLifeBarWidth)

@@ -19,10 +19,7 @@ private:
 	unsigned int displayedLevel = 0;
 
 protected:
-	virtual sf::Vector2f getCorrectTickCorrection() const override
-	{
-		return IDrawableShapes::viewTL;
-	}
+	virtual sf::Vector2f getCorrectTickCorrection() const override;
 
 public:
 	W_Hud(InputWidget* parent);
