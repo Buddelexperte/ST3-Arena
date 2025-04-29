@@ -7,11 +7,11 @@ W_LevelMenu::W_LevelMenu(InputWidget* parent)
 	levelmenu_title(this), level1_Button(this), level2_Button(this), level3_Button(this), return_Button(this)
 {
 	const std::vector<RawButton> LEVEL_MENU_CONSTR = {
-		{sf::Vector2f(0.0f, -300.0f),	sf::Vector2f(100.0f, 100.0f),	sf::Color::Transparent,		100,	"LEVEL SELECT", sf::Color::White},
-		{sf::Vector2f(-500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"LEVEL 1",		sf::Color::White},
-		{sf::Vector2f(0.0f, 0.0f),		sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"LEVEL 2",		sf::Color::White},
-		{sf::Vector2f(500.0f, 0.0f),	sf::Vector2f(200.0f, 200.0f),	sf::Color(100, 100, 100),	24,		"LEVEL 3",		sf::Color::White},
-		{sf::Vector2f(0.0f, 300.0f),	sf::Vector2f(200.0f, 100.0f),	sf::Color::White,			24,		"RETURN",		sf::Color::Black}
+		{sf::Vector2f(0.0f, -300.0f) * viewSizeNorm,	sf::Vector2f(100.0f, 100.0f) * viewSizeNorm,	sf::Color::Transparent,		100,	"LEVEL SELECT", sf::Color::White},
+		{sf::Vector2f(-500.0f, -75.0f) * viewSizeNorm,	sf::Vector2f(200.0f, 200.0f) * viewSizeNorm,	sf::Color(100, 100, 100),	24,		"LEVEL 1",		sf::Color::White},
+		{sf::Vector2f(0.0f, -75.0f) * viewSizeNorm,		sf::Vector2f(200.0f, 200.0f) * viewSizeNorm,	sf::Color(100, 100, 100),	24,		"LEVEL 2",		sf::Color::White},
+		{sf::Vector2f(500.0f, -75.0f) * viewSizeNorm,		sf::Vector2f(200.0f, 200.0f) * viewSizeNorm,	sf::Color(100, 100, 100),	24,		"LEVEL 3",		sf::Color::White},
+		{sf::Vector2f(0.0f, 150.0f) * viewSizeNorm,		buttonSize,										sf::Color::White,			24,		"RETURN",		sf::Color::Black}
 	};
 
 	levelmenu_title.construct(LEVEL_MENU_CONSTR[0]);
