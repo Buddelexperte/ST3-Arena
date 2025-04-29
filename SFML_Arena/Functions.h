@@ -12,7 +12,7 @@ static const inline sf::Keyboard::Key KEY_TAB = sf::Keyboard::Tab;
 
 // Constants
 static const inline double pi = 4.0f * std::atan(1.0); // Calculation of Pi
-static constexpr inline float SMALLEST_PRECISION = 1e-3f;
+static constexpr inline float SMALLEST_PRECISION = 1e-3f; // Smallest precision for most floating point comparisons used
 
 // WEAK POINTER -------------------------------------------------------------------------------------------
 // Lock weak pointer into shared pointer
@@ -117,7 +117,7 @@ inline void clamp(float& value, const float& min, const float& max)
 
 // LERP -------------------------------------------------------------------------------------------
 
-static constexpr inline float LERP_SMOOTHNESS = 0.2f;
+static constexpr inline float LERP_SMOOTHNESS = 0.1f;
 
 inline float lerp(const float& currentRot, const float& targetRot, float factor)
 {
