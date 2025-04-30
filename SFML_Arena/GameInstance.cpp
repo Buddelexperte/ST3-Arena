@@ -160,14 +160,6 @@ void GI_Arena::startRound()
 	setGameState(IN_GAME);
 }
 
-void GI_Arena::waitForFirstRender()
-{
-	// First manual draw
-	updateScreen();
-
-	sf::sleep(sf::milliseconds(1000)); // Sleep ~1 frame
-}
-
 void GI_Arena::preTick()
 {
 	prevCamPos = view->getCenter();
