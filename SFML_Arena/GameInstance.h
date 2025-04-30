@@ -30,8 +30,9 @@ private:
 	std::unique_ptr<sf::RenderWindow> window = nullptr;
 	std::unique_ptr<sf::View> view = nullptr;
 	sf::RenderStates states;
+
 	// Custom GameState
-	GameState gameState = MENU_SCREEN;
+	GameState gameState = LOADING_SCREEN;
 
 	// Widget variables
 	std::vector<std::shared_ptr<InputWidget>> widgets;
@@ -47,6 +48,7 @@ private:
 	float zoomFactor = 1.0f;
 	sf::Vector2f widgetOffset;
 	
+	void waitForFirstRender();
 
 	void preTick(); // Logic before Player input (Checks for Inventory etc.)
 	void tick_view(const float&);

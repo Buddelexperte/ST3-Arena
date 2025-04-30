@@ -53,10 +53,10 @@ ScoreBar::ScoreBar(InputWidget* parent)
 {
 	const std::vector<RawButton> HUD_CONSTR = {
 		// Score Bar
-		{(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }),								sf::Vector2f{0.0f, 5.0f * viewSizeNorm.y},	sf::Color(255, 255, 255, 255),	0,	"",		sf::Color::Transparent,		EAlignment::CENTER_BOTTOM,	EAlignment::LEFT},
-		{(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }),								sf::Vector2f{0.0f, 5.0f * viewSizeNorm.y},	sf::Color(255, 255, 255, 100),	0,	"",		sf::Color::Transparent,		EAlignment::CENTER_BOTTOM,	EAlignment::RIGHT},
+		{(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }),								sf::Vector2f{0.0f, 5.0f * unitNorm.y},	sf::Color(255, 255, 255, 255),	0,	"",		sf::Color::Transparent,		EAlignment::CENTER_BOTTOM,	EAlignment::LEFT},
+		{(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }),								sf::Vector2f{0.0f, 5.0f * unitNorm.y},	sf::Color(255, 255, 255, 100),	0,	"",		sf::Color::Transparent,		EAlignment::CENTER_BOTTOM,	EAlignment::RIGHT},
 		// Level Display
-		{(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y - (20.0f * viewSizeNorm.y) }),	sf::Vector2f{50.0f, 50.0f} * viewSizeNorm,	sf::Color::Transparent,			30,	"",		sf::Color::White,			EAlignment::CENTER_BOTTOM,	EAlignment::CENTER_BOTTOM}
+		{(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y - (20.0f * unitNorm.y) }),	sf::Vector2f{50.0f, 50.0f} * unitNorm,	sf::Color::Transparent,			30,	"",		sf::Color::White,			EAlignment::CENTER_BOTTOM,	EAlignment::CENTER_BOTTOM}
 	};
 
 	scoreBar.construct(HUD_CONSTR[0]);

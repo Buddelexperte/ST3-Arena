@@ -1,5 +1,6 @@
 #pragma once
 
+#include "LoadingScreen.h"
 #include "MainMenu.h"
 #include "Gameplay.h"
 

@@ -43,8 +43,9 @@ bool GI_Arena::initWidgets()
 	widgets.clear();
 	std::cout << "Initiating widgets..." << std::endl;
 	try { // Adding base widgets with their nullptr parent HERE!
-		widgets.push_back(std::make_shared<W_MainMenu>(nullptr)); // MainMenu = 0
-		widgets.push_back(std::make_shared<W_Gameplay>(nullptr)); // Gameplay = 1
+		widgets.push_back(std::make_shared<W_LoadingScreen>(nullptr)); // LoadingScreen = 0
+		widgets.push_back(std::make_shared<W_MainMenu>(nullptr)); // MainMenu = 1
+		widgets.push_back(std::make_shared<W_Gameplay>(nullptr)); // Gameplay = 2
 	}
 	catch (const std::exception& e) {
 		std::cerr << "Exception caught: " << e.what() << std::endl;
@@ -54,9 +55,6 @@ bool GI_Arena::initWidgets()
 
 	// Console log
 	std::cout << "Initiated widgets" << std::endl;
-
-	// Apply correct widget
-	correctWidget();
 	return true;
 }
 
@@ -80,6 +78,8 @@ void GI_Arena::start()
 
 	initWidgets();
 	std::cout << "Widgets created" << std::endl;
+	
+	waitForFirstRender();
 
 	std::cout << "\n### Starting Game ###\n" << std::endl;
 
@@ -113,11 +113,14 @@ void GI_Arena::correctWidget()
 
 	switch (oldGS = gameState)
 	{
-	case MENU_SCREEN: // MAIN_MENU
+	case LOADING_SCREEN:
 		activeMenu = widgets[0];
 		break;
-	case GAME_PAUSED: case GAME_OVER: case GAME_LAUNCHING: case IN_GAME: // GAMEPLAY
+	case MENU_SCREEN: // MAIN_MENU
 		activeMenu = widgets[1];
+		break;
+	case GAME_PAUSED: case GAME_OVER: case GAME_LAUNCHING: case IN_GAME: // GAMEPLAY
+		activeMenu = widgets[2];
 		break;
 	case QUIT: // QUIT GAME
 		activeMenu = nullptr;
@@ -157,6 +160,14 @@ void GI_Arena::startRound()
 	resetViewPos();
 	// Set gameState to IN_GAME
 	setGameState(IN_GAME);
+}
+
+void GI_Arena::waitForFirstRender()
+{
+	// First manual draw
+	updateScreen();
+
+	sf::sleep(sf::milliseconds(1000)); // Sleep ~1 frame
 }
 
 void GI_Arena::preTick()

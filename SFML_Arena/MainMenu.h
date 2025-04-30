@@ -1,10 +1,13 @@
 #pragma once
 
 #include "MainMenuSubWidgets.h" // Own header
+#include "ColorFade.h"
 
 class W_MainMenu : public InputWidget // MainMenu Widget ------------------------------------------
 {
 private:
+	ColorFade fadeScreen;
+
 	Button menu_title;
 	Button menu_highscore;
 	Button menu_startButton;

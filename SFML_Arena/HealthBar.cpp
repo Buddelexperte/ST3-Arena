@@ -47,8 +47,8 @@ HealthBar::HealthBar(InputWidget* parent)
 	lifeBar(parent), lifeBar_bg(parent)
 {
 	const std::vector<RawButton> HUD_CONSTR = {
-		{(sf::Vector2f{20.0f, 20.0f} * viewSizeNorm),									sf::Vector2f{0.0f, 60.0f} * viewSizeNorm,		sf::Color(255, 255, 255, 255),	50, "100",	sf::Color::Black,			EAlignment::LEFT_TOP,		EAlignment::LEFT},
-		{(sf::Vector2f{20.0f, 20.0f} * viewSizeNorm),									sf::Vector2f{0.0f, 60.0f} * viewSizeNorm,		sf::Color(100, 0, 0, 255),		0,	"",		sf::Color::Transparent,		EAlignment::LEFT_TOP,		EAlignment::LEFT},
+		{(sf::Vector2f{20.0f, 20.0f} * unitNorm),									sf::Vector2f{0.0f, 60.0f} * unitNorm,		sf::Color(255, 255, 255, 255),	50, "100",	sf::Color::Black,			EAlignment::LEFT_TOP,		EAlignment::LEFT},
+		{(sf::Vector2f{20.0f, 20.0f} * unitNorm),									sf::Vector2f{0.0f, 60.0f} * unitNorm,		sf::Color(100, 0, 0, 255),		0,	"",		sf::Color::Transparent,		EAlignment::LEFT_TOP,		EAlignment::LEFT},
 	};
 
 	lifeBar.construct(HUD_CONSTR[0]);

@@ -8,15 +8,16 @@
 
 W_MainMenu::W_MainMenu(InputWidget* parent)
 	: InputWidget(parent), 
+	fadeScreen(this),
 	optionsMenu(this), levelMenu(this), selectWeapon(this),
 	menu_title(this), menu_highscore(this), menu_startButton(this), menu_optionsButton(this), menu_quitButton(this)
 {
 	const std::vector<RawButton> MAIN_MENU_CONSTR = {
-		{(sf::Vector2f{ 0.0f, -300.0f }	* viewSizeNorm),    sf::Vector2f{ 350, 120 } * viewSizeNorm,	sf::Color::Transparent,		100,"ARENA",							sf::Color::White},
-		{(sf::Vector2f{ 0.0f, -150.0f }	* viewSizeNorm),    sf::Vector2f{ 100, 100 } * viewSizeNorm,	sf::Color::Transparent,		16,	"Higscore: " + std::to_string(0),	sf::Color::White},
-		{(sf::Vector2f{ 0.0f, 0.0f }	* viewSizeNorm),    buttonSize,									sf::Color::White,			24,	"START",							sf::Color::Black},
-		{(sf::Vector2f{ 0.0f, 150.0f }	* viewSizeNorm),    buttonSize,									sf::Color::White,			24,	"OPTIONS",							sf::Color::Black},
-		{(sf::Vector2f{ 0.0f, 300.0f }	* viewSizeNorm),    buttonSize,									sf::Color::White,			24,	"QUIT",								sf::Color::Black}
+		{(sf::Vector2f{ 0.0f, -300.0f }	* unitNorm),    sf::Vector2f{ 350, 120 } * unitNorm,	sf::Color::Transparent,		100,"ARENA",							sf::Color::White},
+		{(sf::Vector2f{ 0.0f, -150.0f }	* unitNorm),    sf::Vector2f{ 100, 100 } * unitNorm,	sf::Color::Transparent,		16,	"Higscore: " + std::to_string(0),	sf::Color::White},
+		{(sf::Vector2f{ 0.0f, 0.0f }	* unitNorm),    buttonSize,								sf::Color::White,			24,	"START",							sf::Color::Black},
+		{(sf::Vector2f{ 0.0f, 150.0f }	* unitNorm),    buttonSize,								sf::Color::White,			24,	"OPTIONS",							sf::Color::Black},
+		{(sf::Vector2f{ 0.0f, 300.0f }	* unitNorm),    buttonSize,								sf::Color::White,			24,	"QUIT",								sf::Color::Black}
 	};
 
 	menu_title.construct(MAIN_MENU_CONSTR[0]);
@@ -27,11 +28,18 @@ W_MainMenu::W_MainMenu(InputWidget* parent)
 
 	// Done out
 	std::cout << "- Constructed MainMenu" << std::endl;
+
+	fadeScreen.setFadeColor(sf::Color::Black, sf::Color::Transparent, SCREEN_FADE_DURATION);
+	fadeScreen.setPosition(viewTL);
+	fadeScreen.setSize(viewSize);
 }
 
 void W_MainMenu::construct()
 {
 	setWidgetIndex(0);
+
+	fadeScreen.startFade();
+
 	menu_highscore.setText("Highscore: " + std::to_string(SaveGame::storedData.score));
 }
 
@@ -61,7 +69,7 @@ InputWidget* W_MainMenu::setWidgetIndex(const int& newIndex)
 	switch (widgetIndex = newIndex)
 	{
 	case 0: // MAIN_MENU
-		shapes = { &menu_title, &menu_highscore, &menu_startButton, &menu_optionsButton, &menu_quitButton };
+		shapes = { &menu_title, &menu_highscore, &menu_startButton, &menu_optionsButton, &menu_quitButton, &fadeScreen };
 		break;
 	default: // SUB-WIDGETS (implement this notation in EVERY other Widget)
 		shapes = { getActiveChild() };
@@ -73,6 +81,11 @@ InputWidget* W_MainMenu::setWidgetIndex(const int& newIndex)
 void W_MainMenu::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
+
+	if (isChildActive())
+		return;
+
+	fadeScreen.tick(deltaTime);
 
 	menu_title.tick(deltaTime);
 	menu_highscore.tick(deltaTime);

@@ -14,7 +14,7 @@ W_Hud::W_Hud(InputWidget* parent)
 	healthBar(this), scoreBar(this), fadeScreen(this)
 {
 	// Setting fade from black to transparent for spawn visuals
-	fadeScreen.setFadeColor(sf::Color::Black, sf::Color::Transparent, 0.7f);
+	fadeScreen.setFadeColor(sf::Color::Black, sf::Color::Transparent, SCREEN_FADE_DURATION);
 	fadeScreen.setPosition(viewCenter);
 	fadeScreen.setSize(viewSize);
 }

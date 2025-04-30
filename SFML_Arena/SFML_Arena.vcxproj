@@ -161,6 +161,7 @@
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="ItemBaseClasses.cpp" />
     <ClCompile Include="LevelSystem.cpp" />
+    <ClCompile Include="LoadingScreen.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="Particle.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="LevelSystem.h" />
     <ClInclude Include="Lifetime.h" />
+    <ClInclude Include="LoadingScreen.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MainMenuSubWidgets.h" />
     <ClInclude Include="Options.h" />
