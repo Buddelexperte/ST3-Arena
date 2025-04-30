@@ -79,8 +79,6 @@ void GI_Arena::start()
 	initWidgets();
 	std::cout << "Widgets created" << std::endl;
 	
-	waitForFirstRender();
-
 	std::cout << "\n### Starting Game ###\n" << std::endl;
 
 	tickLoop();

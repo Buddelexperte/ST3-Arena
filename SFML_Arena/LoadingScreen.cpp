@@ -30,14 +30,14 @@ void W_LoadingScreen::tick(const float& deltaTime)
 			newMessage = "LOADING...";
 			break;
 		case 1:
-			newMessage = "LOADING..";
+			newMessage = ".LOADING..";
 			break;
 		case 2:
-			newMessage = "LOADING.";
+			newMessage = "..LOADING.";
 			break;
 		case 3:
 		default:
-			newMessage = "LOADING";
+			newMessage = "...LOADING";
 			break;
 		}
 

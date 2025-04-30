@@ -16,7 +16,7 @@ private:
 	static float globalTime;
 
 	// CONFIG
-	static constexpr unsigned int MAX_FPS = 144;
+	static constexpr unsigned int MAX_FPS = 60;
 	static constexpr bool bUseVSync = true;
 
 	static constexpr bool bWidgetParallax = false;
@@ -48,8 +48,6 @@ private:
 	float zoomFactor = 1.0f;
 	sf::Vector2f widgetOffset;
 	
-	void waitForFirstRender();
-
 	void preTick(); // Logic before Player input (Checks for Inventory etc.)
 	void tick_view(const float&);
 	void tick(const float&); // Player Input and window.draw()
