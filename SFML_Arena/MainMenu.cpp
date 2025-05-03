@@ -102,7 +102,6 @@ void W_MainMenu::tick_openAnim(const float&)
 {
 	if (!fadeScreen.isFading())
 	{
-		std::cout << "Ended open anim" << std::endl;
 		IWidgetAnimation::stopAnim();
 	}
 }

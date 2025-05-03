@@ -54,25 +54,21 @@ bool W_TitleScreen::isMouseOver(const bool& checkForClick = false)
 		if (checkForClick) T_Title.setColor(newColor, true);
 		return true;
 	}
-	std::cout << "New check" << std::endl;
 	if (B_Start.isMouseOver(checkForClick))
 	{
 		if (checkForClick) parent->setWidgetIndex(2)->construct();
 		return true;
 	}
-	std::cout << "New check" << std::endl;
 	if (B_OptionsMenu.isMouseOver(checkForClick))
 	{
 		if (checkForClick) parent->setWidgetIndex(1)->construct();
 		return true;
 	}
-	std::cout << "New check" << std::endl;
 	if (B_Quit.isMouseOver(checkForClick))
 	{
 		if (checkForClick) gameInstance().setGameState(QUIT);
 		return true;
 	}
-	std::cout << "Checks done" << std::endl;
 
 	return false;
 }
