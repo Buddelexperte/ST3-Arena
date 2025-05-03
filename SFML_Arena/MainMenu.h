@@ -6,19 +6,22 @@
 class W_MainMenu : public InputWidget // MainMenu Widget ------------------------------------------
 {
 private:
+	virtual sf::Vector2f getCorrectTickCorrection() const override;
+
 	ColorFade fadeScreen;
 
-	Button menu_title;
-	Button menu_highscore;
-	Button menu_startButton;
-	Button menu_optionsButton;
-	Button menu_quitButton;
-
+	W_TitleScreen titleMenu;
 	W_Options optionsMenu;
 	W_LevelMenu levelMenu;
 	W_SelectWeapon selectWeapon;
 
 	virtual bool onKeyEscape() override;
+
+	void start_openAnim() override;
+	void start_closeAnim() override;
+	void tick_openAnim(const float&) override;
+	void tick_closeAnim(const float&) override;
+
 public:
 	void tick(const float& deltaTime) override;
 	W_MainMenu(InputWidget*);
@@ -28,4 +31,5 @@ public:
 
 	InputWidget* setWidgetIndex(const int&) override;
 	InputWidget* getWidgetAtIndex(const int&) override;
+
 };

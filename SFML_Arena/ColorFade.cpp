@@ -8,22 +8,20 @@ void ColorFade::tick_fade(const float& deltaTime)
 	if (bStopFade)
 		return;
 
-	const sf::Color currentColor = getColor();
-	
-	if (currentColor == toColor)
-	{
-		bStopFade = true;
-		return;
-	}
+	elapsedTime += deltaTime;
 
-	float factor = deltaTime / fadeTime;
+	float factor = std::clamp(elapsedTime / fadeTime, 0.0f, 1.0f);
 
-	sf::Color newColor = lerp(currentColor, toColor, factor);
+	sf::Color newColor = lerp(fromColor, toColor, factor);
 	setColor(newColor);
 
-	sf::Color newTextColor = lerp(getColor(true), toColor, factor);
+	sf::Color newTextColor = lerp(fromColor, toColor, factor);
 	setColor(newTextColor, true);
+
+	if (factor >= 1.0f)
+		bStopFade = true;
 }
+
 
 ColorFade::ColorFade(InputWidget* parent)
 	: Button(parent)
@@ -46,6 +44,7 @@ void ColorFade::reset()
 	Button::reset();
 
 	bStopFade = true;
+	elapsedTime = 0.0f;
 
 	// Reset fade screen to default color
 	setColor(fromColor);
@@ -63,9 +62,10 @@ void ColorFade::setFadeColor(const sf::Color& from, const sf::Color& to, const f
 bool ColorFade::isFading() const
 {
 	if (bStopFade)
-		return bStopFade;
+		return false;
 
-	bool bFinished = (getColor() == toColor);
+	//bool bFinished = (getColor() == toColor);
+	bool bFinished = (elapsedTime >= fadeTime);
 
 	return (!bFinished);
 }
@@ -73,6 +73,7 @@ bool ColorFade::isFading() const
 void ColorFade::startFade()
 {
 	bStopFade = false;
+	elapsedTime = 0.0f;
 
 	setColor(fromColor);
 	setColor(getButtonData().textColor, true);

@@ -215,9 +215,6 @@
     <ClCompile Include="W_Inventory.cpp">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
     </ClCompile>
-    <ClCompile Include="Background.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="W_LevelUp.cpp">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks</Filter>
     </ClCompile>
@@ -235,6 +232,15 @@
     </ClCompile>
     <ClCompile Include="ColorFade.cpp">
       <Filter>Source\VisualInterfaces\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadingScreen.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>Source\VisualInterfaces\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="W_TitleScreen.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\MainMenu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -438,6 +444,15 @@
     </ClInclude>
     <ClInclude Include="ColorFade.h">
       <Filter>Source\VisualInterfaces\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadingScreen.h">
+      <Filter>Source\VisualInterfaces\Widgets\MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Source\VisualInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="W_TitleScreen.h">
+      <Filter>Source\VisualInterfaces\Widgets\MainMenu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

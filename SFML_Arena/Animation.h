@@ -1,32 +1,99 @@
-#include <SFML/Graphics.hpp>
+#pragma once
 
-class Animation
+class IWidgetAnimation
 {
+protected:
+	enum EAnimation
+	{
+		NO_ANIMATION = -1,
+		OPEN_ANIM,
+		OPEN_SUB_ANIM,
+		CLOSE_ANIM,
+		IDLE_ANIM
+	};
+
+	virtual void tick_anim(const float& deltaTime)
+	{
+		if (!IWidgetAnimation::isAnimPlaying())
+			return;
+
+		switch (IWidgetAnimation::getPlayingAnim())
+		{
+		case OPEN_ANIM:
+			tick_openAnim(deltaTime);
+			break;
+		case OPEN_SUB_ANIM:
+			tick_openSubAnim(deltaTime);
+			break;
+		case CLOSE_ANIM:
+			tick_closeAnim(deltaTime);
+			break;
+		case IDLE_ANIM:
+			tick_idleAnim(deltaTime);
+			break;
+		case NO_ANIMATION:
+		default:
+			IWidgetAnimation::stopAnim();
+			break;
+		}
+	}
+
 private:
-    sf::RectangleShape& targetShape; // Das Ziel (z. B. dein Button oder Sprite)
-    sf::Vector2i frameSize; // Die Größe eines Frames (z. B. 64x64 Pixel)
-    int frameCount; // Anzahl der Frames in der Animation
-    float frameTime; // Zeit pro Frame in Sekunden
-    float elapsedTime; // Verstrichene Zeit
-    int currentFrame; // Aktueller Frame
+	bool bIsPlaying = false;
+	EAnimation animationPlaying = NO_ANIMATION;
+
+	// Different Widget Animations
+	virtual void start_openAnim() { stopAnim(); };
+	virtual void start_openSubAnim() {};
+	virtual void start_closeAnim() {};
+	virtual void start_idleAnim() {};
+
+	virtual void tick_openAnim(const float&) {};
+	virtual void tick_openSubAnim(const float&) {};
+	virtual void tick_closeAnim(const float&) {};
+	virtual void tick_idleAnim(const float&) {};
 
 public:
-    Animation(sf::RectangleShape& shape, const sf::Vector2i& frameSize, int frameCount, float frameTime)
-        : targetShape(shape), frameSize(frameSize), frameCount(frameCount), frameTime(frameTime), elapsedTime(0), currentFrame(0) {}
+	void playAnim(const EAnimation& anim)
+	{
+		bIsPlaying = true;
+		animationPlaying = anim;
 
-    void update(float deltaTime)
-    {
-        elapsedTime += deltaTime;
-
-        // Wechsel zum nächsten Frame, wenn genügend Zeit vergangen ist
-        if (elapsedTime >= frameTime)
-        {
-            elapsedTime -= frameTime;
-            currentFrame = (currentFrame + 1) % frameCount;
-
-            // Berechne den Texturausschnitt (nur horizontal in diesem Beispiel)
-            int left = currentFrame * frameSize.x;
-            targetShape.setTextureRect(sf::IntRect(left, 0, frameSize.x, frameSize.y));
-        }
-    }
+		switch (IWidgetAnimation::getPlayingAnim())
+		{
+		case OPEN_ANIM:
+			start_openAnim();
+			break;
+		case OPEN_SUB_ANIM:
+			start_openSubAnim();
+			break;
+		case CLOSE_ANIM:
+			start_closeAnim();
+			break;
+		case IDLE_ANIM:
+			start_idleAnim();
+			break;
+		case NO_ANIMATION:
+		default:
+			IWidgetAnimation::stopAnim();
+			break;
+		}
+	}
+	void stopAnim()
+	{
+		bIsPlaying = false;
+	}
+	void clearAnimation()
+	{
+		stopAnim();
+		animationPlaying = NO_ANIMATION;
+	}
+	virtual bool isAnimPlaying() const
+	{
+		return bIsPlaying;
+	}
+	EAnimation getPlayingAnim() const
+	{
+		return animationPlaying;
+	}
 };

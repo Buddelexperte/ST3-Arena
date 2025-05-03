@@ -7,9 +7,10 @@ class ColorFade : public Button
 private:
 	bool bStopFade = true;
 
-	sf::Color fromColor;
-	sf::Color toColor;
-	float fadeTime;
+	sf::Color fromColor = sf::Color::Black;
+	sf::Color toColor = sf::Color::Transparent;
+	float fadeTime = 1.0f;
+	float elapsedTime = 0.0f;
 
 	void tick_fade(const float& deltaTime);
 

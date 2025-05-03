@@ -20,6 +20,11 @@ W_Paused::W_Paused(InputWidget* parent)
 	pause_quitButton.construct(PAUSED_CONSTR[3]);
 }
 
+sf::Vector2f W_Paused::getCorrectTickCorrection() const
+{
+	return widgetOffset;
+}
+
 void W_Paused::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
@@ -83,7 +88,7 @@ bool W_Paused::isMouseOver(const bool& checkForClick = false)
 	}
 	if (pause_quitButton.isMouseOver(checkForClick))
 	{
-		if (checkForClick) gameInstance().setGameState(MENU_SCREEN);
+		if (checkForClick) parent->playAnim(EAnimation::CLOSE_ANIM);
 		return true;
 	}
 	// On no button-mouse overlap

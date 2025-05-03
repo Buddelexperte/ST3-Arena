@@ -9,8 +9,6 @@
 class W_Hud : public InputWidget
 {
 private:
-	ColorFade fadeScreen;
-
 	HealthBar healthBar;
 	ScoreBar scoreBar;
 

@@ -13,6 +13,13 @@ private:
 
 	BackgroundElement background;
 
+	ColorFade fadeScreen;
+
+	void start_openAnim() override;
+	void start_closeAnim() override;
+	void tick_openAnim(const float&) override;
+	void tick_closeAnim(const float&) override;
+
 	void lose();
 
 	bool onKeyEscape() override;

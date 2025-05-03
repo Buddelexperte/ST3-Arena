@@ -9,6 +9,11 @@ Button::Button(InputWidget* parent)
 
 }
 
+void Button::construct()
+{
+    construct(buttonData);
+}
+
 void Button::construct(const RawButton& constr)
 {
 	buttonData = constr;
@@ -395,6 +400,9 @@ void Button::setTexture(const sf::Texture& newTexture, const bool resetTint)
 
 bool Button::isMouseOver(const bool& bRegisterClick)
 {
+    if (isAnimPlaying())
+        return false;
+
 	const sf::Vector2f& mouse = gameInstance().getMousePos();
 	bool hovered = B_Box.getGlobalBounds().contains(mouse);
 

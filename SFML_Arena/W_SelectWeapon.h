@@ -20,5 +20,7 @@ public:
 	void construct() override;
 	bool isMouseOver(const bool&) override;
 
+	bool onKeyEscape() override;
+
 	InputWidget* setWidgetIndex(const int& newIndex) override;
 };

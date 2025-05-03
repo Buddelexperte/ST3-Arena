@@ -50,7 +50,7 @@ bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
 	if (gameOver_quitButton.isMouseOver(checkForClick))
 	{
-		gameInstance().setGameState(MENU_SCREEN);
+		parent->playAnim(EAnimation::CLOSE_ANIM);
 		return true;
 	}
 	// On no button-mouse overlap

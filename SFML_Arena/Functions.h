@@ -133,7 +133,7 @@ inline int lerp(const int& a, const int& b, float factor)
 
 	float res = a + factor * (b - a);
 
-	return static_cast<int>(res);
+	return static_cast<int>(std::round(res));
 }
 
 inline sf::Vector2f lerp(const sf::Vector2f& a, const sf::Vector2f& b, float factor)

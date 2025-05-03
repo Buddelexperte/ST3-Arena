@@ -36,6 +36,7 @@ private:
 	
 	RawButton buttonData;
 	static inline const sf::Color hoverColor_diff = sf::Color(-50, -50, -50, 0); // Color difference when hovering
+	bool bHovered = false;
 public:
 	sf::RectangleShape B_Box;
 	sf::Text T_Text;
@@ -43,6 +44,7 @@ public:
 
 	Button(InputWidget* parent);
 
+	void construct();
 	void construct(const RawButton&);
 
 	// Text

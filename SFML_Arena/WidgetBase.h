@@ -3,6 +3,7 @@
 #include "RenderInfo.h"
 #include "Input.h"
 #include "DrawableShape.h"
+#include "Animation.h"
 
 #include "Functions.h" // For sf::Vector2f maths
 
@@ -11,7 +12,7 @@ class InputWidget;
 
 // WIDGETS ----------------------------------------------------------------------------------------
 
-class WidgetElement : public IMovable, public IDrawableShapes
+class WidgetElement : public IMovable, public IDrawableShapes, public IWidgetAnimation
 {
 private:
 	sf::Vector2f tickPosCorrection = viewCenter;
@@ -24,9 +25,15 @@ public:
 	WidgetElement(InputWidget* parentWidget);
 	virtual ~WidgetElement() = default;
 
-	virtual void construct() {}
+	virtual void construct()
+	{
+		IWidgetAnimation::playAnim(EAnimation::OPEN_ANIM);
+	}
 	virtual void reset() {}
-	virtual void construct(const sf::Vector2f&) {}
+	virtual void construct(const sf::Vector2f&)
+	{
+		construct();
+	}
 	virtual void tick(const float& deltaTime)
 	{
 		if (tickPosCorrection != getCorrectTickCorrection())
@@ -35,6 +42,7 @@ public:
 		}
 
 		tick_pos(tickPosCorrection);
+		tick_anim(deltaTime);
 	}
 
 	virtual void tick_pos(const sf::Vector2f& withPos)
@@ -45,6 +53,8 @@ public:
 	}
 
 	InputWidget* getParent() const { return parent; }
+
+	bool isAnimPlaying() const override;
 };
 
 class InputWidget : public WidgetElement, public IHasInput
@@ -75,6 +85,14 @@ public:
 	virtual InputWidget* setWidgetIndex(const int&);
 	virtual InputWidget* getWidgetAtIndex(const int& atIndex) { return (atIndex == 0 ? this : nullptr); };
 	int getWidgetIndex() const { return widgetIndex; }
-	bool isChildActive() const { return (widgetIndex > 0); }
+	bool isChildActive() { return (getWidgetAtIndex(widgetIndex) != this); }
 	InputWidget* getActiveChild() { return getWidgetAtIndex(widgetIndex); }
+
+	void playAnimation(const EAnimation& anim)
+	{
+		if (isChildActive())
+			getActiveChild()->playAnimation(anim);
+		else
+			IWidgetAnimation::playAnim(anim);
+	}
 };

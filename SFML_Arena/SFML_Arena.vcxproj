@@ -193,12 +193,14 @@
     <ClCompile Include="W_Paused.cpp" />
     <ClCompile Include="W_SelectWeapon.cpp" />
     <ClCompile Include="W_SelectWeapon.h" />
+    <ClCompile Include="W_TitleScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AllEnemyWaves.h" />
     <ClInclude Include="AllEntities.h" />
     <ClInclude Include="AllPerks.h" />
     <ClInclude Include="AllWeapons.h" />
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="ColorFade.h" />
     <ClInclude Include="Damage.h" />
@@ -263,6 +265,7 @@
     <ClInclude Include="W_OptionsGraphics.h" />
     <ClInclude Include="W_OptionsSounds.h" />
     <ClInclude Include="W_Paused.h" />
+    <ClInclude Include="W_TitleScreen.h" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\openal32.dll">

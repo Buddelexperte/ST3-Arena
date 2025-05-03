@@ -22,6 +22,16 @@ WidgetElement::WidgetElement(InputWidget* parentWidget)
 
 }
 
+bool WidgetElement::isAnimPlaying() const
+{
+	bool bIsPlaying = IWidgetAnimation::isAnimPlaying();
+
+	if (parent != nullptr)
+		bIsPlaying |= parent->isAnimPlaying();
+
+	return bIsPlaying;
+}
+
 // InputWidget ------------------------------------------------------------------------------------
 
 InputWidget* InputWidget::setWidgetIndex(const int& toIndex)

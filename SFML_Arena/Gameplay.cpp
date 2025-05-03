@@ -7,24 +7,29 @@
 
 W_Gameplay::W_Gameplay(InputWidget* parent)
 	: InputWidget(parent),
-	pauseMenu(this), gameOverScreen(this), inventoryScreen(this), levelUpScreen(this), background(this),
+	pauseMenu(this), gameOverScreen(this), inventoryScreen(this), levelUpScreen(this), background(this), fadeScreen(this),
 	hud(gameInstance().getHud())
 {
+	// Setting fade from black to transparent for spawn visuals
+	fadeScreen.setPosition(viewTL);
+	fadeScreen.setSize(viewSize);
+
 	// Done out
 	std::cout << "- Constructed GameplayWidget" << std::endl;
 }
 
 void W_Gameplay::construct()
 {
-	InputWidget::construct();
-
-	GameState gameState = gameInstance().getGameState();
+	const GameState gameState = gameInstance().getGameState();
 
 	if (gameState < GAME_LAUNCHING)
 		return getWidgetAtIndex(widgetIndex)->construct();
 
+
 	if (gameState == GAME_LAUNCHING)
 	{
+		InputWidget::construct();
+
 		// Reset values to game start values
 		hud.construct();
 		gameInstance().startRound();
@@ -102,6 +107,8 @@ InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 		break;
 	}
 
+	shapes.push_back(&fadeScreen);
+
 	return getWidgetAtIndex(widgetIndex);
 }
 
@@ -121,6 +128,7 @@ void W_Gameplay::tick(const float& deltaTime)
 	InputWidget::tick(deltaTime);
 	hud.tick(deltaTime);
 	background.tick(deltaTime);
+	fadeScreen.tick(deltaTime);
 
 	Player* player = gameInstance().getPlayer();
 
@@ -201,5 +209,34 @@ void W_Gameplay::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	for (const sf::Drawable* elem : shapes)
 	{
 		target.draw(*elem, states);
+	}
+}
+
+void W_Gameplay::start_openAnim()
+{
+	fadeScreen.setFadeColor(sf::Color::Black, sf::Color::Transparent, SCREEN_FADE_DURATION);
+	fadeScreen.startFade();
+}
+
+void W_Gameplay::start_closeAnim()
+{
+	fadeScreen.setFadeColor(sf::Color::Transparent, sf::Color::Black, SCREEN_FADE_DURATION);
+	fadeScreen.startFade();
+}
+
+void W_Gameplay::tick_openAnim(const float&)
+{
+	if (!fadeScreen.isFading())
+	{
+		IWidgetAnimation::stopAnim();
+	}
+}
+
+void W_Gameplay::tick_closeAnim(const float&)
+{
+	if (!fadeScreen.isFading())
+	{
+		gameInstance().setGameState(MENU_SCREEN);
+		IWidgetAnimation::stopAnim();
 	}
 }

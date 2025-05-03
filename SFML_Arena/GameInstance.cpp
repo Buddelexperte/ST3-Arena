@@ -12,10 +12,10 @@ float GI_Arena::globalTime = 0.0f;
 GI_Arena::GI_Arena()
 {
 	const sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-	window = std::make_unique<sf::RenderWindow>(desktop, "SFML_Arena", sf::Style::Fullscreen);
+	//window = std::make_unique<sf::RenderWindow>(desktop, "SFML_Arena", sf::Style::Fullscreen);
 
 	// Only use for crash heavy debug !
-	//window = std::make_unique<sf::RenderWindow>(desktop, "SFML_Arena", sf::Style::Titlebar | sf::Style::Default);
+	window = std::make_unique<sf::RenderWindow>(desktop, "SFML_Arena", sf::Style::Titlebar | sf::Style::Default);
 
 	window->setFramerateLimit(MAX_FPS);
 	window->setVerticalSyncEnabled(bUseVSync);
@@ -43,9 +43,9 @@ bool GI_Arena::initWidgets()
 	widgets.clear();
 	std::cout << "Initiating widgets..." << std::endl;
 	try { // Adding base widgets with their nullptr parent HERE!
-		widgets.push_back(std::make_shared<W_LoadingScreen>(nullptr)); // LoadingScreen = 0
-		widgets.push_back(std::make_shared<W_MainMenu>(nullptr)); // MainMenu = 1
-		widgets.push_back(std::make_shared<W_Gameplay>(nullptr)); // Gameplay = 2
+		widgets.push_back(std::make_shared<W_LoadingScreen>(nullptr));	// LoadingScreen = 0
+		widgets.push_back(std::make_shared<W_MainMenu>(nullptr));		// MainMenu = 1
+		widgets.push_back(std::make_shared<W_Gameplay>(nullptr));		// Gameplay = 2
 	}
 	catch (const std::exception& e) {
 		std::cerr << "Exception caught: " << e.what() << std::endl;
@@ -226,9 +226,9 @@ sf::Vector2f GI_Arena::getWidgetOffset() const
 // Adjust the camera position based on velocity and distance to target (Player + Mouse Influence)
 void GI_Arena::tick_view(const float& deltaTime)
 {
-	constexpr float SPRING_STRENGTH = 2.5f;             // Higher = Quicker follow
-	constexpr float DAMPING_COEFFICIENT = 4.0f;           // Higher = More Resistance
-	constexpr float MAX_DISTANCE = 100.0f;                // Maximum allowed mouse influence
+	constexpr float SPRING_STRENGTH = 2.5f;					// Higher = Quicker follow
+	constexpr float DAMPING_COEFFICIENT = 4.0f;				// Higher = More Resistance
+	constexpr float MAX_DISTANCE = 100.0f;					// Maximum allowed mouse influence
 
 	// A factor for widgetOffset interpolation (tweak for less aggressive movement)
 	constexpr float WIDGET_LERP_ALPHA = 0.5f;             // Lower value = slower, snappier response

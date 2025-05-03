@@ -4,43 +4,26 @@
 
 #include "MainMenu.h" // Own header file
 #include "GameInstance.h"
-#include "SaveGame.h"
 
 W_MainMenu::W_MainMenu(InputWidget* parent)
-	: InputWidget(parent), 
+	: InputWidget(parent),
 	fadeScreen(this),
-	optionsMenu(this), levelMenu(this), selectWeapon(this),
-	menu_title(this), menu_highscore(this), menu_startButton(this), menu_optionsButton(this), menu_quitButton(this)
+	titleMenu(this), optionsMenu(this), levelMenu(this), selectWeapon(this)
 {
-	const std::vector<RawButton> MAIN_MENU_CONSTR = {
-		{(sf::Vector2f{ 0.0f, -300.0f }	* unitNorm),    sf::Vector2f{ 350, 120 } * unitNorm,	sf::Color::Transparent,		100,"ARENA",							sf::Color::White},
-		{(sf::Vector2f{ 0.0f, -150.0f }	* unitNorm),    sf::Vector2f{ 100, 100 } * unitNorm,	sf::Color::Transparent,		16,	"Higscore: " + std::to_string(0),	sf::Color::White},
-		{(sf::Vector2f{ 0.0f, 0.0f }	* unitNorm),    buttonSize,								sf::Color::White,			24,	"START",							sf::Color::Black},
-		{(sf::Vector2f{ 0.0f, 150.0f }	* unitNorm),    buttonSize,								sf::Color::White,			24,	"OPTIONS",							sf::Color::Black},
-		{(sf::Vector2f{ 0.0f, 300.0f }	* unitNorm),    buttonSize,								sf::Color::White,			24,	"QUIT",								sf::Color::Black}
-	};
-
-	menu_title.construct(MAIN_MENU_CONSTR[0]);
-	menu_highscore.construct(MAIN_MENU_CONSTR[1]);
-	menu_startButton.construct(MAIN_MENU_CONSTR[2]);
-	menu_optionsButton.construct(MAIN_MENU_CONSTR[3]);
-	menu_quitButton.construct(MAIN_MENU_CONSTR[4]);
-
-	// Done out
-	std::cout << "- Constructed MainMenu" << std::endl;
-
-	fadeScreen.setFadeColor(sf::Color::Black, sf::Color::Transparent, SCREEN_FADE_DURATION);
 	fadeScreen.setPosition(viewTL);
 	fadeScreen.setSize(viewSize);
+
+	fadeScreen.construct();
+	
+	// Done out
+	std::cout << "- Constructed MainMenu" << std::endl;
 }
 
 void W_MainMenu::construct()
 {
-	setWidgetIndex(0);
+	InputWidget::construct();
 
-	fadeScreen.startFade();
-
-	menu_highscore.setText("Highscore: " + std::to_string(SaveGame::storedData.score));
+	setWidgetIndex(0)->construct();
 }
 
 InputWidget* W_MainMenu::getWidgetAtIndex(const int& index)
@@ -48,7 +31,7 @@ InputWidget* W_MainMenu::getWidgetAtIndex(const int& index)
 	switch (index)
 	{
 	case 0:
-		return this; // Self
+		return &titleMenu; // TITLE_MENU
 		break;
 	case 1:
 		return &optionsMenu; // OPTIONS_MENU
@@ -66,15 +49,10 @@ InputWidget* W_MainMenu::getWidgetAtIndex(const int& index)
 
 InputWidget* W_MainMenu::setWidgetIndex(const int& newIndex)
 {
-	switch (widgetIndex = newIndex)
-	{
-	case 0: // MAIN_MENU
-		shapes = { &menu_title, &menu_highscore, &menu_startButton, &menu_optionsButton, &menu_quitButton, &fadeScreen };
-		break;
-	default: // SUB-WIDGETS (implement this notation in EVERY other Widget)
-		shapes = { getActiveChild() };
-		break;
-	}
+	widgetIndex = newIndex;
+
+	shapes = { getActiveChild(), &fadeScreen };
+
 	return getActiveChild();
 }
 
@@ -82,16 +60,7 @@ void W_MainMenu::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 
-	if (isChildActive())
-		return;
-
 	fadeScreen.tick(deltaTime);
-
-	menu_title.tick(deltaTime);
-	menu_highscore.tick(deltaTime);
-	menu_startButton.tick(deltaTime);
-	menu_optionsButton.tick(deltaTime);
-	menu_quitButton.tick(deltaTime);
 }
 
 bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
@@ -99,31 +68,13 @@ bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 	if (isChildActive())
 		return getActiveChild()->isMouseOver(checkForClick);
 
-	sf::Vector2f mousePos = gameInstance().getMousePos();
-
-	if (menu_title.isMouseOver(checkForClick))
-	{
-		sf::Color newColor = (menu_title.getColor(true) == sf::Color::White ? sf::Color::Red : sf::Color::White);
-		if (checkForClick) menu_title.setColor(newColor, true);
-		return true;
-	}
-	if (menu_startButton.isMouseOver(checkForClick))
-	{
-		if (checkForClick) setWidgetIndex(2)->construct();
-		return true;
-	}
-	if (menu_optionsButton.isMouseOver(checkForClick))
-	{
-		if (checkForClick) setWidgetIndex(1)->construct();
-		return true;
-	}
-	if (menu_quitButton.isMouseOver(checkForClick))
-	{
-		if (checkForClick) gameInstance().setGameState(QUIT);
-		return true;
-	}
 	// On no button-mouse overlap
 	return false;
+}
+
+sf::Vector2f W_MainMenu::getCorrectTickCorrection() const
+{
+	return widgetOffset;
 }
 
 bool W_MainMenu::onKeyEscape()
@@ -133,4 +84,34 @@ bool W_MainMenu::onKeyEscape()
 	else
 		gameInstance().setGameState(QUIT);
 	return true;
+}
+
+void W_MainMenu::start_openAnim()
+{
+	fadeScreen.setFadeColor(sf::Color::Black, sf::Color::Transparent, SCREEN_FADE_DURATION);
+	fadeScreen.startFade();
+}
+
+void W_MainMenu::start_closeAnim()
+{
+	fadeScreen.setFadeColor(sf::Color::Transparent, sf::Color::Black, SCREEN_FADE_DURATION);
+	fadeScreen.startFade();
+}
+
+void W_MainMenu::tick_openAnim(const float&)
+{
+	if (!fadeScreen.isFading())
+	{
+		std::cout << "Ended open anim" << std::endl;
+		IWidgetAnimation::stopAnim();
+	}
+}
+
+void W_MainMenu::tick_closeAnim(const float& deltaTime)
+{
+	if (!fadeScreen.isFading())
+	{
+		gameInstance().launchGame();
+		IWidgetAnimation::stopAnim();
+	}
 }

@@ -97,7 +97,24 @@ bool W_SelectWeapon::isMouseOver(const bool& checkForClick = false)
 	if (bStartGame)
 	{
 		gameInstance().getPlayer()->getInventory().setStartWeapon(selectedWeaponName);
-		gameInstance().launchGame();
+		parent->playAnim(CLOSE_ANIM);
+		return true;
+	}
+
+	return false;
+}
+
+bool W_SelectWeapon::onKeyEscape()
+{
+	if (isChildActive())
+	{
+		return getActiveChild()->onKeyEscape();
+	}
+
+	if (parent != nullptr)
+	{
+		// Overridden this to only go back ONE widget instead of whole MainMenu
+		parent->setWidgetIndex(parent->getWidgetIndex() - 1);
 		return true;
 	}
 

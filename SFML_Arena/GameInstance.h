@@ -16,7 +16,7 @@ private:
 	static float globalTime;
 
 	// CONFIG
-	static constexpr unsigned int MAX_FPS = 60;
+	static constexpr unsigned int MAX_FPS = 165;
 	static constexpr bool bUseVSync = true;
 
 	static constexpr bool bWidgetParallax = false;
