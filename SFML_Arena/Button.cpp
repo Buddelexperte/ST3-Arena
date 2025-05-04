@@ -371,7 +371,7 @@ void Button::setText(const std::string& newText)
 {
 	buttonData.text = newText;
 	T_Text.setString(newText);
-
+    setTextAlignment(buttonData.textAlignment);
 }
 
 void Button::setColor(const sf::Color& color, const bool& bTextColor)
@@ -391,6 +391,18 @@ void Button::setColor(const sf::Color& color, const bool& bTextColor)
 sf::Color Button::getColor(const bool& bTextColor) const
 {
 	return bTextColor ? buttonData.textColor : buttonData.color;
+}
+
+void Button::setTextSize(const unsigned int& newSize)
+{
+    buttonData.textSize = newSize;
+    T_Text.setCharacterSize(newSize);
+    setTextAlignment(buttonData.textAlignment);
+}
+
+unsigned int Button::getTextSize() const
+{
+    return buttonData.textSize;
 }
 
 void Button::setTexture(const sf::Texture& newTexture, const bool resetTint)

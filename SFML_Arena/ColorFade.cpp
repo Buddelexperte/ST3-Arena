@@ -15,8 +15,9 @@ void ColorFade::tick_fade(const float& deltaTime)
 	sf::Color newColor = lerp(fromColor, toColor, factor);
 	setColor(newColor);
 
-	sf::Color newTextColor = lerp(fromColor, toColor, factor);
-	setColor(newTextColor, true);
+	newColor = lerp(getColor(true), toColor, factor);
+	T_Text.setFillColor(newColor);
+	T_Text.setOutlineColor(newColor);
 
 	if (factor >= 1.0f)
 		bStopFade = true;
@@ -48,6 +49,7 @@ void ColorFade::reset()
 
 	// Reset fade screen to default color
 	setColor(fromColor);
+	setColor(getColor(true));
 }
 
 
@@ -64,7 +66,6 @@ bool ColorFade::isFading() const
 	if (bStopFade)
 		return false;
 
-	//bool bFinished = (getColor() == toColor);
 	bool bFinished = (elapsedTime >= fadeTime);
 
 	return (!bFinished);

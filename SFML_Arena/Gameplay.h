@@ -5,6 +5,12 @@
 class W_Gameplay : public InputWidget // Gameplay Widget ------------------------------------------
 {
 private:
+	int startAnimPhase = -1;
+	static constexpr float START_DELAY = 1.0f;
+	ValueBar startDelay;
+
+	Button loadingPlaceholder;
+
 	W_Paused pauseMenu;
 	W_GameOver gameOverScreen;
 	W_Inventory inventoryScreen;

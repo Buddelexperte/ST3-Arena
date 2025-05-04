@@ -52,6 +52,8 @@ public:
 	std::string getText() const { return buttonData.text; }
 	void setColor(const sf::Color&, const bool& = false); // Set the color of the text or the button fill
 	sf::Color getColor(const bool& = false) const; // Get the color of the text or the button fill
+	void setTextSize(const unsigned int&);
+	unsigned int getTextSize() const;
 
 	// Texture
 	void setTexture(const sf::Texture&, const bool);

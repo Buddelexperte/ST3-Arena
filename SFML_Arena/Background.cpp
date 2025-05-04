@@ -9,11 +9,6 @@ BackgroundElement::BackgroundElement(InputWidget* parent)
 	{
 		std::cerr << "Failed to load background atlas!" << std::endl;
 	}
-	std::cout << "Atlas size: " << tex_atlas.getSize().x << " x " << tex_atlas.getSize().y << "\n";
-	tex_atlas.setRepeated(true); // Very important for background tiling
-
-	// Initialize the RNG just once
-	seedGenerator.seed(std::random_device{}());
 
 	// No default shape drawing
 	shapes = { };
@@ -41,13 +36,13 @@ void BackgroundElement::updateVertexArray()
 	const int tilesY = static_cast<int>(std::ceil(viewSize.y / TILE_SIZE)) + 2;
 
 	// Compute top-left corner in world space
-	float startX = viewCenter.x - viewSize.x / 2.0f;
-	float startY = viewCenter.y - viewSize.y / 2.0f;
+	float startX = viewCenter.x - viewSize.x / 2.0f - TILE_SIZE;
+	float startY = viewCenter.y - viewSize.y / 2.0f - TILE_SIZE;
 	int tileStartX = static_cast<int>(std::floor(startX / static_cast<float>(TILE_SIZE)));
 	int tileStartY = static_cast<int>(std::floor(startY / static_cast<float>(TILE_SIZE)));
 
 	background.setPrimitiveType(sf::Quads);
-	background.resize(static_cast<size_t>(tilesX) * tilesY * 4);
+	background.resize(static_cast<size_t>(tilesX) * static_cast<size_t>(tilesY) * 4);
 
 	size_t vertexIndex = 0;
 	for (int y = 0; y < tilesY; y++)
@@ -61,12 +56,12 @@ void BackgroundElement::updateVertexArray()
 
 			// Get a consistent random tile based on world position
 			int tileIndex = pseudoRandomTileIndex(worldTileX, worldTileY, 0, ATLAS_COLUMNS * ATLAS_ROWS - 1);
-			int atlasX = tileIndex % ATLAS_COLUMNS;
-			int atlasY = tileIndex / ATLAS_COLUMNS;
+			float atlasX = static_cast<float>(tileIndex % ATLAS_COLUMNS);
+			float atlasY = static_cast<float>(tileIndex / ATLAS_COLUMNS);
 
 			// Calculate texture coordinates based on atlas position
 			// Atlas tile size may differ from display tile size
-			int atlasTileSize = tex_atlas.getSize().x / ATLAS_COLUMNS;  // Assuming square tiles in atlas
+			float atlasTileSize = tex_atlas.getSize().x / static_cast<float>(ATLAS_COLUMNS);
 			sf::Vector2f texOffset(atlasX * atlasTileSize, atlasY * atlasTileSize);
 
 			background[vertexIndex + 0].position = { worldX, worldY };
@@ -74,32 +69,36 @@ void BackgroundElement::updateVertexArray()
 			background[vertexIndex + 2].position = { worldX + TILE_SIZE, worldY + TILE_SIZE };
 			background[vertexIndex + 3].position = { worldX, worldY + TILE_SIZE };
 
-			background[vertexIndex + 0].texCoords = texOffset;
-			background[vertexIndex + 1].texCoords = texOffset + sf::Vector2f(atlasTileSize, 0);
+			background[vertexIndex + 0].texCoords = texOffset + sf::Vector2f(0.0f, 0.0f);
+			background[vertexIndex + 1].texCoords = texOffset + sf::Vector2f(atlasTileSize, 0.0f);
 			background[vertexIndex + 2].texCoords = texOffset + sf::Vector2f(atlasTileSize, atlasTileSize);
-			background[vertexIndex + 3].texCoords = texOffset + sf::Vector2f(0, atlasTileSize);
+			background[vertexIndex + 3].texCoords = texOffset + sf::Vector2f(0.0f, atlasTileSize);
 
 			vertexIndex += 4;
 		}
 	}
 }
 
-void BackgroundElement::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-	target.draw(background, &tex_atlas);
-}
-
 int BackgroundElement::pseudoRandomTileIndex(int x, int y, int min, int max)
 {
-	// Create a deterministic hash from the world coordinates
-	uint32_t hash = static_cast<uint32_t>((x * 73856093) ^ (y * 19349663));
+	// Hash function constants
+	static constexpr uint32_t PRIME_X = 73856093;  // Large prime for x-coordinate hashing
+	static constexpr uint32_t PRIME_Y = 19349663;  // Large prime for y-coordinate hashing
 
-	// Use the hash to get a seed for this specific tile
-	std::mt19937 tileRng(hash);
+	// Create a deterministic hash from the world coordinates
+	uint32_t hash = static_cast<uint32_t>((x * PRIME_X) ^ (y * PRIME_Y));
+
+	// Different seed for each tile
+	seedGenerator.seed(hash);
 
 	// Create a distribution based on the given min and max range
 	std::uniform_int_distribution<int> dist(min, max);
 
 	// Return a random tile index within the specified range
-	return dist(tileRng);
+	return dist(seedGenerator);
+}
+
+void BackgroundElement::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	target.draw(background, &tex_atlas);
 }

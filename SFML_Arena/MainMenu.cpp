@@ -12,8 +12,6 @@ W_MainMenu::W_MainMenu(InputWidget* parent)
 {
 	fadeScreen.setPosition(viewTL);
 	fadeScreen.setSize(viewSize);
-
-	fadeScreen.construct();
 	
 	// Done out
 	std::cout << "- Constructed MainMenu" << std::endl;

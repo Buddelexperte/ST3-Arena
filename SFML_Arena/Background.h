@@ -16,7 +16,7 @@ private:
     sf::Texture tex_atlas;
     sf::VertexArray background;
     sf::Vector2f backgroundPos;
-    float parallaxStrength = 0.5f;
+    float parallaxStrength = 1.0f;
 
     // Random number generation
     std::mt19937 seedGenerator;

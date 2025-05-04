@@ -7,12 +7,18 @@
 
 W_Gameplay::W_Gameplay(InputWidget* parent)
 	: InputWidget(parent),
+	startDelay(START_DELAY), loadingPlaceholder(this),
 	pauseMenu(this), gameOverScreen(this), inventoryScreen(this), levelUpScreen(this), background(this), fadeScreen(this),
 	hud(gameInstance().getHud())
 {
-	// Setting fade from black to transparent for spawn visuals
-	fadeScreen.setPosition(viewTL);
-	fadeScreen.setSize(viewSize);
+
+	const std::vector<RawButton> CONSTR = {
+		{viewTL, viewSize, sf::Color::White, 0, "", sf::Color::Black, EAlignment::CENTER, EAlignment::CENTER},
+		{viewTL, viewSize, sf::Color::Transparent, 500, "ARENA", sf::Color::Black, EAlignment::CENTER, EAlignment::CENTER}
+	};
+
+	fadeScreen.construct(CONSTR[0]);
+	loadingPlaceholder.construct(CONSTR[1]);
 
 	// Done out
 	std::cout << "- Constructed GameplayWidget" << std::endl;
@@ -31,18 +37,17 @@ void W_Gameplay::construct()
 		InputWidget::construct();
 
 		// Reset values to game start values
-		hud.construct();
+		setWidgetIndex(-1);
 		gameInstance().startRound();
 	}
 
-	setWidgetIndex(0);
 }
 
 InputWidget* W_Gameplay::getWidgetAtIndex(const int& atIndex)
 {
 	switch (atIndex)
 	{
-	case 0: // SELF
+	case 0: case -1: // SELF
 		return this;
 		break;
 	case 1: // PAUSED
@@ -103,7 +108,10 @@ InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 		shapes.push_back(&inventoryScreen);
 		break;
 	default:
-		shapes = {};
+		gameInstance().setIsPaused(false);
+		gameInstance().setGameState(IN_GAME);
+		shapes = { &fadeScreen, &loadingPlaceholder };
+		return this;
 		break;
 	}
 
@@ -127,8 +135,9 @@ void W_Gameplay::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 	hud.tick(deltaTime);
-	background.tick(deltaTime);
+	loadingPlaceholder.tick(deltaTime);
 	fadeScreen.tick(deltaTime);
+	background.tick(deltaTime);
 
 	Player* player = gameInstance().getPlayer();
 
@@ -164,6 +173,10 @@ void W_Gameplay::tick(const float& deltaTime)
 
 bool W_Gameplay::onKeyEscape()
 {
+	// Indicates laoding or unfamiliar behavior, but could be not recognized by isChildActive call
+	if (widgetIndex < 0)
+		return false;
+
 	if (isChildActive())
 		return getActiveChild()->onKeyEscape();
 
@@ -174,6 +187,10 @@ bool W_Gameplay::onKeyEscape()
 
 bool W_Gameplay::onKeyTab()
 {
+	// Indicates laoding or unfamiliar behavior, but could be not recognized by isChildActive call
+	if (widgetIndex < 0)
+		return false;
+
 	// If no sub widget open, open optionsMenu
 	SoundManager& soundManager = SoundManager::getInstance();
 	soundManager.play(soundManager.getSound_ReturnClick());
@@ -214,8 +231,26 @@ void W_Gameplay::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void W_Gameplay::start_openAnim()
 {
-	fadeScreen.setFadeColor(sf::Color::Black, sf::Color::Transparent, SCREEN_FADE_DURATION);
-	fadeScreen.startFade();
+	switch (startAnimPhase)
+	{
+	case -1:
+		startDelay.reset();
+		fadeScreen.setFadeColor(sf::Color::White, sf::Color::Black, startDelay.getMaxValue());
+		fadeScreen.startFade();
+		startAnimPhase = 0;
+		break;
+	case 1:
+		// Finally show hud and everything
+		setWidgetIndex(0);
+		hud.construct();
+
+		fadeScreen.setFadeColor(sf::Color::Black, sf::Color::Transparent, SCREEN_FADE_DURATION);
+		fadeScreen.startFade();
+		break;
+	default:
+		break;
+	}
+	
 }
 
 void W_Gameplay::start_closeAnim()
@@ -224,11 +259,28 @@ void W_Gameplay::start_closeAnim()
 	fadeScreen.startFade();
 }
 
-void W_Gameplay::tick_openAnim(const float&)
+void W_Gameplay::tick_openAnim(const float& deltaTime)
 {
-	if (!fadeScreen.isFading())
+	switch (startAnimPhase)
 	{
-		IWidgetAnimation::stopAnim();
+	case 0:
+		startDelay.addValue(-deltaTime);
+		if (startDelay.isEmpty())
+		{
+			startAnimPhase = 1;
+			start_openAnim();
+		}
+		break;
+	case 1:
+		if (!fadeScreen.isFading())
+		{
+			startAnimPhase = -1;
+			IWidgetAnimation::stopAnim();
+		}
+		break;
+	default:
+		stopAnim();
+		break;
 	}
 }
 

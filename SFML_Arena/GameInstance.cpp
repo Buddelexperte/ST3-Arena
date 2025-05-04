@@ -225,12 +225,15 @@ sf::Vector2f GI_Arena::getWidgetOffset() const
 // Adjust the camera position based on velocity and distance to target (Player + Mouse Influence)
 void GI_Arena::tick_view(const float& deltaTime)
 {
-	constexpr float SPRING_STRENGTH = 2.5f;					// Higher = Quicker follow
-	constexpr float DAMPING_COEFFICIENT = 4.0f;				// Higher = More Resistance
-	constexpr float MAX_DISTANCE = 100.0f;					// Maximum allowed mouse influence
+	constexpr float SPRING_STRENGTH = 2.5f;				// Higher = Quicker follow
+	constexpr float DAMPING_COEFFICIENT = 4.0f;			// Higher = More Resistance
+	constexpr float MAX_DISTANCE = 100.0f;				// Maximum allowed mouse influence
+	constexpr float WIDGET_LERP_ALPHA = 0.1f;            // Lower value = slower, snappier response
+	constexpr float MIN_DELTA = 0.001f;                  // Minimum delta time to prevent extreme forces
 
-	// A factor for widgetOffset interpolation (tweak for less aggressive movement)
-	constexpr float WIDGET_LERP_ALPHA = 0.1f;             // Lower value = slower, snappier response
+	// Clamp deltaTime to prevent extreme forces on first frame or lag spikes
+	float clampedDelta = std::max(deltaTime, MIN_DELTA);
+	if (clampedDelta > 0.1f) clampedDelta = 0.1f;        // Also prevent too large steps
 
 	// Get current camera, player, and mouse positions
 	const sf::Vector2f camPos = view->getCenter();
@@ -244,7 +247,6 @@ void GI_Arena::tick_view(const float& deltaTime)
 	{
 		mouseOffset = mousePos - playerPos;
 		float offsetLength = std::sqrt(mouseOffset.x * mouseOffset.x + mouseOffset.y * mouseOffset.y);
-
 		// Clamp the mouse offset so it doesn't exceed MAX_DISTANCE
 		if (offsetLength > MAX_DISTANCE)
 		{
@@ -262,7 +264,7 @@ void GI_Arena::tick_view(const float& deltaTime)
 	sf::Vector2f springForce = -SPRING_STRENGTH * distance;
 
 	// Compute the camera's velocity based on the previous camera position
-	sf::Vector2f velocity = camPos - prevCamPos;
+	sf::Vector2f velocity = (camPos - prevCamPos) / clampedDelta;
 
 	// Calculate the damping force using the velocity
 	sf::Vector2f dampingForce = -DAMPING_COEFFICIENT * velocity;
@@ -271,11 +273,10 @@ void GI_Arena::tick_view(const float& deltaTime)
 	sf::Vector2f totalForce = springForce + dampingForce;
 
 	// Update the camera position by applying the total force scaled by deltaTime
-	sf::Vector2f newCamPos = camPos + (totalForce * deltaTime);
+	sf::Vector2f newCamPos = camPos + (totalForce * clampedDelta);
 	setViewPos(newCamPos);
 
 	const sf::Vector2f viewCenter = view->getCenter();
-
 	if (bWidgetParallax)
 	{
 		// Lerp previous widgetOffset towards the new inverted offset
