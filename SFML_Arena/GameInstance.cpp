@@ -40,7 +40,7 @@ bool GI_Arena::initWidgets()
 	didOnce = true;
 
 	widgets.clear();
-	std::cout << "Initiating widgets..." << std::endl;
+	std::cout << "### Initiating widgets..." << std::endl;
 	try { // Adding base widgets with their nullptr parent HERE!
 		widgets.push_back(std::make_shared<W_LoadingScreen>(nullptr));	// LoadingScreen = 0
 		widgets.push_back(std::make_shared<W_MainMenu>(nullptr));		// MainMenu = 1
