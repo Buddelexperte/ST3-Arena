@@ -11,6 +11,7 @@
 class GI_Arena // SINGLETON PATTERN
 {
 private:
+	// Debugging mode
 	static constexpr bool bDevMode = false;
 
 	// Time calculation (deltaTime etc.)
@@ -18,8 +19,8 @@ private:
 	static float globalTime;
 
 	// CONFIG
-	static constexpr unsigned int MAX_FPS = 165;
-	static constexpr bool bUseVSync = true;
+	unsigned int MAX_FPS = 165; // Should be changeable later in settings
+	bool bUseVSync = true;
 
 	static constexpr bool bWidgetParallax = true;
 
