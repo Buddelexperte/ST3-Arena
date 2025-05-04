@@ -72,6 +72,7 @@ Player* GI_Arena::validPlayer()
 void GI_Arena::start()
 {
 	IDrawableShapes::initValues();
+	std::cout << "Viewport values initialized" << std::endl;
 
 	validPlayer();
 	std::cout << "Player created" << std::endl;
