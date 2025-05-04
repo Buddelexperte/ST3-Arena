@@ -30,6 +30,16 @@ public:
 		return dist(rng);
 	}
 
+	// Float in range
+	static int intInRange(const int min, const int max)
+	{
+		float fMin = static_cast<float>(min);
+		float fMax = static_cast<float>(max);
+
+		int intRes = static_cast<int>(floatInRange(fMin, fMax));
+		return intRes;
+	}
+
 	// Percentage in 0.0f to 1.0f notation
 	static bool chance(const float& percentage)
 	{

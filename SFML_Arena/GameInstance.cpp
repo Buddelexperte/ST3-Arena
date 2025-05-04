@@ -11,6 +11,7 @@ float GI_Arena::globalTime = 0.0f;
 
 GI_Arena::GI_Arena()
 {
+	std::cout << "### Creating viewport..." << std::endl;
 	const sf::VideoMode DESKTOP = sf::VideoMode::getDesktopMode();
 
 	const sf::Uint32 WINDOW_STYLE = (bDevMode ? sf::Style::Default : sf::Style::Fullscreen);
@@ -19,25 +20,24 @@ GI_Arena::GI_Arena()
 	window->setFramerateLimit(MAX_FPS);
 	window->setVerticalSyncEnabled(bUseVSync);
 
-	std::cout << "RenderWindow created." << std::endl;
+	std::cout << "- RenderWindow created" << std::endl;
 	sf::Vector2f desktopSize = { static_cast<float>(DESKTOP.width), static_cast<float>(DESKTOP.height) };
 	view = std::make_unique<sf::View>(desktopSize / 2.0f, desktopSize);
 	prevCamPos = widgetOffset = view->getCenter();
-	std::cout << "View created" << std::endl;
+	std::cout << "- View created" << std::endl;
 	window->setView(*view);
-	std::cout << "View attached" << std::endl;
+	std::cout << "- View attached" << std::endl;
 
-	SaveGame::loadSavedData();
+	std::cout << "Initiated viewport\n" << std::endl;
 }
 
 bool GI_Arena::initWidgets()
 {
 	// Only execute this method once
-	static bool didOnce = false;
+	static bool bInitiatedWidgets = false;
 
-	if (didOnce)
+	if (bInitiatedWidgets)
 		return false;
-	didOnce = true;
 
 	widgets.clear();
 	std::cout << "### Initiating widgets..." << std::endl;
@@ -53,7 +53,8 @@ bool GI_Arena::initWidgets()
 	}
 
 	// Console log
-	std::cout << "Initiated widgets" << std::endl;
+	std::cout << "Initiated widgets\n" << std::endl;
+	bInitiatedWidgets = true;
 	return true;
 }
 
@@ -70,14 +71,14 @@ Player* GI_Arena::validPlayer()
 
 void GI_Arena::start()
 {
+	SaveGame::loadSavedData();
+
 	IDrawableShapes::initValues();
-	std::cout << "Viewport values initialized" << std::endl;
+	std::cout << "Viewport values initialized\n" << std::endl;
 
 	validPlayer();
-	std::cout << "Player created" << std::endl;
 
 	initWidgets();
-	std::cout << "Widgets created" << std::endl;
 	
 	std::cout << "\n### Starting Game ###\n" << std::endl;
 

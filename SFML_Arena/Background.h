@@ -1,35 +1,39 @@
 #pragma once
 
-#include "WidgetBase.h"
+#include "WidgetElements.h"
+#include <random>
 
-class BackgroundElement 
-	: public WidgetElement
+class BackgroundElement : public WidgetElement
 {
 private:
-	// Components
-	sf::VertexArray background;  // 4 vertices for the rectangle (quad), specified in Widget Constructor
-	sf::Texture backgroundTexture;
+    // Constants
+    static constexpr float TILING_SCALE = 5.0f;
+    static constexpr int TILE_WIDTH = 16;       // Pixels per Tile
+    static constexpr int ATLAS_COLUMNS = 4;     // Number of tiles horizontally in the atlas
+    static constexpr int ATLAS_ROWS = 1;        // Number of tiles vertically in the atlas
 
-	// Info
-	sf::Vector2f backgroundPos;
+    // Member variables
+    sf::Texture tex_atlas;
+    sf::VertexArray background;
+    sf::Vector2f backgroundPos;
+    float parallaxStrength = 0.5f;
 
-	// Config
-	static constexpr float TILING_SCALE = 0.1f; // Larger = more tiling
-	static constexpr float parallaxStrength = 1.0f; // Adjust this factor for stronger/weaker parallax
+    // Random number generation
+    std::mt19937 seedGenerator;
 
-	void updateVertexArray();
+    // Methods
+    void updateVertexArray();
+    int pseudoRandomTileIndex(int x, int y, int min, int max);
 
 public:
-	BackgroundElement(InputWidget*);
-	~BackgroundElement() = default;
+    BackgroundElement(InputWidget* parent);
+    void construct() override;
+    void tick(const float& deltaTime) override;
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-	void construct() override;
-	void tick(const float& deltaTime) override;
+    sf::VertexArray& getVertexArray()
+    {
+        return background;
+    }
 
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
-	sf::VertexArray& getVertexArray()
-	{
-		return background;
-	}
 };

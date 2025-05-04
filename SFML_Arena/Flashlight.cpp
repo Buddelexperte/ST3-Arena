@@ -29,7 +29,7 @@ Flashlight::Flashlight()
     for (int i = 52; i <= 60; i++)
     {
         sf::Texture newTexture;
-        std::string texturePath = "Content/Textures/512x512 textures (" + std::to_string(i) + ").png";
+        std::string texturePath = "Content/Textures/FlashlightCircle/512x512 textures (" + std::to_string(i) + ").png";
         if (!newTexture.loadFromFile(texturePath))
         {
             std::cerr << "Failed to load texture: " << texturePath << std::endl;

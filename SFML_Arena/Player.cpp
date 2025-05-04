@@ -15,12 +15,13 @@ Player::Player()
 	invincibility(0.5f), // 0.5 seconds of invincibility after hit
 	collisionBox(this, getPosition(), HITBOX_SIZE) // Collision box centered on player, hals as big as sprite
 {
-
+	std::cout << "### Creating player controller + pawn" << std::endl;
 	// Player Sprite Initialization
 	setPosition(viewCenter);
 	setColor(sf::Color::White);
 
 	enableCollision();
+	std::cout << "- Player collision configured" << std::endl;
 
 	// Sprite & textures
 	for (int i = 4; i <= 6; i++)
@@ -33,6 +34,7 @@ Player::Player()
 		}
 		playerTextures.push_back(newTexture);
 	}
+	std::cout << "- Player textures loaded" << std::endl;
 
 	if (!playerTextures.empty())
 	{
@@ -42,6 +44,7 @@ Player::Player()
 		animationSpeed = 0.2f;
 
 		setSize(spriteSize);
+		std::cout << "- Player textures applied" << std::endl;
 	}
 	else
 	{
@@ -49,6 +52,8 @@ Player::Player()
 	}
 
 	shapes = { &flashlight, &playerSprite };
+
+	std::cout << "Player created\n" << std::endl;
 }
 
 void Player::spawn()
