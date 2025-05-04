@@ -27,6 +27,7 @@ private:
 	GI_Arena& operator=(const GI_Arena&) = delete; // Block the '=' operator to stop copies being made of this class
 	
 	// SFML Viewport objects
+	static const inline std::string WINDOW_NAME = "ARENA";
 	std::unique_ptr<sf::RenderWindow> window = nullptr;
 	std::unique_ptr<sf::View> view = nullptr;
 	sf::RenderStates states;
@@ -85,7 +86,18 @@ public:
 	sf::RenderStates getRenderStates() const { return states; }
 	Player* getPlayer();
 	std::weak_ptr<InputWidget> getActiveWidget() { return activeMenu; }
-	void setIsPaused(const bool& bPause) { bIsGameplayPaused = bPause; }
+	void setIsPaused(const bool& bNewIsPaused)
+	{
+		if (bNewIsPaused != bIsGameplayPaused)
+		{
+			std::string titleBarMsg = WINDOW_NAME;
+			if (bNewIsPaused)
+				titleBarMsg += " (Pausiert)";
+			window->setTitle(titleBarMsg);
+		}
+
+		bIsGameplayPaused = bNewIsPaused;
+	}
 	bool getIsPaused() const { return bIsGameplayPaused; }
 	// Update Zoom (WIP)
 	void setZoom(const float& newZoom) { view->zoom(zoomFactor = newZoom); }

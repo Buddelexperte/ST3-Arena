@@ -15,7 +15,7 @@ GI_Arena::GI_Arena()
 	//window = std::make_unique<sf::RenderWindow>(desktop, "SFML_Arena", sf::Style::Fullscreen);
 
 	// Only use for crash heavy debug !
-	window = std::make_unique<sf::RenderWindow>(desktop, "SFML_Arena", sf::Style::Titlebar | sf::Style::Default);
+	window = std::make_unique<sf::RenderWindow>(desktop, "ARENA", sf::Style::Titlebar | sf::Style::Default);
 
 	window->setFramerateLimit(MAX_FPS);
 	window->setVerticalSyncEnabled(bUseVSync);
