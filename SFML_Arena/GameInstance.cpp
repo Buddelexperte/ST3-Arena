@@ -11,17 +11,16 @@ float GI_Arena::globalTime = 0.0f;
 
 GI_Arena::GI_Arena()
 {
-	const sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-	//window = std::make_unique<sf::RenderWindow>(desktop, "SFML_Arena", sf::Style::Fullscreen);
+	const sf::VideoMode DESKTOP = sf::VideoMode::getDesktopMode();
 
-	// Only use for crash heavy debug !
-	window = std::make_unique<sf::RenderWindow>(desktop, "ARENA", sf::Style::Titlebar | sf::Style::Default);
+	const sf::Uint32 WINDOW_STYLE = (bDevMode ? sf::Style::Default : sf::Style::Fullscreen);
+	window = std::make_unique<sf::RenderWindow>(DESKTOP, WINDOW_NAME, WINDOW_STYLE);
 
 	window->setFramerateLimit(MAX_FPS);
 	window->setVerticalSyncEnabled(bUseVSync);
 
 	std::cout << "RenderWindow created." << std::endl;
-	sf::Vector2f desktopSize = { static_cast<float>(desktop.width), static_cast<float>(desktop.height) };
+	sf::Vector2f desktopSize = { static_cast<float>(DESKTOP.width), static_cast<float>(DESKTOP.height) };
 	view = std::make_unique<sf::View>(desktopSize / 2.0f, desktopSize);
 	prevCamPos = widgetOffset = view->getCenter();
 	std::cout << "View created" << std::endl;

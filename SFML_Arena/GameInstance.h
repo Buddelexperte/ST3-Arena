@@ -11,6 +11,8 @@
 class GI_Arena // SINGLETON PATTERN
 {
 private:
+	static constexpr bool bDevMode = false;
+
 	// Time calculation (deltaTime etc.)
 	sf::Clock clock;
 	static float globalTime;
