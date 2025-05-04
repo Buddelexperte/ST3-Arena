@@ -160,6 +160,19 @@ inline sf::Color lerp(const sf::Color& currColor, const sf::Color& targetColor, 
 }
 
 
+// EASING -------------------------------------------------------------------------------------
+inline float smoothstep(float edge0, float edge1, float x)
+{
+	x = std::clamp((x - edge0) / (edge1 - edge0), 0.f, 1.f);
+	return x * x * (3.f - 2.f * x);
+}
+
+inline sf::Vector2f smoothstep(sf::Vector2f edge0, sf::Vector2f edge1, sf::Vector2f x)
+{
+	return sf::Vector2f(smoothstep(edge0.x, edge1.x, x.x), smoothstep(edge0.y, edge1.y, x.y));
+}
+
+
 // VECTOR2F MATH ----------------------------------------------------------------------------------
 // Compatre Vector2f
 inline bool operator==(const sf::Vector2f& vec1, const sf::Vector2f& vec2) {

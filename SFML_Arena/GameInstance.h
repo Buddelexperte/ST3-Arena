@@ -19,7 +19,7 @@ private:
 	static constexpr unsigned int MAX_FPS = 165;
 	static constexpr bool bUseVSync = true;
 
-	static constexpr bool bWidgetParallax = false;
+	static constexpr bool bWidgetParallax = true;
 
 	// SINGLETON
 	GI_Arena();
@@ -68,7 +68,7 @@ public:
 
 	void launchGame();
 	void startRound();
-	// Ticks
+	// Ticks*
 	void tickLoop();
 	float getGlobalTime() const
 	{

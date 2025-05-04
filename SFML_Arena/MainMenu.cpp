@@ -23,7 +23,7 @@ void W_MainMenu::construct()
 {
 	InputWidget::construct();
 
-	setWidgetIndex(0)->construct();
+	setWidgetIndex(0);
 }
 
 InputWidget* W_MainMenu::getWidgetAtIndex(const int& index)

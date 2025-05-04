@@ -47,7 +47,7 @@ public:
 
 	virtual void tick_pos(const sf::Vector2f& withPos)
 	{
-		const bool bTickUpdate = true;
+		static constexpr bool bTickUpdate = true;
 
 		addPosition(withPos, bTickUpdate);
 	}

@@ -6,7 +6,7 @@
 class W_Paused : public InputWidget
 {
 private:
-	virtual sf::Vector2f getCorrectTickCorrection() const override;
+	sf::Vector2f getCorrectTickCorrection() const override;
 
 	Button pause_title;
 	Button pause_resumeButton;

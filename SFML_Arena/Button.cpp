@@ -321,8 +321,6 @@ void Button::setTextAlignment(const EAlignment& alignment)
         break;
     }
 
-    
-
     T_Text.setPosition(textPos);
 }
 
@@ -342,7 +340,10 @@ void Button::addPosition(const sf::Vector2f& deltaPos, const bool& bTickBased)
 	WidgetElement::addPosition(deltaPos, bTickBased);
 
     if (!bTickBased)
+    {
+        //std::cout << "NOT TICK BASES" << std::endl;
 		buttonData.pos += deltaPos;
+    }
 
     B_Box.setPosition(buttonData.pos + deltaPos);
     setTextAlignment(buttonData.textAlignment);

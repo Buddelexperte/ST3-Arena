@@ -12,10 +12,10 @@ float GI_Arena::globalTime = 0.0f;
 GI_Arena::GI_Arena()
 {
 	const sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-	window = std::make_unique<sf::RenderWindow>(desktop, "SFML_Arena", sf::Style::Fullscreen);
+	//window = std::make_unique<sf::RenderWindow>(desktop, "SFML_Arena", sf::Style::Fullscreen);
 
 	// Only use for crash heavy debug !
-	//window = std::make_unique<sf::RenderWindow>(desktop, "SFML_Arena", sf::Style::Titlebar | sf::Style::Default);
+	window = std::make_unique<sf::RenderWindow>(desktop, "SFML_Arena", sf::Style::Titlebar | sf::Style::Default);
 
 	window->setFramerateLimit(MAX_FPS);
 	window->setVerticalSyncEnabled(bUseVSync);
@@ -188,7 +188,6 @@ void GI_Arena::tick(const float& deltaTime)
 		player->handleEvent(&event);
 	}
 
-	// Tick compound actors
 	player->tick(deltaTime);
 	correctWidget();
 
@@ -204,7 +203,6 @@ void GI_Arena::postTick()
 	// Draw new Menu to screen through GameInstance
 	updateScreen();
 }
-
 
 void GI_Arena::setViewPos(const sf::Vector2f& newPos)
 {
@@ -232,7 +230,7 @@ void GI_Arena::tick_view(const float& deltaTime)
 	constexpr float MAX_DISTANCE = 100.0f;					// Maximum allowed mouse influence
 
 	// A factor for widgetOffset interpolation (tweak for less aggressive movement)
-	constexpr float WIDGET_LERP_ALPHA = 0.5f;             // Lower value = slower, snappier response
+	constexpr float WIDGET_LERP_ALPHA = 0.1f;             // Lower value = slower, snappier response
 
 	// Get current camera, player, and mouse positions
 	const sf::Vector2f camPos = view->getCenter();
@@ -276,15 +274,17 @@ void GI_Arena::tick_view(const float& deltaTime)
 	sf::Vector2f newCamPos = camPos + (totalForce * deltaTime);
 	setViewPos(newCamPos);
 
+	const sf::Vector2f viewCenter = view->getCenter();
+
 	if (bWidgetParallax)
 	{
-		// Instead of scaling newCamPos directly, calculate the widget offset relative to the player's position.
-		// This sets widgetOffset to be halfway between playerPos and newCamPos.
-		widgetOffset = lerp(playerPos + (newCamPos - playerPos) * 0.2f, view->getCenter(), WIDGET_LERP_ALPHA);
+		// Lerp previous widgetOffset towards the new inverted offset
+		const sf::Vector2f newCenter = viewCenter - (mouseOffset * 0.1f);
+		widgetOffset = lerp(widgetOffset, newCenter, WIDGET_LERP_ALPHA);
 	}
 	else
 	{
-		widgetOffset = view->getCenter();
+		widgetOffset = viewCenter;
 	}
 
 	IDrawableShapes::updateValues();
