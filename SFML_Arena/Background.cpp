@@ -5,10 +5,21 @@
 BackgroundElement::BackgroundElement(InputWidget* parent)
 	: WidgetElement(parent), background(sf::Quads, 4)
 {
-	if (!tex_atlas.loadFromFile("Content/Textures/Tiles/background/background_atlas_2.png"))
+	const std::string atlasDir = "Content/Textures/Tiles/background/";
+	for (unsigned int i = 0; i < NUM_ATLAS_TO_LOAD; i++)
 	{
-		std::cerr << "Failed to load background atlas!" << std::endl;
+		// BACKGROUND ATLAS needs this naming!!
+		const std::string fileName = "background_atlas_" + std::to_string(i) + ".png";
+		sf::Texture tex;
+		if (!tex.loadFromFile(atlasDir + fileName))
+		{
+			std::cerr << "Failed to load background atlas #" << i << std::endl;
+			continue;
+		}
+		loadedTextures.push_back(tex);
 	}
+
+	setBackgroundTexture(EBackgroundTexture::DEFAULT);
 
 	// No default shape drawing
 	shapes = { };
@@ -27,7 +38,7 @@ void BackgroundElement::tick(const float& deltaTime)
 
 void BackgroundElement::updateVertexArray()
 {
-	static constexpr float TILE_SIZE = TILE_WIDTH * TILING_SCALE;
+	const float TILE_SIZE = TILE_WIDTH * TILING_SCALE;
 
 	backgroundPos = viewCenter * parallaxStrength;
 
@@ -61,7 +72,7 @@ void BackgroundElement::updateVertexArray()
 
 			// Calculate texture coordinates based on atlas position
 			// Atlas tile size may differ from display tile size
-			float atlasTileSize = tex_atlas.getSize().x / static_cast<float>(ATLAS_COLUMNS);
+			float atlasTileSize = usedAtlas->getSize().x / static_cast<float>(ATLAS_COLUMNS);
 			sf::Vector2f texOffset(atlasX * atlasTileSize, atlasY * atlasTileSize);
 
 			background[vertexIndex + 0].position = { worldX, worldY };
@@ -100,5 +111,41 @@ int BackgroundElement::pseudoRandomTileIndex(int x, int y, int min, int max)
 
 void BackgroundElement::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(background, &tex_atlas);
+	target.draw(background, usedAtlas);
+}
+
+void BackgroundElement::setBackgroundTexture(const EBackgroundTexture& newBackground)
+{
+	TILE_WIDTH = 16;
+	
+	switch (currBackground = newBackground)
+	{
+	case EBackgroundTexture::DEBUG:
+	case EBackgroundTexture::DEFAULT:
+		ATLAS_COLUMNS = 4;
+		ATLAS_ROWS = 1;
+
+		usedAtlas = &(loadedTextures[0]);
+		break;
+	case EBackgroundTexture::STONE:
+		ATLAS_COLUMNS = 4;  
+		ATLAS_ROWS = 1;        
+	
+		usedAtlas = &(loadedTextures[1]);
+		break;
+	case EBackgroundTexture::DIRT:
+		ATLAS_COLUMNS = 4;
+		ATLAS_ROWS = 1;
+
+		usedAtlas = &(loadedTextures[2]);
+		break;
+	default:
+		break;
+	}
+
+}
+
+EBackgroundTexture BackgroundElement::getBackgroundTexture() const
+{
+	return currBackground;
 }
