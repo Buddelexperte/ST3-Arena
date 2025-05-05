@@ -12,7 +12,6 @@ void ColorFade::tick_fade(const float& deltaTime)
 
 	float t = std::min(elapsedTime, duration);
 	float factor = easing::smootherstep(0.0f, 1.0f, elapsedTime / duration);
-	factor = easing::cubic::inOut(t, 0.0f, 1.0f, duration);
 
 	sf::Color newColor = lerp(fromColor, toColor, factor);
 	setColor(newColor);

@@ -12,7 +12,7 @@ class GI_Arena // SINGLETON PATTERN
 {
 private:
 	// Debugging mode
-	static constexpr bool bDevMode = true;
+	static constexpr bool bDevMode = false;
 
 	// Time calculation (deltaTime etc.)
 	sf::Clock clock;
@@ -22,7 +22,7 @@ private:
 	unsigned int MAX_FPS = 165; // Should be changeable later in settings
 	bool bUseVSync = true;
 
-	static constexpr bool bWidgetParallax = true;
+	static constexpr bool bWidgetParallax = false;
 
 	// SINGLETON
 	GI_Arena();
