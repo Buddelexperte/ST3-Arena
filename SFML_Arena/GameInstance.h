@@ -12,7 +12,7 @@ class GI_Arena // SINGLETON PATTERN
 {
 private:
 	// Debugging mode
-	static constexpr bool bDevMode = true;
+	static constexpr bool bDevMode = false;
 
 	// Time calculation (deltaTime etc.)
 	sf::Clock clock;

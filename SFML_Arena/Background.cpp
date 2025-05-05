@@ -19,7 +19,7 @@ BackgroundElement::BackgroundElement(InputWidget* parent)
 		loadedTextures.push_back(tex);
 	}
 
-	setBackgroundTexture(EBackgroundTexture::DEFAULT);
+	setBackgroundTexture(EBackgroundTexture::DIRT);
 
 	// No default shape drawing
 	shapes = { };
