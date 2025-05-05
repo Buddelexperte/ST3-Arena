@@ -19,7 +19,7 @@ private:
 	static float globalTime;
 
 	// CONFIG
-	unsigned int MAX_FPS = 165; // Should be changeable later in settings
+	unsigned int MAX_FPS = 144; // Should be changeable later in settings
 	bool bUseVSync = true;
 
 	static constexpr bool bWidgetParallax = false;
