@@ -6,31 +6,32 @@
 Flashlight::Flashlight()
     : animWait(ANIM_FRAME_WAIT)
 {
-    constexpr float SPRITE_SIZE = 512.0f;
-    flashlightSprite.setOrigin(SPRITE_SIZE / 2.0f, SPRITE_SIZE / 2.0f);
+    static constexpr float SPRITE_SIZE = 512.0f; // Actual sprite image dimensions
+    flashlightSprite.setOrigin(SPRITE_SIZE / 2.0f, SPRITE_SIZE / 2.0f); // Center the sprite's origin
 
     sf::Color spriteTint = flashlightSprite.getColor();
-    spriteTint.a = 180;
+    spriteTint.a = static_cast<sf::Uint8>(spriteTint.a * 0.75f);
     flashlightSprite.setColor(spriteTint);
 
-    if (!flashlightShader_Circle.loadFromMemory(circleShader_Code, sf::Shader::Fragment))
+    if (!circleShader.loadFromMemory(circleShader_Code, sf::Shader::Fragment))
     {
         throw std::runtime_error("Failed to load flashlight Circle shader.");
     }
-    if (!flashlightShader_Cone.loadFromMemory(coneShader_Code, sf::Shader::Fragment))
+    if (!coneShader.loadFromMemory(coneShader_Code, sf::Shader::Fragment))
     {
         throw std::runtime_error("Failed to load flashlight Cone shader.");
     }
-    if (!testShader.loadFromMemory(debugShader_Code, sf::Shader::Fragment))
+    if (!testShader.loadFromMemory(testShader_Code, sf::Shader::Fragment))
     {
         throw std::runtime_error("Failed to load test shader.");
     }
 
+    static const std::string texturePath = "Content/Textures/FlashlightCircle/";
     for (int i = 52; i <= 60; i++)
     {
+        std::string fileName = "512x512 textures (" + std::to_string(i) + ").png";
         sf::Texture newTexture;
-        std::string texturePath = "Content/Textures/FlashlightCircle/512x512 textures (" + std::to_string(i) + ").png";
-        if (!newTexture.loadFromFile(texturePath))
+        if (!newTexture.loadFromFile(texturePath + fileName))
         {
             std::cerr << "Failed to load texture: " << texturePath << std::endl;
             continue;
@@ -48,8 +49,6 @@ Flashlight::Flashlight()
     {
         throw std::runtime_error("Failed to create scene render texture.");
     }
-
-    sceneRenderTexture.setSmooth(false);
 
     sceneSprite.setTexture(sceneRenderTexture.getTexture());
 
@@ -86,6 +85,8 @@ void Flashlight::tick_animation(const float& deltaTime)
 void Flashlight::tick_shader(const float& deltaTime)
 {
     currShader = getActiveShader();
+
+    // If no shader active, cancel ticking calculation
     if (!currShader)
         return;
 
@@ -93,7 +94,8 @@ void Flashlight::tick_shader(const float& deltaTime)
     sf::Vector2f playerPos = gameInstance().getPlayer()->getPosition();
     setPosition(playerPos);
 
-    float newRot = getLookAtRot(playerPos, gameInstance().getMousePos());
+    sf::Vector2f mousePos = gameInstance().getMousePos();
+    float newRot = getLookAtRot(playerPos, mousePos);
     setRotation(newRot);
 
 
@@ -104,12 +106,8 @@ void Flashlight::tick_shader(const float& deltaTime)
     // Calculation for Cone specific mouse direction
     if (!gameInstance().getIsPaused() && bUseCone)
     {
-        // Calculate direction vector to mouse
-        sf::Vector2i mousePosition = sf::Mouse::getPosition(*window); // Mouse in window coordinates
-        sf::Vector2f mouseWorldPosition = window->mapPixelToCoords(mousePosition, *view); // Transform to world coords
-
         // Normalize direction vector
-        sf::Vector2f mouseDir = mouseWorldPosition - playerPos;
+        sf::Vector2f mouseDir = mousePos - playerPos;
         if (mouseDir != sf::Vector2f(0.0f, 0.0f))
         {
             float len = std::sqrt(mouseDir.x * mouseDir.x + mouseDir.y * mouseDir.y);
@@ -125,19 +123,19 @@ void Flashlight::tick_shader(const float& deltaTime)
     {
     case Flashlight::CIRCLE:
         flashlightSprite.setScale(SPRITE_SCALE);
-        flashlightShader_Circle.setUniform("lightPos", lightPos);
-        flashlightShader_Circle.setUniform("radius", radius);
-        flashlightShader_Circle.setUniform("u_viewSize", sf::Glsl::Vec2(viewSize));
-        flashlightShader_Circle.setUniform("viewportHeight", view->getSize().y);
+        circleShader.setUniform("lightPos", lightPos);
+        circleShader.setUniform("radius", radius);
+        circleShader.setUniform("u_viewSize", sf::Glsl::Vec2(viewSize));
+        circleShader.setUniform("viewportHeight", view->getSize().y);
         break;
     case Flashlight::CONE:
         flashlightSprite.setScale(SPRITE_SCALE * 2.0f);
-        flashlightShader_Cone.setUniform("lightPos", lightPos);
-        flashlightShader_Cone.setUniform("radius", radius * 2.0f);
-        flashlightShader_Cone.setUniform("direction", coneDir);
-        flashlightShader_Cone.setUniform("angle", degreesToRadians(30.0f)); // 60° cone (30° half-angle)
-        flashlightShader_Cone.setUniform("u_viewSize", sf::Glsl::Vec2(viewSize));
-        flashlightShader_Cone.setUniform("viewportHeight", view->getSize().y);
+        coneShader.setUniform("lightPos", lightPos);
+        coneShader.setUniform("radius", radius * 2.0f);
+        coneShader.setUniform("direction", coneDir);
+        coneShader.setUniform("angle", degreesToRadians(30.0f)); // 60° cone (30° half-angle)
+        coneShader.setUniform("u_viewSize", sf::Glsl::Vec2(viewSize));
+        coneShader.setUniform("viewportHeight", view->getSize().y);
         break;
     default:
         break;
@@ -176,10 +174,10 @@ sf::Shader* Flashlight::getActiveShader()
         return &testShader;
         break;
     case Flashlight::CIRCLE:
-        return &flashlightShader_Circle;
+        return &circleShader;
         break;
     case Flashlight::CONE:
-        return &flashlightShader_Cone;
+        return &coneShader;
         break;
     default:
         break;

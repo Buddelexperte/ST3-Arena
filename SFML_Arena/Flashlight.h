@@ -107,7 +107,7 @@ private:
     }
 )";
 
-    static const inline std::string debugShader_Code = R"(
+    static const inline std::string testShader_Code = R"(
     uniform vec2 lightPos; // Light "Source" = Center of Mask
     uniform vec2 direction; // Direction of the cone from the center (normalized)
     uniform float radius; // Cone Radius
@@ -121,8 +121,8 @@ private:
     }
 )";
 
-    sf::Shader flashlightShader_Circle;
-    sf::Shader flashlightShader_Cone;
+    sf::Shader circleShader;
+    sf::Shader coneShader;
     sf::Shader testShader;
 
     sf::Shader* currShader = nullptr;

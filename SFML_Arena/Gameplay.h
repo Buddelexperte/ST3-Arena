@@ -21,6 +21,8 @@ private:
 
 	ColorFade fadeScreen;
 
+	std::vector<sf::Drawable*> flashlightAffectedDrawables;
+
 	void start_openAnim() override;
 	void start_closeAnim() override;
 	void tick_openAnim(const float&) override;

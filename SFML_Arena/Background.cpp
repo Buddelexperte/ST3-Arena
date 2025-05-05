@@ -5,13 +5,13 @@
 BackgroundElement::BackgroundElement(InputWidget* parent)
 	: WidgetElement(parent), background(sf::Quads, 4)
 {
-	const std::string atlasDir = "Content/Textures/Tiles/background/";
+	static const std::string atlasPath = "Content/Textures/Tiles/background/";
 	for (unsigned int i = 0; i < NUM_ATLAS_TO_LOAD; i++)
 	{
 		// BACKGROUND ATLAS needs this naming!!
 		const std::string fileName = "background_atlas_" + std::to_string(i) + ".png";
 		sf::Texture tex;
-		if (!tex.loadFromFile(atlasDir + fileName))
+		if (!tex.loadFromFile(atlasPath + fileName))
 		{
 			std::cerr << "Failed to load background atlas #" << i << std::endl;
 			continue;
@@ -19,7 +19,7 @@ BackgroundElement::BackgroundElement(InputWidget* parent)
 		loadedTextures.push_back(tex);
 	}
 
-	setBackgroundTexture(EBackgroundTexture::DIRT);
+	setBackgroundTexture(EBackgroundTexture::STONE);
 
 	// No default shape drawing
 	shapes = { };

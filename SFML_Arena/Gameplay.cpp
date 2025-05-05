@@ -79,7 +79,10 @@ InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 		return this;
 
 	// DO NOT ADD BACKGROUND ELEMENT HERE, ALREADY ACCOUNTED FOR IN
-	shapes = { bottomRenderer, player, topRenderer, &hud };
+	shapes = { &background, bottomRenderer, player, topRenderer, &hud };
+
+	// Everything that comes before 'player' in shapes should be here
+	flashlightAffectedDrawables = { &background.getVertexArray(), bottomRenderer };
 
 	switch (widgetIndex = toIndex)
 	{
@@ -107,9 +110,11 @@ InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 		gameInstance().setGameState(GAME_PAUSED);
 		shapes.push_back(&inventoryScreen);
 		break;
+	case -1:
 	default:
 		gameInstance().setIsPaused(false);
 		gameInstance().setGameState(IN_GAME);
+		flashlightAffectedDrawables.clear();
 		shapes = { &fadeScreen, &loadingPlaceholder };
 		return this;
 		break;
@@ -163,17 +168,15 @@ void W_Gameplay::tick(const float& deltaTime)
 	// Make sure flashlight draws shader onto environment
 	Flashlight& flashlight = player->getFlashlight();
 
-	flashlight.drawOtherScene(background.getVertexArray());
-
-	for (sf::Drawable* elem : shapes)
+	for (sf::Drawable* shape : flashlightAffectedDrawables)
 	{
-		flashlight.drawOtherScene(elem);
+		flashlight.drawOtherScene(shape);
 	}
 }
 
 bool W_Gameplay::onKeyEscape()
 {
-	// Indicates laoding or unfamiliar behavior, but could be not recognized by isChildActive call
+	// Indicates loading or unfamiliar behavior, but could be not recognized by isChildActive call
 	if (widgetIndex < 0)
 		return false;
 
@@ -221,8 +224,6 @@ bool W_Gameplay::isMouseOver(const bool& checkForClick = false)
 
 void W_Gameplay::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	background.draw(target, states);
-
 	for (const sf::Drawable* elem : shapes)
 	{
 		target.draw(*elem, states);
