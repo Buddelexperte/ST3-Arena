@@ -28,16 +28,16 @@ void HealthBar::tick_bar(const float& deltaTime)
 	const sf::Vector2f lifeBarSize = lifeBar.getSize();
 	if (lifeBarSize.x != newLifeBarWidth)
 	{
-		newLifeBarWidth = lerp(lifeBarSize.x, newLifeBarWidth, LERP_SMOOTHNESS);
-		sf::Vector2f newLifeBarSize = sf::Vector2f(newLifeBarWidth, lifeBarSize.y);
+		float actualLifeBarWidth = lerp(lifeBarSize.x, newLifeBarWidth, LERP_SMOOTHNESS);
+		sf::Vector2f newLifeBarSize = sf::Vector2f(actualLifeBarWidth, lifeBarSize.y);
 		lifeBar.setSize(newLifeBarSize);
 	}
 
 	const sf::Vector2f lifeBarBgSize = lifeBar_bg.getSize();
 	if (lifeBarBgSize.x != maxHealthBarWidth)
 	{
-		newLifeBarWidth = lerp(lifeBarBgSize.x, maxHealthBarWidth, LERP_SMOOTHNESS);
-		sf::Vector2f newLifeBarBgSize = sf::Vector2f(newLifeBarWidth, lifeBarBgSize.y);
+		float actualLifeBarWidth = lerp(lifeBarBgSize.x, maxHealthBarWidth, LERP_SMOOTHNESS);
+		sf::Vector2f newLifeBarBgSize = sf::Vector2f(actualLifeBarWidth, lifeBarBgSize.y);
 		lifeBar_bg.setSize(newLifeBarBgSize);
 	}
 }
@@ -75,11 +75,6 @@ void HealthBar::construct()
 
 void HealthBar::reset()
 {
-	// Reset life bar to default values
-
-	if (displayedHealth == 1.0f)
-		return;
-
-	const sf::Vector2f DEFAULT_LIFE_BAR_SIZE = sf::Vector2f(0.0f, lifeBar.getSize().y);
-	lifeBar.setSize(DEFAULT_LIFE_BAR_SIZE);
+	// No use yet
+	return;
 }

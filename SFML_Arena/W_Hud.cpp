@@ -33,7 +33,6 @@ void W_Hud::reset()
 void W_Hud::reset_health()
 {
 	healthBar.reset();
-
 }
 
 void W_Hud::reset_score()

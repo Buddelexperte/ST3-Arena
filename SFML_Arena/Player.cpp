@@ -138,7 +138,7 @@ void Player::tick_move(const float& deltaTime)
 	}
 	else
 	{
-		velocity = (lerp(velocity, targetVelo, LERP_SMOOTHNESS));
+		velocity = lerp(velocity, targetVelo, LERP_SMOOTHNESS);
 	}
 
 	sf::Vector2f deltaPos = velocity * deltaTime;
