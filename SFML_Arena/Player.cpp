@@ -196,8 +196,15 @@ void Player::releaseToPool()
 bool Player::handleEvent(sf::Event* eventRef)
 {
 	// If gameplay is paused, use gameInstance to relay event to activeWidget
-	if (gameInstance().getIsPaused())
+	GameState gameState = gameInstance().getGameState();
+
+	switch (gameState)
+	{
+	case IN_GAME:
+		break;
+	default:
 		return gameInstance().handleEvent(eventRef);
+	}
 
 	// if not, just continue with normal distributing of events
 	return IHasInput::handleEvent(eventRef);

@@ -10,7 +10,9 @@ void ColorFade::tick_fade(const float& deltaTime)
 
 	elapsedTime += deltaTime;
 
-	float factor = std::clamp(elapsedTime / fadeTime, 0.0f, 1.0f);
+	float t = std::min(elapsedTime, duration);
+	float factor = easing::smootherstep(0.0f, 1.0f, elapsedTime / duration);
+	factor = easing::cubic::inOut(t, 0.0f, 1.0f, duration);
 
 	sf::Color newColor = lerp(fromColor, toColor, factor);
 	setColor(newColor);
@@ -30,7 +32,7 @@ ColorFade::ColorFade(InputWidget* parent)
 	// Set default values
 	fromColor = sf::Color::Black;
 	toColor = sf::Color::Transparent;
-	fadeTime = 1.0f;
+	duration = 1.0f;
 }
 
 void ColorFade::tick(const float& deltaTime)
@@ -58,7 +60,7 @@ void ColorFade::setFadeColor(const sf::Color& from, const sf::Color& to, const f
 {
 	fromColor = from;
 	toColor = to;
-	fadeTime = time;
+	duration = time;
 }
 
 bool ColorFade::isFading() const
@@ -66,7 +68,7 @@ bool ColorFade::isFading() const
 	if (bStopFade)
 		return false;
 
-	bool bFinished = (elapsedTime >= fadeTime);
+	bool bFinished = (elapsedTime >= duration);
 
 	return (!bFinished);
 }

@@ -144,6 +144,9 @@ void W_Gameplay::tick(const float& deltaTime)
 	fadeScreen.tick(deltaTime);
 	background.tick(deltaTime);
 
+	if (widgetIndex < 0)
+		return;
+
 	Player* player = gameInstance().getPlayer();
 
 	if (player->getInventory().getShouldLevelUp())
@@ -235,12 +238,16 @@ void W_Gameplay::start_openAnim()
 	switch (startAnimPhase)
 	{
 	case -1:
+		gameInstance().setIsPaused(true);
+		startDelay.setMaxValue(START_DELAY);
 		startDelay.reset();
+
 		fadeScreen.setFadeColor(sf::Color::White, sf::Color::Black, startDelay.getMaxValue());
 		fadeScreen.startFade();
 		startAnimPhase = 0;
 		break;
 	case 1:
+		gameInstance().setIsPaused(false);
 		// Finally show hud and everything
 		setWidgetIndex(0);
 		hud.construct();
@@ -289,6 +296,7 @@ void W_Gameplay::tick_closeAnim(const float&)
 {
 	if (!fadeScreen.isFading())
 	{
+		gameInstance().setIsPaused(false);
 		gameInstance().setGameState(MENU_SCREEN);
 		IWidgetAnimation::stopAnim();
 	}

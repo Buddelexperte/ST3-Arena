@@ -9,7 +9,7 @@ private:
 
 	sf::Color fromColor = sf::Color::Black;
 	sf::Color toColor = sf::Color::Transparent;
-	float fadeTime = 1.0f;
+	float duration = 1.0f;
 	float elapsedTime = 0.0f;
 
 	void tick_fade(const float& deltaTime);

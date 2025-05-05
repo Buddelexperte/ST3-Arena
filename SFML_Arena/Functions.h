@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <SFML/Graphics.hpp>
 
 // SFML abbreviations
@@ -161,31 +161,90 @@ inline sf::Color lerp(const sf::Color& currColor, const sf::Color& targetColor, 
 
 
 // EASING -------------------------------------------------------------------------------------
-inline float smoothstep(float edge0, float edge1, float x)
+// 
+namespace easing
 {
-	x = std::clamp((x - edge0) / (edge1 - edge0), 0.f, 1.f);
-	return x * x * (3.f - 2.f * x);
-}
+	// SMOOTHSTEP (Scalar Float)
+	inline float smoothstep(float edge0, float edge1, float x)
+	{
+		if (edge0 == edge1) return edge0;
 
-inline sf::Vector2f smoothstep(sf::Vector2f edge0, sf::Vector2f edge1, sf::Vector2f x)
-{
-	return sf::Vector2f(smoothstep(edge0.x, edge1.x, x.x), smoothstep(edge0.y, edge1.y, x.y));
-}
+		x = std::clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
+		return x * x * (3.0f - 2.0f * x);
+	}
 
+	inline float smootherstep(float edge0, float edge1, float x) {
+		// Clamp x to [0,1] range
+		x = std::clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
+
+		// Apply smootherstep formula: 6x⁵ - 15x⁴ + 10x³
+		return x * x * x * (x * (x * 6.0f - 15.0f) + 10.0f);
+	}
+
+	namespace expo
+	{
+		// Exponential ease-in
+		inline float in(float t, float b, float c, float d) {
+			return (t == 0) ? b : c * static_cast<float>(std::pow(2, 10 * (t / d - 1))) + b;
+		}
+
+		// Exponential ease-out
+		inline float out(float t, float b, float c, float d) {
+			return (t == d) ? b + c : c * (-static_cast<float>(std::pow(2, -10 * t / d)) + 1) + b;
+		}
+
+		// Exponential ease-in-out
+		inline float inOut(float t, float b, float c, float d) {
+			if (t == 0) return b;
+			if (t == d) return b + c;
+			t /= d / 2;
+			if (t < 1) return c / 2 * static_cast<float>(std::pow(2, 10 * (t - 1))) + b;
+			t--;
+			return c / 2 * (-static_cast<float>(std::pow(2, -10 * t)) + 2) + b;
+		}
+	}
+
+	namespace cubic
+	{
+		// Cubic ease-in
+		inline float in(float t, float b, float c, float d) {
+			t /= d;
+			return c * t * t * t + b;
+		}
+
+		// Cubic ease-out
+		inline float out(float t, float b, float c, float d) {
+			t /= d;
+			t--;
+			return c * (t * t * t + 1) + b;
+		}
+
+		// Cubic ease-in-out
+		inline float inOut(float t, float b, float c, float d) {
+			t /= d / 2;
+			if (t < 1) return c / 2 * t * t * t + b;
+			t -= 2;
+			return c / 2 * (t * t * t + 2) + b;
+		}
+	}
+}
 
 // VECTOR2F MATH ----------------------------------------------------------------------------------
 // Compatre Vector2f
-inline bool operator==(const sf::Vector2f& vec1, const sf::Vector2f& vec2) {
+inline bool operator==(const sf::Vector2f& vec1, const sf::Vector2f& vec2)
+{
 	return (vec1.x == vec2.x && vec1.y == vec2.y);
 }
 
 // Vector2f * float
-inline sf::Vector2f operator*(const sf::Vector2f& vec, float scalar) {
+inline sf::Vector2f operator*(const sf::Vector2f& vec, float scalar)
+{
 	return sf::Vector2f(vec.x * scalar, vec.y * scalar);
 }
 
 // Vector2f * Vector2f
-inline sf::Vector2f operator*(const sf::Vector2f& lhs, const sf::Vector2f& rhs) {
+inline sf::Vector2f operator*(const sf::Vector2f& lhs, const sf::Vector2f& rhs)
+{
 	return sf::Vector2f(lhs.x * rhs.x, lhs.y * rhs.y);
 }
 
