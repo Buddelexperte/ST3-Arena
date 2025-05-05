@@ -1,6 +1,7 @@
 #pragma once
 
-#include "SFML_Arena.h" // All includes
+//#include "SFML_Arena.h" // All includes
+#include "GameInstance.h" // GameInstance
 
 int main()
 {
