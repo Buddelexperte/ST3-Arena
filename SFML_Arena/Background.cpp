@@ -5,7 +5,7 @@
 BackgroundElement::BackgroundElement(InputWidget* parent)
 	: WidgetElement(parent), background(sf::Quads, 4)
 {
-	if (!tex_atlas.loadFromFile("Content/Textures/Tiles/background/background_atlas.png"))
+	if (!tex_atlas.loadFromFile("Content/Textures/Tiles/background/background_atlas_2.png"))
 	{
 		std::cerr << "Failed to load background atlas!" << std::endl;
 	}
