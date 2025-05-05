@@ -5,7 +5,7 @@
 
 // TODO: Add enemy DeathLights
 
-class Flashlight : public IDrawableShapes, public IMovable
+class Flashlight : public WidgetElement
 {
 private:
     enum FlashlightType {
@@ -143,16 +143,16 @@ private:
     ValueBar animWait;
     sf::Sprite flashlightSprite;
 
-
-    void tick_animation(const float&);
+    void tick_idleAnim(const float&) override;
     void tick_shader(const float&);
     void tick_display(const float&);
+
 
 public:
     Flashlight();
     ~Flashlight() = default;
 
-    void tick(const float& deltaTime);
+    void tick(const float& deltaTime) override;
 
     void setMaskMode(const bool& = false);
 

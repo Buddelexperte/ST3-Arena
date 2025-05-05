@@ -7,7 +7,6 @@
 
 #include "Functions.h" // For sf::Vector2f maths
 
-class GI_Arena;
 class InputWidget;
 
 // WIDGETS ----------------------------------------------------------------------------------------

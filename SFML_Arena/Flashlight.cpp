@@ -4,7 +4,8 @@
 
 
 Flashlight::Flashlight()
-    : animWait(ANIM_FRAME_WAIT)
+    : WidgetElement(nullptr),
+    animWait(ANIM_FRAME_WAIT)
 {
     static constexpr float SPRITE_SIZE = 512.0f; // Actual sprite image dimensions
     flashlightSprite.setOrigin(SPRITE_SIZE / 2.0f, SPRITE_SIZE / 2.0f); // Center the sprite's origin
@@ -53,33 +54,17 @@ Flashlight::Flashlight()
     sceneSprite.setTexture(sceneRenderTexture.getTexture());
 
     shapes = { &sceneSprite };
+
+    playAnim(EAnimation::IDLE_ANIM);
 }
 
 void Flashlight::tick(const float& deltaTime)
 {
-    tick_animation(deltaTime);
+    IWidgetAnimation::tick_anim(deltaTime);
 
     tick_shader(deltaTime);
 
     tick_display(deltaTime);
-}
-
-void Flashlight::tick_animation(const float& deltaTime)
-{
-    animWait.addValue(-deltaTime);
-    if (animWait.isEmpty())
-    {
-        animFrameCount++;
-        int textureIndex = animFrameCount % textures.size();
-        static int lastTextureIndex = -1; // Track last assigned texture index
-        if (textureIndex != lastTextureIndex)
-        {
-            flashlightSprite.setTexture(textures[textureIndex]);
-            lastTextureIndex = textureIndex;
-        }
-
-        animWait.reset();
-    }
 }
 
 void Flashlight::tick_shader(const float& deltaTime)
@@ -151,6 +136,24 @@ void Flashlight::tick_display(const float& deltaTime)
     // Clear with fully transparent background and render
     sceneRenderTexture.clear(sf::Color::Black);
     sceneRenderTexture.display();
+}
+
+void Flashlight::tick_idleAnim(const float& deltaTime)
+{
+    animWait.addValue(-deltaTime);
+    if (animWait.isEmpty())
+    {
+        animFrameCount++;
+        int textureIndex = animFrameCount % textures.size();
+        static int lastTextureIndex = -1; // Track last assigned texture index
+        if (textureIndex != lastTextureIndex)
+        {
+            flashlightSprite.setTexture(textures[textureIndex]);
+            lastTextureIndex = textureIndex;
+        }
+
+        animWait.reset();
+    }
 }
 
 void Flashlight::setMaskMode(const bool& bCone)
