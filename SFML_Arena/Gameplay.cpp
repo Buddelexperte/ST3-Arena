@@ -30,6 +30,7 @@ void W_Gameplay::construct()
 	if (gameState == GAME_LAUNCHING)
 	{
 		// Reset values to game start values
+		std::cout << "-1" << std::endl;
 		setWidgetIndex(-1); // Loading title card
 		playAnim(EAnimation::OPEN_ANIM);
 		gameInstance().startRound();
@@ -58,6 +59,7 @@ InputWidget* W_Gameplay::getWidgetAtIndex(const int& atIndex)
 	default:
 		break;
 	}
+
 	return nullptr;
 }
 
@@ -228,10 +230,10 @@ void W_Gameplay::start_openAnim()
 		startAnimPhase = 0;
 		break;
 	case 1:
-		setWidgetIndex(0)->construct();
+		setWidgetIndex(0);
 		hud.construct();
 
-		fadeScreen.setFadeColor(sf::Color::Black, sf::Color::Transparent, SCREEN_FADE_DURATION);
+		fadeScreen.setFadeColor(sf::Color::Black, sf::Color::Transparent, SCREEN_FADE_DURATION, easing::cubic::out);
 		fadeScreen.startFade();
 		break;
 	default:

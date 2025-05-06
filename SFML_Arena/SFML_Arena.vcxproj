@@ -203,6 +203,7 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="ColorFade.h" />
+    <ClInclude Include="Curve.h" />
     <ClInclude Include="Damage.h" />
     <ClInclude Include="design.h" />
     <ClInclude Include="Entity.h" />

@@ -306,6 +306,10 @@ void GI_Arena::updateScreen()
 // TODO: Rewrite the GameState logic, handling, disconnect from Pausing, reduce control etc
 void GI_Arena::setGameState(const GameState& newGS)
 {
+	// Refuse to acknowledge "change" when nothing changed
+	if (newGS == gameState)
+		return; // eg when opening Gameplay and animation needs IN_GAME
+
 	// TODO needs oversight
 	std::cout << "Setting gameState to = " << static_cast<int>(newGS) << std::endl;
 

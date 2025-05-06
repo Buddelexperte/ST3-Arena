@@ -14,13 +14,16 @@ private:
 
 	void tick_fade(const float& deltaTime);
 
+	EasingFunction easingFunc = easing::smootherstep; // Or default to smootherstep adapter
+
 public:
 	ColorFade(InputWidget* parent);
 	void tick(const float& deltaTime) override;
 
 	void reset() override;
 
-	void setFadeColor(const sf::Color& from, const sf::Color& to, const float& time);
+	void setFadeColor(const sf::Color& from, const sf::Color& to, const float& d, EasingFunction easing);
+	void setFadeColor(const sf::Color& from, const sf::Color& to, const float& d);
 	bool isFading() const;
 
 	void startFade();

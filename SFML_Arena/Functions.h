@@ -162,24 +162,36 @@ inline sf::Color lerp(const sf::Color& currColor, const sf::Color& targetColor, 
 
 // EASING -------------------------------------------------------------------------------------
 // 
+
+using EasingFunction = float(*)(float t, float b, float c, float d);
+
 namespace easing
 {
-	// SMOOTHSTEP (Scalar Float)
-	inline float smoothstep(float edge0, float edge1, float x)
+	// Rewritten to fit the (t, b, c, d) format: t = current time, b = start value, c = change in value, d = duration
+	inline float smoothstep(float t, float b, float c, float d)
 	{
-		if (edge0 == edge1) return edge0;
+		if (d == 0.0f) return b; // avoid divide by zero
 
-		x = std::clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
-		return x * x * (3.0f - 2.0f * x);
+		// Normalize time to [0, 1]
+		float x = std::clamp(t / d, 0.0f, 1.0f);
+
+		// Apply smoothstep formula
+		float smoothed = x * x * (3.0f - 2.0f * x);
+		return b + c * smoothed;
 	}
 
-	inline float smootherstep(float edge0, float edge1, float x) {
-		// Clamp x to [0,1] range
-		x = std::clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
+	inline float smootherstep(float t, float b, float c, float d)
+	{
+		if (d == 0.0f) return b; // avoid divide by zero
+
+		// Normalize time to [0, 1]
+		float x = std::clamp(t / d, 0.0f, 1.0f);
 
 		// Apply smootherstep formula: 6x⁵ - 15x⁴ + 10x³
-		return x * x * x * (x * (x * 6.0f - 15.0f) + 10.0f);
+		float smoothed = x * x * x * (x * (x * 6.0f - 15.0f) + 10.0f);
+		return b + c * smoothed;
 	}
+
 
 	namespace expo
 	{

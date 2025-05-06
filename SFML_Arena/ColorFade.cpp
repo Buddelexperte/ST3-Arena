@@ -5,14 +5,16 @@
 
 void ColorFade::tick_fade(const float& deltaTime)
 {
-	if (bStopFade)
+	if (bStopFade || !easingFunc)
 		return;
 
 	elapsedTime += deltaTime;
-
 	float t = std::min(elapsedTime, duration);
-	float factor = easing::smootherstep(0.0f, 1.0f, elapsedTime / duration);
 
+	// Call the selected easing function
+	float factor = easingFunc(t, 0.0f, 1.0f, duration);
+
+	// Lerp and apply new color
 	sf::Color newColor = lerp(fromColor, toColor, factor);
 	setColor(newColor);
 
@@ -23,6 +25,7 @@ void ColorFade::tick_fade(const float& deltaTime)
 	if (factor >= 1.0f)
 		bStopFade = true;
 }
+
 
 
 ColorFade::ColorFade(InputWidget* parent)
@@ -55,11 +58,18 @@ void ColorFade::reset()
 
 
 // From, to and time
-void ColorFade::setFadeColor(const sf::Color& from, const sf::Color& to, const float& time)
+void ColorFade::setFadeColor(const sf::Color& from, const sf::Color& to, const float& d, EasingFunction easing)
 {
 	fromColor = from;
 	toColor = to;
-	duration = time;
+	duration = d;
+	easingFunc = easing;
+}
+
+// From, to and time
+void ColorFade::setFadeColor(const sf::Color& from, const sf::Color& to, const float& d)
+{
+	setFadeColor(from, to, d, easing::smootherstep);
 }
 
 bool ColorFade::isFading() const

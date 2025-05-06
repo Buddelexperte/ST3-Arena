@@ -454,6 +454,9 @@
     <ClInclude Include="W_TitleScreen.h">
       <Filter>Source\VisualInterfaces\Widgets\MainMenu</Filter>
     </ClInclude>
+    <ClInclude Include="Curve.h">
+      <Filter>Source\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\openal32.dll">
