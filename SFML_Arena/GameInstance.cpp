@@ -301,6 +301,7 @@ void GI_Arena::updateScreen()
 	window->display();
 }
 
+// TODO: Rewrite the GameState logic, handling, disconnect from Pausing, reduce control etc
 void GI_Arena::setGameState(const GameState& newGS)
 {
 	gameState = newGS;
