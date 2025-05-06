@@ -109,6 +109,9 @@ public:
 	{
 		return validPlayer()->getHud();
 	}
+
+	void resetWindowName();
+	void modWindowName(const std::string& suffix);
 };
 
 static inline GI_Arena& gameInstance()

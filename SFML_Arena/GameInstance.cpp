@@ -327,6 +327,17 @@ void GI_Arena::setGameState(const GameState& newGS)
 	}
 }
 
+void GI_Arena::resetWindowName()
+{
+	window->setTitle(WINDOW_NAME);
+}
+
+void GI_Arena::modWindowName(const std::string& suffix)
+{
+	const std::string windowTitle = WINDOW_NAME + suffix;
+	window->setTitle(windowTitle);
+}
+
 Player* GI_Arena::getPlayer()
 {
 	if (player)

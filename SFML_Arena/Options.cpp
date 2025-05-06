@@ -9,10 +9,10 @@ W_Options::W_Options(InputWidget* parent = nullptr)
 	options_title(this), options_graphics(this), options_sounds(this), options_return(this)
 {
 	const std::vector<RawButton> MAIN_MENU_CONSTR = {
-		{sf::Vector2f{ 0, -300 },		sf::Vector2f{ 350, 120 }, sf::Color::Transparent,   100, "OPTIONS",	sf::Color::White},
-		{sf::Vector2f{ 0, 0 },			sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "SOUNDS",	sf::Color::Black},
-		{sf::Vector2f{ 0, 150 },		sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "GRAPHICS",	sf::Color::Black},
-		{sf::Vector2f{ 0, 300 },		sf::Vector2f{ 300, 100 }, sf::Color::White,         24, "RETURN",	sf::Color::Black},
+		{sf::Vector2f{ 0, -300 },		sf::Vector2f{ 350, 120 },	sf::Color::Transparent,   100,	"OPTIONS",	sf::Color::White},
+		{sf::Vector2f{ 0, 0 },			buttonSize,					sf::Color::White,         24,	"SOUNDS",		sf::Color::Black},
+		{sf::Vector2f{ 0, 150 },		buttonSize,					sf::Color::White,         24,	"GRAPHICS",	sf::Color::Black},
+		{sf::Vector2f{ 0, 300 },		buttonSize,					sf::Color::White,         24,	"RETURN",		sf::Color::Black},
 	};
 
 	options_title.construct(MAIN_MENU_CONSTR[0]);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "W_LevelMenu.h" // Own header file
+#include "GameInstance.h"
 
 W_LevelMenu::W_LevelMenu(InputWidget* parent) 
 	: InputWidget(parent),
@@ -35,6 +36,8 @@ void W_LevelMenu::tick(const float& deltaTime)
 void W_LevelMenu::construct()
 {
 	InputWidget::construct();
+
+	gameInstance().modWindowName(" - Selecting Level...");
 	setWidgetIndex(0);
 }
 

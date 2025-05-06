@@ -35,6 +35,11 @@ void W_Gameplay::construct()
 		playAnim(EAnimation::OPEN_ANIM);
 		gameInstance().startRound();
 	}
+
+	if (isChildActive())
+		return;
+
+	gameInstance().resetWindowName();
 }
 
 InputWidget* W_Gameplay::getWidgetAtIndex(const int& atIndex)
@@ -225,7 +230,7 @@ void W_Gameplay::start_openAnim()
 		startDelay.setMaxValue(START_DELAY);
 		startDelay.reset();
 
-		fadeScreen.setFadeColor(sf::Color::White, sf::Color::Black, startDelay.getMaxValue());
+		fadeScreen.setFadeColor(sf::Color::White, sf::Color::Black, startDelay.getMaxValue(), easing::cubic::in);
 		fadeScreen.startFade();
 		startAnimPhase = 0;
 		break;

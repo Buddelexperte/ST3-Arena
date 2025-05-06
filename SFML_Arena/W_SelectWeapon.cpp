@@ -30,6 +30,8 @@ W_SelectWeapon::W_SelectWeapon(InputWidget* parent)
 void W_SelectWeapon::construct()
 {
 	InputWidget::construct();
+
+	gameInstance().modWindowName(" - Selecting Weapon...");
 	setWidgetIndex(0);
 }
 

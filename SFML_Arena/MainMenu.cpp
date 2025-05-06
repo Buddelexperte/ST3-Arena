@@ -19,8 +19,6 @@ W_MainMenu::W_MainMenu(InputWidget* parent)
 
 void W_MainMenu::construct()
 {
-	std::cout << "Constructed MainMenu" << std::endl;
-
 	InputWidget::construct();
 
 	gameInstance().setIsPaused(false);

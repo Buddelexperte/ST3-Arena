@@ -60,16 +60,20 @@ void W_LoadingScreen::tick_openAnim(const float& deltaTime)
 			switch (textState % 4)
 			{
 			case 0:
+				gameInstance().modWindowName("");
 				newMessage = "LOADING...";
 				break;
 			case 1:
+				gameInstance().modWindowName("...");
 				newMessage = ".LOADING..";
 				break;
 			case 2:
+				gameInstance().modWindowName("..");
 				newMessage = "..LOADING.";
 				break;
 			case 3:
 			default:
+				gameInstance().modWindowName(".");
 				newMessage = "...LOADING";
 				break;
 			}
@@ -81,7 +85,7 @@ void W_LoadingScreen::tick_openAnim(const float& deltaTime)
 
 void W_LoadingScreen::start_closeAnim()
 {
-	fadeScreen.setFadeColor(sf::Color::Transparent, sf::Color::Black, SCREEN_FADE_DURATION);
+	fadeScreen.setFadeColor(sf::Color::Transparent, sf::Color::Black, SCREEN_FADE_DURATION, easing::cubic::out);
 	fadeScreen.startFade();
 }
 

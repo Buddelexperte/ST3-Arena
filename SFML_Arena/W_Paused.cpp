@@ -39,6 +39,7 @@ void W_Paused::construct()
 {
 	InputWidget::construct();
 
+	gameInstance().modWindowName(" (Pausiert)");
 	gameInstance().setGameState(GAME_PAUSED);
 
 	setWidgetIndex(0);

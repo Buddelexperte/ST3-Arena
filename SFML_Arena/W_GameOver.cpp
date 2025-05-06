@@ -31,6 +31,7 @@ void W_GameOver::construct()
 {
 	InputWidget::construct();
 
+	gameInstance().modWindowName(" - You lost!");
 	gameInstance().setGameState(GAME_OVER);
 
 	updateStats(SaveGame::currentData);
