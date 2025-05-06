@@ -16,7 +16,8 @@ void LevelSystem::onUpdateScore()
 void LevelSystem::tryLevelUp()
 {
 	// Check if the player has enough points to level up
-	if (collectedPoints >= getPointsNeeded()) // Example condition for leveling up
+	unsigned int points_thisStage = collectedPoints - getLastPointsNeeded();
+	if (points_thisStage >= getPointsNeeded()) // Example condition for leveling up
 	{
 		onLevelUp();
 	}
@@ -26,7 +27,7 @@ void LevelSystem::onLevelUp()
 {
 	owningInv->setShouldLevelUp(true); // Set the level up flag in the inventory
 
-	setStage(stage + 1);  // Increment the stage / level
+	setStage(getStage() + 1);  // Increment the stage / level
 
 	std::cout << "Level Up! Current Stage: " << stage << std::endl;
 }
