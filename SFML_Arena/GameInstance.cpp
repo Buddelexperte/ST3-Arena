@@ -140,17 +140,17 @@ void GI_Arena::correctWidget()
 
 void GI_Arena::launchGame()
 {
-	if (gameState >= GAME_LAUNCHING)
+	if (gameState == GAME_LAUNCHING)
 		return;
 
-	gameState = GAME_LAUNCHING;
+	setGameState(GAME_LAUNCHING);
 	SaveGame::currentData.clear();
 }
 
 void GI_Arena::startRound()
 {
 	// Only activate Gameplay phase when at least launch phase
-	if (gameState < GAME_LAUNCHING)
+	if (gameState != GAME_LAUNCHING)
 		return;
 
 	// Resetting gameplay aspects
@@ -188,7 +188,7 @@ void GI_Arena::tick(const float& deltaTime)
 		player->handleEvent(&event);
 	}
 
-	player->tick(deltaTime);
+	//player->tick(deltaTime); TODO remove line
 	correctWidget();
 
 	// Tick active Environment
@@ -235,15 +235,17 @@ void GI_Arena::tick_view(const float& deltaTime)
 	float clampedDelta = std::max(deltaTime, MIN_DELTA);
 	if (clampedDelta > 0.1f) clampedDelta = 0.1f;        // Also prevent too large steps
 
+	bool bIsGameOver = getGameState() == GAME_OVER;
+
 	// Get current camera, player, and mouse positions
 	const sf::Vector2f camPos = view->getCenter();
 	const sf::Vector2f playerPos = getPlayer()->getPosition();
-	const sf::Vector2f mousePos = getMousePos();
+	const sf::Vector2f mousePos = (bIsGameOver ? playerPos : getMousePos());
 
 	static sf::Vector2f mouseOffset;
 
 	// Calculate the mouse offset relative to the player
-	if (bWidgetParallax || !getIsPaused())
+	if (bWidgetParallax || !getIsPaused() || bIsGameOver)
 	{
 		mouseOffset = mousePos - playerPos;
 		float offsetLength = std::sqrt(mouseOffset.x * mouseOffset.x + mouseOffset.y * mouseOffset.y);
@@ -304,7 +306,21 @@ void GI_Arena::updateScreen()
 // TODO: Rewrite the GameState logic, handling, disconnect from Pausing, reduce control etc
 void GI_Arena::setGameState(const GameState& newGS)
 {
-	gameState = newGS;
+	// TODO needs oversight
+	std::cout << "Setting gameState to = " << static_cast<int>(newGS) << std::endl;
+
+	switch (gameState = newGS)
+	{
+	case IN_GAME:
+		setIsPaused(false);
+		break;
+	case GAME_PAUSED:
+	case GAME_OVER:
+		setIsPaused(true);
+		break;
+	default:
+		break;
+	}
 }
 
 Player* GI_Arena::getPlayer()

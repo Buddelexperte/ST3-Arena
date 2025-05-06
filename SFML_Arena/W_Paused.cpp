@@ -38,6 +38,9 @@ void W_Paused::tick(const float& deltaTime)
 void W_Paused::construct()
 {
 	InputWidget::construct();
+
+	gameInstance().setGameState(GAME_PAUSED);
+
 	setWidgetIndex(0);
 }
 
@@ -73,12 +76,14 @@ InputWidget* W_Paused::setWidgetIndex(const int& newIndex)
 
 bool W_Paused::isMouseOver(const bool& checkForClick = false)
 {
+	std::cout << "isMouseOver" << std::endl;
+
 	if (isChildActive())
 		return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
 
 	if (pause_resumeButton.isMouseOver(checkForClick))
 	{
-		onKeyEscape();
+		if (checkForClick) onKeyEscape();
 		return true;
 	}
 	if (pause_optionsButton.isMouseOver(checkForClick))

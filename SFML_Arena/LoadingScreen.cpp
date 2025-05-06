@@ -4,29 +4,32 @@
 
 #include "GameInstance.h"
 
+
+W_LoadingScreen::W_LoadingScreen(InputWidget* parent)
+	: InputWidget(parent),
+	fadeScreen(this), T_LoadingScreenStatus(this), T_GameTitle(this), textChangeTimer(TEXT_CHANGE_DELAY)
+{
+	const std::vector<RawButton> CONSTR = {
+		{viewTL, viewSize, sf::Color::Transparent, 50, "LOADING...", sf::Color::White, EAlignment::CENTER, EAlignment::CENTER_BOTTOM},
+		{viewTL, viewSize, sf::Color::Transparent, 500, "ARENA", sf::Color::White, EAlignment::CENTER, EAlignment::CENTER},
+		{viewTL, viewSize}
+	};
+
+	T_LoadingScreenStatus.construct(CONSTR[0]);
+	T_GameTitle.construct(CONSTR[1]);
+	fadeScreen.construct(CONSTR[2]);
+
+	shapes = { &T_LoadingScreenStatus, &T_GameTitle, &fadeScreen };
+
+	std::cout << "- Constructed Loading Screen" << std::endl;
+}
+
 void W_LoadingScreen::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 	T_LoadingScreenStatus.tick(deltaTime);
+	T_GameTitle.tick(deltaTime);
 	fadeScreen.tick(deltaTime);
-}
-
-W_LoadingScreen::W_LoadingScreen(InputWidget* parent)
-	: InputWidget(parent),
-	fadeScreen(this), T_LoadingScreenStatus(this), textChangeTimer(TEXT_CHANGE_DELAY)
-{
-	const std::vector<RawButton> CONSTR = {
-		{viewTL, viewSize, sf::Color::Black, 50, "LOADING...", sf::Color::White, EAlignment::CENTER, EAlignment::CENTER_BOTTOM}
-	};
-
-	T_LoadingScreenStatus.construct(CONSTR[0]);
-
-	fadeScreen.setPosition(viewTL);
-	fadeScreen.setSize(viewSize);
-
-	shapes = { &T_LoadingScreenStatus, &fadeScreen };
-
-	std::cout << "- Constructed Loading Screen" << std::endl;
 }
 
 void W_LoadingScreen::start_openAnim()

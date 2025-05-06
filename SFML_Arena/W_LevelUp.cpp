@@ -39,6 +39,10 @@ W_LevelUp::W_LevelUp(InputWidget* parent)
 
 void W_LevelUp::construct()
 {
+	InputWidget::construct();
+
+	gameInstance().setGameState(GAME_PAUSED);
+
 	setWidgetIndex(0);
 }
 
@@ -46,8 +50,6 @@ bool W_LevelUp::isMouseOver(const bool& checkForClick)
 {
 	if (isChildActive())
 		return getActiveChild()->isMouseOver(checkForClick);
-
-	sf::Vector2f mousePos = gameInstance().getMousePos();
 
 	if (B_Skip.isMouseOver(checkForClick))
 	{

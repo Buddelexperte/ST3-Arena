@@ -10,10 +10,14 @@ private:
 	Button gameOver_score;
 	Button gameOver_kills;
 	Button gameOver_quitButton;
+
+	sf::Vector2f getCorrectTickCorrection() const override;
 public:
 	W_GameOver(InputWidget*);
 	void construct() override;
 	void tick(const float& deltaTime) override;
 	void updateStats(const SaveGame_Struct&);
 	bool isMouseOver(const bool&) override;
+
+	bool onKeyEscape() override;
 };

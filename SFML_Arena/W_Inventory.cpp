@@ -1,4 +1,7 @@
-#include "W_Inventory.h"
+#pragma once
+
+#include "W_Inventory.h" // Own header file
+#include "GameInstance.h"
 
 W_Inventory::W_Inventory(InputWidget* parent)
 	: InputWidget(parent)
@@ -8,6 +11,10 @@ W_Inventory::W_Inventory(InputWidget* parent)
 
 void W_Inventory::construct()
 {
+	InputWidget::construct();
+
+	gameInstance().setGameState(GAME_PAUSED);
+
 	setWidgetIndex(0);
 }
 

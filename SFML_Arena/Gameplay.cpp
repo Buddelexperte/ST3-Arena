@@ -27,20 +27,13 @@ W_Gameplay::W_Gameplay(InputWidget* parent)
 void W_Gameplay::construct()
 {
 	const GameState gameState = gameInstance().getGameState();
-
-	if (gameState < GAME_LAUNCHING)
-		return getWidgetAtIndex(widgetIndex)->construct();
-
-
 	if (gameState == GAME_LAUNCHING)
 	{
-		InputWidget::construct();
-
 		// Reset values to game start values
-		setWidgetIndex(-1);
+		setWidgetIndex(-1); // Loading title card
+		playAnim(EAnimation::OPEN_ANIM);
 		gameInstance().startRound();
 	}
-
 }
 
 InputWidget* W_Gameplay::getWidgetAtIndex(const int& atIndex)
@@ -84,40 +77,30 @@ InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 	// Everything that comes before 'player' in shapes should be here
 	flashlightAffectedDrawables = { &background.getVertexArray(), bottomRenderer };
 
+
 	switch (widgetIndex = toIndex)
 	{
 	case 0: // SELF
-		gameInstance().setIsPaused(false);
 		gameInstance().setGameState(IN_GAME);
 		break;
 	case 1: // PAUSED
-		gameInstance().setIsPaused(true);
-		gameInstance().setGameState(GAME_PAUSED);
 		shapes.push_back(&pauseMenu);
 		break;
 	case 2: // GAME_OVER
-		gameInstance().setIsPaused(true);
-		gameInstance().setGameState(GAME_OVER);
 		shapes.push_back(&gameOverScreen);
 		break;
 	case 3: // LEVEL UP
-		gameInstance().setIsPaused(true);
-		gameInstance().setGameState(GAME_PAUSED);
 		shapes.push_back(&levelUpScreen);
 		break;
 	case 4: // INVENTORY
-		gameInstance().setIsPaused(true);
-		gameInstance().setGameState(GAME_PAUSED);
 		shapes.push_back(&inventoryScreen);
 		break;
 	case -1:
 	default:
-		gameInstance().setIsPaused(false);
-		gameInstance().setGameState(IN_GAME);
+		gameInstance().setIsPaused(true);
 		flashlightAffectedDrawables.clear();
 		shapes = { &fadeScreen, &loadingPlaceholder };
 		return this;
-		break;
 	}
 
 	shapes.push_back(&fadeScreen);
@@ -144,10 +127,9 @@ void W_Gameplay::tick(const float& deltaTime)
 	fadeScreen.tick(deltaTime);
 	background.tick(deltaTime);
 
-	if (widgetIndex < 0)
-		return;
-
 	Player* player = gameInstance().getPlayer();
+
+	player->tick(deltaTime);
 
 	if (player->getInventory().getShouldLevelUp())
 	{
@@ -238,7 +220,6 @@ void W_Gameplay::start_openAnim()
 	switch (startAnimPhase)
 	{
 	case -1:
-		gameInstance().setIsPaused(true);
 		startDelay.setMaxValue(START_DELAY);
 		startDelay.reset();
 
@@ -247,9 +228,7 @@ void W_Gameplay::start_openAnim()
 		startAnimPhase = 0;
 		break;
 	case 1:
-		gameInstance().setIsPaused(false);
-		// Finally show hud and everything
-		setWidgetIndex(0);
+		setWidgetIndex(0)->construct();
 		hud.construct();
 
 		fadeScreen.setFadeColor(sf::Color::Black, sf::Color::Transparent, SCREEN_FADE_DURATION);
@@ -296,7 +275,6 @@ void W_Gameplay::tick_closeAnim(const float&)
 {
 	if (!fadeScreen.isFading())
 	{
-		gameInstance().setIsPaused(false);
 		gameInstance().setGameState(MENU_SCREEN);
 		IWidgetAnimation::stopAnim();
 	}

@@ -14,6 +14,7 @@ private:
 
 	ColorFade fadeScreen;
 	Button T_LoadingScreenStatus;
+	Button T_GameTitle;
 
 	void start_openAnim() override;
 	void start_closeAnim() override;

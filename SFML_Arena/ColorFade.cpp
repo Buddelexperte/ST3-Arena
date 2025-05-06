@@ -67,9 +67,7 @@ bool ColorFade::isFading() const
 	if (bStopFade)
 		return false;
 
-	bool bFinished = (elapsedTime >= duration);
-
-	return (!bFinished);
+	return (elapsedTime < duration);
 }
 
 void ColorFade::startFade()

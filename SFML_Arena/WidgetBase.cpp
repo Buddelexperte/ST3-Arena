@@ -57,7 +57,7 @@ bool InputWidget::onKeyEscape()
 	
 	if (parent != nullptr)
 	{
-		parent->setWidgetIndex(0);
+		parent->setWidgetIndex(0)->construct();
 		return true;
 	}
 

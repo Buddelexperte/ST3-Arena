@@ -114,7 +114,7 @@ bool W_SelectWeapon::onKeyEscape()
 	if (parent != nullptr)
 	{
 		// Overridden this to only go back ONE widget instead of whole MainMenu
-		parent->setWidgetIndex(parent->getWidgetIndex() - 1);
+		parent->setWidgetIndex(parent->getWidgetIndex() - 1)->construct();
 		return true;
 	}
 

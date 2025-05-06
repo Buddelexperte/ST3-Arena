@@ -11,7 +11,7 @@ W_GameOver::W_GameOver(InputWidget* parent)
 		{sf::Vector2f{ 0.0f, -300.0f },		sf::Vector2f{ 350.0f, 120.0f },		sf::Color::Transparent, 100,	"GAME OVER",					sf::Color::White},
 		{sf::Vector2f{ 0.0f, -200.0f },		sf::Vector2f{ 100.0f, 100.0f },		sf::Color::Transparent, 16,		"Score: " + std::to_string(0),	sf::Color::White},
 		{sf::Vector2f{ 0.0f, -180.0f },		sf::Vector2f{ 100.0f, 100.0f },		sf::Color::Transparent, 16,		"Kills: " + std::to_string(0),	sf::Color::White},
-		{sf::Vector2f{ 0.0f, 0.0f },		sf::Vector2f{ 300.0f, 100.0f },		sf::Color::White,	24,			"QUIT",							sf::Color::Black}
+		{sf::Vector2f{ 0.0f, 0.0f },		buttonSize,							sf::Color::White,	24,			"QUIT",							sf::Color::Black}
 	};
 
 	gameOver_title.construct(GAME_OVER_CONSTR[0]);
@@ -22,9 +22,16 @@ W_GameOver::W_GameOver(InputWidget* parent)
 	shapes = { &gameOver_title, &gameOver_score, &gameOver_kills, &gameOver_quitButton };
 }
 
+sf::Vector2f W_GameOver::getCorrectTickCorrection() const
+{
+	return widgetOffset;
+}
+
 void W_GameOver::construct()
 {
 	InputWidget::construct();
+
+	gameInstance().setGameState(GAME_OVER);
 
 	updateStats(SaveGame::currentData);
 }
@@ -47,12 +54,16 @@ void W_GameOver::updateStats(const SaveGame_Struct& currData)
 
 bool W_GameOver::isMouseOver(const bool& checkForClick = false)
 {
-	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
 	if (gameOver_quitButton.isMouseOver(checkForClick))
 	{
-		parent->playAnim(EAnimation::CLOSE_ANIM);
+		if (checkForClick) parent->playAnim(EAnimation::CLOSE_ANIM);
 		return true;
 	}
 	// On no button-mouse overlap
+	return false;
+}
+
+bool W_GameOver::onKeyEscape()
+{
 	return false;
 }
