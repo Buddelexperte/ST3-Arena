@@ -6,6 +6,8 @@
 #include "Gameplay.h"
 #include "Player.h"
 
+#include "Settings.h"
+
 // Global Game Instance ---------------------------------------------------------------------------
 
 class GI_Arena // SINGLETON PATTERN
@@ -13,16 +15,14 @@ class GI_Arena // SINGLETON PATTERN
 private:
 	// Debugging mode
 	static constexpr bool bDevMode = true;
+	
+	// CONFIG
+	UserSettings_Struct usedSettings;
 
 	// Time calculation (deltaTime etc.)
 	sf::Clock clock;
 	static float globalTime;
 
-	// CONFIG
-	unsigned int MAX_FPS = 144; // Should be changeable later in settings
-	bool bUseVSync = true;
-
-	static constexpr bool bWidgetParallax = false;
 
 	// SINGLETON
 	GI_Arena();
@@ -79,6 +79,7 @@ public:
 		return globalTime;
 	}
 	// Viewport
+	void createWindow(const sf::Vector2u&, bool);
 	void updateScreen();
 	void resetViewPos();
 	void setViewPos(const sf::Vector2f&);
@@ -112,6 +113,12 @@ public:
 
 	void resetWindowName();
 	void modWindowName(const std::string& suffix);
+
+	void applySettings(const UserSettings_Struct settings);
+
+	void setMaxFPS(unsigned int);
+	void setUseVSync(bool);
+	void setUseWidgetParallax(bool);
 };
 
 static inline GI_Arena& gameInstance()

@@ -242,6 +242,9 @@
     <ClCompile Include="W_TitleScreen.cpp">
       <Filter>Source\VisualInterfaces\Widgets\MainMenu</Filter>
     </ClCompile>
+    <ClCompile Include="Settings.cpp">
+      <Filter>Source\Helpers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionManager.h">
@@ -455,6 +458,9 @@
       <Filter>Source\VisualInterfaces\Widgets\MainMenu</Filter>
     </ClInclude>
     <ClInclude Include="Curve.h">
+      <Filter>Source\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings.h">
       <Filter>Source\Helpers</Filter>
     </ClInclude>
   </ItemGroup>

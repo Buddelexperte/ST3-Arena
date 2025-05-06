@@ -176,6 +176,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ScoreBar.cpp" />
+    <ClCompile Include="Settings.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="SpawnWave.cpp" />
     <ClCompile Include="SW_Stage1.h" />
@@ -226,6 +227,7 @@
     <ClInclude Include="PU_ExperienceOrb.h" />
     <ClInclude Include="P_Sparkle.h" />
     <ClInclude Include="ScoreBar.h" />
+    <ClInclude Include="Settings.h" />
     <ClInclude Include="SpawnWave.h" />
     <ClInclude Include="SW_Default.h" />
     <ClInclude Include="SW_Stage2.h" />

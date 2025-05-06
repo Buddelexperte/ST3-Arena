@@ -11,14 +11,16 @@ float GI_Arena::globalTime = 0.0f;
 
 GI_Arena::GI_Arena()
 {
+	applySettings(UserSettings::loadSettings());
+
 	std::cout << "### Creating viewport..." << std::endl;
 	const sf::VideoMode DESKTOP = sf::VideoMode::getDesktopMode();
 
 	const sf::Uint32 WINDOW_STYLE = (bDevMode ? sf::Style::Default : sf::Style::Fullscreen);
 	window = std::make_unique<sf::RenderWindow>(DESKTOP, WINDOW_NAME, WINDOW_STYLE);
 
-	window->setFramerateLimit(MAX_FPS);
-	window->setVerticalSyncEnabled(bUseVSync);
+	window->setFramerateLimit(usedSettings.maxFPS);
+	window->setVerticalSyncEnabled(usedSettings.bUseVSync);
 
 	std::cout << "- RenderWindow created" << std::endl;
 	sf::Vector2f desktopSize = { static_cast<float>(DESKTOP.width), static_cast<float>(DESKTOP.height) };
@@ -72,8 +74,8 @@ Player* GI_Arena::validPlayer()
 void GI_Arena::start()
 {
 	SaveGame::loadSavedData();
-
 	IDrawableShapes::initValues();
+
 	std::cout << "Viewport values initialized\n" << std::endl;
 
 	validPlayer();
@@ -245,7 +247,7 @@ void GI_Arena::tick_view(const float& deltaTime)
 	static sf::Vector2f mouseOffset;
 
 	// Calculate the mouse offset relative to the player
-	if (bWidgetParallax || !getIsPaused() || bIsGameOver)
+	if (usedSettings.bWidgetParallax || !getIsPaused() || bIsGameOver)
 	{
 		mouseOffset = mousePos - playerPos;
 		float offsetLength = std::sqrt(mouseOffset.x * mouseOffset.x + mouseOffset.y * mouseOffset.y);
@@ -279,7 +281,7 @@ void GI_Arena::tick_view(const float& deltaTime)
 	setViewPos(newCamPos);
 
 	const sf::Vector2f viewCenter = view->getCenter();
-	if (bWidgetParallax)
+	if (usedSettings.bWidgetParallax)
 	{
 		// Lerp previous widgetOffset towards the new inverted offset
 		const sf::Vector2f newCenter = viewCenter - (mouseOffset * 0.1f);
@@ -336,6 +338,82 @@ void GI_Arena::modWindowName(const std::string& suffix)
 {
 	const std::string windowTitle = WINDOW_NAME + suffix;
 	window->setTitle(windowTitle);
+}
+
+void GI_Arena::applySettings(const UserSettings_Struct settings)
+{
+	setMaxFPS(settings.maxFPS);
+	setUseVSync(settings.bUseVSync);
+	createWindow(settings.res, settings.bFullscreen);
+	setUseWidgetParallax(settings.bWidgetParallax);
+}
+
+void GI_Arena::setMaxFPS(unsigned int maxFPS)
+{
+	if (maxFPS == usedSettings.maxFPS)
+		return;
+
+	usedSettings.maxFPS = maxFPS;
+}
+
+void GI_Arena::setUseVSync(bool bUseVSync)
+{
+	if (bUseVSync == usedSettings.bUseVSync)
+		return;
+
+	usedSettings.bUseVSync = bUseVSync;
+}
+
+void GI_Arena::createWindow(const sf::Vector2u& res, bool bFullscreen)
+{
+	if (res == usedSettings.res && bFullscreen == usedSettings.bFullscreen)
+		return;
+
+	// Close old window if it exists
+	if (window)
+	{
+		window->close();
+		window.release();
+	}
+
+	sf::Uint32 style = bFullscreen ? sf::Style::Fullscreen : sf::Style::Default;
+	sf::VideoMode mode(res.x, res.y);
+
+	// Check if fullscreen mode is valid
+	if (bFullscreen)
+	{
+		bool found = false;
+		for (const auto& m : sf::VideoMode::getFullscreenModes())
+		{
+			if (m.width == res.x && m.height == res.y)
+			{
+				found = true;
+				break;
+			}
+		}
+
+		if (!found)
+		{
+			std::cerr << "Resolution " << res.x << "x" << res.y << " not supported in fullscreen.\n";
+			// Change in settings saved resolution and fullscreen behavior to working set
+			UserSettings::settings.res = usedSettings.res;
+			UserSettings::settings.bFullscreen = usedSettings.bFullscreen;
+			return;
+		}
+	}
+
+	window = std::make_unique<sf::RenderWindow>(mode, "ARENA", style);
+
+	usedSettings.res = res;
+	usedSettings.bFullscreen = bFullscreen;
+}
+
+void GI_Arena::setUseWidgetParallax(bool bWidgetParallax)
+{
+	if (bWidgetParallax == usedSettings.bWidgetParallax)
+		return;
+
+	usedSettings.bWidgetParallax = bWidgetParallax;
 }
 
 Player* GI_Arena::getPlayer()

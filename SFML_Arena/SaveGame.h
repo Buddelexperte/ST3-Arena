@@ -5,7 +5,6 @@
 
 // SAVE GAME --------------------------------------------------------------------------------------
 
-extern const std::string SAVE_FILE;
 
 struct SaveGame_Struct
 {
@@ -27,6 +26,8 @@ struct SaveGame_Struct
 
 class SaveGame
 {
+private:
+	static const inline std::string SAVE_FILE = "SaveGame.txt";
 public:
 	static SaveGame_Struct currentData;
 	static SaveGame_Struct storedData;

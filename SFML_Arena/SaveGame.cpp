@@ -1,8 +1,6 @@
 #pragma once
 
-#include "SaveGame.h"
-
-const std::string SAVE_FILE = "SaveGame.txt";
+#include "SaveGame.h" // Own header file
 
 // SaveGame Code ----------------------------------------------------------------------------------
 
