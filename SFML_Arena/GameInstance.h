@@ -32,6 +32,7 @@ private:
 	// SFML Viewport objects
 	static const inline std::string WINDOW_NAME = "ARENA";
 	std::unique_ptr<sf::RenderWindow> window = nullptr;
+	sf::Image window_icon;
 	std::unique_ptr<sf::View> view = nullptr;
 	sf::RenderStates states;
 
@@ -81,7 +82,6 @@ public:
 		return globalTime;
 	}
 	// Viewport
-	void modWindow(const size_t, bool); // With params, for changing in size etc
 	void updateScreen();
 	void resetViewPos();
 	void setViewPos(const sf::Vector2f&);
@@ -118,6 +118,7 @@ public:
 
 	void applySettings(const UserSettings_Struct settings);
 
+	void setViewportValues(int resolutionID, bool bFullscreen); // For changing mid-game
 	void setMaxFPS(unsigned int);
 	void setUseVSync(bool);
 	void setUseWidgetParallax(bool);
