@@ -12,6 +12,7 @@ SoundManager::SoundManager()
 void SoundManager::play(const sf::SoundBuffer& buffer)
 {
     std::unique_ptr<sf::Sound> newSound = std::make_unique<sf::Sound>(buffer); // Create new Sound Object
+    newSound->setVolume(getMasterVolume());
     newSound->play(); // Play the sound immediately
     activeSounds.push_back(std::move(newSound));
 }
@@ -25,6 +26,16 @@ void SoundManager::cleanUp()
                 return sound->getStatus() == sf::Sound::Stopped;
             }),
         activeSounds.end());
+}
+
+float SoundManager::getMasterVolume() const
+{
+    return volume_master;
+}
+
+void SoundManager::setMasterVolume(const float newVolume)
+{
+    volume_master = newVolume;
 }
 
 const sf::SoundBuffer& SoundManager::getSound_Click()

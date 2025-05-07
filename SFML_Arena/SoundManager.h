@@ -13,6 +13,8 @@ private:
 
     std::vector<std::unique_ptr<sf::Sound>> activeSounds;
     
+    float volume_master = 100.0f; // Sound an
+
     struct LoadedSound
     {
         sf::SoundBuffer sound;
@@ -34,4 +36,7 @@ public:
 
     void play(const sf::SoundBuffer& buffer);
     void cleanUp();
+
+    float getMasterVolume() const;
+    void setMasterVolume(const float);
 };
