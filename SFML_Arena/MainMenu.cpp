@@ -83,6 +83,7 @@ bool W_MainMenu::onKeyEscape()
 		getActiveChild()->onKeyEscape();
 	else
 		gameInstance().setGameState(QUIT);
+
 	return true;
 }
 

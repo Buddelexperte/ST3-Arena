@@ -302,15 +302,14 @@ sf::Vector2f GI_Arena::getWidgetOffset() const
 // Adjust the camera position based on velocity and distance to target (Player + Mouse Influence)
 void GI_Arena::tick_view(const float& deltaTime)
 {
-	constexpr float SPRING_STRENGTH = 2.5f;				// Higher = Quicker follow
-	constexpr float DAMPING_COEFFICIENT = 4.0f;			// Higher = More Resistance
-	constexpr float MAX_DISTANCE = 100.0f;				// Maximum allowed mouse influence
-	constexpr float WIDGET_LERP_ALPHA = 0.1f;            // Lower value = slower, snappier response
-	constexpr float MIN_DELTA = 0.001f;                  // Minimum delta time to prevent extreme forces
+	constexpr float SPRING_STRENGTH = 2.5f;             // Higher = Quicker follow
+	constexpr float DAMPING_COEFFICIENT = 4.0f;         // Higher = More Resistance
+	constexpr float MAX_DISTANCE = 100.0f;              // Maximum allowed mouse influence
+	constexpr float MIN_DELTA = 0.001f;                 // Minimum delta time to prevent extreme forces
 
 	// Clamp deltaTime to prevent extreme forces on first frame or lag spikes
 	float clampedDelta = std::max(deltaTime, MIN_DELTA);
-	if (clampedDelta > 0.1f) clampedDelta = 0.1f;        // Also prevent too large steps
+	if (clampedDelta > 0.1f) clampedDelta = 0.1f;       // Also prevent too large steps
 
 	bool bIsGameOver = getGameState() == GAME_OVER;
 
@@ -318,7 +317,6 @@ void GI_Arena::tick_view(const float& deltaTime)
 	const sf::Vector2f camPos = view->getCenter();
 	const sf::Vector2f playerPos = getPlayer()->getPosition();
 	const sf::Vector2f mousePos = (bIsGameOver ? playerPos : getMousePos());
-
 	static sf::Vector2f mouseOffset;
 
 	// Calculate the mouse offset relative to the player
@@ -326,6 +324,7 @@ void GI_Arena::tick_view(const float& deltaTime)
 	{
 		mouseOffset = mousePos - playerPos;
 		float offsetLength = std::sqrt(mouseOffset.x * mouseOffset.x + mouseOffset.y * mouseOffset.y);
+
 		// Clamp the mouse offset so it doesn't exceed MAX_DISTANCE
 		if (offsetLength > MAX_DISTANCE)
 		{
@@ -355,19 +354,70 @@ void GI_Arena::tick_view(const float& deltaTime)
 	sf::Vector2f newCamPos = camPos + (totalForce * clampedDelta);
 	setViewPos(newCamPos);
 
+	// Update widget offset in a separate method
+	updateWidgetOffset(mouseOffset);
+
+	IDrawableShapes::updateValues();
+}
+
+// New separate method for widget offset calculation
+void GI_Arena::updateWidgetOffset(const sf::Vector2f& gameplayMouseOffset)
+{
+	constexpr float WIDGET_LERP_ALPHA = 0.1f;       // Standard gameplay lerp speed
+	constexpr float MENU_LERP_ALPHA = 0.02f;        // Slower for menus (smoother)
+	constexpr float MENU_MAX_OFFSET = 650.0f;		// Max menu parallax distance
+	constexpr float MENU_DEADZONE = 350.0f;         // Center area with reduced movement
+	constexpr float PARALLAX_SCALE = 0.1f;          // Scale factor for parallax effect
+
 	const sf::Vector2f viewCenter = view->getCenter();
+	const bool isGameplayActive = getGameState() > MENU_SCREEN;
+
 	if (usedSettings.bWidgetParallax)
 	{
-		// Lerp previous widgetOffset towards the new inverted offset
-		const sf::Vector2f newCenter = viewCenter - (mouseOffset * 0.1f);
-		widgetOffset = lerp(widgetOffset, newCenter, WIDGET_LERP_ALPHA);
+		if (isGameplayActive)
+		{
+			// Use gameplay offset calculation (player-relative)
+			const sf::Vector2f newCenter = viewCenter - (gameplayMouseOffset * PARALLAX_SCALE);
+			widgetOffset = lerp(widgetOffset, newCenter, WIDGET_LERP_ALPHA);
+		}
+		else
+		{
+			// Menu mode: calculate offset based on mouse position relative to screen center
+			sf::Vector2f mousePos = getMousePos();
+			sf::Vector2f menuOffset = mousePos - viewCenter;
+
+			// Apply non-linear scaling to reduce sensitivity near center (deadzone)
+			float offsetLength = std::sqrt(menuOffset.x * menuOffset.x + menuOffset.y * menuOffset.y);
+
+			if (offsetLength > 0.0f)
+			{
+				// Apply deadzone and smooth acceleration curve
+				float effectiveDistance = std::max(0.0f, offsetLength - MENU_DEADZONE);
+				float smoothFactor = std::min(effectiveDistance / (MENU_MAX_OFFSET - MENU_DEADZONE), 1.0f);
+
+				// Apply easing curve to make movement more natural
+				smoothFactor = smoothFactor * smoothFactor * (3.0f - 2.0f * smoothFactor); // Smoothstep
+
+				// Scale direction vector by the smooth factor and max distance
+				if (offsetLength > MENU_DEADZONE)
+				{
+					menuOffset = (menuOffset / offsetLength) * MENU_MAX_OFFSET * smoothFactor * PARALLAX_SCALE;
+				}
+				else
+				{
+					menuOffset = sf::Vector2f(0.0f, 0.0f);
+				}
+			}
+
+			// Apply inverse offset to create parallax effect (objects move opposite to mouse)
+			const sf::Vector2f newCenter = viewCenter - menuOffset;
+			widgetOffset = lerp(widgetOffset, newCenter, MENU_LERP_ALPHA);
+		}
 	}
 	else
 	{
 		widgetOffset = viewCenter;
 	}
-
-	IDrawableShapes::updateValues();
 }
 
 void GI_Arena::updateScreen()
