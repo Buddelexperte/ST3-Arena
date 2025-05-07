@@ -30,7 +30,6 @@ void W_Gameplay::construct()
 	if (gameState == GAME_LAUNCHING)
 	{
 		// Reset values to game start values
-		std::cout << "-1" << std::endl;
 		setWidgetIndex(-1); // Loading title card
 		playAnim(EAnimation::OPEN_ANIM);
 		gameInstance().startRound();

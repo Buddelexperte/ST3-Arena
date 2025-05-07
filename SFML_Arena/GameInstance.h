@@ -14,7 +14,7 @@ class GI_Arena // SINGLETON PATTERN
 {
 private:
 	// Debugging mode
-	static constexpr bool bDevMode = true;
+	static constexpr bool bDevMode = false;
 	
 	// CONFIG
 	UserSettings_Struct usedSettings;
@@ -34,6 +34,8 @@ private:
 	std::unique_ptr<sf::RenderWindow> window = nullptr;
 	std::unique_ptr<sf::View> view = nullptr;
 	sf::RenderStates states;
+
+	void createViewport(); // For init
 
 	// Custom GameState
 	GameState gameState = LOADING_SCREEN;
@@ -79,7 +81,7 @@ public:
 		return globalTime;
 	}
 	// Viewport
-	void createWindow(const sf::Vector2u&, bool);
+	void modWindow(const size_t, bool); // With params, for changing in size etc
 	void updateScreen();
 	void resetViewPos();
 	void setViewPos(const sf::Vector2f&);

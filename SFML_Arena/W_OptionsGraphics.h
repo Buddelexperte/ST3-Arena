@@ -1,21 +1,50 @@
 #pragma once
 
 #include "WidgetElements.h"
+#include "Settings.h"
 
-class W_OptionsGraphics : public InputWidget // OptionsGraphicsMenu Widget ------------------------------------------
+// Forward declaration
+class GameInstance;
+
+class W_OptionsGraphics : public InputWidget
 {
 private:
-	Button optionsGraphics_test;
-	Button optionsGraphics_Resolution;
-	Button optionsGraphics_FPSLimit;
-	Button optionsGraphics_Vsync;
-	Button optionsGraphics_MenuParallax;
-	Button optionsGraphics_Apply;
-	Button optionsGraphics_return;
+    // Helper methods
+    std::string formatResolutionLabel(size_t id);
+    void updateSettingTexts(const UserSettings_Struct& s);
+    void checkForDifferences();
+
+    // Settings state
+    UserSettings_Struct newSettings;    // Settings with pending changes
+
+    size_t selectedRes = -1;                 // Selected resolution ID
+    bool bChangedSome = false;          // Flag to track if any settings changed
+
+    // UI Components
+    Button T_Title;
+    Button B_Return;
+    Button B_Apply;
+
+    // Settings labels
+    Button T_Resolution;
+    Button T_MaxFPS;
+    Button T_VSync;
+    Button T_Fullscreen;
+    Button T_WParallax;
+
+    // Settings values
+    Button T_Resolution_Val;
+    Button T_MaxFPS_Val;
+    Button T_VSync_Val;
+    Button T_Fullscreen_Val;
+    Button T_WParallax_Val;
 
 public:
-	void tick(const float& deltaTime) override;
-	void construct() override;
-	W_OptionsGraphics(InputWidget*);
-	bool isMouseOver(const bool&) override;
+    W_OptionsGraphics(InputWidget* parent = nullptr);
+
+    // Core widget methods
+    virtual void construct() override;
+    virtual void tick(const float& deltaTime) override;
+    virtual bool isMouseOver(const bool& checkForClick) override;
+
 };
