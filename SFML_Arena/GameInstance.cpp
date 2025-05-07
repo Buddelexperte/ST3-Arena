@@ -391,7 +391,7 @@ void GI_Arena::setUseVSync(bool bUseVSync)
 	usedSettings.bUseVSync = bUseVSync;
 }
 
-void GI_Arena::modWindow(const size_t resID, bool bFullscreen)
+void GI_Arena::modWindow(size_t resID, bool bFullscreen)
 {
 	// Check if both values even change before creating new Window (cost heavy)
 	bool noResDiff = (resID == usedSettings.resID);
@@ -404,7 +404,7 @@ void GI_Arena::modWindow(const size_t resID, bool bFullscreen)
 	}
 	
 	// Select correct resolution (native accounted for)
-	const sf::VideoMode DESKTOP = UserSettings::getResolution(usedSettings.resID);
+	sf::VideoMode DESKTOP = UserSettings::getResolution(usedSettings.resID);
 
 	// Check if fullscreen mode is valid
 	if (bFullscreen)
@@ -423,7 +423,8 @@ void GI_Arena::modWindow(const size_t resID, bool bFullscreen)
 		if (!found)
 		{
 			std::cerr << "Resolution " << DESKTOP.width << "x" << DESKTOP.height << " not supported in fullscreen.\n";
-			return;
+			resID = 0;
+			DESKTOP = sf::VideoMode::getDesktopMode();
 		}
 	}
 
