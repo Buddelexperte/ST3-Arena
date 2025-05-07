@@ -9,7 +9,8 @@ private:
 	Button optionsSounds_return;
 
 	Button optionsSounds_soundAus;
-	void soundAus();
+	float savedVolume = 100.0f;
+	void toggleSound();
 
 public:
 	void tick(const float& deltaTime) override;

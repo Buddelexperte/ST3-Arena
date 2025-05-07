@@ -12,7 +12,7 @@ W_OptionsSounds::W_OptionsSounds(InputWidget* parent = nullptr)
 	const std::vector<RawButton> MAIN_MENU_CONSTR = {
 		{sf::Vector2f{ 0, -300 },   sf::Vector2f{ 350, 120 }, sf::Color::Transparent,	100,	"SOUND",		sf::Color::White},
 		{sf::Vector2f{ 0, 300 },	sf::Vector2f{ 300, 100 }, sf::Color::White,			24,		"RETURN",	sf::Color::Black},
-		{sf::Vector2f{ 0, 0 },	sf::Vector2f{ 300, 100 }, sf::Color::White,			24,		"SOUND AUS",	sf::Color::Black}
+		{sf::Vector2f{ 0, 0 },	sf::Vector2f{ 300, 100 }, sf::Color::White,			24,		"SOUND -> AUS",	sf::Color::Black}
 	};
 
 	optionsSounds_test.construct(MAIN_MENU_CONSTR[0]);
@@ -45,7 +45,7 @@ bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)
 
 	if (optionsSounds_soundAus.isMouseOver(checkForClick))
 	{
-		if (checkForClick) soundAus();
+		if (checkForClick) toggleSound();
 		return true;
 	}
 
@@ -53,7 +53,19 @@ bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)
 	return false;
 }
 
-void W_OptionsSounds::soundAus()
+void W_OptionsSounds::toggleSound()
 {
-	SoundManager::getInstance().setMasterVolume(0);
+	SoundManager& sm = SoundManager::getInstance();
+	if (sm.getMasterVolume() == 0)
+	{
+		sm.setMasterVolume(savedVolume);
+		sm.play(sm.getSound_Click());
+		optionsSounds_soundAus.setText("SOUND -> AUS");
+	}
+	else
+	{
+		savedVolume = sm.getMasterVolume();
+		sm.setMasterVolume(0);
+		optionsSounds_soundAus.setText("SOUND -> AN");
+	}
 }
