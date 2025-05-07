@@ -7,7 +7,7 @@
 
 W_OptionsSounds::W_OptionsSounds(InputWidget* parent = nullptr) 
 	: InputWidget(parent),
-	optionsSounds_test(this), optionsSounds_return(this), optionsSounds_soundAus(this)
+	T_Title(this), B_Return(this), B_ToggleSound(this)
 {
 	const std::vector<RawButton> MAIN_MENU_CONSTR = {
 		{sf::Vector2f{ 0, -300 },   sf::Vector2f{ 350, 120 }, sf::Color::Transparent,	100,	"SOUND",		sf::Color::White},
@@ -15,37 +15,37 @@ W_OptionsSounds::W_OptionsSounds(InputWidget* parent = nullptr)
 		{sf::Vector2f{ 0, 0 },	sf::Vector2f{ 300, 100 }, sf::Color::White,			24,		"SOUND -> AUS",	sf::Color::Black}
 	};
 
-	optionsSounds_test.construct(MAIN_MENU_CONSTR[0]);
-	optionsSounds_return.construct(MAIN_MENU_CONSTR[1]);
-	optionsSounds_soundAus.construct(MAIN_MENU_CONSTR[2]);
+	T_Title.construct(MAIN_MENU_CONSTR[0]);
+	B_Return.construct(MAIN_MENU_CONSTR[1]);
+	B_ToggleSound.construct(MAIN_MENU_CONSTR[2]);
 }
 
 void W_OptionsSounds::construct()
 {
 	InputWidget::construct();
-	shapes = { &optionsSounds_test, &optionsSounds_return, &optionsSounds_soundAus };
+	shapes = { &T_Title, &B_Return, &B_ToggleSound };
 }
 
 void W_OptionsSounds::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 
-	optionsSounds_test.tick(deltaTime);
-	optionsSounds_return.tick(deltaTime);
-	optionsSounds_soundAus.tick(deltaTime);
+	T_Title.tick(deltaTime);
+	B_Return.tick(deltaTime);
+	B_ToggleSound.tick(deltaTime);
 }
 
 bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)
 {
-	if (optionsSounds_return.isMouseOver(checkForClick))
+	if (B_Return.isMouseOver(checkForClick))
 	{
 		if (checkForClick) parent->construct();
 		return true;
 	}
 
-	if (optionsSounds_soundAus.isMouseOver(checkForClick))
+	if (B_ToggleSound.isMouseOver(checkForClick))
 	{
-		if (checkForClick) toggleSound();
+		if (checkForClick) toggleMuteSound();
 		return true;
 	}
 
@@ -53,19 +53,19 @@ bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)
 	return false;
 }
 
-void W_OptionsSounds::toggleSound()
+void W_OptionsSounds::toggleMuteSound()
 {
 	SoundManager& sm = SoundManager::getInstance();
 	if (sm.getMasterVolume() == 0)
 	{
 		sm.setMasterVolume(savedVolume);
-		sm.play(sm.getSound_Click());
-		optionsSounds_soundAus.setText("SOUND -> AUS");
+		sm.play(sm.getSound_Click(), ESoundEnv::UI);
+		B_ToggleSound.setText("SOUND -> AUS");
 	}
 	else
 	{
 		savedVolume = sm.getMasterVolume();
 		sm.setMasterVolume(0);
-		optionsSounds_soundAus.setText("SOUND -> AN");
+		B_ToggleSound.setText("SOUND -> AN");
 	}
 }

@@ -76,8 +76,8 @@ private:
 public:
 	static UserSettings_Struct getSettings();
 	static size_t getNumResolutions();
-	static sf::VideoMode getResolution(const int);
-	static std::string getResolutionDesc(const int);
+	static sf::VideoMode getResolution(const size_t);
+	static std::string getResolutionDesc(const size_t);
 
 	static size_t getResolutionIndex(const sf::Vector2u& targetRes);
 

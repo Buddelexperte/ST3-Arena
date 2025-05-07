@@ -72,7 +72,7 @@ void GI_Arena::createViewport()
 	std::cout << "- View attached" << std::endl;
 }
 
-void GI_Arena::setViewportValues(int resolutionID, bool bFullscreen)
+void GI_Arena::setViewportValues(size_t resolutionID, bool bFullscreen)
 {
 	bool noResDiff = (resolutionID == usedSettings.resID);
 	bool noFullscreenDiff = (bFullscreen == usedSettings.bFullscreen);

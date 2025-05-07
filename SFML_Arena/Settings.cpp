@@ -20,7 +20,7 @@ size_t UserSettings::getNumResolutions()
 	return getResolutionsVec().size();
 }
 
-sf::VideoMode UserSettings::getResolution(const int id)
+sf::VideoMode UserSettings::getResolution(const size_t id)
 {
 	if (id == 0)
 		return sf::VideoMode::getDesktopMode();
@@ -34,7 +34,7 @@ sf::VideoMode UserSettings::getResolution(const int id)
 	return sf::VideoMode::getDesktopMode();
 }
 
-std::string UserSettings::getResolutionDesc(const int id)
+std::string UserSettings::getResolutionDesc(const size_t id)
 {
 	if (id < getNumResolutions())
 	{

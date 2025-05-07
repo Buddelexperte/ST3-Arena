@@ -431,9 +431,9 @@ void Button::onClick() const
 {
 	SoundManager& soundManager = SoundManager::getInstance();
 	if (buttonData.text == "RETURN" || buttonData.text == "QUIT")
-		soundManager.play(soundManager.getSound_ReturnClick());
+		soundManager.play(soundManager.getSound_ReturnClick(), ESoundEnv::UI);
 	else
-		soundManager.play(soundManager.getSound_Click());
+		soundManager.play(soundManager.getSound_Click(), ESoundEnv::UI);
 }
 
 void Button::onHover() 

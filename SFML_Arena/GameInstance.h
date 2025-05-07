@@ -118,7 +118,7 @@ public:
 
 	void applySettings(const UserSettings_Struct settings);
 
-	void setViewportValues(int resolutionID, bool bFullscreen); // For changing mid-game
+	void setViewportValues(size_t resolutionID, bool bFullscreen); // For changing mid-game
 	void setMaxFPS(unsigned int);
 	void setUseVSync(bool);
 	void setUseWidgetParallax(bool);

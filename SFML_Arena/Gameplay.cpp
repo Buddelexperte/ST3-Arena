@@ -187,7 +187,7 @@ bool W_Gameplay::onKeyTab()
 
 	// If no sub widget open, open optionsMenu
 	SoundManager& soundManager = SoundManager::getInstance();
-	soundManager.play(soundManager.getSound_ReturnClick());
+	soundManager.play(soundManager.getSound_ReturnClick(), ESoundEnv::UI);
 
 	if (isChildActive())
 		return getActiveChild()->onKeyTab();
