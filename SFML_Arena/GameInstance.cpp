@@ -11,10 +11,15 @@ float GI_Arena::globalTime = 0.0f;
 
 GI_Arena::GI_Arena()
 {
-
 	std::cout << "### Creating viewport..." << std::endl;
 	// Resolution stuff
 	usedSettings = UserSettings::loadSettings();
+
+	// Loading taskbar window icon
+	if (!window_icon.loadFromFile("Content/Arena_icon.png"))
+	{
+		std::cerr << "Could not load icon from path" << std::endl;
+	}
 
 	createViewport();
 	
@@ -32,35 +37,77 @@ GI_Arena::GI_Arena()
 
 void GI_Arena::createViewport()
 {
-	// Close old window if it exists
+	sf::VideoMode mode = UserSettings::getResolution(usedSettings.resID);
+
 	if (window)
 	{
 		window->close();
 		window.release();
 	}
 
-	const sf::VideoMode DESKTOP = UserSettings::getResolution(usedSettings.resID);
-
-	const sf::Uint32 STYLE = (bDevMode ? sf::Style::Default : sf::Style::Fullscreen);
-
-	window = std::make_unique<sf::RenderWindow>(DESKTOP, WINDOW_NAME, STYLE);
+	const sf::Uint32 style = (usedSettings.bFullscreen ? sf::Style::Fullscreen : sf::Style::Default);
+	window = std::make_unique<sf::RenderWindow>(mode, WINDOW_NAME, style);
 	std::cout << "- RenderWindow created" << std::endl;
 
-	sf::Image icon;
-	if (icon.loadFromFile("Content/Arena_icon.png")) {
-		window->setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+	// If window_icon was loaded, apply to window
+	if (window_icon.getPixelsPtr())
+	{
+		window->setIcon(window_icon.getSize().x, window_icon.getSize().y, window_icon.getPixelsPtr());
+		std::cout << "- Applied window icon" << std::endl;
+	}
+	else
+	{
+		std::cout << "- No valid window icon to apply" << std::endl;
 	}
 
+	// If view is not valid, create one
 	if (!view)
 	{
-		const sf::Vector2f DESKTOP_SIZE = { static_cast<float>(DESKTOP.width), static_cast<float>(DESKTOP.height) };
-		view = std::make_unique<sf::View>(DESKTOP_SIZE / 2.0f, DESKTOP_SIZE);
+		const sf::Vector2f size{ static_cast<float>(mode.width), static_cast<float>(mode.height) };
+		view = std::make_unique<sf::View>(size / 2.f, size);
 		std::cout << "- View created" << std::endl;
 	}
 
+	// Apply view and set cache values
 	prevCamPos = widgetOffset = view->getCenter();
 	window->setView(*view);
 	std::cout << "- View attached" << std::endl;
+}
+
+void GI_Arena::setViewportValues(int resolutionID, bool bFullscreen)
+{
+	bool noResDiff = (resolutionID == usedSettings.resID);
+	bool noFullscreenDiff = (bFullscreen == usedSettings.bFullscreen);
+
+	if (noResDiff && noFullscreenDiff)
+		return;
+
+	sf::VideoMode mode = UserSettings::getResolution(usedSettings.resID);
+
+	if (bFullscreen)
+	{
+		bool valid = false;
+		for (const auto& m : sf::VideoMode::getFullscreenModes())
+		{
+			if (m.width == mode.width && m.height == mode.height)
+			{
+				valid = true;
+				break;
+			}
+		}
+
+		if (!valid)
+		{
+			std::cerr << "Resolution " << mode.width << "x" << mode.height << " not supported in fullscreen.\n";
+			resolutionID = 0;
+			bFullscreen = true;
+		}
+	}
+
+	usedSettings.resID = resolutionID;
+	usedSettings.bFullscreen = bFullscreen;
+
+	createViewport();
 }
 
 bool GI_Arena::initWidgets()
@@ -372,7 +419,7 @@ void GI_Arena::modWindowName(const std::string& suffix)
 
 void GI_Arena::applySettings(const UserSettings_Struct settings)
 {
-	modWindow(settings.resID, settings.bFullscreen);
+	setViewportValues(settings.resID, settings.bFullscreen);
 	setMaxFPS(settings.maxFPS);
 	setUseVSync(settings.bUseVSync);
 	setUseWidgetParallax(settings.bWidgetParallax);
@@ -394,67 +441,6 @@ void GI_Arena::setUseVSync(bool bUseVSync)
 		return;
 
 	usedSettings.bUseVSync = bUseVSync;
-}
-
-void GI_Arena::modWindow(size_t resID, bool bFullscreen)
-{
-	// Check if both values even change before creating new Window (cost heavy)
-	bool noResDiff = (resID == usedSettings.resID);
-	bool noFullscreenDiff = (bFullscreen == usedSettings.bFullscreen);
-
-	if (noResDiff && noFullscreenDiff)
-	{
-		// On no changes to be applied, cancel
-		return;
-	}
-	
-	// Select correct resolution (native accounted for)
-	sf::VideoMode DESKTOP = UserSettings::getResolution(usedSettings.resID);
-
-	// Check if fullscreen mode is valid
-	if (bFullscreen)
-	{
-		bool found = false;
-		for (const auto& m : sf::VideoMode::getFullscreenModes())
-		{
-			if (m.width == DESKTOP.width && m.height == DESKTOP.height)
-			{
-				found = true;
-				break;
-			}
-		}
-
-		// If resolution is not valid for fullscreen (and fullscreen is selected), return and display faulty resolution
-		if (!found)
-		{
-			std::cerr << "Resolution " << DESKTOP.width << "x" << DESKTOP.height << " not supported in fullscreen.\n";
-			resID = 0;
-			DESKTOP = sf::VideoMode::getDesktopMode();
-		}
-	}
-
-	// Update settings variable for window resolution and fullscreen
-	usedSettings.resID = resID;
-	usedSettings.bFullscreen = bFullscreen;
-
-	// Close old window if it exists
-	if (window)
-	{
-		window->close();
-		window.release();
-	}
-
-	const sf::Uint32 STYLE = (bFullscreen ? sf::Style::Fullscreen : sf::Style::Default);
-
-	window = std::make_unique<sf::RenderWindow>(DESKTOP, WINDOW_NAME, STYLE);
-
-	if (view)
-	{
-		prevCamPos = widgetOffset = view->getCenter();
-		window->setView(*view);
-	}
-
-	std::cout << "Modulated Window/View successfully" << std::endl;
 }
 
 void GI_Arena::setUseWidgetParallax(bool bWidgetParallax)
