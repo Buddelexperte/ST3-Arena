@@ -119,6 +119,7 @@ inline void clamp(float& value, const float& min, const float& max)
 
 static constexpr inline float LERP_SMOOTHNESS = 0.1f;
 static constexpr inline float SCREEN_FADE_DURATION = 0.2f;
+static constexpr inline float ACC_LERP_FACTOR = LERP_SMOOTHNESS * 0.5f;
 
 inline float lerp(const float& a, const float& b, float factor)
 {
