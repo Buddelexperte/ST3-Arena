@@ -37,7 +37,6 @@ private:
 	sf::RenderStates states;
 
 	void createViewport(); // For init
-	void setViewportValues(int resolutionID, bool bFullscreen); // For changing mid-game
 
 	// Custom GameState
 	GameState gameState = LOADING_SCREEN;
@@ -119,6 +118,7 @@ public:
 
 	void applySettings(const UserSettings_Struct settings);
 
+	void setViewportValues(int resolutionID, bool bFullscreen); // For changing mid-game
 	void setMaxFPS(unsigned int);
 	void setUseVSync(bool);
 	void setUseWidgetParallax(bool);

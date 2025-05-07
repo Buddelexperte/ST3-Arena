@@ -11,14 +11,12 @@ float GI_Arena::globalTime = 0.0f;
 
 GI_Arena::GI_Arena()
 {
-	std::cout << "### Creating viewport..." << std::endl;
-	// Resolution stuff
 	usedSettings = UserSettings::loadSettings();
 
 	// Loading taskbar window icon
 	if (!window_icon.loadFromFile("Content/Arena_icon.png"))
 	{
-		std::cerr << "Could not load icon from path" << std::endl;
+		std::cerr << "Could not load window_icon from path!" << std::endl;
 	}
 
 	createViewport();
@@ -29,14 +27,14 @@ GI_Arena::GI_Arena()
 
 	setUseWidgetParallax(usedSettings.bWidgetParallax);
 
-	std::cout << "Applied locally saved settings\n" << std::endl;
-
 	std::cout << "Initiated viewport\n" << std::endl;
 
 }
 
 void GI_Arena::createViewport()
 {
+	std::cout << "### Creating viewport..." << std::endl;
+
 	sf::VideoMode mode = UserSettings::getResolution(usedSettings.resID);
 
 	if (window)
@@ -423,6 +421,8 @@ void GI_Arena::applySettings(const UserSettings_Struct settings)
 	setMaxFPS(settings.maxFPS);
 	setUseVSync(settings.bUseVSync);
 	setUseWidgetParallax(settings.bWidgetParallax);
+
+	std::cout << "Applied locally saved settings\n" << std::endl;
 
 	UserSettings::saveSettings(usedSettings);
 }
