@@ -12,18 +12,21 @@ W_OptionsSounds::W_OptionsSounds(InputWidget* parent = nullptr)
 	const std::vector<RawButton> MAIN_MENU_CONSTR = {
 		{sf::Vector2f{ 0, -300 },   sf::Vector2f{ 350, 120 }, sf::Color::Transparent,	100,	"SOUND",		sf::Color::White},
 		{sf::Vector2f{ 0, 300 },	sf::Vector2f{ 300, 100 }, sf::Color::White,			24,		"RETURN",	sf::Color::Black},
-		{sf::Vector2f{ 0, 0 },	sf::Vector2f{ 300, 100 }, sf::Color::White,			24,		"SOUND -> AUS",	sf::Color::Black}
+		{sf::Vector2f{ 0, 0 },	sf::Vector2f{ 300, 100 }, sf::Color::White,			24,		"SOUND VALUE",	sf::Color::Black}
 	};
 
 	T_Title.construct(MAIN_MENU_CONSTR[0]);
 	B_Return.construct(MAIN_MENU_CONSTR[1]);
 	B_ToggleSound.construct(MAIN_MENU_CONSTR[2]);
+
+	shapes = { &T_Title, &B_Return, &B_ToggleSound };
 }
 
 void W_OptionsSounds::construct()
 {
 	InputWidget::construct();
-	shapes = { &T_Title, &B_Return, &B_ToggleSound };
+
+	updateText();
 }
 
 void W_OptionsSounds::tick(const float& deltaTime)
@@ -53,19 +56,39 @@ bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)
 	return false;
 }
 
+void W_OptionsSounds::call_muteSound(const bool bMute)
+{
+	SoundManager& sm = SoundManager::getInstance();
+	sm.setIsMuted(bMute, ESoundEnv::MASTER);
+
+	if (bMute)
+		return;
+
+	sm.play(sm.getSound_Click(), ESoundEnv::UI);
+	
+}
+
 void W_OptionsSounds::toggleMuteSound()
 {
 	SoundManager& sm = SoundManager::getInstance();
-	if (sm.getMasterVolume() == 0)
+
+	bool isMuted = sm.getIsMuted();
+	bool shouldMute = (!isMuted);
+	call_muteSound(shouldMute);
+
+	updateText();
+}
+
+void W_OptionsSounds::updateText()
+{
+	SoundManager& sm = SoundManager::getInstance();
+	bool bIsMuted = sm.getIsMuted(ESoundEnv::MASTER);
+
+	if (bIsMuted)
 	{
-		sm.setMasterVolume(savedVolume);
-		sm.play(sm.getSound_Click(), ESoundEnv::UI);
-		B_ToggleSound.setText("SOUND -> AUS");
+		B_ToggleSound.setText("SOUND: STUMM");
+		return;
 	}
-	else
-	{
-		savedVolume = sm.getMasterVolume();
-		sm.setMasterVolume(0);
-		B_ToggleSound.setText("SOUND -> AN");
-	}
+	std::string volumeAsString = std::to_string(static_cast<int>(sm.getMasterVolume()));
+	B_ToggleSound.setText("SOUND: " + volumeAsString + "%");
 }

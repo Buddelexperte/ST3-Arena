@@ -10,7 +10,11 @@ private:
 
 	Button B_ToggleSound;
 	float savedVolume = 100.0f;
+
+	void call_muteSound(const bool bMute);
 	void toggleMuteSound();
+
+	void updateText();
 
 public:
 	void tick(const float& deltaTime) override;
