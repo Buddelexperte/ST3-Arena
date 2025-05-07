@@ -49,6 +49,7 @@ class UserSettings
 private:
 	// --- RESOLUTION ---
 	static inline std::vector<ResolutionDesc> availableResolutions = {
+	{sf::Vector2u(0, 0), "(Native)"},					// Native
 	{sf::Vector2u(640, 480), "(VGA) 640x480"},				// VGA
 	{sf::Vector2u(800, 600), "(SVGA) 800x600"},				// SVGA
 	{sf::Vector2u(1024, 768), "(XGA) 1024x768"},			// XGA
@@ -69,9 +70,14 @@ private:
 	};
 
 	static const inline std::string SETTINGS_FILE = "Settings.txt";
-public:
+	static std::vector<ResolutionDesc>& getResolutionsVec();
 	static UserSettings_Struct settings;
-	static std::vector<ResolutionDesc>& getResolutions();
+
+public:
+	static UserSettings_Struct getSettings();
+	static size_t getNumResolutions();
+	static sf::VideoMode getResolution(const int);
+	static std::string getResolutionDesc(const int);
 
 	static size_t getResolutionIndex(const sf::Vector2u& targetRes);
 

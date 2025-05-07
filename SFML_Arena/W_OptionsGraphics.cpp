@@ -3,6 +3,19 @@
 #include "W_OptionsGraphics.h" // Own header file
 #include "GameInstance.h"
 
+void W_OptionsGraphics::reset()
+{
+	// Read back what was actually applied
+	newSettings = UserSettings::getSettings();
+	selectedRes = newSettings.resID;
+
+	// Update UI to match actual applied settings
+	updateSettingTexts(newSettings);
+
+	// This will update button states based on comparison with originalSettings
+	checkForDifferences();
+}
+
 W_OptionsGraphics::W_OptionsGraphics(InputWidget* parent)
 	: InputWidget(parent),
 	T_Title(this), B_Return(this), B_Apply(this), // Title and Cancel and Apply etc
@@ -67,22 +80,14 @@ W_OptionsGraphics::W_OptionsGraphics(InputWidget* parent)
 
 std::string W_OptionsGraphics::formatResolutionLabel(size_t id)
 {
-	if (id < UserSettings::getResolutions().size()) {
-		// Get the resolution and label from the vector
-		return UserSettings::getResolutions()[id].desc; // Return the label string
-	}
-	return "(Custom)"; // Fallback if the id is out of range
+	return UserSettings::getResolutionDesc(static_cast<int>(id));
 }
 
 void W_OptionsGraphics::construct()
 {
 	InputWidget::construct();
 
-	newSettings = UserSettings::settings;
-	selectedRes = newSettings.resID;
-
-	updateSettingTexts(newSettings);
-	checkForDifferences();
+	reset();
 }
 
 void W_OptionsGraphics::updateSettingTexts(const UserSettings_Struct& s)
@@ -117,7 +122,7 @@ void W_OptionsGraphics::updateSettingTexts(const UserSettings_Struct& s)
 void W_OptionsGraphics::checkForDifferences()
 {
 	// Check if current settings differ from ORIGINAL settings
-	bChangedSome = (newSettings != UserSettings::settings);
+	bChangedSome = (newSettings != UserSettings::getSettings());
 
 	if (bChangedSome)
 	{
@@ -161,7 +166,7 @@ bool W_OptionsGraphics::isMouseOver(const bool& checkForClick)
 		if (checkForClick)
 		{
 			// Update the selectedRes index to track the resolution selection
-			selectedRes = (selectedRes + 1) % UserSettings::getResolutions().size();
+			selectedRes = (selectedRes + 1) % UserSettings::getNumResolutions();
 
 			// Update the resolution to the next one in the list using the selectedRes index
 			newSettings.resID = selectedRes;
@@ -252,15 +257,7 @@ bool W_OptionsGraphics::isMouseOver(const bool& checkForClick)
 			// Apply settings
 			gameInstance().applySettings(newSettings);
 
-			// Read back what was actually applied
-			newSettings = UserSettings::settings;
-			selectedRes = newSettings.resID;
-
-			// Update UI to match actual applied settings
-			updateSettingTexts(newSettings);
-
-			// This will update button states based on comparison with originalSettings
-			checkForDifferences();
+			reset();
 		}
 	}
 

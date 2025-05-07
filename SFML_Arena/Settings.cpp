@@ -5,9 +5,43 @@
 
 UserSettings_Struct UserSettings::settings;
 
-std::vector<ResolutionDesc>& UserSettings::getResolutions()
+std::vector<ResolutionDesc>& UserSettings::getResolutionsVec()
 {
 	return availableResolutions;
+}
+
+UserSettings_Struct UserSettings::getSettings()
+{
+	return settings;
+}
+
+size_t UserSettings::getNumResolutions()
+{
+	return getResolutionsVec().size();
+}
+
+sf::VideoMode UserSettings::getResolution(const int id)
+{
+	if (id == 0)
+		return sf::VideoMode::getDesktopMode();
+
+	if (id < getNumResolutions())
+	{
+		sf::Vector2u res = getResolutionsVec()[id].res;
+		return sf::VideoMode(res.x, res.y);
+	}
+
+	return sf::VideoMode::getDesktopMode();
+}
+
+std::string UserSettings::getResolutionDesc(const int id)
+{
+	if (id < getNumResolutions())
+	{
+		return getResolutionsVec()[id].desc;
+	}
+
+	return "(Custom)";
 }
 
 size_t UserSettings::getResolutionIndex(const sf::Vector2u& targetRes)

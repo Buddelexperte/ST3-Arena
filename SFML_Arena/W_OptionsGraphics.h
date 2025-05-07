@@ -39,6 +39,8 @@ private:
     Button T_Fullscreen_Val;
     Button T_WParallax_Val;
 
+    virtual void reset() override;
+
 public:
     W_OptionsGraphics(InputWidget* parent = nullptr);
 
