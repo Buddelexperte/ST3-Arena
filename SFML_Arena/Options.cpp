@@ -6,7 +6,7 @@
 W_Options::W_Options(InputWidget* parent) 
 	: InputWidget(parent), 
 	soundMenu(this), graphicMenu(this),
-	options_title(this), options_graphics(this), options_sounds(this), options_return(this)
+	T_Title(this), B_Graphics(this), B_Sounds(this), B_Return(this)
 {
 	const std::vector<RawButton> MAIN_MENU_CONSTR = {
 		{sf::Vector2f{ 0, -300 },		sf::Vector2f{ 350, 120 },	sf::Color::Transparent,   100,	"OPTIONS",	sf::Color::White},
@@ -15,10 +15,27 @@ W_Options::W_Options(InputWidget* parent)
 		{sf::Vector2f{ 0, 300 },		buttonSize,					sf::Color::White,         24,	"RETURN",		sf::Color::Black},
 	};
 
-	options_title.construct(MAIN_MENU_CONSTR[0]);
-	options_graphics.construct(MAIN_MENU_CONSTR[1]);
-	options_sounds.construct(MAIN_MENU_CONSTR[2]);
-	options_return.construct(MAIN_MENU_CONSTR[3]);
+	T_Title.construct(MAIN_MENU_CONSTR[0]);
+	B_Graphics.construct(MAIN_MENU_CONSTR[1]);
+	B_Sounds.construct(MAIN_MENU_CONSTR[2]);
+	B_Return.construct(MAIN_MENU_CONSTR[3]);
+
+	delegateButtons();
+}
+
+void W_Options::delegateButtons()
+{
+	B_Return.onClick = [this]() {
+		onKeyEscape();
+		};
+
+	B_Graphics.onClick = [this]() {
+		setWidgetIndex(1)->construct();
+		};
+
+	B_Sounds.onClick = [this]() {
+		setWidgetIndex(2)->construct();
+		};
 }
 
 void W_Options::construct()
@@ -53,7 +70,7 @@ InputWidget* W_Options::setWidgetIndex(const int& newIndex)
 	switch (widgetIndex = newIndex)
 	{
 	case 0: // THIS
-		shapes = { &options_title, &options_graphics, &options_return, &options_sounds };
+		shapes = { &T_Title, &B_Graphics, &B_Return, &B_Sounds };
 		break;
 	case 1: // SOUNDS
 		shapes = { &soundMenu };
@@ -72,10 +89,10 @@ void W_Options::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 
-	options_title.tick(deltaTime);
-	options_graphics.tick(deltaTime);
-	options_sounds.tick(deltaTime);
-	options_return.tick(deltaTime);
+	T_Title.tick(deltaTime);
+	B_Graphics.tick(deltaTime);
+	B_Sounds.tick(deltaTime);
+	B_Return.tick(deltaTime);
 }
 
 bool W_Options::isMouseOver(const bool& checkForClick)
@@ -83,21 +100,15 @@ bool W_Options::isMouseOver(const bool& checkForClick)
 	if (isChildActive())
 		return getActiveChild()->isMouseOver(checkForClick);
 
-	if (options_return.isMouseOver(checkForClick))
-	{
-		if (checkForClick) onKeyEscape();
+	if (B_Return.isMouseOver(checkForClick))
 		return true;
-	}
-	if (options_graphics.isMouseOver(checkForClick))
-	{
-		if (checkForClick) setWidgetIndex(1)->construct();
+
+	if (B_Graphics.isMouseOver(checkForClick))
 		return true;
-	}
-	if (options_sounds.isMouseOver(checkForClick))
-	{
-		if (checkForClick) setWidgetIndex(2)->construct();
+
+	if (B_Sounds.isMouseOver(checkForClick))
 		return true;
-	}
+
 	// On no button-mouse overlap
 	return false;
 }

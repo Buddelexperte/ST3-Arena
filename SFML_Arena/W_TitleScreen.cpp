@@ -5,6 +5,7 @@
 #include "SaveGame.h"
 
 
+
 W_TitleScreen::W_TitleScreen(InputWidget* parent)
 	: InputWidget(parent),
 	T_Title(this), T_Highscore(this), B_Start(this), B_OptionsMenu(this), B_Quit(this)
@@ -23,7 +24,34 @@ W_TitleScreen::W_TitleScreen(InputWidget* parent)
 	B_OptionsMenu.construct(MAIN_MENU_CONSTR[3]);
 	B_Quit.construct(MAIN_MENU_CONSTR[4]);
 
+	delegateButtons();
+
 	shapes = { &T_Title, &T_Highscore, &B_Start, &B_OptionsMenu, &B_Quit };
+}
+
+void W_TitleScreen::delegateButtons()
+{
+	T_Title.onClick = [this]()
+	{
+		bool bIsWhite = (T_Title.getColor(true) == sf::Color::White);
+		sf::Color newColor = (bIsWhite ? sf::Color::Red : sf::Color::White);
+		T_Title.setColor(newColor, true);
+	};
+
+	B_Start.onClick = [this]()
+	{
+		parent->setWidgetIndex(2)->construct();
+	};
+
+	B_OptionsMenu.onClick = [this]()
+	{
+		parent->setWidgetIndex(1)->construct();
+	};
+
+	B_Quit.onClick = [this]()
+	{
+		gameInstance().setGameState(QUIT);
+	};
 }
 
 void W_TitleScreen::construct()
@@ -47,29 +75,17 @@ void W_TitleScreen::tick(const float& deltaTime)
 
 bool W_TitleScreen::isMouseOver(const bool& checkForClick = false)
 {
-	sf::Vector2f mousePos = gameInstance().getMousePos();
-
 	if (T_Title.isMouseOver(checkForClick))
-	{
-		sf::Color newColor = (T_Title.getColor(true) == sf::Color::White ? sf::Color::Red : sf::Color::White);
-		if (checkForClick) T_Title.setColor(newColor, true);
 		return true;
-	}
+
 	if (B_Start.isMouseOver(checkForClick))
-	{
-		if (checkForClick) parent->setWidgetIndex(2)->construct();
 		return true;
-	}
+
 	if (B_OptionsMenu.isMouseOver(checkForClick))
-	{
-		if (checkForClick) parent->setWidgetIndex(1)->construct();
 		return true;
-	}
+
 	if (B_Quit.isMouseOver(checkForClick))
-	{
-		if (checkForClick) gameInstance().setGameState(QUIT);
 		return true;
-	}
 
 	return false;
 }

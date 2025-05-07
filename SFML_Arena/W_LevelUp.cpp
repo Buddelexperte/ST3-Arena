@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "functions.h"
 
+
 W_LevelUp::W_LevelUp(InputWidget* parent)
 	: InputWidget(parent), 
 	bg(this), B_Skip(this),
@@ -35,6 +36,16 @@ W_LevelUp::W_LevelUp(InputWidget* parent)
 	pf_display_2.construct(FAMILY_POS[1]);
 	pf_display_3.construct(FAMILY_POS[2]);
 	pf_display_4.construct(FAMILY_POS[3]);
+
+	delegateButtons();
+}
+
+void W_LevelUp::delegateButtons()
+{
+	B_Skip.onClick = [this]()
+	{
+		onKeyEscape();
+	};
 }
 
 void W_LevelUp::construct()
@@ -52,10 +63,7 @@ bool W_LevelUp::isMouseOver(const bool& checkForClick)
 		return getActiveChild()->isMouseOver(checkForClick);
 
 	if (B_Skip.isMouseOver(checkForClick))
-	{
-		if (checkForClick) onKeyEscape();
 		return true;
-	}
 
 	// On no button-mouse overlap
 	return false;

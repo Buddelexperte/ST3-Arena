@@ -5,7 +5,7 @@
 
 W_LevelMenu::W_LevelMenu(InputWidget* parent) 
 	: InputWidget(parent),
-	levelmenu_title(this), level1_Button(this), level2_Button(this), level3_Button(this), return_Button(this)
+	T_Title(this), B_Level1(this), B_Level2(this), B_Level3(this), B_Return(this)
 {
 	const std::vector<RawButton> LEVEL_MENU_CONSTR = {
 		{sf::Vector2f(0.0f,		-300.0f) * unitNorm,	sf::Vector2f(100.0f, 100.0f) * unitNorm,	sf::Color::Transparent,		100,	"LEVEL SELECT", sf::Color::White},
@@ -15,22 +15,52 @@ W_LevelMenu::W_LevelMenu(InputWidget* parent)
 		{sf::Vector2f(0.0f,		150.0f) * unitNorm,		buttonSize,										sf::Color::White,			24,		"RETURN",		sf::Color::Black}
 	};
 
-	levelmenu_title.construct(LEVEL_MENU_CONSTR[0]);
-	level1_Button.construct(LEVEL_MENU_CONSTR[1]);
-	level2_Button.construct(LEVEL_MENU_CONSTR[2]);
-	level3_Button.construct(LEVEL_MENU_CONSTR[3]);
-	return_Button.construct(LEVEL_MENU_CONSTR[4]);
+	T_Title.construct(LEVEL_MENU_CONSTR[0]);
+	B_Level1.construct(LEVEL_MENU_CONSTR[1]);
+	B_Level2.construct(LEVEL_MENU_CONSTR[2]);
+	B_Level3.construct(LEVEL_MENU_CONSTR[3]);
+	B_Return.construct(LEVEL_MENU_CONSTR[4]);
+
+	delegateButtons();
+}
+
+void W_LevelMenu::delegateButtons()
+{
+	B_Level1.onClick = [this]()
+	{
+		selectLevel(1);
+	};
+
+	B_Level2.onClick = [this]()
+	{
+		selectLevel(2);
+	};
+
+	B_Level3.onClick = [this]()
+	{
+		selectLevel(3);
+	};
+
+	B_Return.onClick = [this]()
+	{
+		onKeyEscape();
+	};
+}
+
+void W_LevelMenu::selectLevel(const unsigned int level)
+{
+	parent->setWidgetIndex(parent->getWidgetIndex() + 1)->construct();
 }
 
 void W_LevelMenu::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 
-	levelmenu_title.tick(deltaTime);
-	level1_Button.tick(deltaTime);
-	level2_Button.tick(deltaTime);
-	level3_Button.tick(deltaTime);
-	return_Button.tick(deltaTime);
+	T_Title.tick(deltaTime);
+	B_Level1.tick(deltaTime);
+	B_Level2.tick(deltaTime);
+	B_Level3.tick(deltaTime);
+	B_Return.tick(deltaTime);
 }
 
 void W_LevelMenu::construct()
@@ -44,21 +74,16 @@ void W_LevelMenu::construct()
 bool W_LevelMenu::isMouseOver(const bool& checkForClick = false)
 {
 	if (isChildActive())
-		return getWidgetAtIndex(widgetIndex)->isMouseOver(checkForClick);
+		return getActiveChild()->isMouseOver(checkForClick);
 
-	if (level1_Button.isMouseOver(checkForClick) || level2_Button.isMouseOver(checkForClick) || level3_Button.isMouseOver(checkForClick))
-	{
-		if (checkForClick)
-		{
-			parent->setWidgetIndex(parent->getWidgetIndex() + 1)->construct();
-			return true;
-		}
-	}
-	if (return_Button.isMouseOver(checkForClick))
-	{
-		if (checkForClick) onKeyEscape();
+	if (B_Level1.isMouseOver(checkForClick) 
+		|| B_Level2.isMouseOver(checkForClick) 
+		|| B_Level3.isMouseOver(checkForClick))
 		return true;
-	}
+
+	if (B_Return.isMouseOver(checkForClick))
+		return true;
+
 	return false;
 }
 
@@ -67,7 +92,7 @@ InputWidget* W_LevelMenu::setWidgetIndex(const int& newIndex)
 	switch (widgetIndex = newIndex)
 	{
 	case 0:
-		shapes = { &levelmenu_title, &level1_Button, &level2_Button, &level3_Button, &return_Button };
+		shapes = { &T_Title, &B_Level1, &B_Level2, &B_Level3, &B_Return };
 		break;
 	default:
 		shapes = { getWidgetAtIndex(widgetIndex) };

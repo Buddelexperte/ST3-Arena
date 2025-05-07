@@ -5,6 +5,8 @@
 class W_TitleScreen : public InputWidget
 {
 private:
+	void delegateButtons() override; 
+	
 	Button T_Title;
 	Button T_Highscore;
 	Button B_Start;

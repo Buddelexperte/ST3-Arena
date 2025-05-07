@@ -35,6 +35,7 @@ void W_SelectWeapon::construct()
 	setWidgetIndex(0);
 }
 
+
 void W_SelectWeapon::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);

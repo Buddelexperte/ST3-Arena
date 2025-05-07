@@ -9,10 +9,12 @@
 class W_Options : public InputWidget // OptionsMenu Widget ------------------------------------------
 {
 private:
-	Button options_title;
-	Button options_graphics;
-	Button options_return;
-	Button options_sounds;
+	void delegateButtons() override;
+
+	Button T_Title;
+	Button B_Graphics;
+	Button B_Return;
+	Button B_Sounds;
 
 	W_OptionsSounds soundMenu;
 	W_OptionsGraphics graphicMenu;

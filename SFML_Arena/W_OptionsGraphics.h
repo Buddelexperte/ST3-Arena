@@ -9,6 +9,7 @@ class GameInstance;
 class W_OptionsGraphics : public InputWidget
 {
 private:
+    void delegateButtons() override;
     // Helper methods
     std::string formatResolutionLabel(size_t id);
     void updateSettingTexts(const UserSettings_Struct& s);
@@ -24,6 +25,7 @@ private:
     Button T_Title;
     Button B_Return;
     Button B_Apply;
+    Button bg;
 
     // Settings labels
     Button T_Resolution;
@@ -40,6 +42,12 @@ private:
     Button T_WParallax_Val;
 
     virtual void reset() override;
+
+    void toggleResolution();
+    void toggleMaxFPS();
+    void toggleVSync();
+    void toggleFullscreen();
+    void toggleWidgetParallax();
 
 public:
     W_OptionsGraphics(InputWidget* parent = nullptr);

@@ -5,11 +5,15 @@
 class W_LevelMenu : public InputWidget // LevelMenu Widget ------------------------------------------
 {
 private:
-	Button levelmenu_title;
-	Button level1_Button;
-	Button level2_Button;
-	Button level3_Button;
-	Button return_Button;
+	void delegateButtons() override;
+	
+	Button T_Title;
+	Button B_Level1;
+	Button B_Level2;
+	Button B_Level3;
+	Button B_Return;
+
+	void selectLevel(const unsigned int);
 
 public:
 	void tick(const float& deltaTime) override;

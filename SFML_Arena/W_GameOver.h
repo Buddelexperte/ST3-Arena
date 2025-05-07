@@ -6,10 +6,12 @@
 class W_GameOver : public InputWidget
 {
 private:
-	Button gameOver_title;
-	Button gameOver_score;
-	Button gameOver_kills;
-	Button gameOver_quitButton;
+	void delegateButtons() override;
+
+	Button T_Title;
+	Button T_Score;
+	Button T_Kills;
+	Button B_Quit;
 
 	sf::Vector2f getCorrectTickCorrection() const override;
 public:

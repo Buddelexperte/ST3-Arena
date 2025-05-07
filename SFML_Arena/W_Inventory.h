@@ -5,6 +5,7 @@
 class W_Inventory : public InputWidget
 {
 private:
+	void delegateButtons() override;
 
 public:
 	W_Inventory(InputWidget*);

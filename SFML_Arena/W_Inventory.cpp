@@ -3,8 +3,18 @@
 #include "W_Inventory.h" // Own header file
 #include "GameInstance.h"
 
+
 W_Inventory::W_Inventory(InputWidget* parent)
 	: InputWidget(parent)
+{
+
+
+	delegateButtons();
+
+	shapes = { };
+}
+
+void W_Inventory::delegateButtons()
 {
 
 }

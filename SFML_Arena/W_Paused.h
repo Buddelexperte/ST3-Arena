@@ -6,12 +6,14 @@
 class W_Paused : public InputWidget
 {
 private:
+	void delegateButtons() override;
+
 	sf::Vector2f getCorrectTickCorrection() const override;
 
 	Button pause_title;
-	Button pause_resumeButton;
-	Button pause_optionsButton;
-	Button pause_quitButton;
+	Button B_Resume;
+	Button B_OpenOptions;
+	Button B_Quit;
 
 	W_Options optionsMenu;
 public:

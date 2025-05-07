@@ -6,6 +6,7 @@
 class W_LevelUp : public InputWidget
 {
 private:
+	void delegateButtons() override;
 
 	Button bg;
 	Button B_Skip;

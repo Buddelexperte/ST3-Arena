@@ -24,7 +24,7 @@ struct RawButton
 	sf::Vector2f size = sf::Vector2f(100.0f, 100.0f);
 	sf::Color color = sf::Color::White;
 	unsigned int textSize = 0;
-	std::string text = "Button Text";
+	std::string text = "";
 	sf::Color textColor = sf::Color::White;
 	EAlignment alignment = EAlignment::CENTER;
 	EAlignment textAlignment = EAlignment::CENTER;

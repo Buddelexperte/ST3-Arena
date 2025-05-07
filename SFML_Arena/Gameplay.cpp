@@ -221,6 +221,7 @@ void W_Gameplay::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	}
 }
 
+
 void W_Gameplay::start_openAnim()
 {
 	switch (startAnimPhase)
