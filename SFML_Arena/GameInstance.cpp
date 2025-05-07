@@ -46,6 +46,11 @@ void GI_Arena::createViewport()
 	window = std::make_unique<sf::RenderWindow>(DESKTOP, WINDOW_NAME, STYLE);
 	std::cout << "- RenderWindow created" << std::endl;
 
+	sf::Image icon;
+	if (icon.loadFromFile("Content/Arena_icon.png")) {
+		window->setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+	}
+
 	if (!view)
 	{
 		const sf::Vector2f DESKTOP_SIZE = { static_cast<float>(DESKTOP.width), static_cast<float>(DESKTOP.height) };
