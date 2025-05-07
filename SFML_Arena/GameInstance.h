@@ -14,7 +14,7 @@ class GI_Arena // SINGLETON PATTERN
 {
 private:
 	// Debugging mode
-	static constexpr bool bDevMode = false;
+	static constexpr bool bDevMode = true;
 	
 	// CONFIG
 	UserSettings_Struct usedSettings;

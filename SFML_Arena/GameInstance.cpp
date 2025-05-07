@@ -41,6 +41,7 @@ void GI_Arena::createViewport()
 
 	const sf::VideoMode DESKTOP = sf::VideoMode::getDesktopMode();
 	UserSettings::settings.resID = UserSettings::getResolutionIndex(sf::Vector2u(DESKTOP.width, DESKTOP.height));
+	usedSettings.resID = UserSettings::settings.resID;
 
 	const sf::Uint32 STYLE = (bDevMode ? sf::Style::Default : sf::Style::Fullscreen);
 
@@ -368,12 +369,16 @@ void GI_Arena::modWindowName(const std::string& suffix)
 
 void GI_Arena::applySettings(const UserSettings_Struct settings)
 {
+	std::cout << "Applying settings in GameInstance" << std::endl;
+
 	modWindow(settings.resID, settings.bFullscreen);
 	setMaxFPS(settings.maxFPS);
 	setUseVSync(settings.bUseVSync);
 	setUseWidgetParallax(settings.bWidgetParallax);
 
-	UserSettings::settings = usedSettings;
+	std::cout << "Saving made changes to settings!" << std::endl;
+
+	UserSettings::saveSettings(usedSettings);
 }
 
 void GI_Arena::setMaxFPS(unsigned int maxFPS)
@@ -394,12 +399,16 @@ void GI_Arena::setUseVSync(bool bUseVSync)
 
 void GI_Arena::modWindow(const size_t resID, bool bFullscreen)
 {
+	std::cout << "Modulating sf::RenderWindow" << std::endl;
 	// Check if both values even change before creating new Window (cost heavy)
 	bool noResDiff = (resID == usedSettings.resID);
 	bool noFullscreenDiff = (bFullscreen == usedSettings.bFullscreen);
 
 	if (noResDiff && noFullscreenDiff)
+	{
+		std::cout << "Cancel Modulating sf::RenderWindow, no changes to be applied" << std::endl;
 		return;
+	}
 	
 
 	// Check if fullscreen mode is valid
@@ -424,6 +433,7 @@ void GI_Arena::modWindow(const size_t resID, bool bFullscreen)
 	}
 
 	// Update variables for window resolution and fullscreen
+	std::cout << "Updating gameInstance settings to:\n- ResID: " << resID << "\n- Fullscreen: " << bFullscreen << std::endl;
 	usedSettings.resID = resID;
 	usedSettings.bFullscreen = bFullscreen;
 
@@ -445,7 +455,7 @@ void GI_Arena::modWindow(const size_t resID, bool bFullscreen)
 		window->setView(*view);
 	}
 
-	std::cout << "Modulated Window/View" << std::endl;
+	std::cout << "Modulated Window/View successfully" << std::endl;
 }
 
 void GI_Arena::setUseWidgetParallax(bool bWidgetParallax)
@@ -453,6 +463,7 @@ void GI_Arena::setUseWidgetParallax(bool bWidgetParallax)
 	if (bWidgetParallax == usedSettings.bWidgetParallax)
 		return;
 
+	std::cout << "Updating gameInstance settings to:\n- bWidgetParallax: " << bWidgetParallax << std::endl;
 	usedSettings.bWidgetParallax = bWidgetParallax;
 }
 

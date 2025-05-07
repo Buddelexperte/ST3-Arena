@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include "SaveGame.h" // Own header file

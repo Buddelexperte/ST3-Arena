@@ -77,4 +77,5 @@ public:
 
 	static UserSettings_Struct loadSettings(const std::string & = SETTINGS_FILE);
 	static void saveSettings(UserSettings_Struct settingsToSave);
+	static void saveSettings();
 };

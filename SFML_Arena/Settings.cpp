@@ -21,6 +21,7 @@ size_t UserSettings::getResolutionIndex(const sf::Vector2u& targetRes)
 		}
 	}
 
+	std::cerr << "Resolution not found! Resolution: " << targetRes.x << "x" << targetRes.y << std::endl;
 	return static_cast<size_t>(0); // Return first index, smalles resolution, should be possible anywhere
 }
 
@@ -46,8 +47,6 @@ void UserSettings::saveSettings(UserSettings_Struct settingsToSave)
 {
 	settings = settingsToSave;
 
-	gameInstance().applySettings(settings);
-
 	std::ofstream outFile(SETTINGS_FILE); // Open file in output mode and write the highscore to it
 	if (outFile.is_open())
 	{
@@ -62,4 +61,9 @@ void UserSettings::saveSettings(UserSettings_Struct settingsToSave)
 	else {
 		std::cerr << "Error opening settings file for writing.\n"; // Display file access error message
 	}
+}
+
+void UserSettings::saveSettings()
+{
+	saveSettings(UserSettings::settings);
 }
