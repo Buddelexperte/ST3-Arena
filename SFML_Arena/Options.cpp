@@ -3,7 +3,7 @@
 #include "Options.h" // Own header file
 #include "SoundManager.h"
 
-W_Options::W_Options(InputWidget* parent = nullptr) 
+W_Options::W_Options(InputWidget* parent) 
 	: InputWidget(parent), 
 	soundMenu(this), graphicMenu(this),
 	options_title(this), options_graphics(this), options_sounds(this), options_return(this)
@@ -24,6 +24,7 @@ W_Options::W_Options(InputWidget* parent = nullptr)
 void W_Options::construct()
 {
 	InputWidget::construct();
+
 	setWidgetIndex(0);
 }
 

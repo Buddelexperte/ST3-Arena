@@ -3,10 +3,19 @@
 #include "SoundManager.h"
 #include "FontManager.h"
 
+void Button::playButtonSound() const
+{
+    SoundManager& soundManager = SoundManager::getInstance();
+    if (buttonData.text == "RETURN" || buttonData.text == "QUIT" || buttonData.text == "CANCEL")
+        soundManager.play(soundManager.getSound_ReturnClick(), ESoundEnv::UI);
+    else
+        soundManager.play(soundManager.getSound_Click(), ESoundEnv::UI);
+}
+
 Button::Button(InputWidget* parent)
 	: WidgetElement(parent)
 {
-
+    shapes = { &B_Box , &T_Text };
 }
 
 void Button::construct()
@@ -411,50 +420,51 @@ void Button::setTexture(const sf::Texture& newTexture, const bool resetTint)
 	if (resetTint) B_Box.setFillColor(sf::Color::White);
 }
 
-bool Button::isMouseOver(const bool& bRegisterClick)
+bool Button::isMouseOver(const bool& checkForClick)
 {
     if (isAnimPlaying())
         return false;
 
-	const sf::Vector2f& mouse = gameInstance().getMousePos();
-	bool hovered = B_Box.getGlobalBounds().contains(mouse);
+    const sf::Vector2f& mousePos = gameInstance().getMousePos();
+    const bool isMouseOver = B_Box.getGlobalBounds().contains(mousePos);
 
-	if (hovered)
-		bRegisterClick ? onClick() : onHover();
-	else
-		onUnhover();
+    // If mouse not overlapping hitbox
+    if (!isMouseOver)
+    {
+        if (bHovered)
+            onUnhover();
 
-	return hovered;
-}
+        return false;
+    }
 
-void Button::onClick() const
-{
-	SoundManager& soundManager = SoundManager::getInstance();
-	if (buttonData.text == "RETURN" || buttonData.text == "QUIT")
-		soundManager.play(soundManager.getSound_ReturnClick(), ESoundEnv::UI);
-	else
-		soundManager.play(soundManager.getSound_Click(), ESoundEnv::UI);
+    // Mouse is overlapping hitbox
+
+    // If clicked, call onClick()
+    if (checkForClick)
+    {
+        playButtonSound();
+        if (onClick != nullptr) onClick(); // Only call back to onClick of onClick delegate has been set
+    }
+    else // Else only call for onHover()
+    {
+        onHover();
+    }
+
+    return true;
 }
 
 void Button::onHover() 
 { 
+    bHovered = true;
 	// Change color on hover
-	sf::Color newColor = buttonData.color + hoverColor_diff;
-	sf::Color newTextColor = buttonData.textColor + hoverColor_diff;
+	sf::Color newColor = buttonData.color + HOVER_COLOR_DIFF;
 
 	B_Box.setFillColor(newColor);
-	T_Text.setFillColor(newTextColor);
 }
 
 void Button::onUnhover() 
 {
+    bHovered = false;
 	// Reset color
 	B_Box.setFillColor(buttonData.color);
-	T_Text.setFillColor(buttonData.textColor);
-}
-
-void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-	target.draw(B_Box, states);
-	target.draw(T_Text, states);
 }

@@ -2,6 +2,7 @@
 // Own libraries
 #include "FontManager.h"
 #include "WidgetBase.h"
+#include <functional>
 
 enum EAlignment
 {
@@ -35,8 +36,11 @@ private:
 	FontManager::Font font = FontManager::Font::BUTTON_FONT; // [0] in FontManager.h
 	
 	RawButton buttonData;
-	static inline const sf::Color hoverColor_diff = sf::Color(-50, -50, -50, 0); // Color difference when hovering
+	static inline const sf::Color HOVER_COLOR_DIFF = sf::Color(-50, -50, -50, 0); // Color difference when hovering
 	bool bHovered = false;
+
+	void playButtonSound() const;
+
 public:
 	sf::RectangleShape B_Box;
 	sf::Text T_Text;
@@ -74,10 +78,9 @@ public:
 
 
 	bool isMouseOver(const bool& = false); // Check if mouse is over button
-	void onClick() const;
 	void onHover();
 	void onUnhover();
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	std::function<void()> onClick; // Callback function
 
 	RawButton getButtonData() const { return buttonData; }
 };

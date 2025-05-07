@@ -58,13 +58,18 @@ public:
 
 class InputWidget : public WidgetElement, public IHasInput
 {
+private:
+	// Used for relaying onClick logic and similar delegates of Buttons etc.
+	virtual void delegateButtons() {};
+
 protected:
 	int widgetIndex = 0;
 	virtual bool onMouseClickL(sf::Event*) override { return isMouseOver(true); }
 
 public:
 	InputWidget(InputWidget* parent) 
-		: WidgetElement(parent) {};
+		: WidgetElement(parent)
+	{};
 	~InputWidget() = default;
 
 	// SubWidget ticking

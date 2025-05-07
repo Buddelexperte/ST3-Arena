@@ -43,7 +43,7 @@ void GI_Arena::createViewport()
 		window.release();
 	}
 
-	const sf::Uint32 style = (usedSettings.bFullscreen ? sf::Style::Fullscreen : sf::Style::Default);
+	const sf::Uint32 style = (usedSettings.bFullscreen && !bDevMode ? sf::Style::Fullscreen : sf::Style::Default);
 	window = std::make_unique<sf::RenderWindow>(mode, WINDOW_NAME, style);
 	std::cout << "- RenderWindow created" << std::endl;
 
