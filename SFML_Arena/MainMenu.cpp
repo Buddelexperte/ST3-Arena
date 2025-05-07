@@ -88,13 +88,13 @@ bool W_MainMenu::onKeyEscape()
 
 void W_MainMenu::start_openAnim()
 {
-	fadeScreen.setFadeColor(sf::Color::Black, sf::Color::Transparent, SCREEN_FADE_DURATION);
+	fadeScreen.setFadeColor(ColorColor(sf::Color::Black, sf::Color::Transparent), SCREEN_FADE_DURATION);
 	fadeScreen.startFade();
 }
 
 void W_MainMenu::start_closeAnim()
 {
-	fadeScreen.setFadeColor(sf::Color::Transparent, sf::Color::Black, SCREEN_FADE_DURATION);
+	fadeScreen.setFadeColor(ColorColor(sf::Color::Transparent, sf::Color::Black), SCREEN_FADE_DURATION);
 	fadeScreen.startFade();
 }
 

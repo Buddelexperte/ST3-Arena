@@ -15,26 +15,19 @@ void ColorFade::tick_fade(const float& deltaTime)
 	float factor = easingFunc(t, 0.0f, 1.0f, duration);
 
 	// Lerp and apply new color
-	sf::Color newColor = lerp(fromColor, toColor, factor);
-	setColor(newColor);
+	sf::Color newColor = lerp(boxFade.color1, boxFade.color2, factor);
+	setColor(newColor, false);
 
-	newColor = lerp(getColor(true), toColor, factor);
-	T_Text.setFillColor(newColor);
-	T_Text.setOutlineColor(newColor);
+	newColor = lerp(textFade.color1, textFade.color2, factor);
+	setColor(newColor, true);
 
 	if (factor >= 1.0f)
 		bStopFade = true;
 }
 
-
-
 ColorFade::ColorFade(InputWidget* parent)
 	: Button(parent)
 {
-	// Set default values
-	fromColor = sf::Color::Black;
-	toColor = sf::Color::Transparent;
-	duration = 1.0f;
 }
 
 void ColorFade::tick(const float& deltaTime)
@@ -52,25 +45,32 @@ void ColorFade::reset()
 	elapsedTime = 0.0f;
 
 	// Reset fade screen to default color
-	setColor(fromColor);
-	setColor(getColor(true));
+	setColor(boxFade.color1, false);
+	setColor(textFade.color1, true);
 }
 
 
-// From, to and time
-void ColorFade::setFadeColor(const sf::Color& from, const sf::Color& to, const float& d, EasingFunction easing)
+// Fade both, using default easing
+void ColorFade::setFadeColor(const ColorColor& bothFade, const float& d)
 {
-	fromColor = from;
-	toColor = to;
+	setFadeColor(bothFade, d, easing::smootherstep);
+}
+
+// Fade both, using param easing
+void ColorFade::setFadeColor(const ColorColor& bothFade, const float& d, EasingFunction easing)
+{
+	setFadeColor(bothFade, bothFade,  d, easing);
+}
+
+// Box and Text seperated colorways, easing in param
+void ColorFade::setFadeColor(const ColorColor& b_fade, const ColorColor& t_fade, const float& d, EasingFunction easing)
+{
+	boxFade = b_fade;
+	textFade = t_fade;
 	duration = d;
 	easingFunc = easing;
 }
 
-// From, to and time
-void ColorFade::setFadeColor(const sf::Color& from, const sf::Color& to, const float& d)
-{
-	setFadeColor(from, to, d, easing::smootherstep);
-}
 
 bool ColorFade::isFading() const
 {
@@ -85,8 +85,8 @@ void ColorFade::startFade()
 	bStopFade = false;
 	elapsedTime = 0.0f;
 
-	setColor(fromColor);
-	setColor(getButtonData().textColor, true);
+	setColor(boxFade.color1, false);
+	setColor(textFade.color1, true);
 }
 
 void ColorFade::stopFade()

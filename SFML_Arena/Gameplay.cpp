@@ -7,18 +7,18 @@
 
 W_Gameplay::W_Gameplay(InputWidget* parent)
 	: InputWidget(parent),
-	startDelay(START_DELAY), loadingPlaceholder(this),
+	startDelay(START_DELAY), loadingTitle(this),
 	pauseMenu(this), gameOverScreen(this), inventoryScreen(this), levelUpScreen(this), background(this), fadeScreen(this),
 	hud(gameInstance().getHud())
 {
 
 	const std::vector<RawButton> CONSTR = {
 		{viewTL, viewSize, sf::Color::White, 0, "", sf::Color::Black, EAlignment::CENTER, EAlignment::CENTER},
-		{viewTL, viewSize, sf::Color::Transparent, 500, "ARENA", sf::Color::Black, EAlignment::CENTER, EAlignment::CENTER}
+		{viewTL, viewSize, sf::Color::Transparent, 500, "ARENA", sf::Color::White, EAlignment::CENTER, EAlignment::CENTER}
 	};
 
 	fadeScreen.construct(CONSTR[0]);
-	loadingPlaceholder.construct(CONSTR[1]);
+	loadingTitle.construct(CONSTR[1]);
 
 	// Done out
 	std::cout << "- Constructed GameplayWidget" << std::endl;
@@ -30,7 +30,6 @@ void W_Gameplay::construct()
 	if (gameState == GAME_LAUNCHING)
 	{
 		// Reset values to game start values
-		setWidgetIndex(-1); // Loading title card
 		playAnim(EAnimation::OPEN_ANIM);
 		gameInstance().startRound();
 	}
@@ -105,7 +104,7 @@ InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 	default:
 		gameInstance().setIsPaused(true);
 		flashlightAffectedDrawables.clear();
-		shapes = { &fadeScreen, &loadingPlaceholder };
+		shapes = { &fadeScreen, &loadingTitle };
 		return this;
 	}
 
@@ -129,7 +128,7 @@ void W_Gameplay::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 	hud.tick(deltaTime);
-	loadingPlaceholder.tick(deltaTime);
+	loadingTitle.tick(deltaTime);
 	fadeScreen.tick(deltaTime);
 	background.tick(deltaTime);
 
@@ -227,18 +226,38 @@ void W_Gameplay::start_openAnim()
 	switch (startAnimPhase)
 	{
 	case -1:
+		setWidgetIndex(-1);
+
 		startDelay.setMaxValue(START_DELAY);
 		startDelay.reset();
 
-		fadeScreen.setFadeColor(sf::Color::White, sf::Color::Black, startDelay.getMaxValue(), easing::cubic::in);
-		fadeScreen.startFade();
+		loadingTitle.setFadeColor(
+			ColorColor(sf::Color::Black, sf::Color::Black), 
+			ColorColor(sf::Color::Black, sf::Color::White), 
+			startDelay.getMaxValue() / 2.0f, 
+			easing::expo::out
+		);
+		loadingTitle.startFade();
 		startAnimPhase = 0;
+		break;
+	case 0:
+		loadingTitle.setFadeColor(
+			ColorColor(sf::Color::Black, sf::Color::Black),
+			ColorColor(sf::Color::White, sf::Color::Black),
+			startDelay.getMaxValue() / 2.0f, 
+			easing::cubic::in
+		);
+		loadingTitle.startFade();
 		break;
 	case 1:
 		setWidgetIndex(0);
 		hud.construct();
 
-		fadeScreen.setFadeColor(sf::Color::Black, sf::Color::Transparent, SCREEN_FADE_DURATION, easing::cubic::out);
+		fadeScreen.setFadeColor(
+			ColorColor(sf::Color::Black, sf::Color::Transparent), 
+			SCREEN_FADE_DURATION, 
+			easing::cubic::out
+		);
 		fadeScreen.startFade();
 		break;
 	default:
@@ -249,7 +268,7 @@ void W_Gameplay::start_openAnim()
 
 void W_Gameplay::start_closeAnim()
 {
-	fadeScreen.setFadeColor(sf::Color::Transparent, sf::Color::Black, SCREEN_FADE_DURATION);
+	fadeScreen.setFadeColor(ColorColor(sf::Color::Transparent, sf::Color::Black), SCREEN_FADE_DURATION);
 	fadeScreen.startFade();
 }
 
@@ -262,6 +281,11 @@ void W_Gameplay::tick_openAnim(const float& deltaTime)
 		if (startDelay.isEmpty())
 		{
 			startAnimPhase = 1;
+			start_openAnim();
+			break;
+		}
+		if (!loadingTitle.isFading())
+		{
 			start_openAnim();
 		}
 		break;
