@@ -5,6 +5,8 @@
 class W_Gameplay : public InputWidget // Gameplay Widget ------------------------------------------
 {
 private:
+	sf::Vector2f getCorrectTickCorrection() const override;
+
 	int startAnimPhase = -1;
 	static constexpr float START_DELAY = 1.0f;
 	ValueBar startDelay;

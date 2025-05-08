@@ -221,6 +221,11 @@ void W_Gameplay::draw(sf::RenderTarget& target, sf::RenderStates states) const
 }
 
 
+sf::Vector2f W_Gameplay::getCorrectTickCorrection() const
+{
+	return widgetOffset;
+}
+
 void W_Gameplay::start_openAnim()
 {
 	switch (startAnimPhase)

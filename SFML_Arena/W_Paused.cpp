@@ -40,11 +40,6 @@ void W_Paused::delegateButtons()
 	};
 }
 
-sf::Vector2f W_Paused::getCorrectTickCorrection() const
-{
-	return widgetOffset;
-}
-
 void W_Paused::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
