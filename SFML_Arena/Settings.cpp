@@ -27,7 +27,7 @@ sf::VideoMode UserSettings::getResolution(const size_t id)
 
 	if (id < getNumResolutions())
 	{
-		sf::Vector2u res = getResolutionsVec()[id].res;
+		sf::Vector2u res = getResolutionsVec()[id].xy;
 		return sf::VideoMode(res.x, res.y);
 	}
 
@@ -49,7 +49,7 @@ size_t UserSettings::getResolutionIndex(const sf::Vector2u& targetRes)
 	for (size_t i = 0; i < availableResolutions.size(); ++i)
 	{
 		// Compare the resolutions
-		if (availableResolutions[i].res == targetRes)
+		if (availableResolutions[i].xy == targetRes)
 		{
 			return i; // Return the index when a match is found
 		}

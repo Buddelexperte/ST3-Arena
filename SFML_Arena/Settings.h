@@ -40,7 +40,7 @@ struct UserSettings_Struct
 
 struct ResolutionDesc
 {
-	sf::Vector2u res;
+	sf::Vector2u xy;
 	std::string desc;
 };
 
