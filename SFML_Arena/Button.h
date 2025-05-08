@@ -4,6 +4,8 @@
 #include "WidgetBase.h"
 #include <functional>
 
+#include "C_ColorFade.h" // For clean color fading
+
 enum EAlignment
 {
 	LEFT_BOTTOM,
@@ -36,10 +38,23 @@ private:
 	FontManager::Font font = FontManager::Font::BUTTON_FONT; // [0] in FontManager.h
 	
 	RawButton buttonData;
-	static inline const sf::Color HOVER_COLOR_DIFF = sf::Color(-50, -50, -50, 0); // Color difference when hovering
+	static inline const sf::Color HOVER_COLOR_DELTA = sf::Color(50, 50, 50, 0); // Color difference when hovering
 	bool bHovered = false;
 
+	bool bEnabled = true;
+
 	void playButtonSound() const;
+
+	ColorFade boxFade;
+	ColorFade textFade;
+
+	// Button Animations
+	virtual void start_onHoverAnim() override; // On Hover
+	virtual void tick_onHoverAnim(const float&) override;
+	virtual void start_onUnhoverAnim() override; // On Unhover
+	virtual void tick_onUnhoverAnim(const float&) override;
+	virtual void start_onClickAnim() override; // On Click
+	virtual void tick_onClickAnim(const float&) override;
 
 public:
 	sf::RectangleShape B_Box;
@@ -50,6 +65,7 @@ public:
 
 	void construct();
 	void construct(const RawButton&);
+	void construct(const RawButton&, const bool);
 
 	// Text
 	void setText(const std::string&); // Set the texts content
@@ -70,17 +86,22 @@ public:
 	void setRotation(const float& newRot) override;
 	void setSize(const sf::Vector2f& newSize) override;
 
+	void setEnabled(const bool);
+	bool getEnabled() const { return bEnabled; }
+
 	// Alignment
 	void setAlignment(const EAlignment& alignment);
 	EAlignment getAlignment() const { return buttonData.alignment; }
 	void setTextAlignment(const EAlignment& alignment);
 	EAlignment getTextAlignment() const { return buttonData.textAlignment; }
 
+	RawButton getButtonData() const { return buttonData; }
 
 	bool isMouseOver(const bool& = false); // Check if mouse is over button
-	void onHover();
-	void onUnhover();
-	std::function<void()> onClick; // Callback function
+	
+	// Callback functions
+	std::function<void()> onClick = nullptr; 
+	std::function<void()> onHover = nullptr;
+	std::function<void()> onUnhover = nullptr;
 
-	RawButton getButtonData() const { return buttonData; }
 };

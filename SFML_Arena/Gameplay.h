@@ -11,7 +11,7 @@ private:
 	static constexpr float START_DELAY = 1.0f;
 	ValueBar startDelay;
 
-	ColorFade loadingTitle;
+	Button_fancy loadingTitle;
 
 	W_Paused pauseMenu;
 	W_GameOver gameOverScreen;
@@ -21,7 +21,7 @@ private:
 
 	BackgroundElement background;
 
-	ColorFade fadeScreen;
+	Button_fancy fadeScreen;
 
 	std::vector<sf::Drawable*> flashlightAffectedDrawables;
 

@@ -103,7 +103,7 @@ void W_MainMenu::tick_openAnim(const float&)
 {
 	if (!fadeScreen.isFading())
 	{
-		IWidgetAnimation::stopAnim();
+		stopAnim(OPEN_ANIM);
 	}
 }
 
@@ -112,6 +112,6 @@ void W_MainMenu::tick_closeAnim(const float& deltaTime)
 	if (!fadeScreen.isFading())
 	{
 		gameInstance().launchGame();
-		IWidgetAnimation::stopAnim();
+		stopAnim(CLOSE_ANIM);
 	}
 }

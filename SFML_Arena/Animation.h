@@ -1,5 +1,9 @@
 #pragma once
 
+#include "Functions.h"
+#include <unordered_map>
+#include <vector>
+
 class IWidgetAnimation
 {
 protected:
@@ -9,91 +13,137 @@ protected:
 		OPEN_ANIM,
 		OPEN_SUB_ANIM,
 		CLOSE_ANIM,
-		IDLE_ANIM
+		IDLE_ANIM,
+		ON_HOVER,
+		ON_UNHOVER,
+		ON_CLICK
 	};
 
 	virtual void tick_anim(const float& deltaTime)
 	{
-		if (!IWidgetAnimation::isAnimPlaying())
-			return;
-
-		switch (IWidgetAnimation::getPlayingAnim())
+		for (const auto& [anim, playing] : animationMap)
 		{
-		case OPEN_ANIM:
-			tick_openAnim(deltaTime);
-			break;
-		case OPEN_SUB_ANIM:
-			tick_openSubAnim(deltaTime);
-			break;
-		case CLOSE_ANIM:
-			tick_closeAnim(deltaTime);
-			break;
-		case IDLE_ANIM:
-			tick_idleAnim(deltaTime);
-			break;
-		case NO_ANIMATION:
-		default:
-			IWidgetAnimation::stopAnim();
-			break;
+			if (!playing) continue;
+
+			switch (anim)
+			{
+			case OPEN_ANIM:        tick_openAnim(deltaTime); break;
+			case OPEN_SUB_ANIM:    tick_openSubAnim(deltaTime); break;
+			case CLOSE_ANIM:       tick_closeAnim(deltaTime); break;
+			case IDLE_ANIM:        tick_idleAnim(deltaTime); break;
+			case ON_HOVER:         tick_onHoverAnim(deltaTime); break;
+			case ON_UNHOVER:       tick_onUnhoverAnim(deltaTime); break;
+			case ON_CLICK:         tick_onClickAnim(deltaTime); break;
+			default: break;
+			}
 		}
+
+
 	}
 
 private:
-	bool bIsPlaying = false;
-	EAnimation animationPlaying = NO_ANIMATION;
+	bool bImportantAnim = false;
+	std::unordered_map<EAnimation, bool> animationMap = { };
 
-	// Different Widget Animations
-	virtual void start_openAnim() { stopAnim(); };
-	virtual void start_openSubAnim() {};
-	virtual void start_closeAnim() {};
-	virtual void start_idleAnim() {};
+	// START methods
+	virtual void start_openAnim() { stopAnim(OPEN_ANIM); }
+	virtual void start_openSubAnim() {}
+	virtual void start_closeAnim() {}
+	virtual void start_idleAnim() {}
+	virtual void start_onHoverAnim() {}
+	virtual void start_onUnhoverAnim() {}
+	virtual void start_onClickAnim() {}
 
-	virtual void tick_openAnim(const float&) {};
-	virtual void tick_openSubAnim(const float&) {};
-	virtual void tick_closeAnim(const float&) {};
-	virtual void tick_idleAnim(const float&) {};
+	// TICK methods
+	virtual void tick_openAnim(const float&) {}
+	virtual void tick_openSubAnim(const float&) {}
+	virtual void tick_closeAnim(const float&) {}
+	virtual void tick_idleAnim(const float&) {}
+	virtual void tick_onHoverAnim(const float&) {}
+	virtual void tick_onUnhoverAnim(const float&) {}
+	virtual void tick_onClickAnim(const float&) {}
 
 public:
 	void playAnim(const EAnimation& anim)
 	{
-		bIsPlaying = true;
-		animationPlaying = anim;
+		bImportantAnim = false;
 
-		switch (IWidgetAnimation::getPlayingAnim())
+		animationMap[anim] = true;
+
+		switch (anim)
 		{
 		case OPEN_ANIM:
+			bImportantAnim = true;
 			start_openAnim();
 			break;
 		case OPEN_SUB_ANIM:
 			start_openSubAnim();
 			break;
 		case CLOSE_ANIM:
+			bImportantAnim = true;
 			start_closeAnim();
 			break;
 		case IDLE_ANIM:
 			start_idleAnim();
 			break;
+		case ON_HOVER:
+			start_onHoverAnim();
+			break;
+		case ON_UNHOVER:
+			start_onUnhoverAnim();
+			break;
+		case ON_CLICK:
+			start_onClickAnim();
+			break;
 		case NO_ANIMATION:
 		default:
-			IWidgetAnimation::stopAnim();
+			clearAnims();
 			break;
 		}
 	}
-	void stopAnim()
+
+	void stopAnim(const EAnimation& anim)
 	{
-		bIsPlaying = false;
+		animationMap[anim] = false;
 	}
-	void clearAnimation()
+
+	void clearAnims()
 	{
-		stopAnim();
-		animationPlaying = NO_ANIMATION;
+		bImportantAnim = false;
+		for (auto& [anim, playing] : animationMap)
+		{
+			playing = false;
+		}
 	}
+
 	virtual bool isAnimPlaying() const
 	{
-		return bIsPlaying;
+		for (const auto& [anim, playing] : animationMap)
+		{
+			if (playing) return true;
+		}
+
+		return false;
 	}
-	EAnimation getPlayingAnim() const
+
+	virtual bool isAnimPlaying(const EAnimation anim) const
 	{
-		return animationPlaying;
+		auto it = animationMap.find(anim);
+		return it != animationMap.end() && it->second;
+	}
+
+	virtual bool isAnimBlockingInput() const
+	{
+		return bImportantAnim && isAnimPlaying();
+	}
+
+	std::vector<EAnimation> getPlayingAnims() const
+	{
+		std::vector<EAnimation> result;
+		for (const auto& [anim, playing] : animationMap)
+		{
+			if (playing) result.push_back(anim);
+		}
+		return result;
 	}
 };

@@ -3,7 +3,7 @@
 #include "ColorFade.h" // Own header file
 #include "Functions.h"
 
-void ColorFade::tick_fade(const float& deltaTime)
+void Button_fancy::tick_fade(const float& deltaTime)
 {
 	if (bStopFade || !easingFunc)
 		return;
@@ -15,29 +15,29 @@ void ColorFade::tick_fade(const float& deltaTime)
 	float factor = easingFunc(t, 0.0f, 1.0f, duration);
 
 	// Lerp and apply new color
-	sf::Color newColor = lerp(boxFade.color1, boxFade.color2, factor);
+	sf::Color newColor = lerp(boxFade.color0, boxFade.color1, factor);
 	setColor(newColor, false);
 
-	newColor = lerp(textFade.color1, textFade.color2, factor);
+	newColor = lerp(textFade.color0, textFade.color1, factor);
 	setColor(newColor, true);
 
 	if (factor >= 1.0f)
 		bStopFade = true;
 }
 
-ColorFade::ColorFade(InputWidget* parent)
+Button_fancy::Button_fancy(InputWidget* parent)
 	: Button(parent)
 {
 }
 
-void ColorFade::tick(const float& deltaTime)
+void Button_fancy::tick(const float& deltaTime)
 {
 	Button::tick(deltaTime);
 
 	tick_fade(deltaTime);
 }
 
-void ColorFade::reset()
+void Button_fancy::reset()
 {
 	Button::reset();
 
@@ -45,25 +45,25 @@ void ColorFade::reset()
 	elapsedTime = 0.0f;
 
 	// Reset fade screen to default color
-	setColor(boxFade.color1, false);
-	setColor(textFade.color1, true);
+	setColor(boxFade.color0, false);
+	setColor(textFade.color0, true);
 }
 
 
 // Fade both, using default easing
-void ColorFade::setFadeColor(const ColorColor& bothFade, const float& d)
+void Button_fancy::setFadeColor(const ColorColor& bothFade, const float& d)
 {
 	setFadeColor(bothFade, d, easing::smootherstep);
 }
 
 // Fade both, using param easing
-void ColorFade::setFadeColor(const ColorColor& bothFade, const float& d, EasingFunction easing)
+void Button_fancy::setFadeColor(const ColorColor& bothFade, const float& d, EasingFunction easing)
 {
 	setFadeColor(bothFade, bothFade,  d, easing);
 }
 
 // Box and Text seperated colorways, easing in param
-void ColorFade::setFadeColor(const ColorColor& b_fade, const ColorColor& t_fade, const float& d, EasingFunction easing)
+void Button_fancy::setFadeColor(const ColorColor& b_fade, const ColorColor& t_fade, const float& d, EasingFunction easing)
 {
 	boxFade = b_fade;
 	textFade = t_fade;
@@ -72,7 +72,7 @@ void ColorFade::setFadeColor(const ColorColor& b_fade, const ColorColor& t_fade,
 }
 
 
-bool ColorFade::isFading() const
+bool Button_fancy::isFading() const
 {
 	if (bStopFade)
 		return false;
@@ -80,16 +80,16 @@ bool ColorFade::isFading() const
 	return (elapsedTime < duration);
 }
 
-void ColorFade::startFade()
+void Button_fancy::startFade()
 {
 	bStopFade = false;
 	elapsedTime = 0.0f;
 
-	setColor(boxFade.color1, false);
-	setColor(textFade.color1, true);
+	setColor(boxFade.color0, false);
+	setColor(textFade.color0, true);
 }
 
-void ColorFade::stopFade()
+void Button_fancy::stopFade()
 {
 	bStopFade = true;
 }

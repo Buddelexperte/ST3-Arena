@@ -12,13 +12,13 @@ private:
 	ValueBar textChangeTimer;
 	unsigned int textState = 0;
 
-	ColorFade fadeScreen;
+	Button_fancy fadeScreen;
 	Button T_LoadingScreenStatus;
 	Button T_GameTitle;
 
 	void start_openAnim() override;
-	void start_closeAnim() override;
 	void tick_openAnim(const float&) override;
+	void start_closeAnim() override;
 	void tick_closeAnim(const float&) override;
 
 public:

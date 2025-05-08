@@ -22,6 +22,8 @@ W_LevelMenu::W_LevelMenu(InputWidget* parent)
 	B_Return.construct(LEVEL_MENU_CONSTR[4]);
 
 	delegateButtons();
+
+	shapes = { &T_Title, &B_Level1, &B_Level2, &B_Level3, &B_Return };
 }
 
 void W_LevelMenu::delegateButtons()
@@ -47,9 +49,18 @@ void W_LevelMenu::delegateButtons()
 	};
 }
 
-void W_LevelMenu::selectLevel(const unsigned int level)
+
+void W_LevelMenu::construct()
 {
-	parent->setWidgetIndex(parent->getWidgetIndex() + 1)->construct();
+	InputWidget::construct();
+
+	setWidgetIndex(0);
+
+	T_Title.construct();
+	B_Level1.construct();
+	B_Level2.construct();
+	B_Level3.construct();
+	B_Return.construct();
 }
 
 void W_LevelMenu::tick(const float& deltaTime)
@@ -63,13 +74,6 @@ void W_LevelMenu::tick(const float& deltaTime)
 	B_Return.tick(deltaTime);
 }
 
-void W_LevelMenu::construct()
-{
-	InputWidget::construct();
-
-	gameInstance().modWindowName(" - Selecting Level...");
-	setWidgetIndex(0);
-}
 
 bool W_LevelMenu::isMouseOver(const bool& checkForClick = false)
 {
@@ -87,16 +91,8 @@ bool W_LevelMenu::isMouseOver(const bool& checkForClick = false)
 	return false;
 }
 
-InputWidget* W_LevelMenu::setWidgetIndex(const int& newIndex)
+void W_LevelMenu::selectLevel(const unsigned int level)
 {
-	switch (widgetIndex = newIndex)
-	{
-	case 0:
-		shapes = { &T_Title, &B_Level1, &B_Level2, &B_Level3, &B_Return };
-		break;
-	default:
-		shapes = { getWidgetAtIndex(widgetIndex) };
-		break;
-	}
-	return getWidgetAtIndex(widgetIndex);
+	// TODO: Add different level select to have consequences
+	parent->setWidgetIndex(parent->getWidgetIndex() + 1)->construct();
 }

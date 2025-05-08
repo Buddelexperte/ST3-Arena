@@ -8,7 +8,7 @@ class W_MainMenu : public InputWidget // MainMenu Widget -----------------------
 private:
 	virtual sf::Vector2f getCorrectTickCorrection() const override;
 
-	ColorFade fadeScreen;
+	Button_fancy fadeScreen;
 
 	W_TitleScreen titleMenu;
 	W_Options optionsMenu;

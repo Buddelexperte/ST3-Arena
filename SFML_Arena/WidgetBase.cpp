@@ -32,7 +32,27 @@ bool WidgetElement::isAnimPlaying() const
 	return bIsPlaying;
 }
 
+bool WidgetElement::isAnimPlaying(const EAnimation anim) const
+{
+	bool bIsPlaying = IWidgetAnimation::isAnimPlaying(anim);
+
+	if (parent != nullptr)
+		bIsPlaying |= parent->isAnimPlaying(anim);
+
+	return bIsPlaying;
+}
+
 // InputWidget ------------------------------------------------------------------------------------
+
+bool InputWidget::onMouseMoved(sf::Event* eventRef)
+{
+	return isMouseOver(false);
+}
+
+bool InputWidget::onMouseClickL(sf::Event* eventRef)
+{
+	return isMouseOver(true);
+}
 
 InputWidget* InputWidget::setWidgetIndex(const int& toIndex)
 {

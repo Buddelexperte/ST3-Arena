@@ -298,11 +298,11 @@ void W_Gameplay::tick_openAnim(const float& deltaTime)
 		if (!fadeScreen.isFading())
 		{
 			startAnimPhase = -1;
-			IWidgetAnimation::stopAnim();
+			stopAnim(OPEN_ANIM);
 		}
 		break;
 	default:
-		stopAnim();
+		stopAnim(OPEN_ANIM);
 		break;
 	}
 }
@@ -312,6 +312,6 @@ void W_Gameplay::tick_closeAnim(const float&)
 	if (!fadeScreen.isFading())
 	{
 		gameInstance().setGameState(MENU_SCREEN);
-		IWidgetAnimation::stopAnim();
+		stopAnim(CLOSE_ANIM);
 	}
 }

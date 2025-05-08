@@ -1,4 +1,5 @@
 ﻿#pragma once
+
 #include <SFML/Graphics.hpp>
 
 // SFML abbreviations

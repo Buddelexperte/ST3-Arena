@@ -20,6 +20,4 @@ public:
 	W_LevelMenu(InputWidget*);
 	void construct() override;
 	bool isMouseOver(const bool&) override;
-
-	InputWidget* setWidgetIndex(const int& newIndex) override;
 };

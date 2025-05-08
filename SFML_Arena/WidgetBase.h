@@ -54,6 +54,7 @@ public:
 	InputWidget* getParent() const { return parent; }
 
 	bool isAnimPlaying() const override;
+	bool isAnimPlaying(const EAnimation) const override;
 };
 
 class InputWidget : public WidgetElement, public IHasInput
@@ -64,7 +65,8 @@ private:
 
 protected:
 	int widgetIndex = 0;
-	virtual bool onMouseClickL(sf::Event*) override { return isMouseOver(true); }
+	virtual bool onMouseMoved(sf::Event*) override;
+	virtual bool onMouseClickL(sf::Event*) override;
 
 public:
 	InputWidget(InputWidget* parent) 

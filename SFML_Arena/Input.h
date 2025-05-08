@@ -76,6 +76,7 @@ protected:
 		if (eventRef->mouseWheelScroll.wheel != sf::Mouse::VerticalWheel) return 0.0f;
 		return eventRef->mouseWheelScroll.delta;
 	}
+	virtual bool onMouseMoved(sf::Event*) { return false; };
 	virtual bool onMouseClickL(sf::Event*) { return false; };
 	virtual bool onMouseClickR(sf::Event*) { return false; };
 	virtual bool onMouseClickM(sf::Event*) { return false; };
@@ -105,6 +106,9 @@ public:
 			return onMouseScrolled(eventRef);
 		case sf::Event::MouseButtonReleased:
 			return onMouseButtonReleased(eventRef);
+		case sf::Event::MouseMoved:
+			//std::cout << "[Mouse Moved Event]" << std::endl;
+			return onMouseMoved(eventRef);
 		default:
 			break;
 		}

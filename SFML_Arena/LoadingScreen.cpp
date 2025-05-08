@@ -15,8 +15,10 @@ W_LoadingScreen::W_LoadingScreen(InputWidget* parent)
 		{viewTL, viewSize}
 	};
 
-	T_LoadingScreenStatus.construct(CONSTR[0]);
-	T_GameTitle.construct(CONSTR[1]);
+	static constexpr bool NOT_INTERACTABLE_FLAG = true;
+
+	T_LoadingScreenStatus.construct(CONSTR[0], NOT_INTERACTABLE_FLAG);
+	T_GameTitle.construct(CONSTR[1], NOT_INTERACTABLE_FLAG);
 	fadeScreen.construct(CONSTR[2]);
 
 	shapes = { &T_LoadingScreenStatus, &T_GameTitle, &fadeScreen };
@@ -27,6 +29,7 @@ W_LoadingScreen::W_LoadingScreen(InputWidget* parent)
 void W_LoadingScreen::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
+
 	T_LoadingScreenStatus.tick(deltaTime);
 	T_GameTitle.tick(deltaTime);
 	fadeScreen.tick(deltaTime);
@@ -52,8 +55,11 @@ void W_LoadingScreen::tick_openAnim(const float& deltaTime)
 
 			if (textState >= 3)
 			{
-				if (getPlayingAnim() != CLOSE_ANIM)
+				if (!isAnimPlaying(CLOSE_ANIM))
+				{
+					stopAnim(OPEN_ANIM);
 					playAnim(CLOSE_ANIM);
+				}
 			}
 
 			std::string newMessage;
@@ -94,6 +100,6 @@ void W_LoadingScreen::tick_closeAnim(const float&)
 	if (!fadeScreen.isFading())
 	{
 		gameInstance().setGameState(MENU_SCREEN);
-		IWidgetAnimation::stopAnim();
+		stopAnim(CLOSE_ANIM);
 	}
 }

@@ -60,6 +60,12 @@ void W_TitleScreen::construct()
 
 	gameInstance().resetWindowName();
 	T_Highscore.setText("Highscore: " + std::to_string(SaveGame::storedData.score));
+
+	T_Title.construct();
+	T_Highscore.construct();
+	B_Start.construct();
+	B_OptionsMenu.construct();
+	B_Quit.construct();
 }
 
 void W_TitleScreen::tick(const float& deltaTime)

@@ -20,11 +20,18 @@ Button::Button(InputWidget* parent)
 
 void Button::construct()
 {
-    construct(buttonData);
+    construct(buttonData, getEnabled());
 }
 
 void Button::construct(const RawButton& constr)
 {
+    construct(constr, getEnabled());
+}
+
+void Button::construct(const RawButton& constr, const bool startEnabled)
+{
+    setEnabled(startEnabled);
+
 	buttonData = constr;
 
 	// Setup button box
@@ -42,10 +49,16 @@ void Button::construct(const RawButton& constr)
 	setTextAlignment(constr.textAlignment);
 	setPosition(constr.pos);
 
-    // 
 	RenderInfo renderInfo = { buttonData.pos, buttonData.size, 0.0f, { 0.f, 0.f }, buttonData.color };
 	setRenderInfo(renderInfo);
+
+    tick_pos(getCorrectTickCorrection());
+
+    bHovered = false;
+    isMouseOver(false); // Check for initial onHover events
 }
+
+// Setting Alignments -----------------------------------------------------------------------------
 
 void Button::setAlignment(const EAlignment& alignment)
 {
@@ -333,6 +346,8 @@ void Button::setTextAlignment(const EAlignment& alignment)
     T_Text.setPosition(textPos);
 }
 
+// Other setters ----------------------------------------------------------------------------------
+
 void Button::setPosition(const sf::Vector2f& newPos)
 {
 	WidgetElement::setPosition(newPos);
@@ -376,6 +391,11 @@ void Button::setSize(const sf::Vector2f& newSize)
     setTextAlignment(buttonData.textAlignment);
 }
 
+void Button::setEnabled(const bool b)
+{
+    bEnabled = b;
+}
+
 void Button::setText(const std::string& newText)
 {
 	buttonData.text = newText;
@@ -385,13 +405,15 @@ void Button::setText(const std::string& newText)
 
 void Button::setColor(const sf::Color& color, const bool& bTextColor)
 {
-	if (bTextColor)
+	if (bTextColor) // Text changing color
 	{
+        textFade.fromTo.color0 = color;
 		buttonData.textColor = color;
 		T_Text.setFillColor(color);
 	}
-	else
+	else // Box changing color
 	{
+        boxFade.fromTo.color0 = color;
 		buttonData.color = color;
 		B_Box.setFillColor(color);
 	}
@@ -420,10 +442,14 @@ void Button::setTexture(const sf::Texture& newTexture, const bool resetTint)
 	if (resetTint) B_Box.setFillColor(sf::Color::White);
 }
 
+// Mouse Interaction ------------------------------------------------------------------------------
+
 bool Button::isMouseOver(const bool& checkForClick)
 {
-    if (isAnimPlaying())
+    if (!bEnabled)
+    {
         return false;
+    }
 
     const sf::Vector2f& mousePos = gameInstance().getMousePos();
     const bool isMouseOver = B_Box.getGlobalBounds().contains(mousePos);
@@ -431,40 +457,82 @@ bool Button::isMouseOver(const bool& checkForClick)
     // If mouse not overlapping hitbox
     if (!isMouseOver)
     {
+        // Unhovering, if hovered before this check
         if (bHovered)
-            onUnhover();
+        {
+            bHovered = false;
+            playAnim(EAnimation::ON_UNHOVER);
+            if (onUnhover) onUnhover();
+        }
 
         return false;
     }
 
     // Mouse is overlapping hitbox
-
+    // 
     // If clicked, call onClick()
     if (checkForClick)
     {
+        if (isAnimBlockingInput())
+        {
+            return false;
+        }
+
         playButtonSound();
-        if (onClick != nullptr) onClick(); // Only call back to onClick of onClick delegate has been set
+        playAnim(EAnimation::ON_CLICK);
+        if (onClick) onClick(); // Only call back to onClick of onClick delegate has been set
     }
-    else // Else only call for onHover()
+    else if (!bHovered)// Else only call for onHover() if not already hovering
     {
-        onHover();
+        bHovered = true;
+        playAnim(EAnimation::ON_HOVER);
+        if (onHover) onHover();
     }
 
     return true;
 }
 
-void Button::onHover() 
-{ 
-    bHovered = true;
-	// Change color on hover
-	sf::Color newColor = buttonData.color + HOVER_COLOR_DIFF;
+// Animations -------------------------------------------------------------------------------------
 
-	B_Box.setFillColor(newColor);
+void Button::start_onHoverAnim()
+{
+    static constexpr float hoverDuration = 0.2f;
+
+    sf::Color currColor = B_Box.getFillColor(); // Maybe deviates from manually set color due to smoothing
+    sf::Color hoveredColor = buttonData.color - HOVER_COLOR_DELTA;
+    boxFade.reset(ColorColor(currColor, hoveredColor), hoverDuration);
 }
 
-void Button::onUnhover() 
+void Button::tick_onHoverAnim(const float& deltaTime)
 {
-    bHovered = false;
-	// Reset color
-	B_Box.setFillColor(buttonData.color);
+    if (boxFade.done())
+        stopAnim(ON_HOVER);
+
+    B_Box.setFillColor(boxFade.fade(deltaTime));
+}
+
+void Button::start_onUnhoverAnim()
+{
+    static constexpr float unhoverDuration = 0.2f;
+
+    sf::Color currColor = B_Box.getFillColor(); // Maybe deviates from manually set color due to smoothing
+    boxFade.reset(ColorColor(currColor, buttonData.color), unhoverDuration);
+}
+
+void Button::tick_onUnhoverAnim(const float& deltaTime)
+{
+    if (boxFade.done())
+        stopAnim(ON_UNHOVER);
+
+    B_Box.setFillColor(boxFade.fade(deltaTime));
+}
+
+void Button::start_onClickAnim()
+{
+    // Nothing yet
+}
+
+void Button::tick_onClickAnim(const float&)
+{
+    // Nothing yet
 }

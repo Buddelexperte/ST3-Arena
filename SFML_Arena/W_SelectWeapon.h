@@ -5,15 +5,24 @@
 class W_SelectWeapon : public InputWidget // Inventory Widget ------------------------------------------
 {
 private:
+	void delegateButtons() override;
+
 	static constexpr unsigned int NUM_WEAPONS = 4; // Anzahl Weaffen Buttons
 	float WEAPON_SPACING_X;
 
-	Button inventory_title;
-	Button item1_Button;
-	Button item2_Button;
-	Button item3_Button;
-	Button item4_Button;
-	Button return_Button;
+	Button T_Title;
+	Button B_item1;
+	Button B_item2;
+	Button B_item3;
+	Button B_item4;
+	Button B_Return;
+	
+	// Keeping all weaponButtons in one place
+	std::vector<Button*> weaponButtons;
+
+	std::string selectedWeaponName = "";
+	void tryStartGame();
+
 public:
 	void tick(const float& deltaTime) override;
 	W_SelectWeapon(InputWidget*);
@@ -21,6 +30,4 @@ public:
 	bool isMouseOver(const bool&) override;
 
 	bool onKeyEscape() override;
-
-	InputWidget* setWidgetIndex(const int& newIndex) override;
 };

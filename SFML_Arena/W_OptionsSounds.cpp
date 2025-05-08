@@ -54,8 +54,6 @@ bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)
 
 void W_OptionsSounds::delegateButtons()
 {
-	std::cout << "Delegating buttons" << std::endl;
-
 	B_Return.onClick = [this]() {
 		onKeyEscape();
 		};

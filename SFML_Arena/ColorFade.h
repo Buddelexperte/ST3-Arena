@@ -1,14 +1,9 @@
 #pragma once
 
 #include "WidgetElements.h"
+#include "C_ColorFade.h"
 
-struct ColorColor
-{
-	sf::Color color1;
-	sf::Color color2;
-};
-
-class ColorFade : public Button
+class Button_fancy : public Button
 {
 private:
 	bool bStopFade = true;
@@ -23,7 +18,7 @@ private:
 	EasingFunction easingFunc = easing::smootherstep; // Or default to smootherstep adapter
 
 public:
-	ColorFade(InputWidget* parent);
+	Button_fancy(InputWidget* parent);
 	void tick(const float& deltaTime) override;
 
 	void reset() override;
