@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -225,6 +225,7 @@
     <ClInclude Include="Pickup.h" />
     <ClInclude Include="PU_ExperienceOrb.h" />
     <ClInclude Include="P_Sparkle.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="ScoreBar.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="SpawnWave.h" />
@@ -280,6 +281,12 @@
     <CopyFileToFolders Include="SaveGame.txt">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SFML_Arena.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -460,6 +460,7 @@
     <ClInclude Include="Settings.h">
       <Filter>Source\Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="resource1.h" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\openal32.dll">
@@ -468,5 +469,15 @@
     <CopyFileToFolders Include="SaveGame.txt">
       <Filter>Ressources</Filter>
     </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SFML_Arena.rc">
+      <Filter>Ressources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico">
+      <Filter>Ressources</Filter>
+    </Image>
   </ItemGroup>
 </Project>
