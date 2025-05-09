@@ -13,7 +13,7 @@ private:
 	Button T_Kills;
 	Button B_Quit;
 
-	sf::Vector2f getCorrectTickCorrection() const override;
+	sf::Vector2f getTickCorrection() const override;
 public:
 	W_GameOver(InputWidget*);
 	void construct() override;

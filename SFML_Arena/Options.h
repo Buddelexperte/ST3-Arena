@@ -15,7 +15,6 @@ private:
 	Button B_Sounds;
 	Button B_Graphics;
 	Button B_Return;
-	Button T_DevMode;
 
 	W_OptionsSounds soundMenu;
 	W_OptionsGraphics graphicMenu;

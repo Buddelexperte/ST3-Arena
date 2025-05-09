@@ -10,7 +10,7 @@ void FadeScreen::fade(const float& deltaTime)
 	screen.setColor(colorFade.fade(deltaTime));
 }
 
-sf::Vector2f FadeScreen::getCorrectTickCorrection() const
+sf::Vector2f FadeScreen::getTickCorrection() const
 {
 	return viewCenter;
 }

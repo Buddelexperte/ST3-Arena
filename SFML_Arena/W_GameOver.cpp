@@ -32,7 +32,7 @@ void W_GameOver::delegateButtons()
 	};
 }
 
-sf::Vector2f W_GameOver::getCorrectTickCorrection() const
+sf::Vector2f W_GameOver::getTickCorrection() const
 {
 	return widgetOffset;
 }

@@ -53,7 +53,7 @@ void Button::construct(const RawButton& constr, const bool startDisabled)
 	RenderInfo renderInfo = { buttonData.pos, buttonData.size, 0.0f, { 0.f, 0.f }, buttonData.color };
 	setRenderInfo(renderInfo);
 
-    tick_pos(getCorrectTickCorrection());
+    tick_pos(getTickCorrection());
 
     bHovered = false;
     isMouseOver(false); // Check for initial onHover events

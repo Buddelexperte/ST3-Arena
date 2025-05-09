@@ -11,7 +11,7 @@ private:
 	ScoreBar scoreBar;
 
 protected:
-	virtual sf::Vector2f getCorrectTickCorrection() const override;
+	virtual sf::Vector2f getTickCorrection() const override;
 
 public:
 	W_Hud(InputWidget* parent);

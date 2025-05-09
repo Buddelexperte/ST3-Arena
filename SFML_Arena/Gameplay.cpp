@@ -172,18 +172,23 @@ bool W_Gameplay::onKeyEscape()
 
 bool W_Gameplay::onKeyTab()
 {
-	// Indicates laoding or unfamiliar behavior, but could be not recognized by isChildActive call
-	if (widgetIndex < 0)
-		return false;
-
-	// If no sub widget open, open optionsMenu
-	SoundManager& soundManager = SoundManager::getInstance();
-	soundManager.play(soundManager.getSound_ReturnClick(), ESoundEnv::UI);
-
 	if (isChildActive())
 		return getActiveChild()->onKeyTab();
 
+	SoundManager& soundManager = SoundManager::getInstance();
+	soundManager.play(soundManager.getSound_ReturnClick(), ESoundEnv::UI);
+
 	setWidgetIndex(4)->construct();
+	return true;
+}
+
+bool W_Gameplay::onLostFocus()
+{
+	if (isChildActive())
+		return getActiveChild()->onLostFocus();
+
+	// If no sub widget open, open optionsMenu
+	setWidgetIndex(1)->construct();
 	return true;
 }
 
@@ -213,7 +218,7 @@ void W_Gameplay::draw(sf::RenderTarget& target, sf::RenderStates states) const
 }
 
 
-sf::Vector2f W_Gameplay::getCorrectTickCorrection() const
+sf::Vector2f W_Gameplay::getTickCorrection() const
 {
 	return widgetOffset;
 }

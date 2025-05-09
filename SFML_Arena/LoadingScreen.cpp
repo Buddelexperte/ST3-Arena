@@ -32,7 +32,7 @@ void W_LoadingScreen::tick(const float& deltaTime)
 
 void W_LoadingScreen::updateStatus(const unsigned int stage = 0)
 {
-	std::string newMessage;
+	std::string newMessage = "STATUS_PLACEHOLDER";
 	switch (stage % 4)
 	{
 	case 0:

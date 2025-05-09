@@ -33,7 +33,7 @@ void IDrawableShapes::updateValues()
 	viewSize = view->getSize();
 	viewHalfSize = viewSize / 2.0f;
 	viewCenter = view->getCenter();
-	viewTL = viewCenter - viewHalfSize;
+	viewTL = viewCenter - (viewSize * 0.5f);
 
 	widgetOffset = gameInstance().getWidgetOffset();
 

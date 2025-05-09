@@ -13,8 +13,6 @@ float GI_Arena::globalTime = 0.0f;
 
 GI_Arena::GI_Arena()
 {
-	bDevMode = std::filesystem::exists(devPath);
-
 	usedSettings = UserSettings::loadSettings();
 
 	// Loading taskbar window icon
@@ -47,7 +45,7 @@ void GI_Arena::createViewport()
 		window.release();
 	}
 
-	const sf::Uint32 style = (usedSettings.bFullscreen && !bDevMode ? sf::Style::Fullscreen : sf::Style::Default);
+	const sf::Uint32 style = (usedSettings.bFullscreen && !getIsDebugMode() ? sf::Style::Fullscreen : sf::Style::Default);
 	window = std::make_unique<sf::RenderWindow>(mode, WINDOW_NAME, style);
 	std::cout << "- RenderWindow created" << std::endl;
 
@@ -114,6 +112,9 @@ void GI_Arena::setViewportValues(size_t resolutionID, bool bFullscreen)
 
 bool GI_Arena::initWidgets()
 {
+	// Updating or initially setting DebugIndicator
+	T_DebugMode.construct();
+
 	// Only execute this method once
 	static bool bInitiatedWidgets = false;
 
@@ -168,6 +169,7 @@ void GI_Arena::start()
 
 void GI_Arena::tickLoop()
 {
+
 	// Main Game Loop
 	while (window->isOpen())
 	{
@@ -193,22 +195,38 @@ void GI_Arena::tick(const float& deltaTime)
 	// Update sf::View based on rescaling or ...
 	tick_view(deltaTime);
 
+	// Tick components
+	T_DebugMode.tick(deltaTime);
+
 	// Event management
 	sf::Event event;
 	while (window->pollEvent(event) && gameState > QUIT)
 	{
-		if (event.type == sf::Event::Closed)
+		switch (event.type)
 		{
-			window->close();
+		case sf::Event::GainedFocus:
+			// Check if developer Mode was configured and display it
+			T_DebugMode.construct();
+			break;
+		case sf::Event::LostFocus:
+			// DONT HANDLE TWICE, DO NOT IMPLEMENT PAUSING LOGIC FOR FOCUS LOST IN PLAYER
+			activeMenu->handleEvent(&event);
+			break;
+		case sf::Event::Closed:
+			// End tickLoop, return
+			return window->close(); 
+		default:
 			break;
 		}
+
 		// Player gets to distribute the events and inputs
 		player->handleEvent(&event);
 	}
 
+	// Update activeWidget if changes to gameState have been made in last tick()
 	correctWidget();
 
-	// Tick active Environment
+	// Tick activeWidget environment
 	if (activeMenu != nullptr)
 	{
 		activeMenu->tick(deltaTime);
@@ -217,8 +235,10 @@ void GI_Arena::tick(const float& deltaTime)
 
 void GI_Arena::postTick()
 {
-	// Draw new Menu to screen through GameInstance
-	updateScreen();
+	// Check if a sf::Event::Closed was called
+	if (window->isOpen())
+		// Draw new Menu to screen through GameInstance
+		updateScreen();
 }
 
 void GI_Arena::correctWidget()
@@ -265,6 +285,10 @@ void GI_Arena::launchGame()
 
 	setGameState(GAME_LAUNCHING);
 	SaveGame::currentData.clear();
+	// Resetting gameplay aspects
+	EntityManager::getInstance().deleteAll();
+	player->spawn();
+	resetViewPos();
 }
 
 void GI_Arena::startRound()
@@ -273,11 +297,7 @@ void GI_Arena::startRound()
 	if (gameState != GAME_LAUNCHING)
 		return;
 
-	// Resetting gameplay aspects
-	EntityManager::getInstance().deleteAll();
-	player->spawn();
-	resetViewPos();
-	// Set gameState to IN_GAME
+	// Set gameState to IN_GAME for startRound to work (safety mechanism)
 	setGameState(IN_GAME);
 }
 
@@ -427,6 +447,7 @@ void GI_Arena::updateScreen()
 	window->clear(sf::Color::Black);
 	// Draw all Drawables from shapes vector
 	if (activeMenu != nullptr) window->draw(*activeMenu);
+	window->draw(T_DebugMode);
 	// Display Draw changes
 	window->display();
 }
@@ -501,7 +522,7 @@ void GI_Arena::setUseWidgetParallax(bool bWidgetParallax)
 
 bool GI_Arena::getIsDebugMode() const
 {
-	return bDevMode;
+	return std::filesystem::exists(devPath);
 }
 
 Player* GI_Arena::getPlayer()

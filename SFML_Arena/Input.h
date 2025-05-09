@@ -76,6 +76,8 @@ protected:
 		if (eventRef->mouseWheelScroll.wheel != sf::Mouse::VerticalWheel) return 0.0f;
 		return eventRef->mouseWheelScroll.delta;
 	}
+
+
 	virtual bool onMouseMoved(sf::Event*) { return false; };
 	virtual bool onMouseClickL(sf::Event*) { return false; };
 	virtual bool onMouseClickR(sf::Event*) { return false; };
@@ -91,6 +93,7 @@ protected:
 	virtual bool onKeyEscape() { return false; }
 
 public:
+	virtual bool onLostFocus() { return false; };
 	virtual bool handleEvent(sf::Event* eventRef)
 	{
 		switch (eventRef->type)
@@ -109,6 +112,9 @@ public:
 		case sf::Event::MouseMoved:
 			//std::cout << "[Mouse Moved Event]" << std::endl;
 			return onMouseMoved(eventRef);
+		case sf::Event::LostFocus:
+			//std::cout << "[Focus Lost Event]" << std::endl;
+			return onLostFocus();
 		default:
 			break;
 		}

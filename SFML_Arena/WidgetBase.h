@@ -16,12 +16,12 @@ static inline constexpr bool NOT_INTERACTABLE_FLAG = true;
 class WidgetElement : public IMovable, public IDrawableShapes, public IWidgetAnimation
 {
 private:
-
 	sf::Vector2f tickPosCorrection = viewCenter;
 
 protected:
 	InputWidget* parent;
-	virtual sf::Vector2f getCorrectTickCorrection() const;
+	// Reference point for moving per tick to keep in View
+	virtual sf::Vector2f getTickCorrection() const;
 
 public:
 	WidgetElement(InputWidget* parentWidget);
@@ -38,9 +38,9 @@ public:
 	}
 	virtual void tick(const float& deltaTime)
 	{
-		if (tickPosCorrection != getCorrectTickCorrection())
+		if (tickPosCorrection != getTickCorrection())
 		{
-			tickPosCorrection = getCorrectTickCorrection();
+			tickPosCorrection = getTickCorrection();
 		}
 
 		tick_pos(tickPosCorrection);
@@ -90,7 +90,7 @@ public:
 	virtual bool onKeyTab() override;
 
 	// Sub widget stuff
-	virtual InputWidget* setWidgetIndex(const int&);
+	virtual InputWidget* setWidgetIndex(const int& toIndex) { widgetIndex = toIndex; return getWidgetAtIndex(widgetIndex); };
 	virtual InputWidget* getWidgetAtIndex(const int& atIndex) { return (atIndex == 0 ? this : nullptr); };
 	int getWidgetIndex() const { return widgetIndex; }
 	bool isChildActive() { return (getWidgetAtIndex(widgetIndex) != this); }

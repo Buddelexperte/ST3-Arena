@@ -6,11 +6,11 @@
 
 // WidgetMenu Code --------------------------------------------------------------------------------
 
-sf::Vector2f WidgetElement::getCorrectTickCorrection() const
+sf::Vector2f WidgetElement::getTickCorrection() const
 {
 	if (parent != nullptr)
 	{
-		return parent->getCorrectTickCorrection();
+		return parent->getTickCorrection();
 	}
 
 	return IDrawableShapes::viewCenter;
@@ -40,20 +40,6 @@ bool InputWidget::onMouseMoved(sf::Event* eventRef)
 bool InputWidget::onMouseClickL(sf::Event* eventRef)
 {
 	return isMouseOver(true);
-}
-
-InputWidget* InputWidget::setWidgetIndex(const int& toIndex)
-{
-	widgetIndex = toIndex;
-	switch (widgetIndex)
-	{
-	case 0:
-		// Implement default shapes in child classes
-		break;
-	default:
-		break;
-	}
-	return getWidgetAtIndex(toIndex);
 }
 
 bool InputWidget::onKeyEscape()

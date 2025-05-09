@@ -72,7 +72,7 @@ bool W_MainMenu::isMouseOver(const bool& checkForClick = false)
 	return false;
 }
 
-sf::Vector2f W_MainMenu::getCorrectTickCorrection() const
+sf::Vector2f W_MainMenu::getTickCorrection() const
 {
 	return widgetOffset;
 }

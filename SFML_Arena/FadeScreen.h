@@ -5,7 +5,7 @@
 class FadeScreen : public WidgetElement
 {
 private:
-	sf::Vector2f getCorrectTickCorrection() const override;
+	sf::Vector2f getTickCorrection() const override;
 	Button screen;
 	ColorFade colorFade;
 

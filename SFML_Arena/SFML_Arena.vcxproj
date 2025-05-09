@@ -180,6 +180,7 @@
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="SpawnWave.cpp" />
     <ClCompile Include="SW_Stage1.h" />
+    <ClCompile Include="DebugIndicator.cpp" />
     <ClCompile Include="WidgetBase.cpp" />
     <ClCompile Include="SaveGame.cpp" />
     <ClCompile Include="Slider.cpp" />
@@ -233,6 +234,7 @@
     <ClInclude Include="SpawnWave.h" />
     <ClInclude Include="SW_Default.h" />
     <ClInclude Include="SW_Stage2.h" />
+    <ClInclude Include="DebugIndicator.h" />
     <ClInclude Include="WidgetBase.h" />
     <ClInclude Include="BaseTypes.h" />
     <ClInclude Include="Button.h" />

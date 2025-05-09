@@ -5,7 +5,7 @@
 class W_LevelLoad : public InputWidget
 {
 private:
-	sf::Vector2f getCorrectTickCorrection() const override;
+	sf::Vector2f getTickCorrection() const override;
 	// Background
 	FadeScreen bg;
 	// Title

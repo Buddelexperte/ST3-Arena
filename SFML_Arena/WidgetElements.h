@@ -4,4 +4,6 @@
 #include "Button.h"
 #include "FadeScreen.h"
 
+#include "DebugIndicator.h"
+
 #include "C_ColorFade.h"

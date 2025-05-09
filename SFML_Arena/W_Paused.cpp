@@ -40,16 +40,6 @@ void W_Paused::delegateButtons()
 	};
 }
 
-void W_Paused::tick(const float& deltaTime)
-{
-	InputWidget::tick(deltaTime);
-
-	pause_title.tick(deltaTime);
-	B_Resume.tick(deltaTime);
-	B_OpenOptions.tick(deltaTime);
-	B_Quit.tick(deltaTime);
-}
-
 void W_Paused::construct()
 {
 	InputWidget::construct();
@@ -58,6 +48,16 @@ void W_Paused::construct()
 	gameInstance().setGameState(GAME_PAUSED);
 
 	setWidgetIndex(0);
+}
+
+void W_Paused::tick(const float& deltaTime)
+{
+	InputWidget::tick(deltaTime);
+
+	pause_title.tick(deltaTime);
+	B_Resume.tick(deltaTime);
+	B_OpenOptions.tick(deltaTime);
+	B_Quit.tick(deltaTime);
 }
 
 InputWidget* W_Paused::getWidgetAtIndex(const int& atIndex)

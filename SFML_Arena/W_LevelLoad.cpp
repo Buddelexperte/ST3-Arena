@@ -2,7 +2,7 @@
 
 #include "W_LevelLoad.h"
 
-sf::Vector2f W_LevelLoad::getCorrectTickCorrection() const
+sf::Vector2f W_LevelLoad::getTickCorrection() const
 {
 	return viewCenter;
 }

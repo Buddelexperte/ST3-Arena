@@ -4,7 +4,7 @@
 #include "GameInstance.h"
 
 // Important for HUD display on screen
-sf::Vector2f W_Hud::getCorrectTickCorrection() const
+sf::Vector2f W_Hud::getTickCorrection() const
 {
 	return IDrawableShapes::viewTL;
 }

@@ -15,7 +15,7 @@ class GI_Arena // SINGLETON PATTERN
 private:
 	// Debugging mode
 	static const inline std::string devPath = "game0.txt";
-	bool bDevMode = false;
+	DebugindicatorText T_DebugMode; // No parent, is active always
 	
 	// CONFIG
 	UserSettings_Struct usedSettings;

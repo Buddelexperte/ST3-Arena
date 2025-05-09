@@ -5,7 +5,7 @@
 class W_Gameplay : public InputWidget // Gameplay Widget ------------------------------------------
 {
 private:
-	sf::Vector2f getCorrectTickCorrection() const override;
+	sf::Vector2f getTickCorrection() const override;
 
 	static constexpr float START_DELAY = 1.0f;
 	ValueBar startDelay;
@@ -33,6 +33,7 @@ private:
 
 	bool onKeyEscape() override;
 	bool onKeyTab() override;
+	bool onLostFocus() override;
 	bool onMouseClickR(sf::Event*) override;
 public:
 	W_Gameplay(InputWidget*);
