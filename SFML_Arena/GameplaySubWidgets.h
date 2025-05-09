@@ -7,5 +7,6 @@
 #include "W_Inventory.h"
 #include "W_Hud.h"
 #include "W_LevelUp.h"
+#include "W_LevelLoad.h"
 
 #include "Background.h" // Component

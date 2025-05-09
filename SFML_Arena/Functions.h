@@ -195,20 +195,76 @@ namespace easing
 	}
 
 
+	namespace quad
+	{
+
+		inline float in(float t, float b, float c, float d)
+		{
+			t /= d;
+			return c * t * t + b;
+		}
+
+		inline float out(float t, float b, float c, float d)
+		{
+			t /= d;
+			return -c * t * (t - 2.0f) + b;
+		}
+
+		inline float inOut(float t, float b, float c, float d)
+		{
+			t /= d / 2.0f;
+			if (t < 1.0f) return c / 2.0f * t * t + b;
+			t -= 1.0f;
+			return -c / 2.0f * (t * (t - 2.0f) - 1.0f) + b;
+		}
+	}
+
+	namespace back
+	{
+		inline static constexpr float DEFAULT_S = 1.70158f;
+
+		inline float in(float t, float b, float c, float d)
+		{
+			const float s = DEFAULT_S;
+			t /= d;
+			return c * t * t * ((s + 1.0f) * t - s) + b;
+		}
+
+		inline float out(float t, float b, float c, float d)
+		{
+			const float s = DEFAULT_S;
+			t = t / d - 1.0f;
+			return c * (t * t * ((s + 1.0f) * t + s) + 1.0f) + b;
+		}
+
+		inline float inOut(float t, float b, float c, float d)
+		{
+			float s = DEFAULT_S * 1.525f;
+			t /= d / 2.0f;
+			if (t < 1.0f)
+				return c / 2.0f * (t * t * ((s + 1.0f) * t - s)) + b;
+			t -= 2.0f;
+			return c / 2.0f * (t * t * ((s + 1.0f) * t + s) + 2.0f) + b;
+		}
+	}
+
 	namespace expo
 	{
 		// Exponential ease-in
-		inline float in(float t, float b, float c, float d) {
+		inline float in(float t, float b, float c, float d)
+		{
 			return (t == 0) ? b : c * static_cast<float>(std::pow(2, 10 * (t / d - 1))) + b;
 		}
 
 		// Exponential ease-out
-		inline float out(float t, float b, float c, float d) {
+		inline float out(float t, float b, float c, float d)
+		{
 			return (t == d) ? b + c : c * (-static_cast<float>(std::pow(2, -10 * t / d)) + 1) + b;
 		}
 
 		// Exponential ease-in-out
-		inline float inOut(float t, float b, float c, float d) {
+		inline float inOut(float t, float b, float c, float d)
+		{
 			if (t == 0) return b;
 			if (t == d) return b + c;
 			t /= d / 2;
@@ -221,20 +277,23 @@ namespace easing
 	namespace cubic
 	{
 		// Cubic ease-in
-		inline float in(float t, float b, float c, float d) {
+		inline float in(float t, float b, float c, float d)
+		{
 			t /= d;
 			return c * t * t * t + b;
 		}
 
 		// Cubic ease-out
-		inline float out(float t, float b, float c, float d) {
+		inline float out(float t, float b, float c, float d)
+		{
 			t /= d;
 			t--;
 			return c * (t * t * t + 1) + b;
 		}
 
 		// Cubic ease-in-out
-		inline float inOut(float t, float b, float c, float d) {
+		inline float inOut(float t, float b, float c, float d)
+		{
 			t /= d / 2;
 			if (t < 1) return c / 2 * t * t * t + b;
 			t -= 2;

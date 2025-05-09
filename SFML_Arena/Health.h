@@ -62,7 +62,7 @@ public:
 
 	virtual void resetHealth()
 	{
-		getHealthBar().reset();
+		getHealthBar().fill_to_max();
 		onHealthChanged();
 	}
 };

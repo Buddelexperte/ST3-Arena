@@ -36,7 +36,7 @@ public:
 					//std::cout << "Failed, burst cooldown was not empty" << std::endl;
 					return UseResult::FAILURE_COOLDOWN;
 				}
-				burstCooldown.reset();
+				burstCooldown.fill_to_max();
 				projSpawner->shoot();
 				burstLeft--;
 				return UseResult::SUCCESS;

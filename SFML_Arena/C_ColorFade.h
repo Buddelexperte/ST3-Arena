@@ -22,12 +22,13 @@ struct ColorFade
 		elapsedTime = 0.0f;
 	}
 
-	void reset(const ColorColor& newPair, const float duration, EasingFunction e = easing::smootherstep)
+	sf::Color reset(const ColorColor& newPair, const float duration, EasingFunction e = easing::smootherstep)
 	{
 		fromTo = newPair;
 		d = duration;
 		easingFunc = e;
 		reset();
+		return current;
 	}
 
 
@@ -49,10 +50,15 @@ struct ColorFade
 
 	bool done() const
 	{
-		return (elapsedTime >= d);
+		return !inProgress();
 	}
 
-	void blockFade()
+	bool inProgress() const
+	{
+		return elapsedTime < d;
+	}
+
+	void restrictFading()
 	{
 		fromTo.color1 = fromTo.color0;
 		d = 0.0f;

@@ -7,19 +7,15 @@
 
 W_LoadingScreen::W_LoadingScreen(InputWidget* parent)
 	: InputWidget(parent),
-	fadeScreen(this), T_LoadingScreenStatus(this), T_GameTitle(this), textChangeTimer(TEXT_CHANGE_DELAY)
+	fadeScreen(this), T_LoadingScreenStatus(this), T_GameTitle(this)
 {
 	const std::vector<RawButton> CONSTR = {
 		{viewTL, viewSize, sf::Color::Transparent, 50, "LOADING...", sf::Color::White, EAlignment::CENTER, EAlignment::CENTER_BOTTOM},
-		{viewTL, viewSize, sf::Color::Transparent, 500, "ARENA", sf::Color::White, EAlignment::CENTER, EAlignment::CENTER},
-		{viewTL, viewSize}
+		{viewTL, viewSize, sf::Color::Transparent, 500, "ARENA", sf::Color::White, EAlignment::CENTER, EAlignment::CENTER}
 	};
-
-	static constexpr bool NOT_INTERACTABLE_FLAG = true;
 
 	T_LoadingScreenStatus.construct(CONSTR[0], NOT_INTERACTABLE_FLAG);
 	T_GameTitle.construct(CONSTR[1], NOT_INTERACTABLE_FLAG);
-	fadeScreen.construct(CONSTR[2]);
 
 	shapes = { &T_LoadingScreenStatus, &T_GameTitle, &fadeScreen };
 
@@ -32,74 +28,93 @@ void W_LoadingScreen::tick(const float& deltaTime)
 
 	T_LoadingScreenStatus.tick(deltaTime);
 	T_GameTitle.tick(deltaTime);
-	fadeScreen.tick(deltaTime);
+}
+
+void W_LoadingScreen::updateStatus(const unsigned int stage = 0)
+{
+	std::string newMessage;
+	switch (stage % 4)
+	{
+	case 0:
+		gameInstance().modWindowName("...");
+		newMessage = "LOADING...";
+		break;
+	case 1:
+		gameInstance().modWindowName("..");
+		newMessage = ".LOADING..";
+		break;
+	case 2:
+		gameInstance().modWindowName(".");
+		newMessage = "..LOADING.";
+		break;
+	case 3:
+	default:
+		gameInstance().modWindowName("");
+		newMessage = "...LOADING";
+		break;
+	}
+
+	T_LoadingScreenStatus.setText(newMessage);
 }
 
 void W_LoadingScreen::start_openAnim()
 {
-	fadeScreen.setFadeColor(ColorColor(sf::Color::Black, sf::Color::Transparent), SCREEN_FADE_DURATION);
-	fadeScreen.startFade();
+	fadeScreen.reset(ColorColor(sf::Color::Black, sf::Color::Transparent), SCREEN_FADE_DURATION);
+	playAnim(IDLE_ANIM);
 }
 
 void W_LoadingScreen::tick_openAnim(const float& deltaTime)
 {
-	if (!fadeScreen.isFading())
+	fadeScreen.fade(deltaTime);
+
+	if (fadeScreen.isFading())
+		return;
+
+	stopAnim(OPEN_ANIM);
+}
+
+void W_LoadingScreen::start_idleAnim()
+{
+	textState = -1;
+	gameInstance().modWindowName("...");
+	textChangeTimer.setMaxValue(TEXT_CHANGE_DELAY);
+	textChangeTimer.fill_to_max();
+}
+
+void W_LoadingScreen::tick_idleAnim(const float& deltaTime)
+{
+	// Wait for timer to run out
+	textChangeTimer.addValue(-deltaTime);
+	if (textChangeTimer.isNotEmpty())
+		return;
+
+	textChangeTimer.fill_to_max();
+	
+	textState++;
+	
+	updateStatus(textState);
+	
+	if (textState >= 3)
 	{
-		textChangeTimer.addValue(-deltaTime);
-
-		if (textChangeTimer.isEmpty())
-		{
-			textChangeTimer.reset();
-
-			textState++;
-
-			if (textState >= 3)
-			{
-				if (!isAnimPlaying(CLOSE_ANIM))
-				{
-					stopAnim(OPEN_ANIM);
-					playAnim(CLOSE_ANIM);
-				}
-			}
-
-			std::string newMessage;
-			switch (textState % 4)
-			{
-			case 0:
-				gameInstance().modWindowName("");
-				newMessage = "LOADING...";
-				break;
-			case 1:
-				gameInstance().modWindowName("...");
-				newMessage = ".LOADING..";
-				break;
-			case 2:
-				gameInstance().modWindowName("..");
-				newMessage = "..LOADING.";
-				break;
-			case 3:
-			default:
-				gameInstance().modWindowName(".");
-				newMessage = "...LOADING";
-				break;
-			}
-
-			T_LoadingScreenStatus.setText(newMessage);
-		}
+		stopAnim(IDLE_ANIM);
+		
+		if (!isAnimPlaying(CLOSE_ANIM))
+			playAnim(CLOSE_ANIM);
 	}
 }
 
 void W_LoadingScreen::start_closeAnim()
 {
-	fadeScreen.setFadeColor(ColorColor(sf::Color::Transparent, sf::Color::Black), SCREEN_FADE_DURATION, easing::cubic::out);
-	fadeScreen.startFade();
+	fadeScreen.reset(ColorColor(sf::Color::Transparent, sf::Color::Black), TEXT_CHANGE_DELAY);
 }
 
-void W_LoadingScreen::tick_closeAnim(const float&)
+void W_LoadingScreen::tick_closeAnim(const float& deltaTime)
 {
-	if (!fadeScreen.isFading())
-	{
-		gameInstance().setGameState(MENU_SCREEN);
-		stopAnim(CLOSE_ANIM);
-	}
+	fadeScreen.fade(deltaTime);
+	
+	if (fadeScreen.isFading())
+		return;
+	
+	gameInstance().setGameState(MENU_SCREEN);
+	stopAnim(CLOSE_ANIM);
 }

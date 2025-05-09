@@ -1,7 +1,6 @@
 #pragma once
 
 #include "WidgetElements.h"
-#include "ColorFade.h"
 
 class W_LoadingScreen : public InputWidget // MainMenu Widget ------------------------------------------
 {
@@ -12,16 +11,20 @@ private:
 	ValueBar textChangeTimer;
 	unsigned int textState = 0;
 
-	Button_fancy fadeScreen;
+	FadeScreen fadeScreen;
 	Button T_LoadingScreenStatus;
 	Button T_GameTitle;
 
+	void updateStatus(const unsigned int);
+
 	void start_openAnim() override;
 	void tick_openAnim(const float&) override;
+	void start_idleAnim() override;
+	void tick_idleAnim(const float&) override;
 	void start_closeAnim() override;
 	void tick_closeAnim(const float&) override;
 
 public:
-	void tick(const float& deltaTime) override;
 	W_LoadingScreen(InputWidget*);
+	void tick(const float& deltaTime) override;
 };

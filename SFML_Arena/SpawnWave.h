@@ -78,7 +78,7 @@ public:
 			spawnInterval();
 			nInterval++;
 			// Reset the timer for the next interval
-			intervalTimer.reset();
+			intervalTimer.fill_to_max();
 			resetEnemiesSpawned();
 		}
 	}

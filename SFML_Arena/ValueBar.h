@@ -37,12 +37,17 @@ public:
 		zeroPrecision(currentValue);
 	}
 
-	void reset()
+	void fill_to_max()
 	{
 		currentValue = maxValue;
 	}
 
-	void reset(const float& deficit)
+	void zero_value()
+	{
+		currentValue = 0.0f;
+	}
+
+	void fill_to_max(const float& deficit)
 	{
 		currentValue = maxValue - deficit;
 	}
@@ -68,13 +73,19 @@ public:
 		return currentValue >= maxValue;
 	}
 
-	bool isNotEmpty() const
+	bool isNotMax() const
 	{
-		return currentValue > 0.0f;
+		return currentValue < maxValue;
 	}
+
 
 	bool isEmpty() const
 	{
 		return currentValue <= 0.0f;
+	}
+
+	bool isNotEmpty() const
+	{
+		return currentValue > 0.0f;
 	}
 };

@@ -50,7 +50,6 @@ void W_SelectWeapon::delegateButtons()
 
 		button->onClick = [this, button]() // Not a &button reference as this is a pointer and can be copied
 		{
-			std::cout << button->getText() << std::endl;
 			selectedWeaponName = button->getText();
 			tryStartGame();
 		};
@@ -124,5 +123,6 @@ bool W_SelectWeapon::onKeyEscape()
 void W_SelectWeapon::tryStartGame()
 {
 	gameInstance().getPlayer()->getInventory().setStartWeapon(selectedWeaponName);
+	gameInstance().resetWindowName();
 	parent->playAnim(CLOSE_ANIM);
 }

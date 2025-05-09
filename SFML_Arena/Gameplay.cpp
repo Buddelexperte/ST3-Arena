@@ -7,19 +7,10 @@
 
 W_Gameplay::W_Gameplay(InputWidget* parent)
 	: InputWidget(parent),
-	startDelay(START_DELAY), loadingTitle(this),
+	startDelay(START_DELAY), levelLoadingScreen(this),
 	pauseMenu(this), gameOverScreen(this), inventoryScreen(this), levelUpScreen(this), background(this), fadeScreen(this),
 	hud(gameInstance().getHud())
 {
-
-	const std::vector<RawButton> CONSTR = {
-		{viewTL, viewSize, sf::Color::White, 0, "", sf::Color::Black, EAlignment::CENTER, EAlignment::CENTER},
-		{viewTL, viewSize, sf::Color::Transparent, 500, "ARENA", sf::Color::White, EAlignment::CENTER, EAlignment::CENTER}
-	};
-
-	fadeScreen.construct(CONSTR[0]);
-	loadingTitle.construct(CONSTR[1]);
-
 	// Done out
 	std::cout << "- Constructed GameplayWidget" << std::endl;
 }
@@ -30,11 +21,10 @@ void W_Gameplay::construct()
 	if (gameState == GAME_LAUNCHING)
 	{
 		// Reset values to game start values
-		playAnim(EAnimation::OPEN_ANIM);
-		gameInstance().startRound();
+		setWidgetIndex(-1)->construct();
 	}
 
-	if (isChildActive())
+	if (widgetIndex > 0)
 		return;
 
 	gameInstance().resetWindowName();
@@ -44,7 +34,10 @@ InputWidget* W_Gameplay::getWidgetAtIndex(const int& atIndex)
 {
 	switch (atIndex)
 	{
-	case 0: case -1: // SELF
+	case -1: // LEVEL LOADING SCREEN
+		return &levelLoadingScreen;
+		break;
+	case 0: // SELF
 		return this;
 		break;
 	case 1: // PAUSED
@@ -82,7 +75,6 @@ InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 	// Everything that comes before 'player' in shapes should be here
 	flashlightAffectedDrawables = { &background.getVertexArray(), bottomRenderer };
 
-
 	switch (widgetIndex = toIndex)
 	{
 	case 0: // SELF
@@ -104,8 +96,8 @@ InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 	default:
 		gameInstance().setIsPaused(true);
 		flashlightAffectedDrawables.clear();
-		shapes = { &fadeScreen, &loadingTitle };
-		return this;
+		shapes = { &levelLoadingScreen };
+		return getWidgetAtIndex(widgetIndex);
 	}
 
 	shapes.push_back(&fadeScreen);
@@ -127,10 +119,10 @@ void W_Gameplay::lose()
 void W_Gameplay::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
-	hud.tick(deltaTime);
-	loadingTitle.tick(deltaTime);
-	fadeScreen.tick(deltaTime);
+
 	background.tick(deltaTime);
+	hud.tick(deltaTime);
+	fadeScreen.tick(deltaTime);
 
 	Player* player = gameInstance().getPlayer();
 
@@ -228,90 +220,39 @@ sf::Vector2f W_Gameplay::getCorrectTickCorrection() const
 
 void W_Gameplay::start_openAnim()
 {
-	switch (startAnimPhase)
-	{
-	case -1:
-		setWidgetIndex(-1);
+	// Technical stuff for Gameplay
+	gameInstance().startRound();
+	// Make loading Screen visible and start HUD animations (best ones)
+	setWidgetIndex(0)->construct();
+	hud.construct();
 
-		startDelay.setMaxValue(START_DELAY);
-		startDelay.reset();
-
-		loadingTitle.setFadeColor(
-			ColorColor(sf::Color::Black, sf::Color::Black), 
-			ColorColor(sf::Color::Black, sf::Color::White), 
-			startDelay.getMaxValue() / 2.0f, 
-			easing::expo::out
-		);
-		loadingTitle.startFade();
-		startAnimPhase = 0;
-		break;
-	case 0:
-		loadingTitle.setFadeColor(
-			ColorColor(sf::Color::Black, sf::Color::Black),
-			ColorColor(sf::Color::White, sf::Color::Black),
-			startDelay.getMaxValue() / 2.0f, 
-			easing::cubic::in
-		);
-		loadingTitle.startFade();
-		break;
-	case 1:
-		setWidgetIndex(0);
-		hud.construct();
-
-		fadeScreen.setFadeColor(
-			ColorColor(sf::Color::Black, sf::Color::Transparent), 
-			SCREEN_FADE_DURATION, 
-			easing::cubic::out
-		);
-		fadeScreen.startFade();
-		break;
-	default:
-		break;
-	}
-	
-}
-
-void W_Gameplay::start_closeAnim()
-{
-	fadeScreen.setFadeColor(ColorColor(sf::Color::Transparent, sf::Color::Black), SCREEN_FADE_DURATION);
-	fadeScreen.startFade();
+	fadeScreen.reset(ColorColor(sf::Color::Black, sf::Color::Transparent), SCREEN_FADE_DURATION, easing::expo::out);
 }
 
 void W_Gameplay::tick_openAnim(const float& deltaTime)
 {
-	switch (startAnimPhase)
-	{
-	case 0:
-		startDelay.addValue(-deltaTime);
-		if (startDelay.isEmpty())
-		{
-			startAnimPhase = 1;
-			start_openAnim();
-			break;
-		}
-		if (!loadingTitle.isFading())
-		{
-			start_openAnim();
-		}
-		break;
-	case 1:
-		if (!fadeScreen.isFading())
-		{
-			startAnimPhase = -1;
-			stopAnim(OPEN_ANIM);
-		}
-		break;
-	default:
-		stopAnim(OPEN_ANIM);
-		break;
-	}
+	fadeScreen.fade(deltaTime);
+
+	// Only stop anim if loading is complete
+	if (fadeScreen.isFading())
+		return;
+	
+	stopAnim(OPEN_ANIM);
 }
 
-void W_Gameplay::tick_closeAnim(const float&)
+void W_Gameplay::start_closeAnim()
 {
-	if (!fadeScreen.isFading())
-	{
-		gameInstance().setGameState(MENU_SCREEN);
-		stopAnim(CLOSE_ANIM);
-	}
+	fadeScreen.reset(ColorColor(sf::Color::Transparent, sf::Color::Black), SCREEN_FADE_DURATION);
+}
+
+void W_Gameplay::tick_closeAnim(const float& deltaTime)
+{
+	fadeScreen.fade(deltaTime);
+
+	// Only stop anim if fading is complete
+	if (fadeScreen.isFading())
+		return;
+
+	gameInstance().setGameState(MENU_SCREEN);
+	stopAnim(CLOSE_ANIM);
 }

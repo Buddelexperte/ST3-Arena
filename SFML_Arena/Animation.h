@@ -27,18 +27,16 @@ protected:
 
 			switch (anim)
 			{
-			case OPEN_ANIM:        tick_openAnim(deltaTime); break;
-			case OPEN_SUB_ANIM:    tick_openSubAnim(deltaTime); break;
-			case CLOSE_ANIM:       tick_closeAnim(deltaTime); break;
-			case IDLE_ANIM:        tick_idleAnim(deltaTime); break;
-			case ON_HOVER:         tick_onHoverAnim(deltaTime); break;
-			case ON_UNHOVER:       tick_onUnhoverAnim(deltaTime); break;
-			case ON_CLICK:         tick_onClickAnim(deltaTime); break;
-			default: break;
+			case OPEN_ANIM:			tick_openAnim(deltaTime); break;
+			case OPEN_SUB_ANIM:		tick_openSubAnim(deltaTime); break;
+			case CLOSE_ANIM:		tick_closeAnim(deltaTime); break;
+			case IDLE_ANIM:			tick_idleAnim(deltaTime); break;
+			case ON_HOVER:			tick_onHoverAnim(deltaTime); break;
+			case ON_UNHOVER:		tick_onUnhoverAnim(deltaTime); break;
+			case ON_CLICK:			tick_onClickAnim(deltaTime); break;
+			default:				break;
 			}
 		}
-
-
 	}
 
 private:
@@ -64,7 +62,7 @@ private:
 	virtual void tick_onClickAnim(const float&) {}
 
 public:
-	void playAnim(const EAnimation& anim)
+	virtual void playAnim(const EAnimation& anim)
 	{
 		bImportantAnim = false;
 
@@ -105,6 +103,9 @@ public:
 	void stopAnim(const EAnimation& anim)
 	{
 		animationMap[anim] = false;
+		// Reset the blocking of input if important animation was ended
+		if (anim == OPEN_ANIM || anim == CLOSE_ANIM)
+			bImportantAnim = false;
 	}
 
 	void clearAnims()

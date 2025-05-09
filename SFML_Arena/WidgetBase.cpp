@@ -22,24 +22,12 @@ WidgetElement::WidgetElement(InputWidget* parentWidget)
 
 }
 
-bool WidgetElement::isAnimPlaying() const
+bool WidgetElement::isAnimBlockingInput() const
 {
-	bool bIsPlaying = IWidgetAnimation::isAnimPlaying();
+	if (parent)
+		return parent->isAnimBlockingInput();
 
-	if (parent != nullptr)
-		bIsPlaying |= parent->isAnimPlaying();
-
-	return bIsPlaying;
-}
-
-bool WidgetElement::isAnimPlaying(const EAnimation anim) const
-{
-	bool bIsPlaying = IWidgetAnimation::isAnimPlaying(anim);
-
-	if (parent != nullptr)
-		bIsPlaying |= parent->isAnimPlaying(anim);
-
-	return bIsPlaying;
+	return IWidgetAnimation::isAnimBlockingInput();
 }
 
 // InputWidget ------------------------------------------------------------------------------------

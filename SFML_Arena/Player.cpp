@@ -62,6 +62,7 @@ void Player::spawn()
 	setPosition(spawnPos);
 	setVelocity(sf::Vector2f(0.0f, 0.0f));
 
+	flashlight.setMaskMode(Flashlight::Type::CIRCLE);
 	inventory.reset();
 	resetHealth(); // 100% hp
 	invincibility.setValue(2.0f); // 2 seconds invincibility (Spawn protection)
@@ -358,6 +359,6 @@ void Player::hurt(const float& delta)
 	if (invincibility.isEmpty())
 	{
 		IHasHealth::hurt(delta);
-		invincibility.reset();
+		invincibility.fill_to_max();
 	}
 }

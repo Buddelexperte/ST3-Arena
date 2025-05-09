@@ -7,11 +7,8 @@ class W_Gameplay : public InputWidget // Gameplay Widget -----------------------
 private:
 	sf::Vector2f getCorrectTickCorrection() const override;
 
-	int startAnimPhase = -1;
 	static constexpr float START_DELAY = 1.0f;
 	ValueBar startDelay;
-
-	Button_fancy loadingTitle;
 
 	W_Paused pauseMenu;
 	W_GameOver gameOverScreen;
@@ -19,9 +16,11 @@ private:
 	W_LevelUp levelUpScreen;
 	W_Hud& hud;
 
+	W_LevelLoad levelLoadingScreen;
+
 	BackgroundElement background;
 
-	Button_fancy fadeScreen;
+	FadeScreen fadeScreen;
 
 	std::vector<sf::Drawable*> flashlightAffectedDrawables;
 

@@ -230,7 +230,7 @@
     <ClCompile Include="ScoreBar.cpp">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay\HUD</Filter>
     </ClCompile>
-    <ClCompile Include="ColorFade.cpp">
+    <ClCompile Include="FadeScreen.cpp">
       <Filter>Source\VisualInterfaces\Components</Filter>
     </ClCompile>
     <ClCompile Include="LoadingScreen.cpp">
@@ -244,6 +244,9 @@
     </ClCompile>
     <ClCompile Include="Settings.cpp">
       <Filter>Source\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="W_LevelLoad.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -445,7 +448,7 @@
     <ClInclude Include="ScoreBar.h">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay\HUD</Filter>
     </ClInclude>
-    <ClInclude Include="ColorFade.h">
+    <ClInclude Include="FadeScreen.h">
       <Filter>Source\VisualInterfaces\Components</Filter>
     </ClInclude>
     <ClInclude Include="LoadingScreen.h">
@@ -461,6 +464,10 @@
       <Filter>Source\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="resource1.h" />
+    <ClInclude Include="C_ColorFade.h" />
+    <ClInclude Include="W_LevelLoad.h">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\openal32.dll">

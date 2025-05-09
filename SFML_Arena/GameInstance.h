@@ -14,7 +14,8 @@ class GI_Arena // SINGLETON PATTERN
 {
 private:
 	// Debugging mode
-	static constexpr bool bDevMode = true;
+	static const inline std::string devPath = "game0.txt";
+	bool bDevMode = false;
 	
 	// CONFIG
 	UserSettings_Struct usedSettings;
@@ -47,7 +48,7 @@ private:
 	bool bIsGameplayPaused = true;
 
 	// Player
-	Player* validPlayer();
+	Player* getValidPlayer();
 	std::unique_ptr<Player> player = nullptr;
 
 	// View related
@@ -112,7 +113,7 @@ public:
 
 	W_Hud& getHud()
 	{
-		return validPlayer()->getHud();
+		return getValidPlayer()->getHud();
 	}
 
 	void resetWindowName();
@@ -124,6 +125,8 @@ public:
 	void setMaxFPS(unsigned int);
 	void setUseVSync(bool);
 	void setUseWidgetParallax(bool);
+
+	bool getIsDebugMode() const;
 };
 
 static inline GI_Arena& gameInstance()

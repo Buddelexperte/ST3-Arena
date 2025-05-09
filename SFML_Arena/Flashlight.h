@@ -7,12 +7,15 @@
 
 class Flashlight : public WidgetElement
 {
-private:
-    enum FlashlightType {
+public:
+    enum class Type {
         TEST = -1,
         CIRCLE = 0,
         CONE
-    } shaderType = CIRCLE;
+    };
+
+private:
+    Flashlight::Type flashlightShape = Flashlight::Type::CIRCLE;
 
     static const inline std::string circleShader_Code = R"(
     uniform vec2 lightPos;
@@ -127,11 +130,11 @@ private:
 
     sf::Shader* currShader = nullptr;
     bool bUseCone = false;
-    sf::Vector2f coneDir;
 
     sf::RenderTexture sceneRenderTexture;
     sf::Sprite sceneSprite;
 
+    sf::Vector2f coneDir;
     static constexpr float SHADER_RADIUS = 480;
     float radius = SHADER_RADIUS;
     static const inline sf::Vector2f SPRITE_SCALE = { 2.1f, 2.1f };
@@ -154,7 +157,7 @@ public:
 
     void tick(const float& deltaTime) override;
 
-    void setMaskMode(const bool& = false);
+    void setMaskMode(const Flashlight::Type& = Flashlight::Type::CIRCLE);
 
     void toggleMaskMode();
 

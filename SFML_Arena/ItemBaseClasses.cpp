@@ -19,7 +19,7 @@ UseResult Weapon::activate(const ItemUse& use)
             }
             // Add additional firing logic (ammo check, cooldowns, etc.) here.
             float cooldownDeficit = owningInventory->getCooldownSubtractor();
-            cooldown->reset(cooldownDeficit);
+            cooldown->fill_to_max(cooldownDeficit);
         }
         return UseResult::SUCCESS;
         break;

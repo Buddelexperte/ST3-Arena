@@ -80,38 +80,40 @@ sf::Vector2f W_MainMenu::getCorrectTickCorrection() const
 bool W_MainMenu::onKeyEscape()
 {
 	if (isChildActive())
-		getActiveChild()->onKeyEscape();
-	else
-		gameInstance().setGameState(QUIT);
-
+		return getActiveChild()->onKeyEscape();
+	
+	gameInstance().setGameState(QUIT);
 	return true;
 }
 
 void W_MainMenu::start_openAnim()
 {
-	fadeScreen.setFadeColor(ColorColor(sf::Color::Black, sf::Color::Transparent), SCREEN_FADE_DURATION);
-	fadeScreen.startFade();
+	fadeScreen.reset(ColorColor(sf::Color::Black, sf::Color::Transparent), SCREEN_FADE_DURATION);
+}
+
+
+void W_MainMenu::tick_openAnim(const float& deltaTime)
+{
+	fadeScreen.fade(deltaTime);
+
+	if (fadeScreen.isFading())
+		return;
+	
+	stopAnim(OPEN_ANIM);
 }
 
 void W_MainMenu::start_closeAnim()
 {
-	fadeScreen.setFadeColor(ColorColor(sf::Color::Transparent, sf::Color::Black), SCREEN_FADE_DURATION);
-	fadeScreen.startFade();
-}
-
-void W_MainMenu::tick_openAnim(const float&)
-{
-	if (!fadeScreen.isFading())
-	{
-		stopAnim(OPEN_ANIM);
-	}
+	fadeScreen.reset(ColorColor(sf::Color::Transparent, sf::Color::Black), SCREEN_FADE_DURATION);
 }
 
 void W_MainMenu::tick_closeAnim(const float& deltaTime)
 {
-	if (!fadeScreen.isFading())
-	{
-		gameInstance().launchGame();
-		stopAnim(CLOSE_ANIM);
-	}
+	fadeScreen.fade(deltaTime);
+
+	if (fadeScreen.isFading())
+		return;
+	
+	gameInstance().launchGame();
+	stopAnim(CLOSE_ANIM);
 }

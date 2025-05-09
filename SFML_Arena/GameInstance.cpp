@@ -7,10 +7,14 @@
 #include "SoundManager.h"
 #include "Player.h"
 
+#include <filesystem>
+
 float GI_Arena::globalTime = 0.0f;
 
 GI_Arena::GI_Arena()
 {
+	bDevMode = std::filesystem::exists(devPath);
+
 	usedSettings = UserSettings::loadSettings();
 
 	// Loading taskbar window icon
@@ -135,7 +139,7 @@ bool GI_Arena::initWidgets()
 	return true;
 }
 
-Player* GI_Arena::validPlayer()
+Player* GI_Arena::getValidPlayer()
 {
 	if (player)
 	{
@@ -153,7 +157,7 @@ void GI_Arena::start()
 
 	std::cout << "Viewport values initialized\n" << std::endl;
 
-	validPlayer();
+	getValidPlayer();
 
 	initWidgets();
 	
@@ -167,15 +171,54 @@ void GI_Arena::tickLoop()
 	// Main Game Loop
 	while (window->isOpen())
 	{
-		// Debug time measuring only TEMPORARY, disbale if needed
-		//sf::Clock debugClock;
-		preTick();
 		// Calculate deltaTime for time corrected physics
 		const float deltaTime = clock.restart().asSeconds();
+		preTick();
 		tick(deltaTime);
 		postTick();
-		//std::cout << "tick loop time: " << debugClock.restart().asMilliseconds() << "ms" << std::endl; // Debug
 	}
+}
+
+void GI_Arena::preTick()
+{
+	prevCamPos = view->getCenter();
+	SoundManager::getInstance().cleanUp();
+}
+
+void GI_Arena::tick(const float& deltaTime)
+{
+	// Time variables
+	globalTime += deltaTime;
+
+	// Update sf::View based on rescaling or ...
+	tick_view(deltaTime);
+
+	// Event management
+	sf::Event event;
+	while (window->pollEvent(event) && gameState > QUIT)
+	{
+		if (event.type == sf::Event::Closed)
+		{
+			window->close();
+			break;
+		}
+		// Player gets to distribute the events and inputs
+		player->handleEvent(&event);
+	}
+
+	correctWidget();
+
+	// Tick active Environment
+	if (activeMenu != nullptr)
+	{
+		activeMenu->tick(deltaTime);
+	}
+}
+
+void GI_Arena::postTick()
+{
+	// Draw new Menu to screen through GameInstance
+	updateScreen();
 }
 
 void GI_Arena::correctWidget()
@@ -238,48 +281,6 @@ void GI_Arena::startRound()
 	setGameState(IN_GAME);
 }
 
-void GI_Arena::preTick()
-{
-	prevCamPos = view->getCenter();
-	SoundManager::getInstance().cleanUp();
-}
-
-void GI_Arena::tick(const float& deltaTime)
-{
-	// Time variables
-	globalTime += deltaTime;
-
-	// Update sf::View based on rescaling or ...
-	tick_view(deltaTime);
-
-	// Event management
-	sf::Event event;
-	while (window->pollEvent(event) && gameState > QUIT)
-	{
-		if (event.type == sf::Event::Closed)
-		{
-			window->close();
-			break;
-		}
-		// Player gets to distribute the events and inputs
-		player->handleEvent(&event);
-	}
-
-	//player->tick(deltaTime); TODO remove line
-	correctWidget();
-
-	// Tick active Environment
-	if (activeMenu != nullptr)
-	{
-		activeMenu->tick(deltaTime);
-	}
-}
-
-void GI_Arena::postTick()
-{
-	// Draw new Menu to screen through GameInstance
-	updateScreen();
-}
 
 void GI_Arena::setViewPos(const sf::Vector2f& newPos)
 {
@@ -437,9 +438,6 @@ void GI_Arena::setGameState(const GameState& newGS)
 	if (newGS == gameState)
 		return; // eg when opening Gameplay and animation needs IN_GAME
 
-	// TODO needs oversight
-	std::cout << "Setting gameState to = " << static_cast<int>(newGS) << std::endl;
-
 	switch (gameState = newGS)
 	{
 	case IN_GAME:
@@ -501,6 +499,11 @@ void GI_Arena::setUseWidgetParallax(bool bWidgetParallax)
 	usedSettings.bWidgetParallax = bWidgetParallax;
 }
 
+bool GI_Arena::getIsDebugMode() const
+{
+	return bDevMode;
+}
+
 Player* GI_Arena::getPlayer()
 {
 	if (player)
@@ -508,7 +511,7 @@ Player* GI_Arena::getPlayer()
 		return player.get();
 	}
 
-	return validPlayer();
+	return getValidPlayer();
 }
 
 bool GI_Arena::handleEvent(sf::Event* eventRef)

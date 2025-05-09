@@ -12,15 +12,16 @@ private:
 	void delegateButtons() override;
 
 	Button T_Title;
+	Button B_Sounds;
 	Button B_Graphics;
 	Button B_Return;
-	Button B_Sounds;
+	Button T_DevMode;
 
 	W_OptionsSounds soundMenu;
 	W_OptionsGraphics graphicMenu;
 public:
-	void tick(const float& deltaTime) override;
 	W_Options(InputWidget*);
+	void tick(const float& deltaTime) override;
 	void construct() override;
 	bool isMouseOver(const bool& = false) override;
 

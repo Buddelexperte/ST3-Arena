@@ -104,16 +104,16 @@ void Flashlight::tick_shader(const float& deltaTime)
         coneDir = mouseDir;
     }
 
-    switch (shaderType)
+    switch (flashlightShape)
     {
-    case Flashlight::CIRCLE:
+    case Flashlight::Type::CIRCLE:
         flashlightSprite.setScale(SPRITE_SCALE);
         circleShader.setUniform("lightPos", lightPos);
         circleShader.setUniform("radius", radius);
         circleShader.setUniform("u_viewSize", sf::Glsl::Vec2(viewSize));
         circleShader.setUniform("viewportHeight", view->getSize().y);
         break;
-    case Flashlight::CONE:
+    case Flashlight::Type::CONE:
         flashlightSprite.setScale(SPRITE_SCALE * 2.0f);
         coneShader.setUniform("lightPos", lightPos);
         coneShader.setUniform("radius", radius * 2.0f);
@@ -152,34 +152,34 @@ void Flashlight::tick_idleAnim(const float& deltaTime)
             lastTextureIndex = textureIndex;
         }
 
-        animWait.reset();
+        animWait.fill_to_max();
     }
 }
 
-void Flashlight::setMaskMode(const bool& bCone)
+void Flashlight::setMaskMode(const Flashlight::Type& type)
 {
-    bUseCone = bCone;
-    shaderType = (bUseCone ? CONE : CIRCLE);
+    flashlightShape = type;
+    bUseCone = (type == Type::CONE);
 }
 
 void Flashlight::toggleMaskMode()
 {
     bUseCone = !bUseCone;
-    shaderType = (bUseCone ? CONE : CIRCLE);
+    flashlightShape = (bUseCone ? Type::CONE : Type::CIRCLE);
 
 }
 
 sf::Shader* Flashlight::getActiveShader()
 {
-    switch (shaderType)
+    switch (flashlightShape)
     {
-    case Flashlight::TEST:
+    case Flashlight::Type::TEST:
         return &testShader;
         break;
-    case Flashlight::CIRCLE:
+    case Flashlight::Type::CIRCLE:
         return &circleShader;
         break;
-    case Flashlight::CONE:
+    case Flashlight::Type::CONE:
         return &coneShader;
         break;
     default:

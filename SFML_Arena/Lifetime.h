@@ -30,7 +30,7 @@ protected:
 	{
 		lifetime.setMaxValue(newLifetime);
 
-		lifetime.reset();
+		lifetime.fill_to_max();
 	}
 
 	ValueBar& getLifetime()

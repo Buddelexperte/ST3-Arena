@@ -20,17 +20,18 @@ Button::Button(InputWidget* parent)
 
 void Button::construct()
 {
-    construct(buttonData, getEnabled());
+    construct(buttonData);
 }
 
 void Button::construct(const RawButton& constr)
 {
-    construct(constr, getEnabled());
+    const bool bStartDisabled = !getEnabled();
+    construct(constr, bStartDisabled);
 }
 
-void Button::construct(const RawButton& constr, const bool startEnabled)
+void Button::construct(const RawButton& constr, const bool startDisabled)
 {
-    setEnabled(startEnabled);
+    setEnabled(!startDisabled);
 
 	buttonData = constr;
 
@@ -474,9 +475,7 @@ bool Button::isMouseOver(const bool& checkForClick)
     if (checkForClick)
     {
         if (isAnimBlockingInput())
-        {
             return false;
-        }
 
         playButtonSound();
         playAnim(EAnimation::ON_CLICK);

@@ -1,14 +1,13 @@
 #pragma once
 
 #include "MainMenuSubWidgets.h" // Own header
-#include "ColorFade.h"
 
 class W_MainMenu : public InputWidget // MainMenu Widget ------------------------------------------
 {
 private:
 	virtual sf::Vector2f getCorrectTickCorrection() const override;
 
-	Button_fancy fadeScreen;
+	FadeScreen fadeScreen;
 
 	W_TitleScreen titleMenu;
 	W_Options optionsMenu;

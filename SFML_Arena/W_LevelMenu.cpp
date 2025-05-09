@@ -54,6 +54,7 @@ void W_LevelMenu::construct()
 {
 	InputWidget::construct();
 
+	gameInstance().modWindowName(" - Selecting Level...");
 	setWidgetIndex(0);
 
 	T_Title.construct();

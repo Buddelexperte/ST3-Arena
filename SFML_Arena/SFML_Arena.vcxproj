@@ -147,7 +147,7 @@
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
-    <ClCompile Include="ColorFade.cpp" />
+    <ClCompile Include="FadeScreen.cpp" />
     <ClCompile Include="DrawableShape.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -187,6 +187,7 @@
     <ClCompile Include="W_GameOver.cpp" />
     <ClCompile Include="W_Hud.cpp" />
     <ClCompile Include="W_Inventory.cpp" />
+    <ClCompile Include="W_LevelLoad.cpp" />
     <ClCompile Include="W_LevelMenu.cpp" />
     <ClCompile Include="W_LevelUp.cpp" />
     <ClCompile Include="W_OptionsGraphics.cpp" />
@@ -203,7 +204,7 @@
     <ClInclude Include="AllWeapons.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Background.h" />
-    <ClInclude Include="ColorFade.h" />
+    <ClInclude Include="FadeScreen.h" />
     <ClInclude Include="C_ColorFade.h" />
     <ClInclude Include="Damage.h" />
     <ClInclude Include="design.h" />
@@ -264,6 +265,7 @@
     <ClInclude Include="W_GameOver.h" />
     <ClInclude Include="W_Hud.h" />
     <ClInclude Include="W_Inventory.h" />
+    <ClInclude Include="W_LevelLoad.h" />
     <ClInclude Include="W_LevelMenu.h" />
     <ClInclude Include="W_LevelUp.h" />
     <ClInclude Include="W_OptionsGraphics.h" />

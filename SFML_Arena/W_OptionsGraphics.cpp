@@ -101,7 +101,7 @@ W_OptionsGraphics::W_OptionsGraphics(InputWidget* parent)
 	};
 
 	// Title
-	T_Title.construct(CONSTR[0]);
+	T_Title.construct(CONSTR[0], NOT_INTERACTABLE_FLAG);
 	// Res
 	T_Resolution.construct(CONSTR[1]);
 	T_Resolution_Val.construct(CONSTR[2]);
@@ -121,7 +121,7 @@ W_OptionsGraphics::W_OptionsGraphics(InputWidget* parent)
 	B_Apply.construct(CONSTR[11]);
 	B_Return.construct(CONSTR[12]);
 	// Background
-	bg.construct(CONSTR[13]);
+	bg.construct(CONSTR[13], NOT_INTERACTABLE_FLAG);
 
 	delegateButtons();
 
@@ -160,6 +160,11 @@ void W_OptionsGraphics::delegateButtons()
 	T_MaxFPS.onClick = T_MaxFPS_Val.onClick = [this]()
 	{
 		toggleMaxFPS();
+	};
+
+	T_VSync.onClick = T_VSync_Val.onClick = [this]()
+	{
+		toggleVSync();
 	};
 
 	T_Fullscreen.onClick = T_Fullscreen_Val.onClick = [this]()

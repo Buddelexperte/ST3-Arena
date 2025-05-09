@@ -2,23 +2,26 @@
 
 #include "Options.h" // Own header file
 #include "SoundManager.h"
+#include "GameInstance.h"
 
 W_Options::W_Options(InputWidget* parent) 
 	: InputWidget(parent), 
 	soundMenu(this), graphicMenu(this),
-	T_Title(this), B_Graphics(this), B_Sounds(this), B_Return(this)
+	T_Title(this), B_Graphics(this), B_Sounds(this), B_Return(this), T_DevMode(this)
 {
 	const std::vector<RawButton> MAIN_MENU_CONSTR = {
-		{sf::Vector2f{ 0, -300 },		sf::Vector2f{ 350, 120 },	sf::Color::Transparent,   100,	"OPTIONS",	sf::Color::White},
-		{sf::Vector2f{ 0, 0 },			buttonSize,					sf::Color::White,         24,	"SOUNDS",		sf::Color::Black},
-		{sf::Vector2f{ 0, 150 },		buttonSize,					sf::Color::White,         24,	"GRAPHICS",	sf::Color::Black},
-		{sf::Vector2f{ 0, 300 },		buttonSize,					sf::Color::White,         24,	"RETURN",		sf::Color::Black},
+		{sf::Vector2f{ 0, -300 },										buttonSize,	sf::Color::Transparent,		100,	"OPTIONS",		sf::Color::White},
+		{sf::Vector2f{ 0, 0 },											buttonSize,	sf::Color::White,			24,		"SOUNDS",		sf::Color::Black},
+		{sf::Vector2f{ 0, 150 },										buttonSize,	sf::Color::White,			24,		"GRAPHICS",		sf::Color::Black},
+		{sf::Vector2f{ 0, 300 },										buttonSize,	sf::Color::White,			24,		"RETURN",		sf::Color::Black},
+		{sf::Vector2f(viewSize.x, -viewSize.y) / 2.0f,		buttonSize,	sf::Color::Transparent,		24,		"",				sf::Color::Red,		EAlignment::RIGHT_TOP, EAlignment::RIGHT_TOP}
 	};
 
-	T_Title.construct(MAIN_MENU_CONSTR[0]);
+	T_Title.construct(MAIN_MENU_CONSTR[0], NOT_INTERACTABLE_FLAG);
 	B_Graphics.construct(MAIN_MENU_CONSTR[1]);
 	B_Sounds.construct(MAIN_MENU_CONSTR[2]);
 	B_Return.construct(MAIN_MENU_CONSTR[3]);
+	T_DevMode.construct(MAIN_MENU_CONSTR[4], NOT_INTERACTABLE_FLAG);
 
 	delegateButtons();
 }
@@ -43,6 +46,14 @@ void W_Options::construct()
 	InputWidget::construct();
 
 	setWidgetIndex(0);
+
+	if (gameInstance().getIsDebugMode()) T_DevMode.setText("DEBUG MODE");
+
+	T_Title.construct();
+	B_Graphics.construct();
+	B_Sounds.construct();
+	B_Return.construct();
+	T_DevMode.construct();
 }
 
 InputWidget* W_Options::getWidgetAtIndex(const int& atIndex)
@@ -82,6 +93,9 @@ InputWidget* W_Options::setWidgetIndex(const int& newIndex)
 		shapes = { };
 		break;
 	}
+
+	shapes.push_back(&T_DevMode);
+
 	return getActiveChild();
 }
 
@@ -93,6 +107,7 @@ void W_Options::tick(const float& deltaTime)
 	B_Graphics.tick(deltaTime);
 	B_Sounds.tick(deltaTime);
 	B_Return.tick(deltaTime);
+	T_DevMode.tick(deltaTime);
 }
 
 bool W_Options::isMouseOver(const bool& checkForClick)

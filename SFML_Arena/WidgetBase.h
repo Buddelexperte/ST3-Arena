@@ -9,11 +9,14 @@
 
 class InputWidget;
 
+static inline constexpr bool NOT_INTERACTABLE_FLAG = true;
+
 // WIDGETS ----------------------------------------------------------------------------------------
 
 class WidgetElement : public IMovable, public IDrawableShapes, public IWidgetAnimation
 {
 private:
+
 	sf::Vector2f tickPosCorrection = viewCenter;
 
 protected:
@@ -53,8 +56,7 @@ public:
 
 	InputWidget* getParent() const { return parent; }
 
-	bool isAnimPlaying() const override;
-	bool isAnimPlaying(const EAnimation) const override;
+	bool isAnimBlockingInput() const override;
 };
 
 class InputWidget : public WidgetElement, public IHasInput
@@ -93,12 +95,4 @@ public:
 	int getWidgetIndex() const { return widgetIndex; }
 	bool isChildActive() { return (getWidgetAtIndex(widgetIndex) != this); }
 	InputWidget* getActiveChild() { return getWidgetAtIndex(widgetIndex); }
-
-	void playAnimation(const EAnimation& anim)
-	{
-		if (isChildActive())
-			getActiveChild()->playAnimation(anim);
-		else
-			IWidgetAnimation::playAnim(anim);
-	}
 };
