@@ -25,9 +25,12 @@ void LevelSystem::tryLevelUp()
 
 void LevelSystem::onLevelUp()
 {
-	owningInv->setShouldLevelUp(true); // Set the level up flag in the inventory
+	owningInv->getOwner()->resetHealth(); // Reset health after leveling up
 
-	setStage(getStage() + 1);  // Increment the stage / level
+	owningInv->addQueuedLevelUp(); // Set the level up flag in the inventory
+
+	unsigned int nextStage = getStage() + 1;
+	setStage(nextStage);  // Increment the stage / level
 
 	std::cout << "Level Up! Current Stage: " << stage << std::endl;
 }
