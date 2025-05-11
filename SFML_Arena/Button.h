@@ -6,19 +6,6 @@
 
 #include "C_ColorFade.h" // For clean color fading
 
-enum EAlignment
-{
-	LEFT_BOTTOM,
-	LEFT,
-	LEFT_TOP,
-	CENTER_BOTTOM,
-	CENTER,
-	CENTER_TOP,
-	RIGHT_BOTTOM,
-	RIGHT,
-	RIGHT_TOP
-};
-
 // Pos, Size, Color, TextSize, TextString, TextColor, Alignment, TextAlignment
 struct RawButton
 {
@@ -45,7 +32,10 @@ private:
 
 	void playButtonSound() const;
 
+	sf::RectangleShape B_Box;
 	ColorFade boxFade;
+
+	sf::Text T_Text;
 	ColorFade textFade;
 
 	// Button Animations
@@ -57,10 +47,7 @@ private:
 	virtual void tick_onClickAnim(const float&) override;
 
 public:
-	sf::RectangleShape B_Box;
-	sf::Text T_Text;
 	// Constructors
-
 	Button(InputWidget* parent);
 
 	void construct();
@@ -70,8 +57,14 @@ public:
 	// Text
 	void setText(const std::string&); // Set the texts content
 	std::string getText() const { return buttonData.text; }
-	void setColor(const sf::Color&, const bool& = false); // Set the color of the text or the button fill
-	sf::Color getColor(const bool& = false) const; // Get the color of the text or the button fill
+
+	// Color
+	void setColor(const sf::Color&) override; // Set the color of the text or the button fill
+	sf::Color getColor() const override; // Get the color of the text or the button fill
+	void setTextColor(const sf::Color&); // Set the color of the text or the button fill
+	sf::Color getTextColor() const; // Set the color of the text or the button fill
+	
+	// Text size
 	void setTextSize(const unsigned int&);
 	unsigned int getTextSize() const;
 

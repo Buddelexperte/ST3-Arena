@@ -18,11 +18,11 @@ sf::Vector2f FadeScreen::getTickCorrection() const
 FadeScreen::FadeScreen(InputWidget* parent)
 	: WidgetElement(parent), screen(parent)
 {
-	static const RawButton CONSTR = {
+	static const RawBorder CONSTR = {
 		viewTL, viewSize, sf::Color::Transparent
 	};
 
-	screen.construct(CONSTR, NOT_INTERACTABLE_FLAG);
+	screen.construct(CONSTR);
 
 	shapes = { &screen };
 }
@@ -51,7 +51,7 @@ void FadeScreen::reset(const ColorColor& fade, const float& duration)
 void FadeScreen::reset(const ColorColor& fade, const float& duration, EasingFunction easing)
 {
 	colorFade.reset(fade, duration, easing);
-	screen.setColor(colorFade.current, true);
+	screen.setColor(colorFade.current);
 }
 
 

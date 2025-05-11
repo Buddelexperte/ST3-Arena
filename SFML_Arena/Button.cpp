@@ -404,25 +404,28 @@ void Button::setText(const std::string& newText)
     setTextAlignment(buttonData.textAlignment);
 }
 
-void Button::setColor(const sf::Color& color, const bool& bTextColor)
+void Button::setColor(const sf::Color& color)
 {
-	if (bTextColor) // Text changing color
-	{
-        textFade.fromTo.color0 = color;
-		buttonData.textColor = color;
-		T_Text.setFillColor(color);
-	}
-	else // Box changing color
-	{
-        boxFade.fromTo.color0 = color;
-		buttonData.color = color;
-		B_Box.setFillColor(color);
-	}
+    boxFade.fromTo.color0 = color;
+	buttonData.color = color;
+	B_Box.setFillColor(color);
 }
 
-sf::Color Button::getColor(const bool& bTextColor) const
+sf::Color Button::getColor() const
 {
-	return bTextColor ? buttonData.textColor : buttonData.color;
+	return buttonData.color;
+}
+
+void Button::setTextColor(const sf::Color& color)
+{
+    textFade.fromTo.color0 = color;
+    buttonData.textColor = color;
+    T_Text.setFillColor(color);
+}
+
+sf::Color Button::getTextColor() const
+{
+    return buttonData.textColor;
 }
 
 void Button::setTextSize(const unsigned int& newSize)

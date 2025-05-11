@@ -22,10 +22,10 @@ private:
     bool bChangedSome = false;          // Flag to track if any settings changed
 
     // UI Components
+    Border bg;
     Button T_Title;
     Button B_Return;
     Button B_Apply;
-    Button bg;
 
     // Settings labels
     Button T_Resolution;

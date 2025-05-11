@@ -1,15 +1,13 @@
 #pragma once
 
-#include "Button.h" // Screen
+#include "Border.h" // Screen
 
 class FadeScreen : public WidgetElement
 {
 private:
 	sf::Vector2f getTickCorrection() const override;
-	Button screen;
+	Border screen;
 	ColorFade colorFade;
-
-
 
 public:
 	FadeScreen(InputWidget* parent);

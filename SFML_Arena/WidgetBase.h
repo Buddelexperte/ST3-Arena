@@ -7,6 +7,19 @@
 
 #include "Functions.h" // For sf::Vector2f maths
 
+enum EAlignment
+{
+	LEFT_BOTTOM,
+	LEFT,
+	LEFT_TOP,
+	CENTER_BOTTOM,
+	CENTER,
+	CENTER_TOP,
+	RIGHT_BOTTOM,
+	RIGHT,
+	RIGHT_TOP
+};
+
 class InputWidget;
 
 static inline constexpr bool NOT_INTERACTABLE_FLAG = true;
@@ -16,8 +29,7 @@ static inline constexpr bool NOT_INTERACTABLE_FLAG = true;
 class WidgetElement : public IMovable, public IDrawableShapes, public IWidgetAnimation
 {
 private:
-	sf::Vector2f tickPosCorrection = viewCenter;
-
+	sf::Vector2f tickPosCorrection = viewCenter; // Reference point for moving per tick to keep in View
 protected:
 	InputWidget* parent;
 	// Reference point for moving per tick to keep in View
@@ -27,36 +39,18 @@ public:
 	WidgetElement(InputWidget* parentWidget);
 	virtual ~WidgetElement() = default;
 
-	virtual void construct()
-	{
-		IWidgetAnimation::playAnim(EAnimation::OPEN_ANIM);
-	}
+	virtual void construct();
+	virtual void construct(const sf::Vector2f&) { construct(); }
 	virtual void reset() {}
-	virtual void construct(const sf::Vector2f&)
-	{
-		construct();
-	}
-	virtual void tick(const float& deltaTime)
-	{
-		if (tickPosCorrection != getTickCorrection())
-		{
-			tickPosCorrection = getTickCorrection();
-		}
+	virtual void tick(const float& deltaTime);
 
-		tick_pos(tickPosCorrection);
-		tick_anim(deltaTime);
-	}
-
-	virtual void tick_pos(const sf::Vector2f& withPos)
-	{
-		static constexpr bool bTickUpdate = true;
-
-		addPosition(withPos, bTickUpdate);
-	}
+	virtual void tick_pos(const sf::Vector2f& withPos);
 
 	InputWidget* getParent() const { return parent; }
 
 	bool isAnimBlockingInput() const override;
+
+	virtual bool isMouseOver(const bool& = false) { return false; }
 };
 
 class InputWidget : public WidgetElement, public IHasInput

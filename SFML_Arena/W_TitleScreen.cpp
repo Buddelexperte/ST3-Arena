@@ -33,9 +33,9 @@ void W_TitleScreen::delegateButtons()
 {
 	T_Title.onClick = [this]()
 	{
-		bool bIsWhite = (T_Title.getColor(true) == sf::Color::White);
+		bool bIsWhite = (T_Title.getTextColor() == sf::Color::White);
 		sf::Color newColor = (bIsWhite ? sf::Color::Red : sf::Color::White);
-		T_Title.setColor(newColor, true);
+		T_Title.setTextColor(newColor);
 	};
 
 	B_Start.onClick = [this]()

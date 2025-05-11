@@ -96,10 +96,16 @@ W_OptionsGraphics::W_OptionsGraphics(InputWidget* parent)
 		// Apply & Cancel
 		{sf::Vector2f{ padding / 2.0f, 350 + padding},		buttonSize,																				grayedOutButtonColor,	24, "APPLY",				sf::Color::Black,		EAlignment::LEFT},
 		{sf::Vector2f{ -padding / 2.0f, 350 + padding},		buttonSize,																				sf::Color::White,		24, "RETURN",				sf::Color::Black,		EAlignment::RIGHT},
-		// Background
-		{sf::Vector2f{ 0, 50 },								buttonSize * sf::Vector2f(4.0f, 5.0f) + sf::Vector2f(2 * padding, padding / 2.0f),		backgroundInterfaceColor}
 	};
 
+	// Background
+	const RawBorder BORDER_CONSTR = {
+		sf::Vector2f{ 0, 50 },	buttonSize * sf::Vector2f(4.0f, 5.0f) + sf::Vector2f(2 * padding, padding / 2.0f),		backgroundInterfaceColor
+
+	};
+
+	// Background
+	bg.construct(BORDER_CONSTR);
 	// Title
 	T_Title.construct(CONSTR[0], NOT_INTERACTABLE_FLAG);
 	// Res
@@ -120,8 +126,6 @@ W_OptionsGraphics::W_OptionsGraphics(InputWidget* parent)
 	// Apply & Cancel
 	B_Apply.construct(CONSTR[11]);
 	B_Return.construct(CONSTR[12]);
-	// Background
-	bg.construct(CONSTR[13], NOT_INTERACTABLE_FLAG);
 
 	delegateButtons();
 
@@ -224,6 +228,8 @@ void W_OptionsGraphics::checkForDifferences()
 	// Check if current settings differ from ORIGINAL settings
 	bChangedSome = (newSettings != UserSettings::getSettings());
 
+	B_Apply.setEnabled(bChangedSome);
+
 	if (bChangedSome)
 	{
 		B_Return.setText("CANCEL");
@@ -283,12 +289,9 @@ bool W_OptionsGraphics::isMouseOver(const bool& checkForClick)
 	if (B_Return.isMouseOver(checkForClick))
 		return true;
 
-	if (bChangedSome)
-	{
-		// --- APPLY BUTTON ---
-		if (B_Apply.isMouseOver(checkForClick))
-			return true;
-	}
+	// --- APPLY BUTTON ---
+	if (B_Apply.isMouseOver(checkForClick))
+		return true;
 
 	return false;
 }

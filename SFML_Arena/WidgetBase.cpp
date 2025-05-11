@@ -22,6 +22,29 @@ WidgetElement::WidgetElement(InputWidget* parentWidget)
 
 }
 
+void WidgetElement::construct()
+{
+	IWidgetAnimation::playAnim(EAnimation::OPEN_ANIM);
+}
+
+void WidgetElement::tick(const float& deltaTime)
+{
+	if (tickPosCorrection != getTickCorrection())
+	{
+		tickPosCorrection = getTickCorrection();
+	}
+
+	WidgetElement::tick_pos(tickPosCorrection);
+	IWidgetAnimation::tick_anim(deltaTime);
+}
+
+void WidgetElement::tick_pos(const sf::Vector2f& withPos)
+{
+	static constexpr bool bTickUpdate = true;
+
+	addPosition(withPos, bTickUpdate);
+}
+
 bool WidgetElement::isAnimBlockingInput() const
 {
 	if (parent)

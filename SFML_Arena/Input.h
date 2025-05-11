@@ -133,6 +133,4 @@ public:
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle))
 			onMouseDownM();
 	}
-
-	virtual bool isMouseOver(const bool& = false) { return false; }
 };

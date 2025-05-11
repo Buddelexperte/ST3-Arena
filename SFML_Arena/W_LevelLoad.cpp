@@ -44,13 +44,13 @@ void W_LevelLoad::start_openAnim()
 	static constexpr float DURATION = 1.0f;
 	
 	sf::Color t_color = textFade.reset(ColorColor(sf::Color::Transparent, sf::Color::White), DURATION / 3.0f, easing::quad::in);
-	T_Title.setColor(t_color, true);
+	T_Title.setTextColor(t_color);
 	fadeScreen.reset(ColorColor(sf::Color::Transparent, sf::Color::Transparent), DURATION, easing::expo::in);
 }
 
 void W_LevelLoad::tick_openAnim(const float& deltaTime)
 {
-	T_Title.setColor(textFade.fade(deltaTime), true);
+	T_Title.setTextColor(textFade.fade(deltaTime));
 	fadeScreen.fade(deltaTime);
 
 	if (fadeScreen.isFading())
@@ -65,13 +65,13 @@ void W_LevelLoad::start_closeAnim()
 	static constexpr float DURATION = 2.0f;
 
 	sf::Color t_color = textFade.reset(ColorColor(sf::Color::White, sf::Color::Transparent), DURATION, easing::smoothstep);
-	T_Title.setColor(t_color, true);
+	T_Title.setTextColor(t_color);
 	fadeScreen.reset(ColorColor(sf::Color::Transparent, sf::Color::Black), DURATION, easing::smootherstep);
 }
 
 void W_LevelLoad::tick_closeAnim(const float& deltaTime)
 {
-	T_Title.setColor(textFade.fade(deltaTime), true);
+	T_Title.setTextColor(textFade.fade(deltaTime));
 	fadeScreen.fade(deltaTime);
 
 	if (fadeScreen.isFading())

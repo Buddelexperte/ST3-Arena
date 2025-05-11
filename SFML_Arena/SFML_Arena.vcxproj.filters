@@ -248,6 +248,15 @@
     <ClCompile Include="W_LevelLoad.cpp">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="Border.cpp">
+      <Filter>Source\VisualInterfaces\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugIndicator.cpp">
+      <Filter>Source\VisualInterfaces\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Source\VisualInterfaces\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionManager.h">
@@ -464,9 +473,20 @@
       <Filter>Source\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="resource1.h" />
-    <ClInclude Include="C_ColorFade.h" />
     <ClInclude Include="W_LevelLoad.h">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Border.h">
+      <Filter>Source\VisualInterfaces\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugIndicator.h">
+      <Filter>Source\VisualInterfaces\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="C_ColorFade.h">
+      <Filter>Source\VisualInterfaces\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Source\VisualInterfaces\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
