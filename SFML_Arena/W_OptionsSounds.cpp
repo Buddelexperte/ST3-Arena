@@ -19,7 +19,6 @@ W_OptionsSounds::W_OptionsSounds(InputWidget* parent)
 	};
 
 	T_Title.construct(TITLE_CONSTR);
-
 	B_Return.construct(MAIN_MENU_CONSTR[0]);
 	B_ToggleSound.construct(MAIN_MENU_CONSTR[1]);
 
@@ -33,6 +32,10 @@ void W_OptionsSounds::construct()
 	InputWidget::construct();
 
 	updateText();
+
+	T_Title.construct();
+	B_Return.construct();
+	B_ToggleSound.construct();
 }
 
 void W_OptionsSounds::tick(const float& deltaTime)

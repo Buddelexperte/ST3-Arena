@@ -77,6 +77,37 @@ W_OptionsGraphics::W_OptionsGraphics(InputWidget* parent)
 	};
 }
 
+void W_OptionsGraphics::construct()
+{
+	InputWidget::construct();
+
+	reset();
+
+	// Title
+	T_Title.construct();
+	// Res
+	T_Resolution.construct();
+	T_Resolution_Val.construct();
+	// FPS
+	T_MaxFPS.construct();
+	T_MaxFPS_Val.construct();
+	// VSync
+	T_VSync.construct();
+	T_VSync_Val.construct();
+	// Fullscreen
+	T_Fullscreen.construct();
+	T_Fullscreen_Val.construct();
+	// Widget Parallax
+	T_WParallax.construct();
+	T_WParallax_Val.construct();
+	// Apply & Cancel
+	B_Apply.construct();
+	B_Return.construct();
+	// Background
+	bg.construct();
+
+}
+
 void W_OptionsGraphics::reset()
 {
 	// Read back what was actually applied
@@ -186,13 +217,6 @@ void W_OptionsGraphics::toggleWidgetParallax()
 std::string W_OptionsGraphics::formatResolutionLabel(size_t id)
 {
 	return UserSettings::getResolutionDesc(static_cast<int>(id));
-}
-
-void W_OptionsGraphics::construct()
-{
-	InputWidget::construct();
-
-	reset();
 }
 
 void W_OptionsGraphics::updateSettingTexts(const UserSettings_Struct& s)

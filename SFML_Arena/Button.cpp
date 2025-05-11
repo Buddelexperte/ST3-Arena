@@ -1,4 +1,7 @@
-#include "Button.h"
+#pragma once
+
+#include "Button.h" // Own header file
+
 #include "GameInstance.h"
 #include "SoundManager.h"
 #include "FontManager.h"
@@ -50,12 +53,12 @@ void Button::construct(const RawButton& constr, const bool startDisabled)
 	setTextAlignment(constr.textAlignment);
 	setPosition(constr.pos);
 
-	RenderInfo renderInfo = { buttonData.pos, buttonData.size, 0.0f, { 0.f, 0.f }, buttonData.color };
+	RenderInfo renderInfo = { buttonData.pos, buttonData.size, 0.0f, { 0.0f, 0.0f }, buttonData.color };
 	setRenderInfo(renderInfo);
 
     tick_pos(getTickCorrection());
 
-    bHovered = false;
+	bHovered = false; // Reset hover state
     isMouseOver(false); // Check for initial onHover events
 }
 
@@ -451,9 +454,7 @@ void Button::setTexture(const sf::Texture& newTexture, const bool resetTint)
 bool Button::isMouseOver(const bool& checkForClick)
 {
     if (!bEnabled)
-    {
         return false;
-    }
 
     const sf::Vector2f& mousePos = gameInstance().getMousePos();
     const bool isMouseOver = B_Box.getGlobalBounds().contains(mousePos);
@@ -484,7 +485,8 @@ bool Button::isMouseOver(const bool& checkForClick)
         playAnim(EAnimation::ON_CLICK);
         if (onClick) onClick(); // Only call back to onClick of onClick delegate has been set
     }
-    else if (!bHovered)// Else only call for onHover() if not already hovering
+
+    if (!bHovered) // Else only call for onHover() if not already hovering
     {
         bHovered = true;
         playAnim(EAnimation::ON_HOVER);

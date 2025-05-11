@@ -51,6 +51,11 @@ void W_Paused::construct()
 	gameInstance().setGameState(GAME_PAUSED);
 
 	setWidgetIndex(0);
+
+	T_Title.construct();
+	B_Resume.construct();
+	B_OpenOptions.construct();
+	B_Quit.construct();
 }
 
 void W_Paused::tick(const float& deltaTime)
