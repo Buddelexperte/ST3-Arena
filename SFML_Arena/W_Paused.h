@@ -8,7 +8,7 @@ class W_Paused : public InputWidget
 private:
 	void delegateButtons() override;
 
-	Button pause_title;
+	Text T_Title;
 	Button B_Resume;
 	Button B_OpenOptions;
 	Button B_Quit;

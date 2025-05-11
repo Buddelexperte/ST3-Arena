@@ -10,7 +10,7 @@ private:
 	static constexpr unsigned int NUM_WEAPONS = 4; // Anzahl Weaffen Buttons
 	float WEAPON_SPACING_X;
 
-	Button T_Title;
+	Text T_Title;
 	Button B_item1;
 	Button B_item2;
 	Button B_item3;

@@ -15,8 +15,6 @@ void Text::construct()
 
 void Text::construct(const RawText& constr)
 {
-    WidgetElement::construct();
-
     textData = constr;
 
     // Setup text
@@ -40,9 +38,6 @@ void Text::setPosition(const sf::Vector2f& newPos)
 
     textData.pos = newPos;
     T_Text.setPosition(getPosition());
-
-    // Update the textData position if required.
-    setAlignment(textData.alignment);
 }
 
 void Text::addPosition(const sf::Vector2f& deltaPos, const bool& bTickBased)
@@ -51,11 +46,11 @@ void Text::addPosition(const sf::Vector2f& deltaPos, const bool& bTickBased)
 
     if (!bTickBased)
     {
-        //std::cout << "NOT TICK BASES" << std::endl;
+        //std::cout << "NOT TICK BASED" << std::endl;
         textData.pos += deltaPos;
     }
 
-    T_Text.setPosition(getPosition());
+    T_Text.setPosition(textData.pos + deltaPos);
 
     setAlignment(textData.alignment);
 }
@@ -154,8 +149,4 @@ void Text::setAlignment(const EAlignment& alignment)
 
     // Apply calculated origin
     T_Text.setOrigin(xOrigin, yOrigin);
-
-    // The position of the text remains as-is unless explicitly changed elsewhere
-    // You can optionally re-apply its position here:
-    setPosition(T_Text.getPosition());
 }

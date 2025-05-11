@@ -10,21 +10,24 @@ W_SelectWeapon::W_SelectWeapon(InputWidget* parent)
 	B_item1(this), B_item2(this), B_item3(this), B_item4(this), 
 	B_Return(this)
 {
+	const RawText TITLE_CONSTR = {
+		sf::Vector2f(0.0f, -300.0f) * unitNorm, sf::Color::White, 100, "SELECT WEAPON"
+	};
+
 	const std::vector<RawButton> INVENTORY_MENU_CONSTR = {
-		{sf::Vector2f(0.0f,						-300.0f) * unitNorm,	sf::Vector2f(100.0f, 100.0f) * unitNorm,	sf::Color::Transparent,		100,	"INVENTORY",	sf::Color::White},
 		{sf::Vector2f(-1.5f * WEAPON_SPACING_X, -75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	sf::Color(100, 100, 100),	24,		"PISTOL",		sf::Color::White},
 		{sf::Vector2f(-0.5f * WEAPON_SPACING_X, -75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	sf::Color(100, 100, 100),	24,		"SHOTGUN",		sf::Color::White},
 		{sf::Vector2f(0.5f * WEAPON_SPACING_X,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	sf::Color(100, 100, 100),	24,		"RIFLE",		sf::Color::White},
 		{sf::Vector2f(1.5f * WEAPON_SPACING_X,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	sf::Color(100, 100, 100),	24,		"BURST RIFLE",	sf::Color::White},
-		{sf::Vector2f(0.0f,						150.0f) * unitNorm,		buttonSize,										sf::Color::White,			24,		"RETURN",		sf::Color::Black}
+		{sf::Vector2f(0.0f,						150.0f) * unitNorm,		buttonSize,									sf::Color::White,			24,		"RETURN",		sf::Color::Black}
 	};
 
-	T_Title.construct(INVENTORY_MENU_CONSTR[0]);
-	B_item1.construct(INVENTORY_MENU_CONSTR[1]);
-	B_item2.construct(INVENTORY_MENU_CONSTR[2]);
-	B_item3.construct(INVENTORY_MENU_CONSTR[3]);
-	B_item4.construct(INVENTORY_MENU_CONSTR[4]);
-	B_Return.construct(INVENTORY_MENU_CONSTR[5]);
+	T_Title.construct(TITLE_CONSTR);
+	B_item1.construct(INVENTORY_MENU_CONSTR[0]);
+	B_item2.construct(INVENTORY_MENU_CONSTR[1]);
+	B_item3.construct(INVENTORY_MENU_CONSTR[2]);
+	B_item4.construct(INVENTORY_MENU_CONSTR[3]);
+	B_Return.construct(INVENTORY_MENU_CONSTR[4]);
 
 	weaponButtons = {
 		&B_item1, &B_item2, &B_item3, &B_item4

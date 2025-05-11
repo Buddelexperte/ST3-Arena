@@ -9,17 +9,20 @@ W_Options::W_Options(InputWidget* parent)
 	soundMenu(this), graphicMenu(this),
 	T_Title(this), B_Graphics(this), B_Sounds(this), B_Return(this)
 {
+	const RawText TITLE_CONSTR = {
+		sf::Vector2f{ 0, -300 }, sf::Color::White, 100, "OPTIONS", EAlignment::CENTER
+	};
+
 	const std::vector<RawButton> MAIN_MENU_CONSTR = {
-		{sf::Vector2f{ 0, -300 },										buttonSize,	sf::Color::Transparent,		100,	"OPTIONS",		sf::Color::White},
 		{sf::Vector2f{ 0, 0 },											buttonSize,	sf::Color::White,			24,		"SOUNDS",		sf::Color::Black},
 		{sf::Vector2f{ 0, 150 },										buttonSize,	sf::Color::White,			24,		"GRAPHICS",		sf::Color::Black},
 		{sf::Vector2f{ 0, 300 },										buttonSize,	sf::Color::White,			24,		"RETURN",		sf::Color::Black}
 	};
 
-	T_Title.construct(MAIN_MENU_CONSTR[0], NOT_INTERACTABLE_FLAG);
-	B_Graphics.construct(MAIN_MENU_CONSTR[1]);
-	B_Sounds.construct(MAIN_MENU_CONSTR[2]);
-	B_Return.construct(MAIN_MENU_CONSTR[3]);
+	T_Title.construct(TITLE_CONSTR);
+	B_Graphics.construct(MAIN_MENU_CONSTR[0]);
+	B_Sounds.construct(MAIN_MENU_CONSTR[1]);
+	B_Return.construct(MAIN_MENU_CONSTR[2]);
 
 	delegateButtons();
 }

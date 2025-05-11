@@ -11,7 +11,7 @@ class W_Options : public InputWidget // OptionsMenu Widget ---------------------
 private:
 	void delegateButtons() override;
 
-	Button T_Title;
+	Text T_Title;
 	Button B_Sounds;
 	Button B_Graphics;
 	Button B_Return;

@@ -7,17 +7,20 @@ W_GameOver::W_GameOver(InputWidget* parent)
 	: InputWidget(parent),
 	T_Title(this), T_Score(this), T_Kills(this), B_Quit(this)
 {
-	const std::vector<RawButton> GAME_OVER_CONSTR = {
-		{sf::Vector2f{ 0.0f, -300.0f },		sf::Vector2f{ 350.0f, 120.0f },		sf::Color::Transparent, 100,	"GAME OVER",					sf::Color::White},
-		{sf::Vector2f{ 0.0f, -200.0f },		sf::Vector2f{ 100.0f, 100.0f },		sf::Color::Transparent, 16,		"Score: " + std::to_string(0),	sf::Color::White},
-		{sf::Vector2f{ 0.0f, -180.0f },		sf::Vector2f{ 100.0f, 100.0f },		sf::Color::Transparent, 16,		"Kills: " + std::to_string(0),	sf::Color::White},
-		{sf::Vector2f{ 0.0f, 0.0f },		buttonSize,							sf::Color::White,	24,			"QUIT",							sf::Color::Black}
+	const std::vector <RawText> TEXT_CONSTR = {
+		{sf::Vector2f( 0.0f, -300.0f ), sf::Color::White, 100, "GAME OVER"					},
+		{sf::Vector2f( 0.0f, -200.0f ), sf::Color::White, 16, "Score: " + std::to_string(0)	},
+		{sf::Vector2f( 0.0f, -180.0f ), sf::Color::White, 16, "Kills: " + std::to_string(0)	}
 	};
 
-	T_Title.construct(GAME_OVER_CONSTR[0]);
-	T_Score.construct(GAME_OVER_CONSTR[1]);
-	T_Kills.construct(GAME_OVER_CONSTR[2]);
-	B_Quit.construct(GAME_OVER_CONSTR[3]);
+	const RawButton GAME_OVER_CONSTR = {
+		sf::Vector2f{ 0.0f, 0.0f },		buttonSize,							sf::Color::White,	24,			"QUIT",							sf::Color::Black
+	};
+
+	T_Title.construct(TEXT_CONSTR[0]);
+	T_Score.construct(TEXT_CONSTR[1]);
+	T_Kills.construct(TEXT_CONSTR[2]);
+	B_Quit.construct(GAME_OVER_CONSTR);
 
 	delegateButtons();
 

@@ -8,10 +8,8 @@
 
 sf::Vector2f WidgetElement::getTickCorrection() const
 {
-	if (parent != nullptr)
-	{
+	if (parent)
 		return parent->getTickCorrection();
-	}
 
 	return IDrawableShapes::viewCenter;
 }
@@ -34,8 +32,8 @@ void WidgetElement::tick(const float& deltaTime)
 		tickPosCorrection = getTickCorrection();
 	}
 
-	WidgetElement::tick_pos(tickPosCorrection);
-	IWidgetAnimation::tick_anim(deltaTime);
+	tick_pos(tickPosCorrection);
+	tick_anim(deltaTime);
 }
 
 void WidgetElement::tick_pos(const sf::Vector2f& withPos)
@@ -47,10 +45,14 @@ void WidgetElement::tick_pos(const sf::Vector2f& withPos)
 
 bool WidgetElement::isAnimBlockingInput() const
 {
-	if (parent)
-		return parent->isAnimBlockingInput();
+	bool bBlocking = false;
 
-	return IWidgetAnimation::isAnimBlockingInput();
+	if (parent)
+		bBlocking |= parent->isAnimBlockingInput();
+
+	bBlocking |= IWidgetAnimation::isAnimBlockingInput();
+
+	return bBlocking;
 }
 
 // InputWidget ------------------------------------------------------------------------------------

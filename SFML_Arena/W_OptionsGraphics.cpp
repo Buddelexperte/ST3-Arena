@@ -3,6 +3,80 @@
 #include "W_OptionsGraphics.h" // Own header file
 #include "GameInstance.h"
 
+W_OptionsGraphics::W_OptionsGraphics(InputWidget* parent)
+	: InputWidget(parent),
+	T_Title(this), bg(this),
+	B_Return(this), B_Apply(this), // Title and Cancel and Apply etc
+	T_Resolution(this), T_MaxFPS(this), T_VSync(this), T_Fullscreen(this), T_WParallax(this), // Texts
+	T_Resolution_Val(this), T_MaxFPS_Val(this), T_VSync_Val(this), T_Fullscreen_Val(this), T_WParallax_Val(this) // Value Texts
+{
+	const RawText TITLE_CONSTR = {
+		sf::Vector2f{ 0, -300 }, sf::Color::White, 100, "GRAPHICS", EAlignment::CENTER
+	};
+
+	const std::vector<RawButton> CONSTR = {
+		// Resolution
+		{sf::Vector2f{ 0.0f, -150 },						buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "RESOLUTION",			sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
+		{sf::Vector2f{ 0.0f, -150 },						buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "(Custom)",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
+		// FPS
+		{sf::Vector2f{ 0.0f, -50 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "FPS LIMIT",			sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
+		{sf::Vector2f{ 0.0f, -50 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "Max FPS",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
+		// VSync
+		{sf::Vector2f{ 0.0f, 50 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "VSYNC",				sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
+		{sf::Vector2f{ 0.0f, 50 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "Status",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
+		// Fullscreen
+		{sf::Vector2f{ 0.0f, 150 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "FULLSCREEN",			sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
+		{sf::Vector2f{ 0.0f, 150 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "Status",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
+		// Menu parallax
+		{sf::Vector2f{ 0.0f, 250 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "MENU PARALLAX",		sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
+		{sf::Vector2f{ 0.0f, 250 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "Status",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
+		// Apply & Cancel
+		{sf::Vector2f{ padding / 2.0f, 350 + padding},		buttonSize,																				grayedOutButtonColor,	24, "APPLY",				sf::Color::Black,		EAlignment::LEFT},
+		{sf::Vector2f{ -padding / 2.0f, 350 + padding},		buttonSize,																				sf::Color::White,		24, "RETURN",				sf::Color::Black,		EAlignment::RIGHT},
+	};
+
+	// Background
+	const RawBorder BORDER_CONSTR = {
+		sf::Vector2f{ 0, 50 },	buttonSize * sf::Vector2f(4.0f, 5.0f) + sf::Vector2f(2 * padding, padding / 2.0f),		backgroundInterfaceColor
+
+	};
+
+	// Title
+	T_Title.construct(TITLE_CONSTR);
+	// Res
+	T_Resolution.construct(CONSTR[0]);
+	T_Resolution_Val.construct(CONSTR[1]);
+	// FPS
+	T_MaxFPS.construct(CONSTR[2]);
+	T_MaxFPS_Val.construct(CONSTR[3]);
+	// VSync
+	T_VSync.construct(CONSTR[4]);
+	T_VSync_Val.construct(CONSTR[5]);
+	// Fullscreen
+	T_Fullscreen.construct(CONSTR[6]);
+	T_Fullscreen_Val.construct(CONSTR[7]);
+	// Widget Parallax
+	T_WParallax.construct(CONSTR[8]);
+	T_WParallax_Val.construct(CONSTR[9]);
+	// Apply & Cancel
+	B_Apply.construct(CONSTR[10]);
+	B_Return.construct(CONSTR[11]);
+	// Background
+	bg.construct(BORDER_CONSTR);
+
+	delegateButtons();
+
+	shapes = {
+		&T_Title, &bg,
+		&B_Return,&B_Apply,
+		&T_Resolution, &T_Resolution_Val,
+		&T_MaxFPS, &T_MaxFPS_Val,
+		&T_VSync, &T_VSync_Val,
+		&T_Fullscreen, &T_Fullscreen_Val,
+		&T_WParallax, &T_WParallax_Val
+	};
+}
+
 void W_OptionsGraphics::reset()
 {
 	// Read back what was actually applied
@@ -12,6 +86,47 @@ void W_OptionsGraphics::reset()
 	// Update the UI
 	updateSettingTexts(newSettings);
 	checkForDifferences();
+}
+
+void W_OptionsGraphics::delegateButtons()
+{
+	B_Return.onClick = [this]()
+	{
+		onKeyEscape();
+	};
+
+	B_Apply.onClick = [this]()
+	{
+		gameInstance().applySettings(newSettings);
+		reset();
+	};
+
+	// Settings ----
+
+	T_Resolution.onClick = T_Resolution_Val.onClick = [this]()
+	{
+		toggleResolution();
+	};
+
+	T_MaxFPS.onClick = T_MaxFPS_Val.onClick = [this]()
+	{
+		toggleMaxFPS();
+	};
+
+	T_VSync.onClick = T_VSync_Val.onClick = [this]()
+	{
+		toggleVSync();
+	};
+
+	T_Fullscreen.onClick = T_Fullscreen_Val.onClick = [this]()
+	{
+		toggleFullscreen();
+	};
+
+	T_WParallax.onClick = T_WParallax_Val.onClick = [this]()
+	{
+		toggleWidgetParallax();
+	};
 }
 
 void W_OptionsGraphics::toggleResolution()
@@ -66,120 +181,6 @@ void W_OptionsGraphics::toggleWidgetParallax()
 	// Update the UI
 	updateSettingTexts(newSettings);
 	checkForDifferences();
-}
-
-W_OptionsGraphics::W_OptionsGraphics(InputWidget* parent)
-	: InputWidget(parent),
-	bg(this),
-	T_Title(this), B_Return(this), B_Apply(this), // Title and Cancel and Apply etc
-	T_Resolution(this), T_MaxFPS(this), T_VSync(this), T_Fullscreen(this), T_WParallax(this), // Texts
-	T_Resolution_Val(this), T_MaxFPS_Val(this), T_VSync_Val(this), T_Fullscreen_Val(this), T_WParallax_Val(this) // Value Texts
-{
-	const std::vector<RawButton> CONSTR = {
-		// Title
-		{sf::Vector2f{ 0, -300 },							buttonSize,																				sf::Color::Transparent,		100, "GRAPHICS",		sf::Color::White},
-		// Resolution
-		{sf::Vector2f{ 0.0f, -150 },						buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "RESOLUTION",			sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
-		{sf::Vector2f{ 0.0f, -150 },						buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "(Custom)",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
-		// FPS
-		{sf::Vector2f{ 0.0f, -50 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "FPS LIMIT",			sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
-		{sf::Vector2f{ 0.0f, -50 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "Max FPS",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
-		// VSync
-		{sf::Vector2f{ 0.0f, 50 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "VSYNC",				sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
-		{sf::Vector2f{ 0.0f, 50 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "Status",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
-		// Fullscreen
-		{sf::Vector2f{ 0.0f, 150 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "FULLSCREEN",			sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
-		{sf::Vector2f{ 0.0f, 150 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "Status",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
-		// Menu parallax
-		{sf::Vector2f{ 0.0f, 250 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "MENU PARALLAX",		sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
-		{sf::Vector2f{ 0.0f, 250 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "Status",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
-		// Apply & Cancel
-		{sf::Vector2f{ padding / 2.0f, 350 + padding},		buttonSize,																				grayedOutButtonColor,	24, "APPLY",				sf::Color::Black,		EAlignment::LEFT},
-		{sf::Vector2f{ -padding / 2.0f, 350 + padding},		buttonSize,																				sf::Color::White,		24, "RETURN",				sf::Color::Black,		EAlignment::RIGHT},
-	};
-
-	// Background
-	const RawBorder BORDER_CONSTR = {
-		sf::Vector2f{ 0, 50 },	buttonSize * sf::Vector2f(4.0f, 5.0f) + sf::Vector2f(2 * padding, padding / 2.0f),		backgroundInterfaceColor
-
-	};
-
-	// Background
-	bg.construct(BORDER_CONSTR);
-	// Title
-	T_Title.construct(CONSTR[0], NOT_INTERACTABLE_FLAG);
-	// Res
-	T_Resolution.construct(CONSTR[1]);
-	T_Resolution_Val.construct(CONSTR[2]);
-	// FPS
-	T_MaxFPS.construct(CONSTR[3]);
-	T_MaxFPS_Val.construct(CONSTR[4]);
-	// VSync
-	T_VSync.construct(CONSTR[5]);
-	T_VSync_Val.construct(CONSTR[6]);
-	// Fullscreen
-	T_Fullscreen.construct(CONSTR[7]);
-	T_Fullscreen_Val.construct(CONSTR[8]);
-	// Widget Parallax
-	T_WParallax.construct(CONSTR[9]);
-	T_WParallax_Val.construct(CONSTR[10]);
-	// Apply & Cancel
-	B_Apply.construct(CONSTR[11]);
-	B_Return.construct(CONSTR[12]);
-
-	delegateButtons();
-
-	shapes = {
-		&bg,
-		&T_Title,
-		&B_Return,&B_Apply,
-		&T_Resolution, &T_Resolution_Val,
-		&T_MaxFPS, &T_MaxFPS_Val,
-		&T_VSync, &T_VSync_Val,
-		&T_Fullscreen, &T_Fullscreen_Val,
-		&T_WParallax, &T_WParallax_Val
-	};
-}
-
-void W_OptionsGraphics::delegateButtons()
-{
-	B_Return.onClick = [this]()
-	{
-		onKeyEscape();
-	};
-
-	B_Apply.onClick = [this]()
-	{
-		gameInstance().applySettings(newSettings);
-		reset();
-	};
-
-	// Settings ----
-
-	T_Resolution.onClick = T_Resolution_Val.onClick = [this]()
-	{
-		toggleResolution();
-	};
-
-	T_MaxFPS.onClick = T_MaxFPS_Val.onClick = [this]()
-	{
-		toggleMaxFPS();
-	};
-
-	T_VSync.onClick = T_VSync_Val.onClick = [this]()
-	{
-		toggleVSync();
-	};
-
-	T_Fullscreen.onClick = T_Fullscreen_Val.onClick = [this]()
-	{
-		toggleFullscreen();
-	};
-
-	T_WParallax.onClick = T_WParallax_Val.onClick = [this]()
-	{
-		toggleWidgetParallax();
-	};
 }
 
 std::string W_OptionsGraphics::formatResolutionLabel(size_t id)

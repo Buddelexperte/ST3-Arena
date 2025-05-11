@@ -23,7 +23,7 @@ private:
 
     // UI Components
     Border bg;
-    Button T_Title;
+    Text T_Title;
     Button B_Return;
     Button B_Apply;
 

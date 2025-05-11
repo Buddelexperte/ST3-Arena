@@ -29,7 +29,7 @@ static inline constexpr bool NOT_INTERACTABLE_FLAG = true;
 class WidgetElement : public IMovable, public IDrawableShapes, public IWidgetAnimation
 {
 private:
-	sf::Vector2f tickPosCorrection = viewCenter; // Reference point for moving per tick to keep in View
+	sf::Vector2f tickPosCorrection = sf::Vector2f(0.0f, 0.0f); // Reference point for moving per tick to keep in View
 protected:
 	InputWidget* parent;
 	// Reference point for moving per tick to keep in View

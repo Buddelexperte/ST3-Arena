@@ -9,15 +9,19 @@ W_OptionsSounds::W_OptionsSounds(InputWidget* parent)
 	: InputWidget(parent),
 	T_Title(this), B_Return(this), B_ToggleSound(this)
 {
+	const RawText TITLE_CONSTR = {
+		sf::Vector2f{ 0, -300 }, sf::Color::White, 100, "SOUND", EAlignment::CENTER
+	};
+
 	const std::vector<RawButton> MAIN_MENU_CONSTR = {
-		{sf::Vector2f{ 0, -300 },   sf::Vector2f{ 350, 120 },	sf::Color::Transparent,		100,	"SOUND",		sf::Color::White},
 		{sf::Vector2f{ 0, 300 },	sf::Vector2f{ 300, 100 },	sf::Color::White,			24,		"RETURN",		sf::Color::Black},
 		{sf::Vector2f{ 0, 0 },		sf::Vector2f{ 300, 100 },	sf::Color::White,			24,		"SOUND VALUE",	sf::Color::Black}
 	};
 
-	T_Title.construct(MAIN_MENU_CONSTR[0]);
-	B_Return.construct(MAIN_MENU_CONSTR[1]);
-	B_ToggleSound.construct(MAIN_MENU_CONSTR[2]);
+	T_Title.construct(TITLE_CONSTR);
+
+	B_Return.construct(MAIN_MENU_CONSTR[0]);
+	B_ToggleSound.construct(MAIN_MENU_CONSTR[1]);
 
 	delegateButtons();
 

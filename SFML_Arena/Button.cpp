@@ -366,12 +366,12 @@ void Button::addPosition(const sf::Vector2f& deltaPos, const bool& bTickBased)
 
     if (!bTickBased)
     {
-        //std::cout << "NOT TICK BASES" << std::endl;
+        //std::cout << "NOT TICK BASED" << std::endl;
 		buttonData.pos += deltaPos;
     }
 
     B_Box.setPosition(buttonData.pos + deltaPos);
-    setTextAlignment(buttonData.textAlignment);
+	setTextAlignment(buttonData.textAlignment);
 }
 
 void Button::setRotation(const float& newRot)

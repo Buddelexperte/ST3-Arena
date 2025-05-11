@@ -8,9 +8,9 @@ class W_GameOver : public InputWidget
 private:
 	void delegateButtons() override;
 
-	Button T_Title;
-	Button T_Score;
-	Button T_Kills;
+	Text T_Title;
+	Text T_Score;
+	Text T_Kills;
 	Button B_Quit;
 
 	sf::Vector2f getTickCorrection() const override;

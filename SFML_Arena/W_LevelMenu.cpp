@@ -7,19 +7,22 @@ W_LevelMenu::W_LevelMenu(InputWidget* parent)
 	: InputWidget(parent),
 	T_Title(this), B_Level1(this), B_Level2(this), B_Level3(this), B_Return(this)
 {
+	const RawText TITLE_CONSTR = {
+		sf::Vector2f(0.0f, -300.0f)* unitNorm, sf::Color::White, 100, "LEVEL SELECT"
+	};
+
 	const std::vector<RawButton> LEVEL_MENU_CONSTR = {
-		{sf::Vector2f(0.0f,		-300.0f) * unitNorm,	sf::Vector2f(100.0f, 100.0f) * unitNorm,	sf::Color::Transparent,		100,	"LEVEL SELECT", sf::Color::White},
 		{sf::Vector2f(-500.0f,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	sf::Color(100, 100, 100),	24,		"LEVEL 1",		sf::Color::White},
 		{sf::Vector2f(0.0f,		-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	sf::Color(100, 100, 100),	24,		"LEVEL 2",		sf::Color::White},
 		{sf::Vector2f(500.0f,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	sf::Color(100, 100, 100),	24,		"LEVEL 3",		sf::Color::White},
-		{sf::Vector2f(0.0f,		150.0f) * unitNorm,		buttonSize,										sf::Color::White,			24,		"RETURN",		sf::Color::Black}
+		{sf::Vector2f(0.0f,		150.0f) * unitNorm,		buttonSize,									sf::Color::White,			24,		"RETURN",		sf::Color::Black}
 	};
 
-	T_Title.construct(LEVEL_MENU_CONSTR[0]);
-	B_Level1.construct(LEVEL_MENU_CONSTR[1]);
-	B_Level2.construct(LEVEL_MENU_CONSTR[2]);
-	B_Level3.construct(LEVEL_MENU_CONSTR[3]);
-	B_Return.construct(LEVEL_MENU_CONSTR[4]);
+	T_Title.construct(TITLE_CONSTR);
+	B_Level1.construct(LEVEL_MENU_CONSTR[0]);
+	B_Level2.construct(LEVEL_MENU_CONSTR[1]);
+	B_Level3.construct(LEVEL_MENU_CONSTR[2]);
+	B_Return.construct(LEVEL_MENU_CONSTR[3]);
 
 	delegateButtons();
 
