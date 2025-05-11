@@ -21,14 +21,14 @@ GI_Arena::GI_Arena()
 		std::cerr << "Could not load window_icon from path!" << std::endl;
 	}
 
-	createViewport();
-	
 	setMaxFPS(usedSettings.maxFPS);
 	
 	setUseVSync(usedSettings.bUseVSync);
 
 	setUseWidgetParallax(usedSettings.bWidgetParallax);
 
+	createViewport();
+	
 	std::cout << "Initiated viewport\n" << std::endl;
 
 }
@@ -48,6 +48,11 @@ void GI_Arena::createViewport()
 	const sf::Uint32 style = (usedSettings.bFullscreen && !getIsDebugMode() ? sf::Style::Fullscreen : sf::Style::Default);
 	window = std::make_unique<sf::RenderWindow>(mode, WINDOW_NAME, style);
 	std::cout << "- RenderWindow created" << std::endl;
+
+	// Applying settings
+	if (usedSettings.maxFPS > 0)
+		window->setFramerateLimit(usedSettings.maxFPS);
+	window->setVerticalSyncEnabled(usedSettings.bUseVSync);
 
 	// If window_icon was loaded, apply to window
 	if (window_icon.getPixelsPtr())
@@ -486,10 +491,10 @@ void GI_Arena::modWindowName(const std::string& suffix)
 
 void GI_Arena::applySettings(const UserSettings_Struct settings)
 {
-	setViewportValues(settings.resID, settings.bFullscreen);
 	setMaxFPS(settings.maxFPS);
 	setUseVSync(settings.bUseVSync);
 	setUseWidgetParallax(settings.bWidgetParallax);
+	setViewportValues(settings.resID, settings.bFullscreen);
 
 	std::cout << "Applied locally saved settings\n" << std::endl;
 
@@ -501,7 +506,7 @@ void GI_Arena::setMaxFPS(unsigned int maxFPS)
 	if (maxFPS == usedSettings.maxFPS)
 		return;
 
-	usedSettings.maxFPS = maxFPS;
+	usedSettings.maxFPS = (maxFPS > 0 ? maxFPS : 0);
 }
 
 void GI_Arena::setUseVSync(bool bUseVSync)
