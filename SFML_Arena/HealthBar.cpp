@@ -5,8 +5,6 @@
 
 void HealthBar::tick_bar(const float& deltaTime)
 {
-	// Update the life bar based on the player's health
-
 	// Get players health
 	Player* playerRef = gameInstance().getPlayer();
 	float playerHealth = playerRef->getHealth();
@@ -25,10 +23,12 @@ void HealthBar::tick_bar(const float& deltaTime)
 	float newLifeBarWidth = maxHealthBarWidth * playerHealth;
 	newLifeBarWidth = std::clamp(newLifeBarWidth, 0.0f, maxHealthBarWidth);
 
+	float factor = lerpFactor(deltaTime, LERP_SMOOTHNESS);
+
 	const sf::Vector2f lifeBarSize = lifeBar.getSize();
 	if (lifeBarSize.x != newLifeBarWidth)
 	{
-		float actualLifeBarWidth = lerp(lifeBarSize.x, newLifeBarWidth, LERP_SMOOTHNESS);
+		float actualLifeBarWidth = lerp(lifeBarSize.x, newLifeBarWidth, factor);
 		sf::Vector2f newLifeBarSize = sf::Vector2f(actualLifeBarWidth, lifeBarSize.y);
 		lifeBar.setSize(newLifeBarSize);
 	}
@@ -36,7 +36,7 @@ void HealthBar::tick_bar(const float& deltaTime)
 	const sf::Vector2f lifeBarBgSize = lifeBar_bg.getSize();
 	if (lifeBarBgSize.x != maxHealthBarWidth)
 	{
-		float actualLifeBarWidth = lerp(lifeBarBgSize.x, maxHealthBarWidth, LERP_SMOOTHNESS);
+		float actualLifeBarWidth = lerp(lifeBarBgSize.x, maxHealthBarWidth, factor);
 		sf::Vector2f newLifeBarBgSize = sf::Vector2f(actualLifeBarWidth, lifeBarBgSize.y);
 		lifeBar_bg.setSize(newLifeBarBgSize);
 	}

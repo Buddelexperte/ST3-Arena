@@ -36,9 +36,10 @@ void PU_ExperienceOrb::tick_move(const float& deltaTime)
         speed *= ACCELERATION_FACTOR;
 
         newVelo = direction * speed;
-    }
 
-    newVelo = lerp(getVelocity(), newVelo, LERP_SMOOTHNESS);
+        float factor = lerpFactor(deltaTime, LERP_SMOOTHNESS);
+        newVelo = lerp(getVelocity(), newVelo, factor);
+    }
     sf::Vector2f offset = getVelocity() * deltaTime;
 
     setVelocity(newVelo);
