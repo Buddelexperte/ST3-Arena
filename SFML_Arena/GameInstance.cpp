@@ -246,6 +246,24 @@ void GI_Arena::postTick()
 		updateScreen();
 }
 
+Player* GI_Arena::getPlayer()
+{
+	if (player)
+	{
+		return player.get();
+	}
+
+	return getValidPlayer();
+}
+
+bool GI_Arena::handleEvent(sf::Event* eventRef)
+{
+	if (activeMenu)
+		return activeMenu->handleEvent(eventRef);
+
+	return false;
+}
+
 void GI_Arena::correctWidget()
 {
 	// If GameState changed in earlier loop, construct new activeMenu;
@@ -528,22 +546,4 @@ void GI_Arena::setUseWidgetParallax(bool bWidgetParallax)
 bool GI_Arena::getIsDebugMode() const
 {
 	return std::filesystem::exists(devPath);
-}
-
-Player* GI_Arena::getPlayer()
-{
-	if (player)
-	{
-		return player.get();
-	}
-
-	return getValidPlayer();
-}
-
-bool GI_Arena::handleEvent(sf::Event* eventRef)
-{
-	if (activeMenu)
-		return activeMenu->handleEvent(eventRef);
-
-	return false;
 }
