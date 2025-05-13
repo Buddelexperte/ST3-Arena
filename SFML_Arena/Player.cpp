@@ -139,7 +139,8 @@ void Player::tick_move(const float& deltaTime)
 	}
 	else
 	{
-		velocity = lerp(velocity, targetVelo, ACC_LERP_FACTOR);
+		float factor = lerpFactor(deltaTime, ACC_LERP_FACTOR);
+		velocity = lerp(velocity, targetVelo, factor);
 	}
 
 	sf::Vector2f deltaPos = velocity * deltaTime;
@@ -161,8 +162,8 @@ void Player::tick_move(const float& deltaTime)
 	}
 	else
 	{
-		const float ROT_LERP = LERP_SMOOTHNESS * ROT_LERP_MULTIPLIER * multiplier;
-		rotation += angleDiff * ROT_LERP;
+		float factor = lerpFactor(deltaTime, ROTATION_LERP);
+		rotation = lerp(rotation, rotation + angleDiff, factor);
 	}
 
 	rotation = fmod(rotation + 360.f, 360.f);

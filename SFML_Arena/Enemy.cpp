@@ -51,12 +51,20 @@ void Enemy::tick_move(const float& deltaTime)
 	float norm = std::abs(distance.x) + std::abs(distance.y);
 	// Calculate velocity: scale the direction vector by speed/normalized length
 	sf::Vector2f targetVelo = distance * (WALK_SPEED / norm);
-	sf::Vector2f newVelo = lerp(getVelocity(), targetVelo, ACC_LERP_FACTOR);
+	if (shouldZero(targetVelo))
+	{
+		targetVelo = sf::Vector2f(0.0f, 0.0f);
+	}
+	else
+	{
+		float factor = lerpFactor(deltaTime, ACC_LERP_FACTOR);
+		targetVelo = lerp(getVelocity(), targetVelo, factor);
+	}
 
-	sf::Vector2f offset = newVelo * deltaTime;
+	sf::Vector2f offset = targetVelo * deltaTime;
 
 	addPosition(offset);
-	setVelocity(newVelo);
+	setVelocity(targetVelo);
 
 	// Rotation
 	
@@ -73,8 +81,8 @@ void Enemy::tick_move(const float& deltaTime)
 	}
 	else
 	{
-		const float ROT_LERP = LERP_SMOOTHNESS * ROT_LERP_MULTIPLIER;
-		rotation += angleDiff * ROT_LERP;
+		float factor = lerpFactor(deltaTime, ROTATION_LERP);
+		rotation = lerp(rotation, rotation + angleDiff, factor);
 	}
 
 	rotation = fmod(rotation + 360.f, 360.f);

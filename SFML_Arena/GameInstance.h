@@ -58,7 +58,7 @@ private:
 	
 	void preTick(); // Logic before Player input (Checks for Inventory etc.)
 	void tick_view(const float&);
-	void updateWidgetOffset(const sf::Vector2f& mouseOffset);
+	void updateWidgetOffset(const sf::Vector2f& mouseOffset, const float& deltaTime);
 
 	void tick(const float&); // Player Input and window.draw()
 	void postTick(); // Logic after Player Input (Checks for game closing etc.)

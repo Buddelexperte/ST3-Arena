@@ -33,7 +33,8 @@ void ScoreBar::tick_bar(const float& deltaTime)
 
 	if (scoreBarSize.x != newScoreBarWidth)
 	{
-		newScoreBarWidth = lerp(scoreBarSize.x, newScoreBarWidth, LERP_SMOOTHNESS);
+		float factor = lerpFactor(deltaTime, LERP_SMOOTHNESS);
+		newScoreBarWidth = lerp(scoreBarSize.x, newScoreBarWidth, factor);
 		sf::Vector2f newScoreBarSize = sf::Vector2f(newScoreBarWidth, scoreBarSize.y);
 		scoreBar.setSize(newScoreBarSize);
 	}
@@ -41,7 +42,8 @@ void ScoreBar::tick_bar(const float& deltaTime)
 	const sf::Vector2f scoreBarBgSize = scoreBar_bg.getSize();
 	if (scoreBarBgSize.x != maxScoreBarWidth)
 	{
-		newScoreBarWidth = lerp(scoreBarBgSize.x, maxScoreBarWidth, LERP_SMOOTHNESS);
+		float factor = lerpFactor(deltaTime, LERP_SMOOTHNESS);
+		newScoreBarWidth = lerp(scoreBarBgSize.x, maxScoreBarWidth, factor);
 		sf::Vector2f newScoreBarBgSize = sf::Vector2f(newScoreBarWidth, scoreBarBgSize.y);
 		scoreBar_bg.setSize(newScoreBarBgSize);
 	}

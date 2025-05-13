@@ -381,13 +381,13 @@ void GI_Arena::tick_view(const float& deltaTime)
 	setViewPos(newCamPos);
 
 	// Update widget offset in a separate method
-	updateWidgetOffset(mouseOffset);
+	updateWidgetOffset(mouseOffset, deltaTime);
 
 	IDrawableShapes::updateValues();
 }
 
 // New separate method for widget offset calculation
-void GI_Arena::updateWidgetOffset(const sf::Vector2f& gameplayMouseOffset)
+void GI_Arena::updateWidgetOffset(const sf::Vector2f& gameplayMouseOffset, const float& deltaTime)
 {
 	constexpr float WIDGET_LERP_ALPHA = 0.1f;       // Standard gameplay lerp speed
 	constexpr float MENU_LERP_ALPHA = 0.02f;        // Slower for menus (smoother)
@@ -404,7 +404,8 @@ void GI_Arena::updateWidgetOffset(const sf::Vector2f& gameplayMouseOffset)
 		{
 			// Use gameplay offset calculation (player-relative)
 			const sf::Vector2f newCenter = viewCenter - (gameplayMouseOffset * PARALLAX_SCALE);
-			widgetOffset = lerp(widgetOffset, newCenter, WIDGET_LERP_ALPHA);
+			float factor = lerpFactor(deltaTime, WIDGET_LERP_ALPHA);
+			widgetOffset = lerp(widgetOffset, newCenter, factor);
 		}
 		else
 		{
@@ -437,7 +438,8 @@ void GI_Arena::updateWidgetOffset(const sf::Vector2f& gameplayMouseOffset)
 
 			// Apply inverse offset to create parallax effect (objects move opposite to mouse)
 			const sf::Vector2f newCenter = viewCenter - menuOffset;
-			widgetOffset = lerp(widgetOffset, newCenter, MENU_LERP_ALPHA);
+			float factor = lerpFactor(deltaTime, MENU_LERP_ALPHA);
+			widgetOffset = lerp(widgetOffset, newCenter, factor);
 		}
 	}
 	else
