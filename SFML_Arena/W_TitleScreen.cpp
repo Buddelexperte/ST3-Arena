@@ -24,12 +24,12 @@ W_TitleScreen::W_TitleScreen(InputWidget* parent)
 	B_OptionsMenu.construct(MAIN_MENU_CONSTR[3]);
 	B_Quit.construct(MAIN_MENU_CONSTR[4]);
 
-	delegateButtons();
+	delegateEvents();
 
 	shapes = { &T_Title, &T_Highscore, &B_Start, &B_OptionsMenu, &B_Quit };
 }
 
-void W_TitleScreen::delegateButtons()
+void W_TitleScreen::delegateEvents()
 {
 	T_Title.onClick = [this]()
 	{

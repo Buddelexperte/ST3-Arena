@@ -22,7 +22,7 @@ W_OptionsSounds::W_OptionsSounds(InputWidget* parent)
 	B_Return.construct(MAIN_MENU_CONSTR[0]);
 	B_ToggleSound.construct(MAIN_MENU_CONSTR[1]);
 
-	delegateButtons();
+	delegateEvents();
 
 	shapes = { &T_Title, &B_Return, &B_ToggleSound };
 }
@@ -59,7 +59,7 @@ bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)
 	return false;
 }
 
-void W_OptionsSounds::delegateButtons()
+void W_OptionsSounds::delegateEvents()
 {
 	B_Return.onClick = [this]() {
 		onKeyEscape();

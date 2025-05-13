@@ -85,6 +85,7 @@ void Player::tick(const float& deltaTime)
 void Player::tick_flashlight(const float& deltaTime)
 {
 	static constexpr bool bDrawFlashlight = true;
+
 	if (bDrawFlashlight)
 	{
 		flashlight.tick(deltaTime);

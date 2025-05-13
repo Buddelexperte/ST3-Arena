@@ -57,7 +57,7 @@ class InputWidget : public WidgetElement, public IHasInput
 {
 private:
 	// Used for relaying onClick logic and similar delegates of Buttons etc.
-	virtual void delegateButtons() {};
+	virtual void delegateEvents() {};
 
 protected:
 	int widgetIndex = 0;

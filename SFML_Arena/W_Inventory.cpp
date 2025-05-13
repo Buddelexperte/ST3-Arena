@@ -9,12 +9,12 @@ W_Inventory::W_Inventory(InputWidget* parent)
 {
 
 
-	delegateButtons();
+	delegateEvents();
 
 	shapes = { };
 }
 
-void W_Inventory::delegateButtons()
+void W_Inventory::delegateEvents()
 {
 
 }

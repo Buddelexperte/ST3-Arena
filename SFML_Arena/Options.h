@@ -9,7 +9,7 @@
 class W_Options : public InputWidget // OptionsMenu Widget ------------------------------------------
 {
 private:
-	void delegateButtons() override;
+	void delegateEvents() override;
 
 	Text T_Title;
 	Button B_Sounds;

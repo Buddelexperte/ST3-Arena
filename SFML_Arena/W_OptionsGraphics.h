@@ -9,7 +9,7 @@ class GameInstance;
 class W_OptionsGraphics : public InputWidget
 {
 private:
-    void delegateButtons() override;
+    void delegateEvents() override;
     // Helper methods
     std::string formatResolutionLabel(size_t id);
     void updateSettingTexts(const UserSettings_Struct& s);

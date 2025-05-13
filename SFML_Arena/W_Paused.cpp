@@ -22,10 +22,10 @@ W_Paused::W_Paused(InputWidget* parent)
 	B_OpenOptions.construct(PAUSED_CONSTR[1]);
 	B_Quit.construct(PAUSED_CONSTR[2]);
 
-	delegateButtons();
+	delegateEvents();
 }
 
-void W_Paused::delegateButtons()
+void W_Paused::delegateEvents()
 {
 	B_Resume.onClick = [this]()
 	{

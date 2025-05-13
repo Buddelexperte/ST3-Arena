@@ -33,12 +33,12 @@ W_SelectWeapon::W_SelectWeapon(InputWidget* parent)
 		&B_item1, &B_item2, &B_item3, &B_item4
 	};
 
-	delegateButtons();
+	delegateEvents();
 
 	shapes = { &T_Title, &B_item1, &B_item2, &B_item3, &B_item4, &B_Return };
 }
 
-void W_SelectWeapon::delegateButtons()
+void W_SelectWeapon::delegateEvents()
 {
 	B_Return.onClick = [this]()
 	{

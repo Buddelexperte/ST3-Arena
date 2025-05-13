@@ -1,14 +1,19 @@
 #pragma once
 
-#include "PerkFamilyDisplay.h" // Own header file
+#include "PerkFamilyDisplayElement.h" // Own header file
 
-PerkFamily_Display::PerkFamily_Display(InputWidget* parent)
+PerkFamily_Element::PerkFamily_Element(InputWidget* parent)
 	: WidgetElement(parent),
 	border(parent), T_name(parent), I_Icon(parent), T_desc(parent)
 {
+	const RawBorder CONSTR_BG = {
+		sf::Vector2f{ 0.0f, 0.0f } *viewSizeNorm,
+		sf::Vector2f{ 300.0f, 700.0f } *viewSizeNorm,
+		sf::Color(180, 180, 180, 255),
+		EAlignment::CENTER
+	};
+
 	const std::vector<RawButton> PERK_FAMILY_CONSTR = {
-		// Background (border)
-		{(sf::Vector2f{ 0.0f, 0.0f } * viewSizeNorm),		sf::Vector2f{ 300.0f, 700.0f } * viewSizeNorm,		sf::Color(140, 140, 140, 255),	0,	"",										sf::Color::Black,	EAlignment::CENTER,		EAlignment::CENTER_TOP},
 		// Name																				 
 		{(sf::Vector2f{ 0.0f, -330.0f } * viewSizeNorm),	sf::Vector2f{ 150.0f, 40.0f } * viewSizeNorm,		sf::Color(100, 100, 100, 255),	16,	"Family Name",							sf::Color::Black,	EAlignment::CENTER_TOP,	EAlignment::CENTER},
 		// Icon																				 
@@ -18,10 +23,31 @@ PerkFamily_Display::PerkFamily_Display(InputWidget* parent)
 	
 	};
 	
-	border.construct(PERK_FAMILY_CONSTR[0]);
-	T_name.construct(PERK_FAMILY_CONSTR[1]);
-	I_Icon.construct(PERK_FAMILY_CONSTR[2]);
-	T_desc.construct(PERK_FAMILY_CONSTR[3]);
+	border.construct(CONSTR_BG);
+	T_name.construct(PERK_FAMILY_CONSTR[0]);
+	I_Icon.construct(PERK_FAMILY_CONSTR[1]);
+	T_desc.construct(PERK_FAMILY_CONSTR[2]);
 
 	shapes = { &border, &T_name, &I_Icon, &T_desc };
+}
+
+bool PerkFamily_Element::isMouseOver(const bool& bCheckForClick)
+{
+	const bool isMouseOver = border.isMouseOver(bCheckForClick);
+
+	if (!isMouseOver)
+		return false;
+
+	if (!bCheckForClick)
+		return true;
+
+	if (onSelect != nullptr)
+		onSelect();
+
+	return true;
+}
+
+PerkFamily PerkFamily_Element::getDisplayedFamily() const
+{
+	return displayedFamily;
 }

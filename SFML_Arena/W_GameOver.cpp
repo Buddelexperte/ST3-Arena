@@ -22,12 +22,12 @@ W_GameOver::W_GameOver(InputWidget* parent)
 	T_Kills.construct(TEXT_CONSTR[2]);
 	B_Quit.construct(GAME_OVER_CONSTR);
 
-	delegateButtons();
+	delegateEvents();
 
 	shapes = { &T_Title, &T_Score, &T_Kills, &B_Quit };
 }
 
-void W_GameOver::delegateButtons()
+void W_GameOver::delegateEvents()
 {
 	B_Quit.onClick = [this]()
 	{

@@ -1,20 +1,24 @@
 #pragma once
 
 #include "WidgetElements.h"
-#include "PerkFamilyDisplay.h" // Component
+#include "PerkFamilyMenu.h"
+#include "PerkFamilyTree.h"
 
 class W_LevelUp : public InputWidget
 {
 private:
-	void delegateButtons() override;
+	void delegateEvents() override;
 
-	Button bg;
-	Button B_Skip;
+	Border bg;
+	
+	PerkFamilyMenu familySelect;
 
-	PerkFamily_Display pf_display_1;
-	PerkFamily_Display pf_display_2;
-	PerkFamily_Display pf_display_3;
-	PerkFamily_Display pf_display_4;
+	PerkFamily_Tree* currTree = nullptr;
+
+	PerkFamily_Tree familyTree_1;
+	PerkFamily_Tree familyTree_2;
+	PerkFamily_Tree familyTree_3;
+	PerkFamily_Tree familyTree_4;
 
 public:
 	W_LevelUp(InputWidget*);
@@ -22,6 +26,8 @@ public:
 	void construct() override;
 
 	bool isMouseOver(const bool&) override;
+
+	bool onKeyEscape() override;
 
 	InputWidget* setWidgetIndex(const int&) override;
 	InputWidget* getWidgetAtIndex(const int&) override;

@@ -5,7 +5,7 @@
 class W_OptionsSounds : public InputWidget // OptionSoundMenu Widget ------------------------------------------
 {
 private:
-	void delegateButtons() override;
+	void delegateEvents() override;
 
 	Text T_Title;
 	Button B_Return;

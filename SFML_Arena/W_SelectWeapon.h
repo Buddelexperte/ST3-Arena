@@ -5,7 +5,7 @@
 class W_SelectWeapon : public InputWidget // Inventory Widget ------------------------------------------
 {
 private:
-	void delegateButtons() override;
+	void delegateEvents() override;
 
 	static constexpr unsigned int NUM_WEAPONS = 4; // Anzahl Weaffen Buttons
 	float WEAPON_SPACING_X;

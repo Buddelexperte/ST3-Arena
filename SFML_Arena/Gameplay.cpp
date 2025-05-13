@@ -49,8 +49,8 @@ InputWidget* W_Gameplay::getWidgetAtIndex(const int& atIndex)
 	case 3: // LEVEL UP
 		return &levelUpScreen;
 		break;
-	case 4: // INVENTPRY
-		return &inventoryScreen;
+	case 4: // INVENTORY
+		return &levelUpScreen;
 		break;
 	default:
 		break;
@@ -90,7 +90,7 @@ InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 		shapes.push_back(&levelUpScreen);
 		break;
 	case 4: // INVENTORY
-		shapes.push_back(&inventoryScreen);
+		shapes.push_back(&levelUpScreen);
 		break;
 	case -1:
 	default:
@@ -143,9 +143,6 @@ void W_Gameplay::tick(const float& deltaTime)
 			inv.removeQueuedLevelUp(); // Reset level up flag
 		}
 	}
-
-	if (isChildActive())
-		getActiveChild()->tick(deltaTime);
 
 	// Make sure flashlight draws shader onto environment
 	Flashlight& flashlight = player->getFlashlight();

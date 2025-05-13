@@ -64,7 +64,7 @@ W_OptionsGraphics::W_OptionsGraphics(InputWidget* parent)
 	// Background
 	bg.construct(BORDER_CONSTR);
 
-	delegateButtons();
+	delegateEvents();
 
 	shapes = {
 		&T_Title, &bg,
@@ -119,7 +119,7 @@ void W_OptionsGraphics::reset()
 	checkForDifferences();
 }
 
-void W_OptionsGraphics::delegateButtons()
+void W_OptionsGraphics::delegateEvents()
 {
 	B_Return.onClick = [this]()
 	{

@@ -5,7 +5,7 @@
 class W_LevelMenu : public InputWidget // LevelMenu Widget ------------------------------------------
 {
 private:
-	void delegateButtons() override;
+	void delegateEvents() override;
 	
 	Text T_Title;
 	Button B_Level1;

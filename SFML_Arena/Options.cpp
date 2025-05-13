@@ -24,10 +24,10 @@ W_Options::W_Options(InputWidget* parent)
 	B_Sounds.construct(MAIN_MENU_CONSTR[1]);
 	B_Return.construct(MAIN_MENU_CONSTR[2]);
 
-	delegateButtons();
+	delegateEvents();
 }
 
-void W_Options::delegateButtons()
+void W_Options::delegateEvents()
 {
 	B_Return.onClick = [this]() {
 		onKeyEscape();

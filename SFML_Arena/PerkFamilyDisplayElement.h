@@ -1,12 +1,15 @@
 #pragma once
 
 #include "WidgetElements.h"
+#include "PerkInfo.h"
 
-class PerkFamily_Display : public WidgetElement
+class PerkFamily_Element : public WidgetElement
 {
 private:
+	PerkFamily displayedFamily = PerkFamily::None;
+
 	// Background
-	Button border;
+	Border border;
 	// Perk Family Name
 	Button T_name;
 	// Perk Family Description
@@ -15,11 +18,20 @@ private:
 	Button I_Icon;
 
 public:
-	PerkFamily_Display(InputWidget* parent);
-
-	void construct(const sf::Vector2f& startPos)
+	PerkFamily_Element(InputWidget* parent);
+	void construct() override
 	{
+
+	}
+	void construct(const sf::Vector2f& startPos, const PerkFamily& pf)
+	{
+		displayedFamily = pf;
+
 		setPosition(startPos);
+
+		PerkFamilyInfo fInfo = getPerkFInfo(displayedFamily);
+		T_name.setText(fInfo.name);
+		T_desc.setText(fInfo.description);
 	}
 
 	void setPosition(const sf::Vector2f& pos) override
@@ -41,4 +53,10 @@ public:
 		T_desc.addPosition(delta, bTickBased);
 		I_Icon.addPosition(delta, bTickBased);
 	}
+
+	bool isMouseOver(const bool& = false) override;
+
+	PerkFamily getDisplayedFamily() const;
+
+	std::function<void()> onSelect = nullptr;
 };

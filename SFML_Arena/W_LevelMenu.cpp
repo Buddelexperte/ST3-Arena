@@ -24,12 +24,12 @@ W_LevelMenu::W_LevelMenu(InputWidget* parent)
 	B_Level3.construct(LEVEL_MENU_CONSTR[2]);
 	B_Return.construct(LEVEL_MENU_CONSTR[3]);
 
-	delegateButtons();
+	delegateEvents();
 
 	shapes = { &T_Title, &B_Level1, &B_Level2, &B_Level3, &B_Return };
 }
 
-void W_LevelMenu::delegateButtons()
+void W_LevelMenu::delegateEvents()
 {
 	B_Level1.onClick = [this]()
 	{

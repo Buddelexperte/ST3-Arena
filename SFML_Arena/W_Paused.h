@@ -6,7 +6,7 @@
 class W_Paused : public InputWidget
 {
 private:
-	void delegateButtons() override;
+	void delegateEvents() override;
 
 	Text T_Title;
 	Button B_Resume;

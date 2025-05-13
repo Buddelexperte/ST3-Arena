@@ -6,7 +6,7 @@
 class W_GameOver : public InputWidget
 {
 private:
-	void delegateButtons() override;
+	void delegateEvents() override;
 
 	Text T_Title;
 	Text T_Score;
