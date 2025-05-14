@@ -1,4 +1,4 @@
-#include "PerkFamilyTree.h"
+﻿#include "PerkFamilyTree.h"
 #include <iostream>
 #include <array>
 
@@ -27,8 +27,9 @@ const PerkTree& PerkFamily_Tree::getDefensiveTree() const
             { "def_armor", "Hardened Skin", "Reduce incoming damage by 5%." },
             { "def_heal", "Second Wind", "Recover 10% HP after surviving a wave." },
             { "def_barrier", "Energy Barrier", "Gain a shield that absorbs 15 damage every 20 seconds.",
-            { // 1 Child
-                { "def_barrier2", "Barrier Recharge", "Reduce shield cooldown by 5 seconds." }
+            { // 2 Children
+                { "def_barrier2", "Barrier Recharge", "Reduce shield cooldown by 5 seconds." },
+                { "def_barrier_alt", "Barrier Recharge", "Reduce shield cooldown by 5 seconds." }
             }}
         }
     };
@@ -93,12 +94,15 @@ std::unique_ptr<Button> PerkFamily_Tree::createButtonFromPerkInfo(const PerkNode
     // Create a new button for this perk node
     std::unique_ptr<Button> button = std::make_unique<Button>(this);
 
-    // Set button properties based on PerkNodeInfo
-    button->setText(perkInfo.name);
-    button->setText(perkInfo.tag);
-    button->setEnabled(perkInfo.bUnlocked);
+	sf::Color nodeColor = perkInfo.bUnlocked ? sf::Color::White : sf::Color(100, 20, 20, 255); // Color based on unlocked status
 
-    button->construct();
+    RawButton buttonConstructor = {
+		sf::Vector2f(0.0f, 0.0f), NODE_SIZE, nodeColor, 16, perkInfo.tag, sf::Color::Black, EAlignment::CENTER, EAlignment::CENTER
+    };
+
+    // Set button properties based on PerkNodeInfo
+    bool bStartDisabled = !perkInfo.bUnlocked;
+	button->construct(buttonConstructor, bStartDisabled);
 
     return std::move(button);
 }
@@ -109,80 +113,126 @@ void PerkFamily_Tree::clearNodes()
     perkButtons.clear();
 }
 
-sf::Vector2u PerkFamily_Tree::countTreeSize(const PerkNodeInfo& rootNode)
+sf::Vector2u PerkFamily_Tree::buildTreeLayout(const PerkNodeInfo& rootNode)
 {
-    static constexpr unsigned int MAX_DEPTH = 10;
+	static constexpr unsigned int MAX_DEPTH = 5; // Maximum depth of the tree, for recursion safety
 
-    // Array tracking the width per depth (capped at MAX_DEPTH)
-    std::array<int, MAX_DEPTH> widthPerLevel = {};
-    int maxDepthReached = 0; // Counter outside of function to keep track of max value
+    // Store subtree height (number of vertical slots needed)
+	std::unordered_map<const PerkNodeInfo*, int> nodeSubtreeHeight; // Storing with nodeInfo as Pointers for unique access and avoidance of copies being made
 
-    // Recursive function for PerkInfoNode tree measurement
-    std::function<void(const PerkNodeInfo&, int)> traverse;
-    traverse = [&](const PerkNodeInfo& node, int depthReached)
+    // STEP 1: MEASURE SUBTREE HEIGHTS
+    std::function<int(const PerkNodeInfo&)> measureSubtree;
+    measureSubtree = [&](const PerkNodeInfo& node) -> int // -> int because of recursion, is safer
         {
-            if (depthReached >= MAX_DEPTH)
-                return;
+            if (node.children.empty())
+            {
+				nodeSubtreeHeight[&node] = 1; // Leaf node has height of 1, no children branches
+                return 1;
+            }
 
-            // Track width (number of nodes per depth level)
-            widthPerLevel[depthReached]++;
-
-            // Track max depth reached by const parameter
-            if (depthReached > maxDepthReached)
-                maxDepthReached = depthReached;
-
-            // Traverse children, recursively
+			int total = 0; // Initialize total height for this node
             for (const PerkNodeInfo& child : node.children)
             {
-                traverse(child, depthReached + 1);
+                total += measureSubtree(child); 
+            }
+
+			nodeSubtreeHeight[&node] = total; // Store the total height of this node
+
+            return total;
+        };
+
+    // STEP 2: BUILD BUTTONS AND POSITION THEM
+    int maxDepthReached = 0;
+	int totalVerticalSlots = measureSubtree(rootNode); // fills nodeSubtreeHeight + gets max vertical
+
+    clearNodes(); // Clear previous buttons if necessary
+
+    const sf::Vector2f tlCorner = -getSize() / 2.0f; // Top-left corner of the visual tree area
+
+	float x_start = tlCorner.x + padding; // Start position for x-axis, left most point inside border
+	x_start += sideMenuWidth + padding; // Offset for the side menu width
+	float y_start = tlCorner.y; // Start position for y-axis, calculated from the top-left corner
+
+    // Step 1: Precompute total tree height from the root for vertical centering
+    int totalTreeHeight = nodeSubtreeHeight[&rootNode]; // Total number of rows
+    float y_step = NODE_SIZE.y + NODE_DISTANCE.y;       // Vertical space per node
+    float totalPixelHeight = totalTreeHeight * y_step; 
+    float y_center_offset = -totalPixelHeight / 2.0f;    // Center offset (shifts root upward)
+
+    std::function<void(const PerkNodeInfo&, int, float)> placeButtons;
+    placeButtons = [&](const PerkNodeInfo& node, int depth, float y_base)
+        {
+            if (depth >= static_cast<int>(MAX_DEPTH)) // Prevent going deeper than max depth
+                return;
+
+            maxDepthReached = std::max(maxDepthReached, depth); // Track max tree depth reached
+
+            int subtreeHeight = nodeSubtreeHeight[&node]; // Total node count of subtree rooted here
+
+            // Calculate node world position
+            float x = x_start + depth * (NODE_SIZE.x + NODE_DISTANCE.x);
+            float y = y_center_offset + y_base + (subtreeHeight * y_step) / 2.0f; // Vertically center within subtree
+
+            // Create and place the node's button
+			sf::Vector2f position = { x, y };
+            std::unique_ptr<Button> button = createButtonFromPerkInfo(node);
+            button->setPosition(position);
+
+            Button* rawPtr = button.get();
+            nodeToButtonMap[&node] = rawPtr; // Associate node with its Button (raw pointer, be careful!!!)
+
+            perkButtons.push_back(std::move(button)); // Move the button into storage
+
+            // Recursively place child nodes below this one
+            float childCursorY = y_base;
+            for (const PerkNodeInfo& child : node.children)
+            {
+				nodeConnections.emplace_back(&node, &child); // Associate parent-child nodes
+
+                // Recursively place child button first
+                int childHeight = nodeSubtreeHeight[&child];
+                placeButtons(child, depth + 1, childCursorY);
+                childCursorY += childHeight * y_step;
+
+                // Drawing line from parent to child
+                Button* parentBtn = nodeToButtonMap[&node];
+                Button* childBtn = nodeToButtonMap[&child];
             }
         };
 
-    // Start at the rootNode, depth = 0
-    traverse(rootNode, 0);
 
-    // Find the maximum width from all levels
-    int maxWidth = *std::max_element(widthPerLevel.begin(), widthPerLevel.end());
-    maxDepthReached += 1; // +1 because root is at level 0
+    // STEP 3: CALL BUILDER
+    placeButtons(rootNode, 0, 0.0f);
 
-    sf::Vector2u treeSize(maxWidth, maxDepthReached);
-
+    // Final size: depth and max vertical branches
+	sf::Vector2u treeSize(totalVerticalSlots, maxDepthReached + 1); // +1 for the root node
     return treeSize;
 }
 
-
 void PerkFamily_Tree::buildTree(const PerkNodeInfo& rootNode)
 {
-    // Clear any existing buttons
-    clearNodes();
+    if (!perkButtons.empty())
+        return;
 
     // Create the root button
     std::unique_ptr<Button> rootButton = createButtonFromPerkInfo(rootNode);
-    perkButtons.push_back(std::move(rootButton));
-
-    //TODO: REWORK WHOLE LOGIC FROM THIS LINE ON
-
-    for (std::unique_ptr<Button>& button : perkButtons)
-    {
-        shapes.push_back(button.get());
-    }
-
-    sf::Vector2u treeSize = countTreeSize(rootNode);
+    treeSize = buildTreeLayout(rootNode);
 }
 
 PerkFamily_Tree::PerkFamily_Tree(InputWidget* parent)
     : InputWidget(parent)
 {
-}
 
-PerkFamily_Tree::~PerkFamily_Tree()
-{
-    clearNodes();
 }
 
 void PerkFamily_Tree::construct()
 {
+    buildTree(rootNode);
 
+    for (std::unique_ptr<Button>& button : perkButtons)
+    {
+		button->construct();
+    }
 }
 
 void PerkFamily_Tree::construct(const sf::Vector2f& borderSize, const PerkFamily& pf)
@@ -191,7 +241,7 @@ void PerkFamily_Tree::construct(const sf::Vector2f& borderSize, const PerkFamily
     displayedFamily = pf;
     // Building the tree on construct, should not be called more than once for each family
     rootNode = getPerkTree(pf);
-    buildTree(rootNode);
+	rootNode.bUnlocked = true; // Set root node as unlocked
 }
 
 bool PerkFamily_Tree::isMouseOver(const bool& checkForClick)
@@ -204,4 +254,56 @@ bool PerkFamily_Tree::isMouseOver(const bool& checkForClick)
     }
 
     return false;
+}
+
+void PerkFamily_Tree::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+    // Create a single vertex array for all connection quads
+    sf::VertexArray allLines(sf::Quads);
+
+    for (const auto& [parent, child] : nodeConnections)
+    {
+        Button* parentBtn = nodeToButtonMap.at(parent);
+        Button* childBtn = nodeToButtonMap.at(child);
+
+        if (parentBtn && childBtn)
+        {
+            const sf::Vector2f tickCorr = getTickCorrection();
+
+            RawButton parentData = parentBtn->getButtonData();
+            RawButton childData = childBtn->getButtonData();
+
+            sf::Vector2f lineOffsetFromButtonCenter((NODE_SIZE.x - lineWidth) / 2.0f, 0.0f);
+
+            sf::Vector2f from = parentData.pos + lineOffsetFromButtonCenter + tickCorr;
+            sf::Vector2f to = childData.pos - lineOffsetFromButtonCenter + tickCorr;
+
+			// Calc direction from parent to child and length of connection
+            sf::Vector2f direction = to - from;
+            float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+
+			// Normalize direction and calculate perpendicular offset
+            sf::Vector2f dirNormalized = direction / length;
+            sf::Vector2f perpendicular = { - dirNormalized.y, dirNormalized.x };
+            sf::Vector2f offset = perpendicular * (lineWidth / 2.0f);
+
+			// Set color based on unlocked status
+            sf::Color lineColor = (child->bUnlocked ? sf::Color::White : sf::Color(100, 0, 0, 255));
+
+            // Push 4 vertices per connection into the shared array
+            allLines.append({ from + offset, lineColor });
+            allLines.append({ from - offset, lineColor });
+            allLines.append({ to - offset, lineColor });
+            allLines.append({ to + offset, lineColor });
+        }
+    }
+
+    // Now draw all connections in a single call
+    target.draw(allLines, states);
+
+    // Draw buttons
+    for (const auto& btn : perkButtons)
+    {
+        target.draw(*btn, states);
+    }
 }

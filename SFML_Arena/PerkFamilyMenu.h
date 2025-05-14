@@ -29,4 +29,3 @@ public:
 
 	std::function<void(PerkFamily)> onSelectFamily = nullptr;
 };
-
