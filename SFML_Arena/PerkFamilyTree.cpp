@@ -1,12 +1,13 @@
 #include "PerkFamilyTree.h"
 #include <iostream>
+#include <array>
 
 // Implementation of tree generation methods
-PerkTree PerkFamily_Tree::getOffensiveTree()
+const PerkTree& PerkFamily_Tree::getOffensiveTree() const
 {
-    return {
+    static const PerkTree offensiveTree = {
         "off_root", "Offense Root", "Start of offensive tree.",
-        { // Children
+        { // 2 Children
             { "off_crit", "Critical Hit", "Increase crit chance." },
             { "off_dot", "Bleed", "Deal damage over time.",
             { // 1 Child
@@ -14,13 +15,15 @@ PerkTree PerkFamily_Tree::getOffensiveTree()
             }}
         }
     };
+
+    return offensiveTree;
 }
 
-PerkTree PerkFamily_Tree::getDefensiveTree()
+const PerkTree& PerkFamily_Tree::getDefensiveTree() const
 {
-    return {
+    static const PerkTree defensiveTree = {
         "def_root", "Defense Root", "Fortify your resilience.",
-        { // Children
+        { // 3 Children
             { "def_armor", "Hardened Skin", "Reduce incoming damage by 5%." },
             { "def_heal", "Second Wind", "Recover 10% HP after surviving a wave." },
             { "def_barrier", "Energy Barrier", "Gain a shield that absorbs 15 damage every 20 seconds.",
@@ -29,13 +32,15 @@ PerkTree PerkFamily_Tree::getDefensiveTree()
             }}
         }
     };
+
+    return defensiveTree;
 }
 
-PerkTree PerkFamily_Tree::getUtilityTree()
+const PerkTree& PerkFamily_Tree::getUtilityTree() const
 {
-    return {
+    static const PerkTree utilityTree = {
         "util_root", "Utility Root", "Master versatility and control.",
-        { // Children
+        { // 3 Children
             { "util_speed", "Quick Feet", "Move 10% faster." },
             { "util_reload", "Fast Hands", "Reload speed increased by 20%." },
             { "util_scan", "Enemy Scanner", "Reveals enemy health bars and weaknesses.",
@@ -44,13 +49,15 @@ PerkTree PerkFamily_Tree::getUtilityTree()
             }}
         }
     };
+
+    return utilityTree;
 }
 
-PerkTree PerkFamily_Tree::getSupportTree()
+const PerkTree& PerkFamily_Tree::getSupportTree() const
 {
-    return {
+    static const PerkTree  supportTree = {
         "sup_root", "Support Root", "Empower allies and enhance the battlefield.",
-        { // Children
+        { // 3 Children
             { "sup_heal_aura", "Healing Aura", "Nearby allies regenerate 2% HP per second." },
             { "sup_ammo", "Ammo Dispenser", "Allies gain extra ammo on wave start." },
             { "sup_revive", "Quick Revive", "Revive allies 50% faster.",
@@ -59,12 +66,32 @@ PerkTree PerkFamily_Tree::getSupportTree()
             }}
         }
     };
+
+    return supportTree;
 }
 
-Button* PerkFamily_Tree::createButtonFromPerkInfo(const PerkNodeInfo& perkInfo)
+const PerkTree& PerkFamily_Tree::getPerkTree(const PerkFamily& family)
+{
+    static const std::unordered_map<PerkFamily, const PerkTree&> perkTrees = {
+        { PerkFamily::Offensive, getOffensiveTree() },
+        { PerkFamily::Defensive, getDefensiveTree() },
+        { PerkFamily::Utility,   getUtilityTree() },
+        { PerkFamily::Support,   getSupportTree() },
+    };
+
+    auto it = perkTrees.find(family);
+    if (it != perkTrees.end())
+        return it->second;
+
+    // Getting an empty tree in case family was invalid
+    static const PerkTree emptyTree = { "Invalid", "Invalid", "No tree available." };
+    return emptyTree;
+}
+
+std::unique_ptr<Button> PerkFamily_Tree::createButtonFromPerkInfo(const PerkNodeInfo& perkInfo)
 {
     // Create a new button for this perk node
-    Button* button = new Button(this);
+    std::unique_ptr<Button> button = std::make_unique<Button>(this);
 
     // Set button properties based on PerkNodeInfo
     button->setText(perkInfo.name);
@@ -73,79 +100,74 @@ Button* PerkFamily_Tree::createButtonFromPerkInfo(const PerkNodeInfo& perkInfo)
 
     button->construct();
 
-    return button;
+    return std::move(button);
 }
 
-void PerkFamily_Tree::clearButtons()
+void PerkFamily_Tree::clearNodes()
 {
-    // Delete all existing buttons
-    for (Button* button : perkButtons)
-    {
-        delete button;
-    }
+	shapes.clear(); // Clear shapes as well, as they should only contain nodes
     perkButtons.clear();
-	shapes.clear(); // Clear shapes as well
 }
+
+sf::Vector2u PerkFamily_Tree::countTreeSize(const PerkNodeInfo& rootNode)
+{
+    static constexpr unsigned int MAX_DEPTH = 10;
+
+    // Array tracking the width per depth (capped at MAX_DEPTH)
+    std::array<int, MAX_DEPTH> widthPerLevel = {};
+    int maxDepthReached = 0; // Counter outside of function to keep track of max value
+
+    // Recursive function for PerkInfoNode tree measurement
+    std::function<void(const PerkNodeInfo&, int)> traverse;
+    traverse = [&](const PerkNodeInfo& node, int depthReached)
+        {
+            if (depthReached >= MAX_DEPTH)
+                return;
+
+            // Track width (number of nodes per depth level)
+            widthPerLevel[depthReached]++;
+
+            // Track max depth reached by const parameter
+            if (depthReached > maxDepthReached)
+                maxDepthReached = depthReached;
+
+            // Traverse children, recursively
+            for (const PerkNodeInfo& child : node.children)
+            {
+                traverse(child, depthReached + 1);
+            }
+        };
+
+    // Start at the rootNode, depth = 0
+    traverse(rootNode, 0);
+
+    // Find the maximum width from all levels
+    int maxWidth = *std::max_element(widthPerLevel.begin(), widthPerLevel.end());
+    maxDepthReached += 1; // +1 because root is at level 0
+
+    sf::Vector2u treeSize(maxWidth, maxDepthReached);
+
+    return treeSize;
+}
+
 
 void PerkFamily_Tree::buildTree(const PerkNodeInfo& rootNode)
 {
-    std::cout << "Building tree" << std::endl;
-
     // Clear any existing buttons
-    clearButtons();
+    clearNodes();
+
+    // Create the root button
+    std::unique_ptr<Button> rootButton = createButtonFromPerkInfo(rootNode);
+    perkButtons.push_back(std::move(rootButton));
 
     //TODO: REWORK WHOLE LOGIC FROM THIS LINE ON
 
-    // Create the root button
-    Button* rootButton = createButtonFromPerkInfo(rootNode);
-    perkButtons.push_back(rootButton);
-	shapes.push_back(rootButton);
-
-    // Stack to keep track of parent buttons and their children info
-    std::vector<std::pair<Button*, const std::vector<PerkNodeInfo>*>> nodeStack;
-    nodeStack.push_back({ rootButton, &rootNode.children });
-
-    // Node positioning constants
-    const float HORIZONTAL_SPACING = 150.0f;  // Space between siblings
-    const float VERTICAL_SPACING = 120.0f;    // Space between parent and children
-
-    // Process all nodes in the tree
-    while (!nodeStack.empty())
+    for (std::unique_ptr<Button>& button : perkButtons)
     {
-        auto [parentButton, childrenInfo] = nodeStack.back();
-        nodeStack.pop_back();
-
-        if (childrenInfo->empty())
-            continue;
-
-        // Calculate positions for children
-        float totalWidth = (childrenInfo->size() - 1) * HORIZONTAL_SPACING;
-        float startX = parentButton->getPosition().x - totalWidth / 2.0f;
-        float childY = parentButton->getPosition().y + VERTICAL_SPACING;
-
-        // Create and position all children
-        for (size_t i = 0; i < childrenInfo->size(); i++)
-        {
-            const PerkNodeInfo& childInfo = (*childrenInfo)[i];
-
-            // Create child button
-            Button* childButton = createButtonFromPerkInfo(childInfo);
-
-            // Position the child
-            float childX = startX + i * HORIZONTAL_SPACING;
-            childButton->setPosition(sf::Vector2f(childX, childY));
-
-            // Add to buttons collection
-            perkButtons.push_back(childButton);
-            shapes.push_back(childButton);
-
-            // Add to stack if it has children
-            if (!childInfo.children.empty())
-            {
-                nodeStack.push_back({ childButton, &childInfo.children });
-            }
-        }
+        shapes.push_back(button.get());
     }
+
+    sf::Vector2u treeSize = countTreeSize(rootNode);
 }
 
 PerkFamily_Tree::PerkFamily_Tree(InputWidget* parent)
@@ -155,16 +177,17 @@ PerkFamily_Tree::PerkFamily_Tree(InputWidget* parent)
 
 PerkFamily_Tree::~PerkFamily_Tree()
 {
-    clearButtons();
+    clearNodes();
 }
 
 void PerkFamily_Tree::construct()
 {
+
 }
 
-void PerkFamily_Tree::construct(const sf::Vector2f& startPos, const PerkFamily& pf)
+void PerkFamily_Tree::construct(const sf::Vector2f& borderSize, const PerkFamily& pf)
 {
-    setPosition(startPos);
+    setSize(borderSize);
     displayedFamily = pf;
     // Building the tree on construct, should not be called more than once for each family
     rootNode = getPerkTree(pf);
@@ -173,8 +196,8 @@ void PerkFamily_Tree::construct(const sf::Vector2f& startPos, const PerkFamily& 
 
 bool PerkFamily_Tree::isMouseOver(const bool& checkForClick)
 {
-    // Check each button
-    for (Button* button : perkButtons)
+    // Check each button (tree node)
+    for (std::unique_ptr<Button>& button : perkButtons)
     {
         if (button->isMouseOver(checkForClick))
             return true;

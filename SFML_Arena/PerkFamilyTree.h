@@ -20,34 +20,22 @@ class PerkFamily_Tree : public InputWidget
 private:
 	PerkFamily displayedFamily = PerkFamily::None;
 	PerkTree rootNode; // Root node of the tree
-	std::vector<Button*> perkButtons; // Store buttons for the tree
+	std::vector<std::unique_ptr<Button>> perkButtons; // Store buttons for the tree
 
 	// Create different perk trees
-	PerkTree getOffensiveTree();
-	PerkTree getDefensiveTree();
-	PerkTree getUtilityTree();
-	PerkTree getSupportTree();
+	const PerkTree& getOffensiveTree() const;
+	const PerkTree& getDefensiveTree() const;
+	const PerkTree& getUtilityTree() const;
+	const PerkTree& getSupportTree() const;
 
 	// Get the appropriate perk tree based on family
-	inline const PerkTree& getPerkTree(const PerkFamily& family)
-	{
-		static const std::unordered_map<PerkFamily, PerkTree> perkTrees = {
-			{ PerkFamily::Offensive, getOffensiveTree() },
-			{ PerkFamily::Defensive, getDefensiveTree() },
-			{ PerkFamily::Utility,   getUtilityTree() },
-			{ PerkFamily::Support,   getSupportTree() },
-		};
-		auto it = perkTrees.find(family);
-		if (it != perkTrees.end())
-			return it->second;
-		static const PerkTree emptyTree = { "invalid", "Invalid", "No tree available." };
-		return emptyTree;
-	}
+	const PerkTree& getPerkTree(const PerkFamily& family);
 
 	// Helper methods for tree building
-	void clearButtons();
+	sf::Vector2u countTreeSize(const PerkNodeInfo& rootNode);
+	void clearNodes();
 	void buildTree(const PerkNodeInfo& rootNode);
-	Button* createButtonFromPerkInfo(const PerkNodeInfo& perkInfo);
+	std::unique_ptr<Button> createButtonFromPerkInfo(const PerkNodeInfo&);
 
 public:
 	PerkFamily_Tree(InputWidget* parent);
@@ -58,7 +46,9 @@ public:
 	void tick(const float& deltaTime) override
 	{
 		InputWidget::tick(deltaTime);
-		for (Button* button : perkButtons)
+
+		// Ticking all perk nodes
+		for (std::unique_ptr<Button>& button : perkButtons)
 		{
 			button->tick(deltaTime);
 		}
@@ -67,8 +57,9 @@ public:
 	void addPosition(const sf::Vector2f& delta, const bool& bTickBased = true) override
 	{
 		WidgetElement::addPosition(delta, bTickBased);
+
 		// Update positions of all buttons
-		for (Button* button : perkButtons)
+		for (std::unique_ptr<Button>& button : perkButtons)
 		{
 			button->addPosition(delta, bTickBased);
 		}
