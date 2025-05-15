@@ -23,6 +23,7 @@ public:
 			return;
 
 		sf::Color nodeColor = (nodeInfo->bUnlocked ? sf::Color::White : sf::Color(100, 20, 20, 255)); // Color based on unlocked status
+		//nodeColor = (getIsHovered() ? sf::Color::Yellow : nodeColor); TODO add functionality
 		nodeColor = (nodeInfo->bSelected ? (sf::Color::White - HOVER_COLOR_DELTA) : nodeColor);
 
 

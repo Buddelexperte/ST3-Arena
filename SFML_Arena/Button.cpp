@@ -555,3 +555,8 @@ void Button::click()
     playAnim(EAnimation::ON_CLICK);
     if (onClick) onClick(); // Only call back to onClick of onClick delegate has been set
 }
+
+bool Button::getIsHovered() const
+{
+    return bHovered;
+}

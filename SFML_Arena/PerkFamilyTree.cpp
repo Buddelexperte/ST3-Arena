@@ -44,6 +44,16 @@ void PerkFamily_Tree::delegateEvents()
 
     for (std::unique_ptr<PerkNode>& node : perkButtons)
     {
+        // TODO: Tooltip menu on the side of the border and yellow color for hovering
+
+        node->onHover = [this, button = node.get()]()
+            {
+            };
+
+        node->onUnhover = [this, button = node.get()]()
+            {
+            };
+
         node->onClick = [this, button = node.get()]()
             {
                 PerkNodeInfo* info = button->getNodeInfo();
@@ -74,11 +84,7 @@ void PerkFamily_Tree::delegateEvents()
             };
 
 
-        // TODO: Tooltip menu on the side of the border
-        node->onHover = [this, button = node.get()]()
-            {
-
-            };
+        
     }
 }
 

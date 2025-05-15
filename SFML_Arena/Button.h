@@ -98,7 +98,7 @@ public:
 
 	bool isMouseOver(const bool& = false); // Check if mouse is over button
 	
-	bool getIsHovered() const { return bHovered; }
+	bool getIsHovered() const;
 
 	// Callback functions
 	std::function<void()> onClick = nullptr; 
