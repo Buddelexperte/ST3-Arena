@@ -21,10 +21,20 @@ W_LevelUp::W_LevelUp(InputWidget* parent)
 
 	delegateEvents();
 
-	familyTree_1.construct(bg.getSize(), PerkFamily::Offensive);
-	familyTree_2.construct(bg.getSize(), PerkFamily::Defensive);
-	familyTree_3.construct(bg.getSize(), PerkFamily::Utility);
-	familyTree_4.construct(bg.getSize(), PerkFamily::Support);
+	familyTrees = {
+		&familyTree_1, &familyTree_2, &familyTree_3, &familyTree_4
+	};
+
+	for (PerkFamily_Tree* tree : familyTrees)
+	{
+		tree->setPosition(bg.getPosition());
+		tree->setSize(bg.getSize());
+	}
+
+	familyTree_1.construct(PerkFamily::Offensive);
+	familyTree_2.construct(PerkFamily::Defensive);
+	familyTree_3.construct(PerkFamily::Utility);
+	familyTree_4.construct(PerkFamily::Support);
 }
 
 void W_LevelUp::delegateEvents()

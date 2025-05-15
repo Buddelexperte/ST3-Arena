@@ -90,7 +90,7 @@
     <Filter Include="Source\VisualInterfaces\Widgets\Gameplay\HUD">
       <UniqueIdentifier>{a0582402-9fb4-4572-9889-2cd66d7c388e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks\FamilyDisplay">
+    <Filter Include="Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks\PerkSelection">
       <UniqueIdentifier>{ebad94de-01a2-46eb-9679-e59ef22c4e7a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -258,13 +258,13 @@
       <Filter>Source\VisualInterfaces\Components</Filter>
     </ClCompile>
     <ClCompile Include="PerkFamilyDisplayElement.cpp">
-      <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks\FamilyDisplay</Filter>
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks\PerkSelection</Filter>
     </ClCompile>
     <ClCompile Include="PerkFamilyMenu.cpp">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks</Filter>
     </ClCompile>
     <ClCompile Include="PerkFamilyTree.cpp">
-      <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks\FamilyDisplay</Filter>
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks\PerkSelection</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -495,7 +495,7 @@
       <Filter>Source\VisualInterfaces\Components</Filter>
     </ClInclude>
     <ClInclude Include="PerkFamilyDisplayElement.h">
-      <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks\FamilyDisplay</Filter>
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks\PerkSelection</Filter>
     </ClInclude>
     <ClInclude Include="PerkFamilyMenu.h">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks</Filter>
@@ -504,7 +504,10 @@
       <Filter>Source\Actors\Inventory\Items\Perks</Filter>
     </ClInclude>
     <ClInclude Include="PerkFamilyTree.h">
-      <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks\FamilyDisplay</Filter>
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks\PerkSelection</Filter>
+    </ClInclude>
+    <ClInclude Include="PerkNode.h">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks\PerkSelection</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

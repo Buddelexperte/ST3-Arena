@@ -2,25 +2,19 @@
 
 #include "WidgetElements.h"
 #include "PerkInfo.h"
-
-// Structure to hold perk node information
-struct PerkNodeInfo
-{
-	std::string tag;
-	std::string name;
-	std::string description;
-	std::vector<PerkNodeInfo> children;
-	bool bUnlocked = false;
-	bool bSelected = false;
-};
+#include "PerkNode.h"
 
 using PerkTree = PerkNodeInfo; // One start root node, now called Tree
 
 class PerkFamily_Tree : public InputWidget
 {
 private:
+	static unsigned int perkID;
+
+	void delegateEvents() override;
+
 	static constexpr float borderPadding = padding * 5.0f; // Padding for the border
-	static inline const sf::Vector2f NODE_SIZE = sf::Vector2f(120.0f, 120.0f); // Width of each node
+	static const inline sf::Vector2f NODE_SIZE = PerkNode::getNodeSize(); // Size of the node
 	static inline const sf::Vector2f NODE_DISTANCE = sf::Vector2f(200.0f, 50.0f); // Distance for each node
 	static constexpr float sideMenuWidth = 500.0f; // Width of the side menu
 
@@ -30,12 +24,12 @@ private:
 	PerkTree rootNode; // Root node of the tree
 
 	sf::Vector2u treeSize; // Size of the tree (width, depth)
-	std::vector<std::unique_ptr<Button>> perkButtons; // Store buttons for the tree
-	// TODO: Implement callback from button to PerkNodeInfo reference/pointer
+	std::vector<std::unique_ptr<PerkNode>> perkButtons; // Store buttons for the tree
 
 	// For line connections
-	std::unordered_map<const PerkNodeInfo*, Button*> nodeToButtonMap;
+	std::unordered_map<unsigned int, PerkNode*> nodeToButtonMap;
 	std::vector<std::pair<const PerkNodeInfo*, const PerkNodeInfo*>> nodeConnections;
+	std::unordered_map<const PerkNodeInfo*, const PerkNodeInfo*> childToParent;
 
 	// Create different perk trees
 	const PerkTree& getOffensiveTree() const;
@@ -47,24 +41,23 @@ private:
 	const PerkTree& getPerkTree(const PerkFamily& family);
 
 	// Helper methods for tree building
-	sf::Vector2u buildTreeLayout(const PerkNodeInfo& rootNode);
+	sf::Vector2u buildTreeLayout(PerkNodeInfo& rootNode);
 	void clearNodes();
-	void buildTree(const PerkNodeInfo& rootNode);
-	std::unique_ptr<Button> createButtonFromPerkInfo(const PerkNodeInfo&);
+	std::unique_ptr<PerkNode> createButtonFromPerkInfo(PerkNodeInfo*);
 
 public:
 	PerkFamily_Tree(InputWidget* parent);
 
 	void construct() override;
-	void construct(const sf::Vector2f& startPos, const PerkFamily& pf);
+	void construct(const PerkFamily& pf);
 	void tick(const float& deltaTime) override
 	{
 		InputWidget::tick(deltaTime);
 
 		// Ticking all perk nodes
-		for (std::unique_ptr<Button>& button : perkButtons)
+		for (std::unique_ptr<PerkNode>& node : perkButtons)
 		{
-			button->tick(deltaTime);
+			node->tick(deltaTime);
 		}
 	}
 

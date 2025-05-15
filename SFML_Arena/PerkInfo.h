@@ -10,6 +10,18 @@ enum class PerkFamily
 	Count
 };
 
+// Structure to hold perk node information
+struct PerkNodeInfo
+{
+	unsigned int id = 0;
+	std::string tag;
+	std::string name;
+	std::string description;
+	std::vector<PerkNodeInfo> children;
+	bool bUnlocked = false;
+	bool bSelected = false;
+};
+
 struct PerkFamilyInfo
 {
 	std::string name;

@@ -19,6 +19,7 @@ private:
 	PerkFamily_Tree familyTree_2;
 	PerkFamily_Tree familyTree_3;
 	PerkFamily_Tree familyTree_4;
+	std::vector<PerkFamily_Tree*> familyTrees;
 
 public:
 	W_LevelUp(InputWidget*);

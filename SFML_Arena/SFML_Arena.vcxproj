@@ -233,6 +233,7 @@
     <ClInclude Include="PerkFamilyMenu.h" />
     <ClInclude Include="PerkFamilyTree.h" />
     <ClInclude Include="PerkInfo.h" />
+    <ClInclude Include="PerkNode.h" />
     <ClInclude Include="Pickup.h" />
     <ClInclude Include="PU_ExperienceOrb.h" />
     <ClInclude Include="P_Sparkle.h" />
