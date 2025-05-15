@@ -58,7 +58,7 @@ void Button::construct(const RawButton& constr, const bool startDisabled)
 
     tick_pos(getTickCorrection());
 
-	bHovered = false; // Reset hover state
+	bHovered = startDisabled; // Reset hover state to false, except if disabled to stop hovering logic
     isMouseOver(false); // Check for initial onHover events
 }
 
@@ -453,6 +453,7 @@ void Button::setTexture(const sf::Texture& newTexture, const bool resetTint)
 
 bool Button::isMouseOver(const bool& checkForClick)
 {
+    // If disabled, skip hovering logic
     if (!bEnabled)
         return false;
 
@@ -464,33 +465,24 @@ bool Button::isMouseOver(const bool& checkForClick)
     {
         // Unhovering, if hovered before this check
         if (bHovered)
-        {
-            bHovered = false;
-            playAnim(EAnimation::ON_UNHOVER);
-            if (onUnhover) onUnhover();
-        }
+            unhover();
 
         return false;
     }
 
     // Mouse is overlapping hitbox
-    // 
+     
+    
     // If clicked, call onClick()
+    if (checkForClick && isAnimBlockingInput())
+        return false;
+
     if (checkForClick)
-    {
-        if (isAnimBlockingInput())
-            return false;
+        click();
 
-        playButtonSound();
-        playAnim(EAnimation::ON_CLICK);
-        if (onClick) onClick(); // Only call back to onClick of onClick delegate has been set
-    }
-
-    if (!bHovered) // Else only call for onHover() if not already hovering
+    if (bHovered == false) // Else only call for onHover() if not already hovering
     {
-        bHovered = true;
-        playAnim(EAnimation::ON_HOVER);
-        if (onHover) onHover();
+        hover();
     }
 
     return true;
@@ -539,4 +531,27 @@ void Button::start_onClickAnim()
 void Button::tick_onClickAnim(const float&)
 {
     // Nothing yet
+}
+
+void Button::hover()
+{
+    bHovered = true;
+    stopAnim(EAnimation::ON_UNHOVER);
+    playAnim(EAnimation::ON_HOVER);
+    if (onHover) onHover();
+}
+
+void Button::unhover()
+{
+    bHovered = false;
+    stopAnim(EAnimation::ON_HOVER);
+    playAnim(EAnimation::ON_UNHOVER);
+    if (onUnhover) onUnhover();
+}
+
+void Button::click()
+{
+    playButtonSound();
+    playAnim(EAnimation::ON_CLICK);
+    if (onClick) onClick(); // Only call back to onClick of onClick delegate has been set
 }

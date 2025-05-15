@@ -17,7 +17,7 @@ struct PerkNodeInfo
 	std::string tag;
 	std::string name;
 	std::string description;
-	std::vector<PerkNodeInfo> children;
+	std::vector<PerkNodeInfo*> children;  // Changed to pointer
 	bool bUnlocked = false;
 	bool bSelected = false;
 };

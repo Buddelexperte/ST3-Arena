@@ -13,6 +13,7 @@ public:
 	PerkNode(InputWidget* parent, PerkNodeInfo* info)
 		: Button(parent), nodeInfo(info)
 	{
+
 	}
 
 	void construct()
@@ -21,14 +22,16 @@ public:
 		if (!nodeInfo)
 			return;
 
-		sf::Color nodeColor = nodeInfo->bUnlocked ? sf::Color::White : sf::Color(100, 20, 20, 255); // Color based on unlocked status
+		sf::Color nodeColor = (nodeInfo->bUnlocked ? sf::Color::White : sf::Color(100, 20, 20, 255)); // Color based on unlocked status
+		nodeColor = (nodeInfo->bSelected ? (sf::Color::White - HOVER_COLOR_DELTA) : nodeColor);
+
 
 		RawButton buttonConstructor = {
-			sf::Vector2f(0.0f, 0.0f), NODE_SIZE, nodeColor, 16, nodeInfo->tag, sf::Color::Black, EAlignment::CENTER, EAlignment::CENTER
+			getButtonData().pos, NODE_SIZE, nodeColor, 16, nodeInfo->tag, sf::Color::Black, EAlignment::CENTER, EAlignment::CENTER
 		};
 
 		// Set button properties based on PerkNodeInfo
-		bool bStartDisabled = !nodeInfo->bUnlocked;
+		bool bStartDisabled = !nodeInfo->bUnlocked || nodeInfo->bSelected;
 		Button::construct(buttonConstructor, bStartDisabled); // Call the base class constructor
 	}
 

@@ -25,7 +25,6 @@ private:
 	FontManager::Font font = FontManager::Font::BUTTON_FONT; // [0] in FontManager.h
 	
 	RawButton buttonData;
-	static inline const sf::Color HOVER_COLOR_DELTA = sf::Color(50, 50, 50, 0); // Color difference when hovering
 	bool bHovered = false;
 
 	bool bEnabled = true;
@@ -45,6 +44,13 @@ private:
 	virtual void tick_onUnhoverAnim(const float&) override;
 	virtual void start_onClickAnim() override; // On Click
 	virtual void tick_onClickAnim(const float&) override;
+
+	virtual void hover();
+	virtual void unhover();
+	virtual void click();
+
+protected:
+	static inline const sf::Color HOVER_COLOR_DELTA = sf::Color(50, 50, 50, 0); // Color difference when hovering
 
 public:
 	// Constructors
@@ -92,6 +98,8 @@ public:
 
 	bool isMouseOver(const bool& = false); // Check if mouse is over button
 	
+	bool getIsHovered() const { return bHovered; }
+
 	// Callback functions
 	std::function<void()> onClick = nullptr; 
 	std::function<void()> onHover = nullptr;
