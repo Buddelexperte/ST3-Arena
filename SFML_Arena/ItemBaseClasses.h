@@ -190,13 +190,15 @@ struct PerkTriggerInfo
 // Perk: passive boost that triggers on specific game events.
 class Perk : public Item
 {
-protected:
+private:
+    virtual const ItemInfo intiItemInfo() = 0;
+    virtual const std::vector<PerkTrigger> initTriggers() = 0;
     // Each perk can listen for one or more triggers.
     std::vector<PerkTrigger> triggers;
 
 public:
-    Perk(const ItemInfo& info, const std::vector<PerkTrigger>& triggerList)
-        : Item(info), triggers(triggerList)
+    Perk()
+        : Item(intiItemInfo), triggers(initTriggers)
     {
         // Perks are always active/passive once acquired.
         bReady = true;
@@ -243,3 +245,5 @@ public:
         }
     }
 };
+
+std::unique_ptr<Perk> makePerk(const std::string& tag);

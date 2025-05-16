@@ -2,6 +2,7 @@
 
 #include "ItemBaseClasses.h"
 #include "Inventory.h"
+#include "AllPerks.h"
 
 // TODO: Make Weapon, enemy and other attributes read from a file
 
@@ -91,4 +92,9 @@ std::unique_ptr<Weapon> makeWeapon(const std::string& selectWeaponText)
     }
 
     return nullptr;
+}
+
+std::unique_ptr<Perk> makePerk(const std::string& tag)
+{
+    return std::unique_ptr<Perk>();
 }

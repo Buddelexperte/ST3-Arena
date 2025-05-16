@@ -500,14 +500,26 @@
     <ClInclude Include="PerkFamilyMenu.h">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks</Filter>
     </ClInclude>
-    <ClInclude Include="PerkInfo.h">
-      <Filter>Source\Actors\Inventory\Items\Perks</Filter>
-    </ClInclude>
     <ClInclude Include="PerkFamilyTree.h">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks\PerkSelection</Filter>
     </ClInclude>
     <ClInclude Include="PerkNode.h">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks\PerkSelection</Filter>
+    </ClInclude>
+    <ClInclude Include="PerkInfo.h">
+      <Filter>Source\Actors\Inventory\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Perk_def.h">
+      <Filter>Source\Actors\Inventory\Items\Perks</Filter>
+    </ClInclude>
+    <ClInclude Include="Perk_off.h">
+      <Filter>Source\Actors\Inventory\Items\Perks</Filter>
+    </ClInclude>
+    <ClInclude Include="Perk_util.h">
+      <Filter>Source\Actors\Inventory\Items\Perks</Filter>
+    </ClInclude>
+    <ClInclude Include="Perk_sup.h">
+      <Filter>Source\Actors\Inventory\Items\Perks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
