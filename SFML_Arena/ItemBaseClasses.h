@@ -198,7 +198,7 @@ private:
 
 public:
     Perk()
-        : Item(intiItemInfo), triggers(initTriggers)
+        : Item(intiItemInfo()), triggers(initTriggers())
     {
         // Perks are always active/passive once acquired.
         bReady = true;
