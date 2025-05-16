@@ -20,6 +20,7 @@ struct PerkNodeInfo
 	std::vector<PerkNodeInfo*> children;  // Changed to pointer
 	bool bUnlocked = false;
 	bool bSelected = false;
+	bool isPathHovered = false;
 };
 
 struct PerkFamilyInfo

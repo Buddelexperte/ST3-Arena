@@ -419,6 +419,11 @@ sf::Color Button::getColor() const
 	return buttonData.color;
 }
 
+const sf::Color Button::getActualColor() const
+{
+    return B_Box.getFillColor();
+}
+
 void Button::setTextColor(const sf::Color& color)
 {
     textFade.fromTo.color0 = color;
@@ -495,16 +500,19 @@ void Button::start_onHoverAnim()
     static constexpr float hoverDuration = 0.2f;
 
     sf::Color currColor = B_Box.getFillColor(); // Maybe deviates from manually set color due to smoothing
-    sf::Color hoveredColor = buttonData.color - HOVER_COLOR_DELTA;
+    sf::Color hoveredColor = getHoverColor();
     boxFade.reset(ColorColor(currColor, hoveredColor), hoverDuration);
 }
 
 void Button::tick_onHoverAnim(const float& deltaTime)
 {
-    if (boxFade.done())
-        stopAnim(ON_HOVER);
-
     B_Box.setFillColor(boxFade.fade(deltaTime));
+    
+    if (boxFade.done())
+    {
+        stopAnim(ON_HOVER);
+        B_Box.setFillColor(getHoverColor());
+    }
 }
 
 void Button::start_onUnhoverAnim()
@@ -517,10 +525,13 @@ void Button::start_onUnhoverAnim()
 
 void Button::tick_onUnhoverAnim(const float& deltaTime)
 {
-    if (boxFade.done())
-        stopAnim(ON_UNHOVER);
-
     B_Box.setFillColor(boxFade.fade(deltaTime));
+    
+    if (boxFade.done())
+    {
+        stopAnim(ON_UNHOVER);
+        B_Box.setFillColor(getButtonData().color);
+    }
 }
 
 void Button::start_onClickAnim()

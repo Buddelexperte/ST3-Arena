@@ -48,6 +48,10 @@ private:
     PerkNodeInfo* createPerkNodeInfo(unsigned int id, const std::string& tag,
         const std::string& name, const std::string& description);
 
+    void markParentNodesPath(PerkNodeInfo*, const bool&);
+    void unlockChildrenNodes(PerkNodeInfo*);
+    void blockSiblingNodes(PerkNodeInfo*);
+
 public:
     PerkFamily_Tree(InputWidget* parent);
     ~PerkFamily_Tree(); // Added destructor to clean up memory
@@ -55,16 +59,7 @@ public:
     void construct() override;
     void construct(const PerkFamily& pf);
 
-    void tick(const float& deltaTime) override
-    {
-        InputWidget::tick(deltaTime);
-
-        // Ticking all perk nodes
-        for (std::unique_ptr<PerkNode>& node : perkButtons)
-        {
-            node->tick(deltaTime);
-        }
-    }
+    void tick(const float& deltaTime) override;
 
     bool isMouseOver(const bool& checkForClick = false) override;
 

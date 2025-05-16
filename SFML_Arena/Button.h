@@ -31,11 +31,6 @@ private:
 
 	void playButtonSound() const;
 
-	sf::RectangleShape B_Box;
-	ColorFade boxFade;
-
-	sf::Text T_Text;
-	ColorFade textFade;
 
 	// Button Animations
 	virtual void start_onHoverAnim() override; // On Hover
@@ -49,8 +44,25 @@ private:
 	virtual void unhover();
 	virtual void click();
 
+
 protected:
-	static inline const sf::Color HOVER_COLOR_DELTA = sf::Color(50, 50, 50, 0); // Color difference when hovering
+	sf::RectangleShape B_Box;
+	ColorFade boxFade;
+
+	sf::Text T_Text;
+	ColorFade textFade;
+	
+	virtual const sf::Color getHoverDelta() const
+	{
+		static const sf::Color HOVER_COLOR_DELTA = sf::Color(50, 50, 50, 0);
+		
+		return HOVER_COLOR_DELTA;
+	}
+
+	virtual const sf::Color getHoverColor() const
+	{
+		return buttonData.color - getHoverDelta();
+	}
 
 public:
 	// Constructors
@@ -67,6 +79,7 @@ public:
 	// Color
 	void setColor(const sf::Color&) override; // Set the color of the text or the button fill
 	sf::Color getColor() const override; // Get the color of the text or the button fill
+	const sf::Color getActualColor() const;
 	void setTextColor(const sf::Color&); // Set the color of the text or the button fill
 	sf::Color getTextColor() const; // Set the color of the text or the button fill
 	

@@ -38,53 +38,83 @@ PerkNodeInfo* PerkFamily_Tree::createPerkNodeInfo(
     return nodePtr;
 }
 
+void PerkFamily_Tree::markParentNodesPath(PerkNodeInfo* node, const bool& bMark = true)
+{
+    PerkNodeInfo* ptr = node;
+    while (childToParent[ptr] != nullptr)
+    {
+        PerkNodeInfo* parent = childToParent[ptr];
+        parent->isPathHovered = bMark;
+        nodeToButtonMap[parent->id]->onUpdate();
+
+        ptr = parent;
+    }
+}
+
+void PerkFamily_Tree::unlockChildrenNodes(PerkNodeInfo* node)
+{
+    std::vector<PerkNodeInfo*>& children = node->children;
+    for (PerkNodeInfo* childInfo : children)
+    {
+        childInfo->bUnlocked = true;
+        nodeToButtonMap[childInfo->id]->onUpdate();
+    }
+}
+
+void PerkFamily_Tree::blockSiblingNodes(PerkNodeInfo* node)
+{
+    // If he has parent, block siblings
+    if (childToParent[node] == nullptr)
+        return;
+
+    PerkNodeInfo* parent = childToParent[node];
+    std::vector<PerkNodeInfo*>& siblings = parent->children;
+    for (PerkNodeInfo* childInfo : siblings)
+    {
+        if (childInfo == node) continue; // Skip self as 'sibling'
+
+        childInfo->bUnlocked = false;
+        nodeToButtonMap[childInfo->id]->onUpdate();
+    }
+}
+
 void PerkFamily_Tree::delegateEvents()
 {
     // ONLY CALL AFTER BUILDING THE TREE
 
+    // Setting all delegates dynamically for each node
     for (std::unique_ptr<PerkNode>& node : perkButtons)
     {
-        // TODO: Tooltip menu on the side of the border and yellow color for hovering
-
+        // TODO: Tooltip menu on the side of the border
         node->onHover = [this, button = node.get()]()
             {
+                PerkNodeInfo* info = button->getNodeInfo();
+
+                markParentNodesPath(info, true);
             };
 
         node->onUnhover = [this, button = node.get()]()
             {
+                PerkNodeInfo* info = button->getNodeInfo();
+
+                markParentNodesPath(info, false);
             };
 
         node->onClick = [this, button = node.get()]()
             {
                 PerkNodeInfo* info = button->getNodeInfo();
                 info->bSelected = true;
-                button->construct();
+                button->onUpdate();
 
-                // If he has parent, block siblings
-                if (childToParent[info] != nullptr)
-                {
-                    PerkNodeInfo* parent = childToParent[info];
-                    std::vector<PerkNodeInfo*>& siblings = parent->children;
-                    for (PerkNodeInfo* childInfo : siblings)
-                    {
-                        if (childInfo == info) continue; // Skip self as 'sibling'
-
-                        childInfo->bUnlocked = false;
-                        nodeToButtonMap[childInfo->id]->construct();
-                    }
-                }
+                // Block siblings from being clicked
+                blockSiblingNodes(info);
 
                 // Unlock children if selected
-                std::vector<PerkNodeInfo*>& children = info->children;
-                for (PerkNodeInfo* childInfo : children)
-                {
-                    childInfo->bUnlocked = true;
-                    nodeToButtonMap[childInfo->id]->construct();
-                }
+                unlockChildrenNodes(info);
+
+                // Unmark previous path as hover messes up this part if not done manually
+                markParentNodesPath(info, false);
             };
-
-
-        
     }
 }
 
@@ -362,6 +392,7 @@ void PerkFamily_Tree::construct()
 
 void PerkFamily_Tree::construct(const PerkFamily& pf)
 {
+    // Only create if this tree was not already built
     if (rootNode != nullptr)
         return;
 
@@ -378,6 +409,17 @@ void PerkFamily_Tree::construct(const PerkFamily& pf)
     }
 
     rootNode->bUnlocked = true; // Set root node as unlocked
+}
+
+void PerkFamily_Tree::tick(const float& deltaTime)
+{
+    InputWidget::tick(deltaTime);
+
+    // Ticking all perk nodes
+    for (std::unique_ptr<PerkNode>& node : perkButtons)
+    {
+        node->tick(deltaTime);
+    }
 }
 
 bool PerkFamily_Tree::isMouseOver(const bool& checkForClick)
@@ -432,7 +474,7 @@ void PerkFamily_Tree::draw(sf::RenderTarget& target, sf::RenderStates states) co
             sf::Vector2f offset = perpendicular * (lineWidth / 2.0f);
 
             // Set color based on unlocked status
-            sf::Color lineColor = childData.color;
+            sf::Color lineColor = childBtn->getActualColor();
 
             // Push 4 vertices per connection into the shared array
             allLines.append({ from + offset, lineColor });
