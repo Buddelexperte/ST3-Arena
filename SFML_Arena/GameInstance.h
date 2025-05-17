@@ -94,6 +94,7 @@ public:
 	sf::Vector2f getWidgetOffset() const;
 	sf::RenderStates getRenderStates() const { return states; }
 	Player* getPlayer();
+	Inventory& getInventory();
 	std::weak_ptr<InputWidget> getActiveWidget() { return activeMenu; }
 	void setIsPaused(const bool& bNewIsPaused)
 	{

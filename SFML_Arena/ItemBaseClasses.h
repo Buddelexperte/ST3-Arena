@@ -18,7 +18,8 @@ enum class ItemUse
     ATTACK,
     LOAD_UP,
     CANCEL_LOAD,
-    PASSIVE_TRIGGER
+    PASSIVE_TRIGGER,
+    ON_EQUIP
 };
 
 enum class UseResult
@@ -27,7 +28,8 @@ enum class UseResult
     FAILURE = 0,
     FAILURE_COOLDOWN,
     FAILURE_NO_RESOURCES,
-    SUCCESS
+    SUCCESS,
+    CRITICAL_SUCCESS
 };
 
 class Inventory; // Forward declaration
@@ -91,6 +93,8 @@ struct StringWeapon
     WeaponType type;
 };
 
+std::string normalizeWeaponName(const std::string& name);
+
 // List of all possible synonyms for each weapon
 extern const std::vector<StringWeapon> weaponMappings;
 
@@ -100,21 +104,14 @@ WeaponType getWeaponTypeFromText(const std::string& buttonText);
 class Weapon : public Item
 {
 protected:
-	float damage = 0.0f;    // Base damage of the weapon
     std::unique_ptr<ValueBar> cooldown;
     std::unique_ptr<ProjectileSpawner> projSpawner;
+
+private:
+	float damage = 0.0f;    // Base damage of the weapon
+
 public:
-    Weapon(const ItemInfo& info, const float& damage, std::unique_ptr<ProjectileSpawner> ps, std::unique_ptr<ValueBar> cd) 
-        : 
-        Item(info),
-        damage(damage),
-        projSpawner(std::move(ps)),
-        cooldown(std::move(cd))
-    {
-        cooldown->setValue(cooldown->getMaxValue() + 0.5f);
-        // Weapons are considered "ready" by default
-        bReady = true;
-    }
+    Weapon(const ItemInfo&, const float&, std::unique_ptr<ProjectileSpawner>, std::unique_ptr<ValueBar>);
 
     virtual ~Weapon() = default;
 
@@ -158,10 +155,10 @@ public:
         return damage;
     }
 
-	void setDamage(const float& newDamage)
-	{
-		damage = newDamage;
-	}
+    void setDamage(const float& newDamage)
+    {
+        damage = newDamage;
+    }
 
     // Additional weapon-specific methods could be added (e.g., reload, update)
 };
@@ -173,77 +170,103 @@ std::unique_ptr<Weapon> makeWeapon(const std::string& weaponName);
 // Enum for various perk triggers.
 enum class PerkTrigger
 {
-    OnEnemyContact,
-    OnPlayerDamaged,
-    OnWeaponShot,
-    OnEnemyHit
-    // Extend with additional triggers as needed.
+    None,                       // Fallback or uninitialized value
+
+    OnWaveStart,                // Triggered at the beginning of a wave
+    OnWaveEnd,                  // Triggered when a wave ends
+
+    OnEnemyContact,             // When player touches or collides with enemy
+    OnPlayerDamaged,            // When the player takes damage
+    OnPlayerHeal,               // When the player receives healing
+
+    OnWeaponShot,               // When a weapon is fired
+    OnEnemyGotHit,                 // When a weapon hits an enemy (successful damage application)
+    OnEnemyKill,                // When an enemy is killed
+
+    OnItemPickup,               // When picking up any item (ammo, health, power-up, etc.)
+
+    OnInterval                  // Called at fixed intervals (e.g., every second, handled inside Perk)
 };
 
 struct PerkTriggerInfo
 {
     PerkTrigger trigger;
-    sf::Vector2f pos;
-    Entity* actor;
+    sf::Vector2f pos = sf::Vector2f(0.0f, 0.0f);
+    Entity* actor = nullptr;
 };
 
 // Perk: passive boost that triggers on specific game events.
 class Perk : public Item
 {
 private:
-    virtual const ItemInfo intiItemInfo() = 0;
-    virtual const std::vector<PerkTrigger> initTriggers() = 0;
     // Each perk can listen for one or more triggers.
-    std::vector<PerkTrigger> triggers;
+    std::unordered_set<PerkTrigger> triggers;
 
 public:
-    Perk()
-        : Item(intiItemInfo()), triggers(initTriggers())
-    {
-        // Perks are always active/passive once acquired.
-        bReady = true;
-    }
-
+    Perk(const ItemInfo&, const std::unordered_set<PerkTrigger>&);
     virtual ~Perk() = default;
 
-    virtual UseResult activate(const ItemUse& use) override
-    {
-        if (use == ItemUse::PASSIVE_TRIGGER)
-        {
-            return UseResult::SUCCESS;
-        }
-        return UseResult::FAILURE;
-    }
+    virtual UseResult activate(const ItemUse& use) override;
 
     // Called when a game event occurs; checks if the perk should trigger.
-    void onTrigger(PerkTriggerInfo& triggerInfo)
+    void tryTrigger(PerkTriggerInfo& triggerInfo);
+
+    // For deriving classes
+    virtual void onEquip()
     {
-        PerkTrigger trigger = triggerInfo.trigger;
-        if (vectorContains(triggers, trigger))
-        {
-            std::cout << "Perk \"" << info.name << "\" triggered on event: ";
-            switch (trigger)
-            {
-            case PerkTrigger::OnEnemyContact:
-                std::cout << "OnEnemyContact";
-                break;
-            case PerkTrigger::OnPlayerDamaged:
-                std::cout << "OnPlayerDamaged";
-                break;
-            case PerkTrigger::OnWeaponShot:
-                std::cout << "OnWeaponShot";
-                break;
-            case PerkTrigger::OnEnemyHit:     
-                std::cout << "OnWeaponHit";
-                break;
-            default: 
-                std::cout << "Unknown Trigger";
-                break;
-            }
-            std::cout << "\n";
-            // Insert perk effect logic here (e.g., boost stats, activate shield, etc.)
-        }
+        std::cout << "OnEquip Perk" << std::endl;
     }
+
+    virtual void onWaveStart()
+    {
+        std::cout << "OnWaveStart" << std::endl;
+    }
+
+    virtual void onWaveEnd()
+    {
+        std::cout << "OnWaveEnd" << std::endl;
+    }
+
+    virtual void onEnemyContact()
+    {
+        std::cout << "OnEnemyContact" << std::endl;
+    }
+
+    virtual void onPlayerDamaged()
+    {
+        std::cout << "OnPlayerDamaged" << std::endl;
+    }
+
+    virtual void onPlayerHeal()
+    {
+        std::cout << "OnPlayerHeal" << std::endl;
+    }
+
+    virtual void onWeaponShot()
+    {
+        std::cout << "OnWeaponShot" << std::endl;
+    }
+
+    virtual void onWeaponHit()
+    {
+        std::cout << "OnWeaponHit (OnEnemyGotHit)" << std::endl;
+    }
+
+    virtual void onEnemyKill()
+    {
+        std::cout << "OnEnemyKill" << std::endl;
+    }
+
+    virtual void onItemPickup()
+    {
+        std::cout << "OnItemPickup" << std::endl;
+    }
+
+    virtual void onInterval()
+    {
+        std::cout << "OnInterval" << std::endl;
+    }
+
 };
 
 std::unique_ptr<Perk> makePerk(const std::string& tag);

@@ -9,6 +9,20 @@
 unsigned int EntityManager::numEnemies = 0;
 int EntityManager::entityCount = 0;
 
+void EntityManager::onWaveStarted()
+{
+    static PerkTriggerInfo triggerInfo(PerkTrigger::OnWaveStart);
+
+    gameInstance().getInventory().triggerPerks(triggerInfo);
+}
+
+void EntityManager::onWaveEnded()
+{
+    static PerkTriggerInfo triggerInfo(PerkTrigger::OnWaveEnd);
+
+    gameInstance().getInventory().triggerPerks(triggerInfo);
+}
+
 EntityManager::EntityManager()
     : spawnWave(std::make_unique<SW_Stage1>())
 {

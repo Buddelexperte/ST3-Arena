@@ -80,6 +80,9 @@ void Player::tick(const float& deltaTime)
 
 	// Flashlight tick
 	tick_flashlight(deltaTime);
+
+	// Tick inventory
+	tick_inv(deltaTime);
 }
 
 void Player::tick_flashlight(const float& deltaTime)
@@ -90,6 +93,11 @@ void Player::tick_flashlight(const float& deltaTime)
 	{
 		flashlight.tick(deltaTime);
 	}
+}
+
+void Player::tick_inv(const float& deltaTime)
+{
+	inventory.tick(deltaTime);
 }
 
 void Player::tick_gameplay(const float& deltaTime)
@@ -190,7 +198,6 @@ void Player::tick_animation(const float& deltaTime)
 	}
 }
 
-
 void Player::releaseToPool()
 {
 	GenericPool<Player>::instance().release(std::unique_ptr<Player>(this));
@@ -233,9 +240,10 @@ sf::Keyboard::Key Player::onKeyPressed(sf::Event* eventRef)
 bool Player::onMouseClickL(sf::Event* eventRef)
 {
 	UseResult result = UseResult::FAILURE;
+
 	if (inventory.getActiveWeapon() != nullptr)
 	{
-		result = inventory.getActiveWeapon()->activate(ItemUse::ATTACK);
+		result = inventory.shootWeapon();
 	}
 	return (result >= UseResult::SUCCESS);
 }
@@ -245,10 +253,7 @@ void Player::onMouseDownL()
 	if (gameInstance().getIsPaused())
 		return;
 
-	if (inventory.getActiveWeapon() != nullptr)
-	{
-		inventory.getActiveWeapon()->activate(ItemUse::LOAD_UP);
-	}
+	inventory.loadUpWeapon();
 }
 
 bool Player::onMouseClickR(sf::Event* eventRef)
@@ -259,7 +264,7 @@ bool Player::onMouseClickR(sf::Event* eventRef)
 
 bool Player::onMouseReleaseL(sf::Event* eventRef)
 {
-	return (inventory.getActiveWeapon()->activate(ItemUse::CANCEL_LOAD) == UseResult::SUCCESS);
+	return (inventory.loadUpWeapon_cancel() == UseResult::SUCCESS);
 }
 
 float Player::onMouseScrolled(sf::Event* eventRef)
@@ -349,6 +354,11 @@ void Player::onCollision(IHasCollision* other)
 void Player::collideWithEnemy(Enemy& enemy)
 {
 	hurt(enemy.getDamage());
+
+	// Trigger perks
+	PerkTriggerInfo triggerInfo(PerkTrigger::OnEnemyContact, getPosition(), &enemy);
+
+	inventory.triggerPerks(triggerInfo);
 }
 
 void Player::collideWithProjectile(Projectile& projectile)
@@ -362,5 +372,16 @@ void Player::hurt(const float& delta)
 	{
 		IHasHealth::hurt(delta);
 		invincibility.fill_to_max();
+
+		// Trigger related Perks
+		PerkTriggerInfo triggerInfo(PerkTrigger::OnPlayerDamaged, getPosition());
+		inventory.triggerPerks(triggerInfo);
 	}
+}
+
+void Player::heal(const float& delta)
+{
+	IHasHealth::hurt(delta);
+	PerkTriggerInfo triggerInfo(PerkTrigger::OnPlayerHeal, getPosition());
+	inventory.triggerPerks(triggerInfo);
 }

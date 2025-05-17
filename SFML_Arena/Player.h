@@ -40,6 +40,7 @@ private:
 	using IMovable::setVelocity; // Make this function private
 
 	void tick_flashlight(const float&);
+	void tick_inv(const float&);
 	void tick_gameplay(const float&);
 	void tick_move(const float&) override;
 	void tick_health(const float&) override;
@@ -92,6 +93,7 @@ public:
 	}
 
 	void hurt(const float& delta) override;
+	void heal(const float& delta) override;
 
 	W_Hud& getHud()
 	{

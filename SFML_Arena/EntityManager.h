@@ -33,6 +33,8 @@ private:
 
 	static unsigned int numEnemies;
 	std::unique_ptr<EnemySpawnWave> spawnWave;
+	void onWaveStarted();
+	void onWaveEnded();
 
 	std::vector<RendererAndKeys> renderLayers = { RendererAndKeys(), RendererAndKeys()};
 	std::unordered_map<size_t, std::unique_ptr<Entity>> activeEntities; // Random Access to Entites

@@ -10,6 +10,7 @@ class Inventory
 {
 private:
     Player* owner = nullptr;
+
     // Store all acquired weapons.
     std::string startWeaponName;
     std::vector<std::unique_ptr<Weapon>> weapons;
@@ -17,9 +18,10 @@ private:
 
     // Level up System
     LevelSystem levelSystem;
+    unsigned int numLevelUpsQueued = 0;
+
     // Store all acquired perks.
     std::vector<std::unique_ptr<Perk>> perks;
-    unsigned int numLevelUpsQueued = 0;
 
     // Multipliers
     float cooldownMultiplier = 1.0f;
@@ -28,109 +30,70 @@ private:
     // Pickup configs
 	float MAGNETIC_DISTANCE = 200.0f; // Distance at which the player can pick up items
 
+    void addWeapon(std::unique_ptr<Weapon>);
+    void applyPerk(std::unique_ptr<Perk>);
+
 public:
     Inventory(Player*); // Always need to set the owning playerRef
-    Inventory(Player*, std::unique_ptr<Weapon>);
     ~Inventory() = default;
 
-	LevelSystem& getLevelSystem()
-	{
-		return levelSystem;
-	}
+    void tick(const float&);
 
-    void addQueuedLevelUp()
-    {
-        numLevelUpsQueued++;
-    }
-    void removeQueuedLevelUp()
-    {
-        if (numLevelUpsQueued > 0)
-            numLevelUpsQueued--;
-    }
-	unsigned int getNumQueuedLevelUps() const
-	{
-		return numLevelUpsQueued;
-	}
+    LevelSystem& getLevelSystem();
 
-    size_t getNumWeapons() const
-        { return weapons.size(); }
+    // Queued Level Ups
+    void addQueuedLevelUp();
+    void removeQueuedLevelUp();
+    unsigned int getNumQueuedLevelUps() const;
 
-    size_t getNumPerks() const
-        { return perks.size(); }
+    // Num of items
+    size_t getNumWeapons() const;
+    size_t getNumPerks() const;
 
-    void setCooldownMultiplier(const float& newMulti)
-        { cooldownMultiplier = newMulti; }
 
-    float getCooldownMultiplier() const
-        { return cooldownMultiplier; }
+    // Cooldown Multiplier
+    void setCooldownMultiplier(const float& newMulti);
+    float getCooldownMultiplier() const;
+    // Cooldown Subtractors (bias)
+    void setCooldownSubtractor(const float& newSub);
+    float getCooldownSubtractor() const;
 
-    void setCooldownSubtractor(const float& newSub)
-        { cooldownSubtractor = newSub; }
+    // Magnetic Range
+    void setMagneticRange(const float& newRange);
+    float getMagneticRange() const;
 
-    float getCooldownSubtractor() const
-        { return cooldownSubtractor; }
+    // Start Weapon
+    std::string getStartWeapon() const;
+    void setStartWeapon(const std::string& newWeaponName);
 
-    void setMagneticRange(const float& newRange)
-    {
-        MAGNETIC_DISTANCE = newRange;
-    }
+    // Add Items by their string identifier
+    void addWeapon_byName(const std::string& tag);
+    void addPerk_byTag(const std::string& tag);
 
-	float getMagneticRange() const
-	{
-		return MAGNETIC_DISTANCE;
-	}
+    // Removing items by index
+    std::unique_ptr<Weapon> removeWeapon(size_t index);
+    std::unique_ptr<Perk> removePerk(size_t index);
 
-    std::string getStartWeapon() const
-    {
-        return startWeaponName;
-    }
-
-    void setStartWeapon(const std::string& newWeaponName)
-    {
-        startWeaponName = newWeaponName;
-    }
-
-    // Adds a new weapon. If this is the first weapon, it becomes the active weapon.
-    void addWeapon(std::unique_ptr<Weapon>);
-
-    // Switches the active weapon by its index.
-    bool selectWeapon(size_t);
+    // Switches the active weapon by its index. (NOT USED IN THIS GAME)
+    bool selectWeapon(size_t index);
 
     // Returns a pointer to the current active weapon.
     Weapon* getActiveWeapon() const;
-
-    Player* getOwner()
-        { return owner; }
+    Player* getOwner();
 
     // Adds a new perk.
-    void addPerk(std::unique_ptr<Perk>);
-
     // This function should be called when an in-game event occurs to trigger all relevant perks.
     void triggerPerks(PerkTriggerInfo&);
 
-    // Removes a weapon by index and returns the unique pointer.
-    std::unique_ptr<Weapon> removeWeapon(size_t);
-
-    // Removes a perk by index and returns the unique pointer.
-    std::unique_ptr<Perk> removePerk(size_t);
+    // Interact with items
+    UseResult shootWeapon();
+    UseResult loadUpWeapon();
+    UseResult loadUpWeapon_cancel();
     
-    void clear_weapons()
-    {
-        weapons.clear();
-        activeWeaponIndex = -1;
-    }
-
-    void clear_perks()
-        { perks.clear(); }
-
-    void clear()
-    {
-        clear_perks();
-        clear_weapons();
-    }
+    // Clear and reset functions
+    void clear_weapons();
+    void clear_perks();
+    void clear_all();
 
     void reset();
-
-    // Optional: an update function to process inventory-related logic each frame.
-    void update(const float&);
 };

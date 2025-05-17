@@ -3,40 +3,33 @@
 #include "ItemBaseClasses.h"
 #include "Projectiles_Shotgun.h"
 
-class Shotgun : public Weapon
-{
+class Shotgun : public Weapon {
 private:
-	static constexpr float BASE_DAMAGE = 1.0f;
-	static constexpr float COOLDOWN = 1.0f;
+    static constexpr float BASE_DAMAGE = 1.0f;
+    static constexpr float BASE_COOLDOWN = 1.0f;
 
 public:
-	Shotgun()
-		:
-		Weapon(
-			ItemInfo("Shotgun", "Basic weapon, spread pattern"),	// ItemInfo
-			BASE_DAMAGE,											// Damage
-			std::make_unique<PS_Shotgun>(BASE_DAMAGE),				// ProjectileSpawner
-			std::make_unique<ValueBar>(COOLDOWN)					// Cooldown	
-		)
-	{
-	}
+    Shotgun()
+        : Weapon(
+            ItemInfo("Shotgun", "Basic weapon, spread pattern"),
+            BASE_DAMAGE,
+            std::make_unique<PS_Shotgun>(BASE_DAMAGE), // Assuming PS_Shotgun exists
+            std::make_unique<ValueBar>(BASE_COOLDOWN)
+        )
+    { }
 
-	UseResult activate(const ItemUse& use) override
-	{
-		switch (use)
-		{
-		case ItemUse::ATTACK:
-			if (Weapon::activate(use) < UseResult::SUCCESS)
-			{
-				break;
-			}
+    UseResult activate(const ItemUse& use) override {
+        switch (use) {
+        case ItemUse::ATTACK:
+            if (Weapon::activate(use) < UseResult::SUCCESS)
+                break;
 
-			projSpawner->shoot();
-			break;
-		default:
-			break;
-		}
+            projSpawner->shoot();
+            return UseResult::SUCCESS;
+        default:
+            break;
+        }
 
-		return UseResult::FAILURE;
-	}
+        return UseResult::FAILURE;
+    }
 };

@@ -256,6 +256,11 @@ Player* GI_Arena::getPlayer()
 	return getValidPlayer();
 }
 
+Inventory& GI_Arena::getInventory()
+{
+	return getPlayer()->getInventory();
+}
+
 bool GI_Arena::handleEvent(sf::Event* eventRef)
 {
 	if (activeMenu)

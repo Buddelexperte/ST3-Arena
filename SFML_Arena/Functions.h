@@ -28,37 +28,6 @@ std::shared_ptr<T> lockWeakPtr(const std::weak_ptr<T>& weakPtr)
 }
 
 // STRING -------------------------------------------------------------------------------------------
-inline std::string normalizeWeaponName(const std::string& name)
-{
-	std::string normalized;
-	bool lastWasSpace = true; // To collapse multiple spaces
-
-	for (char ch : name) {
-		// Convert to uppercase and replace underscores with spaces
-		if (ch == '_') ch = ' ';
-		if (std::isspace(ch)) {
-			if (!lastWasSpace) {
-				normalized.push_back(' '); // Only add one space
-				lastWasSpace = true;
-			}
-		}
-		else {
-			normalized.push_back(std::toupper(ch));
-			lastWasSpace = false;
-		}
-	}
-
-	// Trim leading and trailing spaces
-	if (!normalized.empty() && normalized.front() == ' ') {
-		normalized.erase(normalized.begin());
-	}
-	if (!normalized.empty() && normalized.back() == ' ') {
-		normalized.pop_back();
-	}
-
-	return normalized;
-}
-
 inline std::string toRoman(unsigned int number)
 {
 	static const std::pair<unsigned int, const char*> romanMap[] = {

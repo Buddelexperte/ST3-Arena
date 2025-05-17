@@ -1,6 +1,10 @@
-﻿#include "PerkFamilyTree.h"
+﻿#pragma once
+
+#include "PerkFamilyTree.h"
 #include <iostream>
 #include <array>
+
+#include "GameInstance.h"
 
 unsigned int PerkFamily_Tree::perkID = 0;
 
@@ -114,6 +118,9 @@ void PerkFamily_Tree::delegateEvents()
 
                 // Unmark previous path as hover messes up this part if not done manually
                 markParentNodesPath(info, false);
+
+                // Add the clicked perk (only not already selected ones are clickable, so no worries)
+                gameInstance().getInventory().addPerk_byTag(info->tag);
             };
     }
 }
@@ -138,23 +145,6 @@ PerkTree PerkFamily_Tree::getOffensiveTree()
 PerkTree PerkFamily_Tree::getDefensiveTree()
 {
     PerkNodeInfo* root = createPerkNodeInfo(++perkID, "def_root", "Defense Root", "Fortify your resilience.");
-
-    PerkNodeInfo* armorNode = createPerkNodeInfo(++perkID, "def_armor", "Hardened Skin", "Reduce incoming damage by 5%.");
-    PerkNodeInfo* healNode = createPerkNodeInfo(++perkID, "def_heal", "Second Wind", "Recover 10% HP after surviving a wave.");
-    PerkNodeInfo* barrierNode = createPerkNodeInfo(++perkID, "def_barrier", "Energy Barrier", "Gain a shield that absorbs 15 damage every 20 seconds.");
-
-    PerkNodeInfo* barrierRechargeNode = createPerkNodeInfo(++perkID, "def_barrier2", "Barrier Recharge", "Reduce shield cooldown by 5 seconds.");
-
-    // Fix duplicate tag - change the tag to make it unique
-    PerkNodeInfo* barrierAltNode = createPerkNodeInfo(++perkID, "def_barrier_alt2", "Barrier Amplify", "Increase shield absorption by 5 points.");
-
-    // Add children
-    barrierNode->children.push_back(barrierRechargeNode);
-    barrierNode->children.push_back(barrierAltNode);
-
-    root->children.push_back(armorNode);
-    root->children.push_back(healNode);
-    root->children.push_back(barrierNode);
 
     return root;
 }

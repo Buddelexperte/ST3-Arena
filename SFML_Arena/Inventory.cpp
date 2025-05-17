@@ -8,15 +8,8 @@ Inventory::Inventory(Player* playerRef)
 	: owner(playerRef),
     levelSystem(this), // Initialize the level system with a reference to this inventory
 	startWeaponName("StartWeapon") // Default starting weapon name
-    
 {
 
-}
-
-Inventory::Inventory(Player* playerRef, std::unique_ptr<Weapon> initialWeapon)
-    : Inventory(playerRef)
-{
-    addWeapon(std::move(initialWeapon));
 }
 
 // Adds a new weapon. If this is the first weapon, it becomes the active weapon.
@@ -29,6 +22,23 @@ void Inventory::addWeapon(std::unique_ptr<Weapon> weapon)
     weapons.push_back(std::move(weapon));
     if (activeWeaponIndex == -1)
         activeWeaponIndex = 0;
+}
+
+std::string Inventory::getStartWeapon() const
+{
+    return startWeaponName;
+}
+
+void Inventory::setStartWeapon(const std::string& newWeaponName)
+{
+    startWeaponName = newWeaponName;
+}
+
+void Inventory::addWeapon_byName(const std::string& name)
+{
+    std::unique_ptr<Weapon> weapon = makeWeapon(name);
+
+    addWeapon(std::move(weapon));
 }
 
 // Switches the active weapon by its index.
@@ -45,6 +55,44 @@ bool Inventory::selectWeapon(size_t index)
     return false;
 }
 
+UseResult Inventory::shootWeapon()
+{
+    Weapon* activeWeapon = getActiveWeapon();
+
+    if (activeWeapon == nullptr)
+        return UseResult::FAILURE;
+
+    UseResult result = activeWeapon->activate(ItemUse::ATTACK);
+
+    if (result >= UseResult::SUCCESS)
+    {
+        PerkTriggerInfo triggerInfo(PerkTrigger::OnWeaponShot, owner->getPosition());
+        triggerPerks(triggerInfo);
+    }
+
+    return result;
+}
+
+UseResult Inventory::loadUpWeapon()
+{
+    Weapon* activeWeapon = getActiveWeapon();
+
+    if (activeWeapon == nullptr)
+        return UseResult::FAILURE;
+
+    return activeWeapon->activate(ItemUse::LOAD_UP);
+}
+
+UseResult Inventory::loadUpWeapon_cancel()
+{
+    Weapon* activeWeapon = getActiveWeapon();
+
+    if (activeWeapon == nullptr)
+        return UseResult::FAILURE;
+
+    return activeWeapon->activate(ItemUse::CANCEL_LOAD);
+}
+
 // Returns a pointer to the current active weapon.
 Weapon* Inventory::getActiveWeapon() const
 {
@@ -53,14 +101,31 @@ Weapon* Inventory::getActiveWeapon() const
     return nullptr;
 }
 
+Player* Inventory::getOwner()
+{
+    return owner;
+}
+
+
+void Inventory::addPerk_byTag(const std::string& tag)
+{
+    std::unique_ptr<Perk> perk = makePerk(tag);
+
+    applyPerk(std::move(perk));
+}
+
 // Adds a new perk.
-void Inventory::addPerk(std::unique_ptr<Perk> perk)
+void Inventory::applyPerk(std::unique_ptr<Perk> perk)
 {
     if (!perk)
         return;
 
-    perk->setOwningInventory(this);
+    Perk* perk_ptr = perk.get();
+
     perks.push_back(std::move(perk));
+
+    perk_ptr->setOwningInventory(this);
+    perk_ptr->activate(ItemUse::ON_EQUIP);
 }
 
 // This function should be called when an in-game event occurs to trigger all relevant perks.
@@ -68,7 +133,7 @@ void Inventory::triggerPerks(PerkTriggerInfo& triggerInfo)
 {
     for (auto& perk : perks)
     {
-        perk->onTrigger(triggerInfo);
+        perk->tryTrigger(triggerInfo);
     }
 }
 
@@ -106,17 +171,100 @@ std::unique_ptr<Perk> Inventory::removePerk(size_t index)
     return removedPerk;
 }
 
+void Inventory::clear_weapons()
+{
+    weapons.clear();
+    activeWeaponIndex = -1;
+}
+
+void Inventory::clear_perks()
+{
+    perks.clear();
+}
+
+void Inventory::clear_all()
+{
+    clear_perks();
+    clear_weapons();
+}
+
 void Inventory::reset()
 {
 	levelSystem.reset();
-    clear();
-    // Get wepaon by StartWeaponName
-    std::unique_ptr<Weapon> startWeapon = makeWeapon(startWeaponName);
-    addWeapon(std::move(startWeapon));
+    clear_all();
+    // Add wepaon by StartWeaponName
+    addWeapon_byName(startWeaponName);
 }
 
 // Optional: an update function to process inventory-related logic each frame.
-void Inventory::update(const float& deltaTime)
+void Inventory::tick(const float& deltaTime)
 {
     // For example: check if weapons are reloading or if perk effects need updating.
+    static PerkTriggerInfo intervalTriggerInfo(PerkTrigger::OnInterval);
+
+    triggerPerks(intervalTriggerInfo);
 }
+
+LevelSystem& Inventory::getLevelSystem()
+{
+    return levelSystem;
+}
+
+void Inventory::addQueuedLevelUp()
+{
+    numLevelUpsQueued++;
+}
+
+void Inventory::removeQueuedLevelUp()
+{
+    if (numLevelUpsQueued > 0)
+    {
+        numLevelUpsQueued--;
+    }
+}
+
+unsigned int Inventory::getNumQueuedLevelUps() const
+{
+    return numLevelUpsQueued;
+}
+
+size_t Inventory::getNumWeapons() const
+{
+    return weapons.size();
+}
+
+size_t Inventory::getNumPerks() const
+{
+    return perks.size();
+}
+
+void Inventory::setCooldownMultiplier(const float& newMulti)
+{
+    cooldownMultiplier = newMulti;
+}
+
+float Inventory::getCooldownMultiplier() const
+{
+    return cooldownMultiplier;
+}
+
+void Inventory::setCooldownSubtractor(const float& newSub)
+{
+    cooldownSubtractor = newSub;
+}
+
+float Inventory::getCooldownSubtractor() const
+{
+    return cooldownSubtractor;
+}
+
+void Inventory::setMagneticRange(const float& newRange)
+{
+    MAGNETIC_DISTANCE = newRange;
+}
+
+float Inventory::getMagneticRange() const
+{
+    return MAGNETIC_DISTANCE;
+}
+

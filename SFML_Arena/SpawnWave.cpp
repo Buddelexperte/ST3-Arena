@@ -65,3 +65,19 @@ void EnemySpawnWave::spawnInterval()
         spawnEnemy();
 	}
 }
+
+EnemySpawnWave::EnemySpawnWave(float sInterval, unsigned int enemiesPerInterval, unsigned int maxIntervals, unsigned int maxEnemiesPerInterval)
+    : intervalTimer(sInterval),
+    enemiesPerInterval(enemiesPerInterval),
+    maxIntervals(maxIntervals),
+    maxEnemiesPerInterval(maxEnemiesPerInterval),
+    enemiesSpawned(0)
+{
+
+}
+
+EnemySpawnWave::EnemySpawnWave(float sInterval, unsigned int enemiesPerInterval, unsigned int maxIntervals)
+    : EnemySpawnWave(sInterval, enemiesPerInterval, maxIntervals, 20)
+{
+
+}

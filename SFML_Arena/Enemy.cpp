@@ -132,6 +132,9 @@ void Enemy::kill_self(const bool& bByPlayer = false)
 
 		spawnDeathParticle();
 		spawnExperience();
+
+		PerkTriggerInfo triggerInfo(PerkTrigger::OnEnemyKill, getPosition(), this);
+		gameInstance().getInventory().triggerPerks(triggerInfo);
 	}
 
 	Entity::kill_self();

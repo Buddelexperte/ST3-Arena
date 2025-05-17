@@ -22,22 +22,8 @@ private:
 	virtual void spawnEnemy();
 	virtual void spawnInterval();
 public:
-	EnemySpawnWave(float sInterval, unsigned int enemiesPerInterval, unsigned int maxIntervals, unsigned int maxEnemiesPerInterval)
-		: intervalTimer(sInterval),
-		enemiesPerInterval(enemiesPerInterval),
-		maxIntervals(maxIntervals),
-		maxEnemiesPerInterval(maxEnemiesPerInterval),
-		enemiesSpawned(0)
-	{
-
-	}
-
-	// TODO: remove this default 20 max enemies and replace with dynamic logic
-	EnemySpawnWave(float sInterval, unsigned int enemiesPerInterval, unsigned int maxIntervals)
-		: EnemySpawnWave(sInterval, enemiesPerInterval, maxIntervals, 20)
-	{
-
-	}
+	EnemySpawnWave(float sInterval, unsigned int enemiesPerInterval, unsigned int maxIntervals, unsigned int maxEnemiesPerInterval);
+	EnemySpawnWave(float sInterval, unsigned int enemiesPerInterval, unsigned int maxIntervals);
 	~EnemySpawnWave() = default;
 
 	void tick_timer(const float& deltaTime)

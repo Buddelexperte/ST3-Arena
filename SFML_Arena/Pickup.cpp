@@ -17,5 +17,9 @@ void Pickup::onCollision(IHasCollision* other)
 void Pickup::collideWithPlayer(Player& player)
 {
 	onPickup();
+
+	PerkTriggerInfo triggerInfo(PerkTrigger::OnItemPickup, getPosition(), this);
+	gameInstance().getInventory().triggerPerks(triggerInfo);
+
 	kill_self();
 }

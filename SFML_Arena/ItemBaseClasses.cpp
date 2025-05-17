@@ -4,7 +4,17 @@
 #include "Inventory.h"
 #include "AllPerks.h"
 
-// TODO: Make Weapon, enemy and other attributes read from a file
+Weapon::Weapon(const ItemInfo& info, const float& damage, std::unique_ptr<ProjectileSpawner> ps, std::unique_ptr<ValueBar> cd)
+    :
+    Item(info),
+    damage(damage),
+    projSpawner(std::move(ps)),
+    cooldown(std::move(cd))
+{
+    cooldown->setValue(cooldown->getMaxValue() + 0.5f);
+    // Weapons are considered "ready" by default
+    bReady = true;
+}
 
 UseResult Weapon::activate(const ItemUse& use)
 {
@@ -58,6 +68,38 @@ const std::vector<StringWeapon> weaponMappings = {
     {"RIFLE_BURST", BURST_RIFLE}
 };
 
+std::string normalizeWeaponName(const std::string& name)
+{
+    std::string normalized;
+    bool lastWasSpace = true; // To collapse multiple spaces
+
+    for (char ch : name) {
+        // Convert to uppercase and replace underscores with spaces
+        if (ch == '_') ch = ' ';
+        if (std::isspace(ch))
+        {
+            if (!lastWasSpace)
+            {
+                normalized.push_back(' '); // Only add one space
+                lastWasSpace = true;
+            }
+        }
+        else {
+            normalized.push_back(std::toupper(ch));
+            lastWasSpace = false;
+        }
+    }
+
+    // Trim leading and trailing spaces
+    if (!normalized.empty() && normalized.front() == ' ') {
+        normalized.erase(normalized.begin());
+    }
+    if (!normalized.empty() && normalized.back() == ' ') {
+        normalized.pop_back();
+    }
+
+    return normalized;
+}
 
 WeaponType getWeaponTypeFromText(const std::string& buttonText)
 {
@@ -96,5 +138,75 @@ std::unique_ptr<Weapon> makeWeapon(const std::string& selectWeaponText)
 
 std::unique_ptr<Perk> makePerk(const std::string& tag)
 {
-    return std::unique_ptr<Perk>();
+    static const std::unordered_map<std::string, std::function<std::unique_ptr<Perk>()>> perkFactory = {
+        // Offensive
+        {"off_root", [] { return std::make_unique<POff_Root>(); }},
+        {"off_crit", [] { return std::make_unique<POff_Crit>(); }},
+        {"off_dot", [] { return std::make_unique<POff_DOT>(); }},
+        {"off_dot_upgrade", [] { return std::make_unique<POff_DOT_Upgrade>(); }},
+        // Defense
+        {"def_root", [] { return std::make_unique<PDef_Root>(); }},
+        // Utility
+        {"util_root", [] { return std::make_unique<PUtil_Root>(); }},
+        {"util_speed", [] { return std::make_unique<PUtil_Speed>(); }},
+        {"util_reload", [] { return std::make_unique<PUtil_Reload>(); }},
+        {"util_scan", [] { return std::make_unique<PUtil_Scan>(); }},
+        {"util_scan2", [] { return std::make_unique<PUtil_Scan2>(); }},
+        // Support
+        {"sup_root", [] { return std::make_unique<PSup_Root>(); }},
+        {"sup_heal_aura", [] { return std::make_unique<PSup_HealAura>(); }},
+        {"sup_ammo", [] { return std::make_unique<PSup_Ammo>(); }},
+        {"sup_revive", [] { return std::make_unique<PSup_Revive>(); }},
+        {"sup_revive2", [] { return std::make_unique<PSup_Revive2>(); }}
+    };
+
+    auto it = perkFactory.find(tag);
+    return (it != perkFactory.end()) ? it->second() : nullptr;
+}
+
+Perk::Perk(const ItemInfo& itemInfo, const std::unordered_set<PerkTrigger>& triggers)
+    : Item(itemInfo), triggers(triggers)
+{
+    // Perks are always active/passive once acquired.
+    bReady = true;
+}
+
+UseResult Perk::activate(const ItemUse& use)
+{
+    switch (use)
+    {
+    case ItemUse::ON_EQUIP:
+        onEquip();
+        return UseResult::SUCCESS;
+    default:
+        break;
+    }
+
+    return UseResult::FAILURE;
+}
+
+void Perk::tryTrigger(PerkTriggerInfo& triggerInfo)
+{
+    const PerkTrigger trigger = triggerInfo.trigger;
+    if (triggers.contains(trigger)) // Ff trigger is in unordered_set
+    {
+        std::cout << "Perk \"" << info.name << "\" triggered on event: ";
+        switch (trigger)
+        {
+        case PerkTrigger::OnEnemyContact:
+            onEnemyContact();
+            break;
+        case PerkTrigger::OnPlayerDamaged:
+            onPlayerDamaged();
+            break;
+        case PerkTrigger::OnWeaponShot:
+            onWeaponShot();
+            break;
+        case PerkTrigger::OnEnemyGotHit:
+            break;
+        default:
+            std::cout << "Unknown Trigger";
+            break;
+        }
+    }
 }
