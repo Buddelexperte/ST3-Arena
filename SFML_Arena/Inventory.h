@@ -23,6 +23,15 @@ private:
     // Store all acquired perks.
     std::vector<std::unique_ptr<Perk>> perks;
 
+    // Shield invincibility (seperate from after getting hurt)
+    static constexpr bool DEFAULT_INVINCIBILITY = false;
+    bool bIsInvincible = DEFAULT_INVINCIBILITY;
+
+    // Invincible after getting hurt
+    static constexpr float SPAWN_INVI = 2.0f; // 2 seconds
+    static constexpr float DEFAULT_HURT_FREQ = 0.5f; // 2 seconds
+    ValueBar hurtTimer;
+
     // Cooldown
     static constexpr float DEFAULT_COOLDOWN_MULTIPLIER = 1.0f;
     float cooldownMultiplier = DEFAULT_COOLDOWN_MULTIPLIER;
@@ -63,6 +72,17 @@ public:
     // Num of items
     size_t getNumWeapons() const;
     size_t getNumPerks() const;
+
+    // Shield
+    void setInvincible(const bool& newVal);
+    bool getIsInvincible() const;
+
+    // Invincibility
+    void setHurtFreq(const float& newVal);
+    void fillHurtFreq();
+    void setTimedInvincibility(const float& delay);
+    float getHurtFreq() const;
+    bool canBeHurt() const;
 
     // Cooldown Multiplier
     void setCooldownMultiplier(const float& newMulti);

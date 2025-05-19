@@ -26,7 +26,11 @@ public:
 
 	virtual void heal(const float& delta)
 	{
-		getHealthBar().addValue(delta);
+		if (getHealth() + delta > getMaxHealth())
+			setHealth(getMaxHealth());
+		else 
+			getHealthBar().addValue(delta);
+
 		onHealthChanged();
 	}
 

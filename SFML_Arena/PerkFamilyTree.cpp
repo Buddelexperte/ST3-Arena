@@ -102,6 +102,8 @@ void PerkFamily_Tree::delegateEvents()
                 PerkNodeInfo* info = button->getNodeInfo();
 
                 markParentNodesPath(info, false);
+
+                button->setColor(button->getButtonData().color);
             };
 
         node->onClick = [this, button = node.get()]()
@@ -174,10 +176,10 @@ PerkTree PerkFamily_Tree::getSupportTree()
     PerkNodeInfo* root = createPerkNodeInfo(++perkID, "sup_root", "Support Root", "Empower allies and enhance the battlefield.");
 
     PerkNodeInfo* healAuraNode = createPerkNodeInfo(++perkID, "sup_heal_aura", "Healing Aura", "Nearby allies regenerate 2% HP per second.");
-    PerkNodeInfo* ammoNode = createPerkNodeInfo(++perkID, "sup_ammo", "Ammo Dispenser", "Allies gain extra ammo on wave start.");
-    PerkNodeInfo* reviveNode = createPerkNodeInfo(++perkID, "sup_revive", "Quick Revive", "Revive allies 50% faster.");
+    PerkNodeInfo* ammoNode = createPerkNodeInfo(++perkID, "sup_vampire", "Ammo Dispenser", "Allies gain extra ammo on wave start.");
+    PerkNodeInfo* reviveNode = createPerkNodeInfo(++perkID, "sup_shield", "Quick Revive", "Revive allies 50% faster.");
 
-    PerkNodeInfo* reviveUpgradeNode = createPerkNodeInfo(++perkID, "sup_revive2", "Lifeline", "Grants temporary invincibility on revive.");
+    PerkNodeInfo* reviveUpgradeNode = createPerkNodeInfo(++perkID, "sup_double_life", "Lifeline", "Grants temporary invincibility on revive.");
 
     // Add children
     reviveNode->children.push_back(reviveUpgradeNode);

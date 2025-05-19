@@ -155,9 +155,9 @@ std::unique_ptr<Perk> makePerk(const std::string& tag)
         // Support
         {"sup_root", [] { return std::make_unique<PSup_Root>(); }},
         {"sup_heal_aura", [] { return std::make_unique<PSup_HealAura>(); }},
-        {"sup_ammo", [] { return std::make_unique<PSup_Ammo>(); }},
-        {"sup_revive", [] { return std::make_unique<PSup_Revive>(); }},
-        {"sup_revive2", [] { return std::make_unique<PSup_Revive2>(); }}
+        {"sup_vampire", [] { return std::make_unique<PSup_Vampire>(); }},
+        {"sup_shield", [] { return std::make_unique<PSup_Shield>(); }},
+        {"sup_double_life", [] { return std::make_unique<PSup_DoubleLife>(); }}
     };
 
     auto it = perkFactory.find(tag);

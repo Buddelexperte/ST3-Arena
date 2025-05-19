@@ -319,7 +319,7 @@ void GI_Arena::launchGame()
 	resetViewPos();
 }
 
-void GI_Arena::startRound()
+void GI_Arena::startRound() // Gets called from Gameplay Widget
 {
 	// Only activate Gameplay phase when at least launch phase
 	if (gameState != GAME_LAUNCHING)
@@ -552,5 +552,5 @@ void GI_Arena::setUseWidgetParallax(bool bWidgetParallax)
 
 bool GI_Arena::getIsDebugMode() const
 {
-	return std::filesystem::exists(devPath);
+	return std::filesystem::exists(devPath); // Check for real-time changes
 }

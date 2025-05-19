@@ -8,6 +8,7 @@ void HealthBar::tick_bar(const float& deltaTime)
 	// Get players health
 	Player* playerRef = gameInstance().getPlayer();
 	float playerHealth = playerRef->getHealth();
+	float playerMaxHealth = playerRef->getMaxHealth();
 
 	// Update string displayed only if displayed health is different from actual health
 	if (playerHealth != displayedHealth)
@@ -20,7 +21,7 @@ void HealthBar::tick_bar(const float& deltaTime)
 	}
 
 	// Get needed width for life bar
-	float newLifeBarWidth = maxHealthBarWidth * playerHealth;
+	float newLifeBarWidth = maxHealthBarWidth * (playerHealth / playerMaxHealth);
 	newLifeBarWidth = std::clamp(newLifeBarWidth, 0.0f, maxHealthBarWidth);
 
 	float factor = lerpFactor(deltaTime, LERP_SMOOTHNESS);

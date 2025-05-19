@@ -9,6 +9,8 @@
 #include "Input.h"
 #include "Entity.h"
 
+#include "C_ColorFade.h"
+
 // PLAYER -----------------------------------------------------------------------------------------
 
 class Player : 
@@ -18,7 +20,6 @@ class Player :
 	public IHasInput
 {
 private:
-
 	// Collision
 	static const inline sf::Vector2f HITBOX_SIZE = sf::Vector2f(80.0f, 80.0f);
 	CollisionBox collisionBox;
@@ -26,9 +27,6 @@ private:
 	W_Hud hud;
 	Flashlight flashlight;
 	Inventory inventory;
-
-	// Health bar
-	ValueBar invincibility;
 
 	// Animation
 	sf::Sprite playerSprite;
@@ -40,11 +38,14 @@ private:
 	using IMovable::setVelocity; // Make this function private
 
 	void tick_flashlight(const float&);
-	void tick_inv(const float&);
 	void tick_gameplay(const float&);
 	void tick_move(const float&) override;
 	void tick_health(const float&) override;
 	void tick_animation(const float&);
+	void tick_color(const float&);
+
+	ColorFade playerFade;
+	static const inline sf::Color SHIELD_COLOR = sf::Color(100, 112, 255);
 
 protected:
 	sf::Keyboard::Key onKeyPressed(sf::Event*) override;
@@ -85,7 +86,16 @@ public:
 	void collideWithEnemy(Enemy& enemy) override;
 	void collideWithProjectile(Projectile& projectile) override;
 
+	void activateShield();
+	void breakShield();
+
 	// Health
+	void resetHealth(const float& newMax)
+	{
+		IHasHealth::resetHealth(newMax);
+		hud.reset_health();
+	}
+
 	void resetHealth() override
 	{
 		IHasHealth::resetHealth();

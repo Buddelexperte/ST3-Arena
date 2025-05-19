@@ -180,9 +180,9 @@ enum class PerkTrigger
     OnPlayerHeal,               // When the player receives healing
 
     OnWeaponShot,               // When a weapon is fired
-    OnWeaponHit,                 // When a weapon hits an enemy (successful damage application)
-    OnEnemyGotHit,                // When an enemy is killed
-    OnEnemyKilled,                // When an enemy is killed
+    OnWeaponHit,                // When a weapon hits an enemy (successful damage application)
+    OnEnemyGotHit,              // When an enemy is killed
+    OnEnemyKilled,              // When an enemy is killed
 
     OnItemPickup,               // When picking up any item (ammo, health, power-up, etc.)
 

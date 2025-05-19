@@ -1,11 +1,19 @@
 #pragma once
 
 #include "ItemBaseClasses.h"
+#include "GameInstance.h"
 
 class PUtil_Root : public Perk
 {
-	static const inline ItemInfo INFO = ItemInfo("Utility Root Perk");
+	static const inline ItemInfo INFO = ItemInfo("Utility Root Perk", "Increases time between hits taken to 1 second");
 	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {};
+
+	static constexpr float NEW_HURT_INVI = 1.0f;
+
+	void onEquip() override
+	{
+		gameInstance().getInventory().setHurtFreq(NEW_HURT_INVI);
+	}
 
 public:
 	PUtil_Root() : Perk(INFO, TRIGGERS) {}

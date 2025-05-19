@@ -1,12 +1,20 @@
 #pragma once
 
 #include "ItemBaseClasses.h"
+#include "GameInstance.h"
 
 class PSup_Root : public Perk
 {
 private:
-	static const inline ItemInfo INFO = ItemInfo("Support Root Perk");
+	static const inline ItemInfo INFO = ItemInfo("Support Root Perk", "Increase your max hp from 100-125hp");
 	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {};
+
+	static constexpr float newMaxHp = 1.25f;
+
+	void onEquip() override
+	{
+		gameInstance().getPlayer()->resetHealth(newMaxHp);
+	}
 
 public: 
 	PSup_Root() : Perk(INFO, TRIGGERS) {}
@@ -16,38 +24,108 @@ class PSup_HealAura : public Perk
 {
 private:
 	static const inline ItemInfo INFO = ItemInfo("Heal Aura Perk");
-	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {};
+	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {PerkTrigger::OnInterval};
+
+	static constexpr float healAmount = 0.05f; // 5 hp
+	static constexpr float healDelay = 1.0f; // 1 second
+	ValueBar healTimer;
+
+	void onInterval(const float& deltaTime) override
+	{
+		healTimer.addValue(-deltaTime);
+
+		if (healTimer.isEmpty())
+		{
+			healTimer.fill_to_max();
+
+			gameInstance().getPlayer()->heal(healAmount);
+		}
+	}
 
 public: 
-	PSup_HealAura() : Perk(INFO, TRIGGERS) {}
+	PSup_HealAura() : Perk(INFO, TRIGGERS), healTimer(healDelay) {}
 };
 
-class PSup_Ammo : public Perk
+class PSup_Vampire : public Perk
 {
 private:
-	static const inline ItemInfo INFO = ItemInfo("Ammo Regen Perk");
-	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {};
+	static const inline ItemInfo INFO = ItemInfo("Vampire Perk", "Receive 20% of an enemies health upon killing it");
+	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {PerkTrigger::OnEnemyKilled};
+
+	static constexpr float lifeFraction = 0.2f;
+
+	void onEnemyKilled(PerkTriggerInfo& triggerInfo) override
+	{
+		Entity* entity = triggerInfo.actor;
+		if (entity != nullptr)
+		{
+			IHasHealth* healthEntity = dynamic_cast<IHasHealth*>(entity);
+			float healValue = healthEntity->getMaxHealth() * lifeFraction;
+			gameInstance().getPlayer()->heal(healValue);
+		}
+	}
 
 public: 
-	PSup_Ammo() : Perk(INFO, TRIGGERS) {}
+	PSup_Vampire() : Perk(INFO, TRIGGERS) {}
 };
 
-class PSup_Revive : public Perk
+class PSup_Shield : public Perk
 {
 private:
-	static const inline ItemInfo INFO = ItemInfo("Revive Ally Perk");
-	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {};
+	static const inline ItemInfo INFO = ItemInfo("Passive Shield Perk");
+	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {PerkTrigger::OnInterval, PerkTrigger::OnEnemyContact};
+
+	static constexpr float shieldRegenTime = 5.0f;
+	ValueBar shieldTimer;
+	bool bShieldActive = false;
+
+	void onInterval(const float& deltaTime) override
+	{
+		if (bShieldActive)
+			return;
+
+		shieldTimer.addValue(-deltaTime);
+
+		if (shieldTimer.isEmpty())
+		{
+			shieldTimer.fill_to_max();
+
+			bShieldActive = true;
+			gameInstance().getPlayer()->activateShield();
+		}
+	}
+
+	void onEnemyContact(PerkTriggerInfo& triggerInfo) override
+	{
+		// Break shield if it was active to allow damage to come in again
+		if (bShieldActive)
+		{
+			bShieldActive = false;
+			gameInstance().getPlayer()->breakShield();
+		}
+
+		// If shield was not already active, reset timer for activation 
+		shieldTimer.fill_to_max();
+	}
 
 public: 
-	PSup_Revive() : Perk(INFO, TRIGGERS) {}
+	PSup_Shield() : Perk(INFO, TRIGGERS), shieldTimer(shieldRegenTime) {}
 };
 
-class PSup_Revive2 : public Perk
+class PSup_DoubleLife : public Perk
 {
 private:
-	static const inline ItemInfo INFO = ItemInfo("Advanced Revive Perk");
+	static const inline ItemInfo INFO = ItemInfo("Advanced Revive Perk", "Increase your hp to double the original value!");
 	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {};
 
+	static constexpr float newMaxHp = 2.0f;
+
+	void onEquip() override
+	{
+		Player* player = gameInstance().getPlayer();
+		player->resetHealth(newMaxHp);
+	}
+
 public: 
-	PSup_Revive2() : Perk(INFO, TRIGGERS) {}
+	PSup_DoubleLife() : Perk(INFO, TRIGGERS) {}
 };

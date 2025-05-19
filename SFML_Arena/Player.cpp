@@ -12,13 +12,13 @@ Player::Player()
 	Entity(EntityType::Player),
 	inventory(this), // Player inventory
 	hud(nullptr), // Player HUD (no owner)
-	invincibility(0.5f), // 0.5 seconds of invincibility after hit
 	collisionBox(this, getPosition(), HITBOX_SIZE) // Collision box centered on player, hals as big as sprite
 {
 	std::cout << "### Creating player controller + pawn" << std::endl;
 	// Player Sprite Initialization
 	setPosition(viewCenter);
 	setColor(sf::Color::White);
+	playerFade.reset(ColorColor(sf::Color::White, sf::Color::White), SCREEN_FADE_DURATION, easing::quad::in);
 
 	enableCollision();
 	std::cout << "- Player collision configured" << std::endl;
@@ -65,7 +65,9 @@ void Player::spawn()
 	flashlight.setMaskMode(Flashlight::Type::CIRCLE);
 	inventory.reset();
 	resetHealth(); // 100% hp
-	invincibility.setValue(2.0f); // 2 seconds invincibility (Spawn protection)
+
+	static constexpr float SPAW_PROTECTION = 2.0f; // 2 seconds of no damage from inital spawn
+	inventory.setTimedInvincibility(SPAW_PROTECTION);
 }
 
 void Player::spawn(SpawnInformation spawnInfo)
@@ -81,8 +83,8 @@ void Player::tick(const float& deltaTime)
 	// Flashlight tick
 	tick_flashlight(deltaTime);
 
-	// Tick inventory
-	tick_inv(deltaTime);
+	// Tick color fading (is more complex than in other classes)
+	tick_color(deltaTime);
 }
 
 void Player::tick_flashlight(const float& deltaTime)
@@ -93,11 +95,6 @@ void Player::tick_flashlight(const float& deltaTime)
 	{
 		flashlight.tick(deltaTime);
 	}
-}
-
-void Player::tick_inv(const float& deltaTime)
-{
-	inventory.tick(deltaTime);
 }
 
 void Player::tick_gameplay(const float& deltaTime)
@@ -115,10 +112,8 @@ void Player::tick_gameplay(const float& deltaTime)
 	tick_animation(deltaTime); // Animation update
 	tick_health(deltaTime);
 
-
 	// Component gameplay ticks
-	invincibility.addValue(-deltaTime); // Invinvibility update
-	inventory.getActiveWeapon()->tick(deltaTime); // Weapon cooldown update
+	inventory.tick(deltaTime); // Weapon cooldown update
 }
 
 void Player::tick_move(const float& deltaTime)
@@ -196,6 +191,11 @@ void Player::tick_animation(const float& deltaTime)
 			animationAccu -= animationSpeed;
 		}
 	}
+}
+
+void Player::tick_color(const float& deltaTime)
+{
+	setColor(playerFade.fade(deltaTime));
 }
 
 void Player::releaseToPool()
@@ -341,9 +341,9 @@ void Player::setSize(const sf::Vector2f& newSize)
 
 void Player::setColor(const sf::Color& newColor)
 {
-	IMovable::setColor(sf::Color::White);
+	IMovable::setColor(newColor);
 
-	playerSprite.setColor(sf::Color::White);
+	playerSprite.setColor(newColor);
 }
 
 void Player::onCollision(IHasCollision* other)
@@ -353,11 +353,13 @@ void Player::onCollision(IHasCollision* other)
 
 void Player::collideWithEnemy(Enemy& enemy)
 {
-	hurt(enemy.getDamage());
-
-	// Trigger perks
+	if (!inventory.getIsInvincible())
+	{
+		hurt(enemy.getDamage());
+	}
+	
+	// Trigger perks (after damage applied)
 	PerkTriggerInfo triggerInfo(PerkTrigger::OnEnemyContact, getPosition(), &enemy);
-
 	inventory.triggerPerks(triggerInfo);
 }
 
@@ -366,14 +368,35 @@ void Player::collideWithProjectile(Projectile& projectile)
 	// Empty for now (probably for long)
 }
 
+void Player::activateShield()
+{
+	inventory.setInvincible(true);
+
+	playerFade.reset(ColorColor(sf::Color::White, SHIELD_COLOR), SCREEN_FADE_DURATION, easing::quad::inOut);
+
+	std::cout << "SHIELD ACTIVATED!" << std::endl;
+}
+
+void Player::breakShield()
+{
+	inventory.setInvincible(false);
+	inventory.fillHurtFreq(); // Give player normal invincibility as if they have been hit (wouldn't do anything if not done)
+
+	playerFade.reset(ColorColor(SHIELD_COLOR, sf::Color::White), 0.1f, easing::expo::in);
+
+	std::cout << "SHIELD BROKE!" << std::endl;
+}
+
 void Player::hurt(const float& delta)
 {
-	if (invincibility.isEmpty())
+	if (inventory.canBeHurt())
 	{
 		const float actualDelta = (delta + inventory.getHurtBias()) * inventory.getHurtMultiplier();
 
 		IHasHealth::hurt(actualDelta);
-		invincibility.fill_to_max();
+		inventory.fillHurtFreq();
+
+		playerFade.reset(ColorColor(sf::Color::Red, sf::Color::White), SCREEN_FADE_DURATION, easing::smootherstep);
 
 		// Trigger related Perks
 		PerkTriggerInfo triggerInfo(PerkTrigger::OnPlayerDamaged, getPosition());
@@ -383,7 +406,7 @@ void Player::hurt(const float& delta)
 
 void Player::heal(const float& delta)
 {
-	IHasHealth::hurt(delta);
+	IHasHealth::heal(delta);
 	PerkTriggerInfo triggerInfo(PerkTrigger::OnPlayerHeal, getPosition());
 	inventory.triggerPerks(triggerInfo);
 }

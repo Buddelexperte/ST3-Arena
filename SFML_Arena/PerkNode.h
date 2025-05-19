@@ -10,6 +10,7 @@ protected:
 	{
 		return sf::Color::Yellow;
 	}
+
 private:
 	static const inline sf::Vector2f NODE_SIZE = sf::Vector2f(120.0f, 120.0f); // Size of the node
 

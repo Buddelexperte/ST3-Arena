@@ -7,6 +7,7 @@
 Inventory::Inventory(Player* playerRef)
 	: owner(playerRef),
     levelSystem(this), // Initialize the level system with a reference to this inventory
+    hurtTimer(DEFAULT_HURT_FREQ),
 	startWeaponName("StartWeapon") // Default starting weapon name
 {
 
@@ -196,18 +197,23 @@ void Inventory::reset()
     // Add wepaon by StartWeaponName
     addWeapon_byName(startWeaponName);
 
-    setCooldownMultiplier(DEFAULT_COOLDOWN_MULTIPLIER);
-    setCooldownSubtractor(DEFAULT_COOLDOWN_SUBTRACTOR);
-    setHurtBias(DEFAULT_HURT_BIAS);
-    setHurtMultiplier(DEFAULT_HURT_MULTIPLIER);
-    setMagneticRange(DEFAULT_MAGNETIC_DISTANCE);
+    cooldownMultiplier  = DEFAULT_COOLDOWN_MULTIPLIER;
+    cooldownSubtractor  = DEFAULT_COOLDOWN_SUBTRACTOR;
+    hurtBias            = DEFAULT_HURT_BIAS;
+    hurtMultiplier      = DEFAULT_HURT_MULTIPLIER;
+    magneticDistance    = DEFAULT_MAGNETIC_DISTANCE;
+    setHurtFreq(DEFAULT_HURT_FREQ);
 
-    numLevelUpsQueued = 0;
+    numLevelUpsQueued   = 0;
 }
 
 // Optional: an update function to process inventory-related logic each frame.
 void Inventory::tick(const float& deltaTime)
 {
+    hurtTimer.addValue(-deltaTime);
+
+    getActiveWeapon()->tick(deltaTime);
+
     // For example: check if weapons are reloading or if perk effects need updating.
     static PerkTriggerInfo intervalTriggerInfo(PerkTrigger::OnInterval);
 
@@ -249,6 +255,41 @@ size_t Inventory::getNumWeapons() const
 size_t Inventory::getNumPerks() const
 {
     return perks.size();
+}
+
+void Inventory::setInvincible(const bool& newVal)
+{
+    bIsInvincible = newVal;
+}
+
+bool Inventory::getIsInvincible() const
+{
+    return bIsInvincible;
+}
+
+void Inventory::setHurtFreq(const float& newVal)
+{
+    hurtTimer.setMaxValue(newVal);
+}
+
+void Inventory::fillHurtFreq()
+{
+    hurtTimer.fill_to_max();
+}
+
+void Inventory::setTimedInvincibility(const float& delay)
+{
+    hurtTimer.setValue(delay);
+}
+
+float Inventory::getHurtFreq() const
+{
+    return hurtTimer.getMaxValue();
+}
+
+bool Inventory::canBeHurt() const
+{
+    return hurtTimer.isEmpty();
 }
 
 void Inventory::setCooldownMultiplier(const float& newMulti)
