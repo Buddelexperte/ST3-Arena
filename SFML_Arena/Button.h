@@ -31,7 +31,6 @@ private:
 
 	void playButtonSound() const;
 
-
 	// Button Animations
 	virtual void start_onHoverAnim() override; // On Hover
 	virtual void tick_onHoverAnim(const float&) override;
@@ -44,8 +43,8 @@ private:
 	virtual void unhover();
 	virtual void click();
 
-
 protected:
+
 	sf::RectangleShape B_Box;
 	ColorFade boxFade;
 
@@ -62,6 +61,11 @@ protected:
 	virtual const sf::Color getHoverColor() const
 	{
 		return buttonData.color - getHoverDelta();
+	}
+
+	virtual const sf::Color getBeforeHoverColor() const
+	{
+		return buttonData.color;
 	}
 
 public:

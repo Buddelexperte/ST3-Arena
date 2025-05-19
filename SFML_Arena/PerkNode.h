@@ -5,23 +5,26 @@
 
 class PerkNode : public Button
 {
-protected:
-	virtual const sf::Color getHoverColor() const override
+private:
+	const sf::Color getHoverColor() const override
 	{
 		return sf::Color::Yellow;
 	}
 
-private:
+	const sf::Color getBeforeHoverColor() const
+	{
+		return getNodeColor(nodeInfo);
+	}
+
 	static const inline sf::Vector2f NODE_SIZE = sf::Vector2f(120.0f, 120.0f); // Size of the node
 
 	PerkNodeInfo* nodeInfo; // Information about this perk node
-	const sf::Color getNodeColor(const PerkNodeInfo*)
+	const sf::Color getNodeColor(const PerkNodeInfo*) const
 	{
-		sf::Color nodeColor = sf::Color(100, 20, 20, 255);
+		static const sf::Color blockedColor = sf::Color(100, 20, 20, 255);
 
-		if (nodeInfo->isPathHovered)
-			return sf::Color::Yellow;
-
+		sf::Color nodeColor = blockedColor;
+		
 		if (nodeInfo->bUnlocked)
 			nodeColor = sf::Color::White;
 
@@ -31,6 +34,7 @@ private:
 		return nodeColor;
 
 	}
+	
 
 	const bool getShouldDisable(const PerkNodeInfo*)
 	{
@@ -70,8 +74,22 @@ public:
 		if (!nodeInfo)
 			return;
 
-		setColor(getNodeColor(nodeInfo));
-		setEnabled(!getShouldDisable(nodeInfo));
+		sf::Color nodeColor = getNodeColor(nodeInfo);
+		setColor(nodeColor);
+
+		bool enableNode = !getShouldDisable(nodeInfo);
+		setEnabled(enableNode);
+
+		if (nodeInfo->isPathHovered)
+		{
+			stopAnim(EAnimation::ON_UNHOVER);
+			playAnim(EAnimation::ON_HOVER);
+		}
+		else
+		{
+			stopAnim(EAnimation::ON_HOVER);
+			playAnim(EAnimation::ON_UNHOVER);
+		}
 	}
 
 	void setNodeInfo(PerkNodeInfo* info)

@@ -468,10 +468,7 @@ bool Button::isMouseOver(const bool& checkForClick)
     // If mouse not overlapping hitbox
     if (!isMouseOver)
     {
-        // Unhovering, if hovered before this check
-        if (bHovered)
-            unhover();
-
+        unhover();
         return false;
     }
 
@@ -485,11 +482,7 @@ bool Button::isMouseOver(const bool& checkForClick)
     if (checkForClick)
         click();
 
-    if (bHovered == false) // Else only call for onHover() if not already hovering
-    {
-        hover();
-    }
-
+    hover();
     return true;
 }
 
@@ -530,7 +523,7 @@ void Button::tick_onUnhoverAnim(const float& deltaTime)
     if (boxFade.done())
     {
         stopAnim(ON_UNHOVER);
-        B_Box.setFillColor(getButtonData().color);
+        B_Box.setFillColor(getBeforeHoverColor());
     }
 }
 
@@ -546,6 +539,7 @@ void Button::tick_onClickAnim(const float&)
 
 void Button::hover()
 {
+    if (bHovered) return;
     bHovered = true;
     stopAnim(EAnimation::ON_UNHOVER);
     playAnim(EAnimation::ON_HOVER);
@@ -554,6 +548,7 @@ void Button::hover()
 
 void Button::unhover()
 {
+    if (!bHovered) return;
     bHovered = false;
     stopAnim(EAnimation::ON_HOVER);
     playAnim(EAnimation::ON_UNHOVER);

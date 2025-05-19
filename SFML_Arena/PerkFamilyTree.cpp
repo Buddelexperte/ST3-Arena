@@ -93,17 +93,13 @@ void PerkFamily_Tree::delegateEvents()
         node->onHover = [this, button = node.get()]()
             {
                 PerkNodeInfo* info = button->getNodeInfo();
-
                 markParentNodesPath(info, true);
             };
 
         node->onUnhover = [this, button = node.get()]()
             {
                 PerkNodeInfo* info = button->getNodeInfo();
-
                 markParentNodesPath(info, false);
-
-                button->setColor(button->getButtonData().color);
             };
 
         node->onClick = [this, button = node.get()]()
@@ -118,7 +114,6 @@ void PerkFamily_Tree::delegateEvents()
                 // Unlock children if selected
                 unlockChildrenNodes(info);
 
-                // Unmark previous path as hover messes up this part if not done manually
                 markParentNodesPath(info, false);
 
                 // Add the clicked perk (only not already selected ones are clickable, so no worries)
