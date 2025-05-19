@@ -20,9 +20,6 @@ private:
 
     size_t selectedRes = -1;            // Selected resolution ID (starts at 'native' = -1)
     size_t selectedFps = 0;             // Starts at lowest value
-    std::vector<unsigned int> fpsAvailable = {
-        30, 60, 144, 165, 240
-    };
     bool bChangedSome = false;          // Flag to track if any settings changed
 
 

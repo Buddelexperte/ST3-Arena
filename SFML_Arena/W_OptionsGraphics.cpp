@@ -175,6 +175,10 @@ void W_OptionsGraphics::toggleResolution()
 
 void W_OptionsGraphics::toggleMaxFPS()
 {
+	static const std::vector<unsigned int> fpsAvailable = {
+		30, 60, 144, 165, 240
+	};
+
 	selectedFps++;
 
 	if (selectedFps >= fpsAvailable.size())
