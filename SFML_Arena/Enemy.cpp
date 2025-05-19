@@ -9,7 +9,7 @@ Enemy::Enemy()
 	: Entity(EntityType::Enemy),
 	collisionBox(this, getPosition(), getSize())
 {
-
+	hurtFade.reset(ColorColor(sf::Color::Red, getColor()), SCREEN_FADE_DURATION, easing::smootherstep);
 }
 
 void Enemy::spawn(SpawnInformation spawnInfo)
@@ -17,8 +17,6 @@ void Enemy::spawn(SpawnInformation spawnInfo)
 	setRenderInfo(spawnInfo.renderInfo);
 	resetHealth(spawnInfo.health);
 	setDamage(spawnInfo.damage);
-
-	
 }
 
 void Enemy::tick(const float& deltaTime)
@@ -133,7 +131,7 @@ void Enemy::kill_self(const bool& bByPlayer = false)
 		spawnDeathParticle();
 		spawnExperience();
 
-		PerkTriggerInfo triggerInfo(PerkTrigger::OnEnemyKill, getPosition(), this);
+		PerkTriggerInfo triggerInfo(PerkTrigger::OnEnemyKilled, getPosition(), this);
 		gameInstance().getInventory().triggerPerks(triggerInfo);
 	}
 
@@ -142,6 +140,8 @@ void Enemy::kill_self(const bool& bByPlayer = false)
 
 void Enemy::tick_health(const float& deltaTime)
 {
+	setColor(hurtFade.fade(deltaTime));
+
 	if (isDead())
 	{
 		constexpr bool diedByPlayer = true;
@@ -196,5 +196,18 @@ void Enemy::collideWithPlayer(Player& player)
 
 void Enemy::collideWithProjectile(Projectile& projectile)
 {
-	hurt(projectile.getDamage());
+	float actualDamage = projectile.getDamage();
+	gameInstance().getInventory().applyCrit(actualDamage);
+
+	hurt(actualDamage);
+
+	PerkTriggerInfo triggerInfo(PerkTrigger::OnEnemyGotHit, getPosition(), this);
+	gameInstance().getInventory().triggerPerks(triggerInfo);
+}
+
+void Enemy::hurt(const float& delta)
+{
+	hurtFade.reset();
+
+	IHasHealth::hurt(delta);
 }

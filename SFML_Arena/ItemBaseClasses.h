@@ -180,8 +180,9 @@ enum class PerkTrigger
     OnPlayerHeal,               // When the player receives healing
 
     OnWeaponShot,               // When a weapon is fired
-    OnEnemyGotHit,                 // When a weapon hits an enemy (successful damage application)
-    OnEnemyKill,                // When an enemy is killed
+    OnWeaponHit,                 // When a weapon hits an enemy (successful damage application)
+    OnEnemyGotHit,                // When an enemy is killed
+    OnEnemyKilled,                // When an enemy is killed
 
     OnItemPickup,               // When picking up any item (ammo, health, power-up, etc.)
 
@@ -208,6 +209,8 @@ public:
 
     virtual UseResult activate(const ItemUse& use) override;
 
+    bool hasTrigger(const PerkTrigger& trigger);
+
     // Called when a game event occurs; checks if the perk should trigger.
     void tryTrigger(PerkTriggerInfo& triggerInfo);
 
@@ -217,56 +220,60 @@ public:
         std::cout << "OnEquip Perk" << std::endl;
     }
 
-    virtual void onWaveStart()
+    virtual void onWaveStart(PerkTriggerInfo& triggerInfo)
     {
         std::cout << "OnWaveStart" << std::endl;
     }
 
-    virtual void onWaveEnd()
+    virtual void onWaveEnd(PerkTriggerInfo& triggerInfo)
     {
         std::cout << "OnWaveEnd" << std::endl;
     }
 
-    virtual void onEnemyContact()
+    virtual void onEnemyContact(PerkTriggerInfo& triggerInfo)
     {
         std::cout << "OnEnemyContact" << std::endl;
     }
 
-    virtual void onPlayerDamaged()
+    virtual void onPlayerDamaged(PerkTriggerInfo& triggerInfo)
     {
         std::cout << "OnPlayerDamaged" << std::endl;
     }
 
-    virtual void onPlayerHeal()
+    virtual void onPlayerHeal(PerkTriggerInfo& triggerInfo)
     {
         std::cout << "OnPlayerHeal" << std::endl;
     }
 
-    virtual void onWeaponShot()
+    virtual void onWeaponShot(PerkTriggerInfo& triggerInfo)
     {
         std::cout << "OnWeaponShot" << std::endl;
     }
 
-    virtual void onWeaponHit()
+    virtual void onWeaponHit(PerkTriggerInfo& triggerInfo)
     {
-        std::cout << "OnWeaponHit (OnEnemyGotHit)" << std::endl;
+        std::cout << "OnWeaponHit" << std::endl;
     }
 
-    virtual void onEnemyKill()
+    virtual void onEnemyGotHit(PerkTriggerInfo& triggerInfo)
+    {
+        std::cout << "OnEnemyGotHit" << std::endl;
+    }
+
+    virtual void onEnemyKilled(PerkTriggerInfo& triggerInfo)
     {
         std::cout << "OnEnemyKill" << std::endl;
     }
 
-    virtual void onItemPickup()
+    virtual void onItemPickup(PerkTriggerInfo& triggerInfo)
     {
         std::cout << "OnItemPickup" << std::endl;
     }
 
-    virtual void onInterval()
+    virtual void onInterval(const float& deltaTime) // A perk's tick
     {
-        std::cout << "OnInterval" << std::endl;
+        std::cout << "On Perk Interval" << std::endl;
     }
-
 };
 
 std::unique_ptr<Perk> makePerk(const std::string& tag);

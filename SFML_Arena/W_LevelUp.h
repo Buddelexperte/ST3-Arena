@@ -15,10 +15,10 @@ private:
 
 	PerkFamily_Tree* currTree = nullptr;
 
-	PerkFamily_Tree familyTree_1;
-	PerkFamily_Tree familyTree_2;
-	PerkFamily_Tree familyTree_3;
-	PerkFamily_Tree familyTree_4;
+	PerkFamily_Tree familyTree_off;
+	PerkFamily_Tree familyTree_def;
+	PerkFamily_Tree familyTree_util;
+	PerkFamily_Tree familyTree_sup;
 	std::vector<PerkFamily_Tree*> familyTrees;
 
 public:
@@ -27,8 +27,6 @@ public:
 	void construct() override;
 
 	bool isMouseOver(const bool&) override;
-
-	bool onKeyEscape() override;
 
 	InputWidget* setWidgetIndex(const int&) override;
 	InputWidget* getWidgetAtIndex(const int&) override;

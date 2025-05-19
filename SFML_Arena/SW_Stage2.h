@@ -6,7 +6,7 @@ class SW_Stage2 : public EnemySpawnWave
 {
 public:
 	SW_Stage2()
-		: EnemySpawnWave(0.5f, 3, 0) // 1s per interval, 1 enemy per interval, inf intervals
+		: EnemySpawnWave(0.5f, 3, 0) // 0.5s per interval, 3 enemy per interval, inf intervals
 	{
 
 	}

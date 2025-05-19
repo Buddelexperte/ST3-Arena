@@ -133,7 +133,8 @@ void Inventory::triggerPerks(PerkTriggerInfo& triggerInfo)
 {
     for (auto& perk : perks)
     {
-        perk->tryTrigger(triggerInfo);
+        if (perk->hasTrigger(triggerInfo.trigger))
+            perk->tryTrigger(triggerInfo);
     }
 }
 
@@ -182,7 +183,7 @@ void Inventory::clear_perks()
     perks.clear();
 }
 
-void Inventory::clear_all()
+void Inventory::clear_inventory()
 {
     clear_perks();
     clear_weapons();
@@ -191,9 +192,17 @@ void Inventory::clear_all()
 void Inventory::reset()
 {
 	levelSystem.reset();
-    clear_all();
+    clear_inventory();
     // Add wepaon by StartWeaponName
     addWeapon_byName(startWeaponName);
+
+    setCooldownMultiplier(DEFAULT_COOLDOWN_MULTIPLIER);
+    setCooldownSubtractor(DEFAULT_COOLDOWN_SUBTRACTOR);
+    setHurtBias(DEFAULT_HURT_BIAS);
+    setHurtMultiplier(DEFAULT_HURT_MULTIPLIER);
+    setMagneticRange(DEFAULT_MAGNETIC_DISTANCE);
+
+    numLevelUpsQueued = 0;
 }
 
 // Optional: an update function to process inventory-related logic each frame.
@@ -202,7 +211,11 @@ void Inventory::tick(const float& deltaTime)
     // For example: check if weapons are reloading or if perk effects need updating.
     static PerkTriggerInfo intervalTriggerInfo(PerkTrigger::OnInterval);
 
-    triggerPerks(intervalTriggerInfo);
+    for (auto& perk : perks)
+    {
+        if (perk->hasTrigger(intervalTriggerInfo.trigger))
+            perk->onInterval(deltaTime);
+    }
 }
 
 LevelSystem& Inventory::getLevelSystem()
@@ -258,13 +271,69 @@ float Inventory::getCooldownSubtractor() const
     return cooldownSubtractor;
 }
 
+void Inventory::setHurtBias(const float& val)
+{
+    hurtBias = val;
+}
+
+void Inventory::applyHurtBias(const float& val)
+{
+    hurtBias += val;
+}
+
+float Inventory::getHurtBias() const
+{
+    return hurtBias;
+}
+
+void Inventory::setHurtMultiplier(const float& val)
+{
+    hurtMultiplier = val;
+}
+
+void Inventory::applyHurtMultiplier(const float& val)
+{
+    hurtMultiplier *= val;
+}
+
+float Inventory::getHurtMultiplier() const
+{
+    return hurtMultiplier;
+}
+
+void Inventory::setCritChance(const float& val)
+{
+    critChance = val;
+}
+
+void Inventory::addCritChance(const float& val)
+{
+    critChance += val;
+}
+
+float Inventory::getCritChance() const
+{
+    return critChance;
+}
+
+void Inventory::applyCrit(float& damage)
+{
+    float randVal = RNG::floatInRange(0.0f, 1.0f);
+
+    if (randVal < critChance)
+    {
+        std::cout << "CRITICAL HIT" << std::endl;
+        damage *= CRIT_MULITPLIER;
+    }
+}
+
 void Inventory::setMagneticRange(const float& newRange)
 {
-    MAGNETIC_DISTANCE = newRange;
+    magneticDistance = newRange;
 }
 
 float Inventory::getMagneticRange() const
 {
-    return MAGNETIC_DISTANCE;
+    return magneticDistance;
 }
 

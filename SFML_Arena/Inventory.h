@@ -23,12 +23,26 @@ private:
     // Store all acquired perks.
     std::vector<std::unique_ptr<Perk>> perks;
 
-    // Multipliers
-    float cooldownMultiplier = 1.0f;
-    float cooldownSubtractor = 0.0f;
+    // Cooldown
+    static constexpr float DEFAULT_COOLDOWN_MULTIPLIER = 1.0f;
+    float cooldownMultiplier = DEFAULT_COOLDOWN_MULTIPLIER;
+    static constexpr float DEFAULT_COOLDOWN_SUBTRACTOR = 0.0f;
+    float cooldownSubtractor = DEFAULT_COOLDOWN_SUBTRACTOR;
+
+    // Health
+    static constexpr float DEFAULT_HURT_BIAS = 0.0f;
+    float hurtBias = DEFAULT_HURT_BIAS;
+    static constexpr float DEFAULT_HURT_MULTIPLIER = 1.0f;
+    float hurtMultiplier = DEFAULT_HURT_MULTIPLIER;
+
+    // Crit
+    static constexpr float DEFAUL_CRIT_CHANCE = 0.0f;
+    float critChance = DEFAUL_CRIT_CHANCE;
+    static constexpr float CRIT_MULITPLIER = 2.0f;
 
     // Pickup configs
-	float MAGNETIC_DISTANCE = 200.0f; // Distance at which the player can pick up items
+    static constexpr float DEFAULT_MAGNETIC_DISTANCE = 200.0f;
+	float magneticDistance = DEFAULT_MAGNETIC_DISTANCE; // Distance at which the player can pick up items
 
     void addWeapon(std::unique_ptr<Weapon>);
     void applyPerk(std::unique_ptr<Perk>);
@@ -50,13 +64,25 @@ public:
     size_t getNumWeapons() const;
     size_t getNumPerks() const;
 
-
     // Cooldown Multiplier
     void setCooldownMultiplier(const float& newMulti);
     float getCooldownMultiplier() const;
     // Cooldown Subtractors (bias)
     void setCooldownSubtractor(const float& newSub);
     float getCooldownSubtractor() const;
+
+    // Set Damage values
+    void setHurtBias(const float&);
+    void applyHurtBias(const float&);
+    float getHurtBias() const;
+    void setHurtMultiplier(const float&);
+    void applyHurtMultiplier(const float&);
+    float getHurtMultiplier() const;
+
+    void setCritChance(const float&);
+    void addCritChance(const float&);
+    float getCritChance() const;
+    void applyCrit(float& damage);
 
     // Magnetic Range
     void setMagneticRange(const float& newRange);
@@ -93,7 +119,7 @@ public:
     // Clear and reset functions
     void clear_weapons();
     void clear_perks();
-    void clear_all();
+    void clear_inventory();
 
     void reset();
 };

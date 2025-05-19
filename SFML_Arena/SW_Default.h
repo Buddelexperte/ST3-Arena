@@ -6,7 +6,7 @@ class SW_Default : public EnemySpawnWave
 {
 public:
 	SW_Default()
-		: EnemySpawnWave(SMALLEST_PRECISION, 1, 0) // 1s per interval, 1 enemy per interval, inf intervals
+		: EnemySpawnWave(SMALLEST_PRECISION, 1, 0) // smallest delay between interval, 1 enemy per interval, inf intervals
 	{
 
 	}

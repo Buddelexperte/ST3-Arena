@@ -31,7 +31,6 @@ EntityManager::EntityManager()
 
 void EntityManager::tick(const float& deltaTime)
 {
-
     // Kill all pendingKill enemies
     tick_kill(deltaTime);
 
@@ -45,6 +44,9 @@ void EntityManager::tick(const float& deltaTime)
     tick_renderer(deltaTime);
 
     CollisionManager::getInstance().tick(deltaTime);
+
+    // Kill all pendingKill enemies
+    tick_kill(deltaTime);
 
     return;
 }

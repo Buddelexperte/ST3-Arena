@@ -5,7 +5,7 @@
 
 class Shotgun : public Weapon {
 private:
-    static constexpr float BASE_DAMAGE = 1.0f;
+    static constexpr float BASE_DAMAGE = 0.2f;
     static constexpr float BASE_COOLDOWN = 1.0f;
 
 public:
@@ -13,7 +13,7 @@ public:
         : Weapon(
             ItemInfo("Shotgun", "Basic weapon, spread pattern"),
             BASE_DAMAGE,
-            std::make_unique<PS_Shotgun>(BASE_DAMAGE), // Assuming PS_Shotgun exists
+            std::make_unique<PS_Shotgun>(BASE_DAMAGE),
             std::make_unique<ValueBar>(BASE_COOLDOWN)
         )
     { }

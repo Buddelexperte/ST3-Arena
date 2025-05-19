@@ -370,7 +370,9 @@ void Player::hurt(const float& delta)
 {
 	if (invincibility.isEmpty())
 	{
-		IHasHealth::hurt(delta);
+		const float actualDelta = (delta + inventory.getHurtBias()) * inventory.getHurtMultiplier();
+
+		IHasHealth::hurt(actualDelta);
 		invincibility.fill_to_max();
 
 		// Trigger related Perks

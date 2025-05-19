@@ -16,6 +16,8 @@ private:
 	virtual void onHealthChanged() {};
 
 public:
+	virtual ~IHasHealth() = default;
+
 	virtual void hurt(const float& delta)
 	{
 		getHealthBar().addValue(-delta);

@@ -8,7 +8,7 @@
 W_LevelUp::W_LevelUp(InputWidget* parent)
 	: InputWidget(parent), 
 	bg(this), familySelect(this),
-	familyTree_1(this), familyTree_2(this), familyTree_3(this), familyTree_4(this)
+	familyTree_off(this), familyTree_def(this), familyTree_util(this), familyTree_sup(this)
 {
 	const RawBorder CONSTR_BG = {
 		sf::Vector2f{ 0.0f, 0.0f } * viewSizeNorm,
@@ -22,7 +22,7 @@ W_LevelUp::W_LevelUp(InputWidget* parent)
 	delegateEvents();
 
 	familyTrees = {
-		&familyTree_1, &familyTree_2, &familyTree_3, &familyTree_4
+		&familyTree_off, &familyTree_def, &familyTree_util, &familyTree_sup
 	};
 
 	for (PerkFamily_Tree* tree : familyTrees)
@@ -31,10 +31,10 @@ W_LevelUp::W_LevelUp(InputWidget* parent)
 		tree->setSize(bg.getSize());
 	}
 
-	familyTree_1.construct(PerkFamily::Offensive);
-	familyTree_2.construct(PerkFamily::Defensive);
-	familyTree_3.construct(PerkFamily::Utility);
-	familyTree_4.construct(PerkFamily::Support);
+	familyTree_off.construct(PerkFamily::Offensive);
+	familyTree_def.construct(PerkFamily::Defensive);
+	familyTree_util.construct(PerkFamily::Utility);
+	familyTree_sup.construct(PerkFamily::Support);
 }
 
 void W_LevelUp::delegateEvents()
@@ -44,16 +44,16 @@ void W_LevelUp::delegateEvents()
 			switch (family)
 			{
 			case PerkFamily::Offensive:
-				currTree = &familyTree_1;
+				currTree = &familyTree_off;
 				break;
 			case PerkFamily::Defensive:
-				currTree = &familyTree_2;
+				currTree = &familyTree_def;
 				break;
 			case PerkFamily::Utility:
-				currTree = &familyTree_3;
+				currTree = &familyTree_util;
 				break;
 			case PerkFamily::Support:
-				currTree = &familyTree_4;
+				currTree = &familyTree_sup;
 				break;
 			default:
 				currTree = nullptr;
@@ -83,17 +83,6 @@ bool W_LevelUp::isMouseOver(const bool& checkForClick)
 
 	// On no button-mouse overlap
 	return familySelect.isMouseOver(checkForClick);
-}
-
-bool W_LevelUp::onKeyEscape()
-{
-	if (parent != nullptr)
-	{
-		parent->setWidgetIndex(0)->construct();
-		return true;
-	}
-
-	return false;
 }
 
 void W_LevelUp::tick(const float& deltaTime)

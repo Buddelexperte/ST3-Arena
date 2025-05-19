@@ -185,28 +185,65 @@ UseResult Perk::activate(const ItemUse& use)
     return UseResult::FAILURE;
 }
 
+bool Perk::hasTrigger(const PerkTrigger& trigger)
+{
+    return triggers.contains(trigger);
+}
+
 void Perk::tryTrigger(PerkTriggerInfo& triggerInfo)
 {
     const PerkTrigger trigger = triggerInfo.trigger;
-    if (triggers.contains(trigger)) // Ff trigger is in unordered_set
+    if (hasTrigger(trigger))
     {
-        std::cout << "Perk \"" << info.name << "\" triggered on event: ";
         switch (trigger)
         {
+        case PerkTrigger::OnWaveStart:
+            onWaveStart(triggerInfo);
+            break;
+
+        case PerkTrigger::OnWaveEnd:
+            onWaveEnd(triggerInfo);
+            break;
+
         case PerkTrigger::OnEnemyContact:
-            onEnemyContact();
+            onEnemyContact(triggerInfo);
             break;
+
         case PerkTrigger::OnPlayerDamaged:
-            onPlayerDamaged();
+            onPlayerDamaged(triggerInfo);
             break;
+
+        case PerkTrigger::OnPlayerHeal:
+            onPlayerHeal(triggerInfo);
+            break;
+
         case PerkTrigger::OnWeaponShot:
-            onWeaponShot();
+            onWeaponShot(triggerInfo);
             break;
+
+        case PerkTrigger::OnWeaponHit:
+            onWeaponHit(triggerInfo);
+            break;
+
         case PerkTrigger::OnEnemyGotHit:
+            onEnemyGotHit(triggerInfo);
             break;
+
+        case PerkTrigger::OnEnemyKilled:
+            onEnemyKilled(triggerInfo);
+            break;
+
+        case PerkTrigger::OnItemPickup:
+            onItemPickup(triggerInfo);
+            break;
+
+        case PerkTrigger::OnInterval:
+            break;
+
         default:
-            std::cout << "Unknown Trigger";
+            std::cout << "Unknown Trigger" << std::endl;
             break;
         }
     }
 }
+

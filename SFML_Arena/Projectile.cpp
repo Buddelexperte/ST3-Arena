@@ -74,7 +74,8 @@ void Projectile::onCollision(IHasCollision* other)
 
 void Projectile::collideWithEnemy(Enemy& enemy)
 {
-	PerkTriggerInfo triggerInfo(PerkTrigger::OnEnemyGotHit, getPosition(), this);
+	PerkTriggerInfo triggerInfo(PerkTrigger::OnWeaponHit, getPosition(), this);
 	GI_Arena::getInstance().getPlayer()->getInventory().triggerPerks(triggerInfo);
+
 	kill_self();
 }

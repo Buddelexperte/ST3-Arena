@@ -38,7 +38,7 @@ protected:
 
 public:
 	Entity(const EntityType&);
-	~Entity() = default;
+	virtual ~Entity() = default;
 
 	EntityType getType() const;
 

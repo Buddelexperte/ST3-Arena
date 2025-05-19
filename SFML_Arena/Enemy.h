@@ -8,6 +8,8 @@
 #include "RenderInfo.h"
 #include "Entity.h"
 
+#include "C_ColorFade.h"
+
 class Enemy : 
 	public Entity, public IHasDamage, public IHasHealth
 {
@@ -25,6 +27,8 @@ private:
 	void spawnDeathParticle();
 	void spawnExperience();
 	void kill_self(const bool&);
+
+	ColorFade hurtFade;
 
 public:
 	Enemy();
@@ -52,4 +56,7 @@ public:
 
 	void collideWithPlayer(Player& player) override;
 	void collideWithProjectile(Projectile& projectile) override;
+
+
+	void hurt(const float& delta) override;
 };
