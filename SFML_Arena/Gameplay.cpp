@@ -22,6 +22,8 @@ void W_Gameplay::construct()
 	{
 		// Reset values to game start values
 		setWidgetIndex(-1)->construct();
+
+		levelUpScreen.reset(); // Resetting the Perk Trees on Game Launch
 	}
 
 	if (widgetIndex > 0)

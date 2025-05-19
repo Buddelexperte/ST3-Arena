@@ -30,11 +30,6 @@ W_LevelUp::W_LevelUp(InputWidget* parent)
 		tree->setPosition(bg.getPosition());
 		tree->setSize(bg.getSize());
 	}
-
-	familyTree_off.construct(PerkFamily::Offensive);
-	familyTree_def.construct(PerkFamily::Defensive);
-	familyTree_util.construct(PerkFamily::Utility);
-	familyTree_sup.construct(PerkFamily::Support);
 }
 
 void W_LevelUp::delegateEvents()
@@ -72,8 +67,21 @@ void W_LevelUp::construct()
 
 	setWidgetIndex(0);
 
+	familyTree_off.construct(PerkFamily::Offensive);
+	familyTree_def.construct(PerkFamily::Defensive);
+	familyTree_util.construct(PerkFamily::Utility);
+	familyTree_sup.construct(PerkFamily::Support);
+
 	bg.construct();
 	familySelect.construct();
+}
+
+void W_LevelUp::reset()
+{
+	for (PerkFamily_Tree* tree : familyTrees)
+	{
+		tree->reset();
+	}
 }
 
 bool W_LevelUp::isMouseOver(const bool& checkForClick)

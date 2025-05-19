@@ -10,7 +10,7 @@ unsigned int PerkFamily_Tree::perkID = 0;
 
 PerkFamily_Tree::~PerkFamily_Tree()
 {
-    clearNodes();
+    reset();
 }
 
 PerkNodeInfo* PerkFamily_Tree::createPerkNodeInfo(
@@ -38,7 +38,7 @@ PerkNodeInfo* PerkFamily_Tree::createPerkNodeInfo(
     }
 
     PerkNodeInfo* nodePtr = newNode.get();
-    allPerkNodes.push_back(std::move(newNode));
+    nodeInfos.push_back(std::move(newNode));
     return nodePtr;
 }
 
@@ -221,20 +221,6 @@ std::unique_ptr<PerkNode> PerkFamily_Tree::createButtonFromPerkInfo(PerkNodeInfo
     return node;
 }
 
-void PerkFamily_Tree::clearNodes()
-{
-    shapes.clear(); // Clear shapes as well, as they should only contain nodes
-    perkButtons.clear();
-
-    // Clear pointer maps and vectors
-    nodeToButtonMap.clear();
-    nodeConnections.clear();
-    childToParent.clear();
-
-    // Clear all created PerkNodeInfo objects
-    allPerkNodes.clear();
-}
-
 sf::Vector2u PerkFamily_Tree::buildTreeLayout(PerkNodeInfo* rootNode)
 {
     if (!rootNode)
@@ -384,21 +370,45 @@ void PerkFamily_Tree::construct(const PerkFamily& pf)
 {
     // Only create if this tree was not already built
     if (rootNode != nullptr)
+    {
+        construct();
         return;
+    }
 
     displayedFamily = pf;
-    clearNodes(); // Clear previous buttons if necessary
+    reset(); // Clear all to avoid partial initialization
 
     // Building the tree on construct, should not be called more than once for each family
     rootNode = getPerkTree(pf);
 
-    if (!rootNode) {
+    if (rootNode == nullptr) {
         std::cerr << "Error: Failed to create perk tree for family: " << static_cast<int>(pf) << std::endl;
-        rootNode = nullptr;
         return;
     }
 
     rootNode->bUnlocked = true; // Set root node as unlocked
+}
+
+void PerkFamily_Tree::reset()
+{
+    rootNode = nullptr;
+
+    for (std::unique_ptr<PerkNode>& elem : perkButtons)
+    {
+        elem.release();
+    }
+    perkButtons.clear();
+    shapes.clear();
+
+    for (std::unique_ptr<PerkNodeInfo>& info : nodeInfos)
+    {
+        info.release();
+    }
+    nodeInfos.clear();
+
+    nodeToButtonMap.clear();
+    nodeConnections.clear();
+    childToParent.clear();
 }
 
 void PerkFamily_Tree::tick(const float& deltaTime)

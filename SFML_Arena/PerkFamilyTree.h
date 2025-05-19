@@ -20,15 +20,16 @@ private:
     PerkTree rootNode = nullptr; // Root node of the tree (pointer)
     sf::Vector2u treeSize; // Size of the tree (width, depth)
 
-    std::vector<std::unique_ptr<PerkNode>> perkButtons; // Store buttons for the tree
+    // Store all UI elements
+    std::vector<std::unique_ptr<PerkNode>> perkButtons;
+    // Storage all information
+    std::vector<std::unique_ptr<PerkNodeInfo>> nodeInfos;
 
     // For line connections
     std::unordered_map<unsigned int, PerkNode*> nodeToButtonMap;
-    std::vector<std::pair<PerkNodeInfo*, PerkNodeInfo*>> nodeConnections; // Changed to pointers
-    std::unordered_map<PerkNodeInfo*, PerkNodeInfo*> childToParent; // Changed to pointers
+    std::vector<std::pair<PerkNodeInfo*, PerkNodeInfo*>> nodeConnections;
+    std::unordered_map<PerkNodeInfo*, PerkNodeInfo*> childToParent;
 
-    // Storage for all created PerkNodeInfo objects to manage memory
-    std::vector<std::unique_ptr<PerkNodeInfo>> allPerkNodes;
 
     // Create different perk trees
     PerkTree getOffensiveTree();
@@ -41,12 +42,14 @@ private:
 
     // Helper methods for tree building
     sf::Vector2u buildTreeLayout(PerkNodeInfo* rootNode);
-    void clearNodes();
     std::unique_ptr<PerkNode> createButtonFromPerkInfo(PerkNodeInfo* perkInfo);
 
     // Helper for creating PerkNodeInfo objects and managing memory
-    PerkNodeInfo* createPerkNodeInfo(unsigned int id, const std::string& tag,
-        const std::string& name, const std::string& description);
+    PerkNodeInfo* createPerkNodeInfo(
+        unsigned int id, 
+        const std::string& tag,
+        const std::string& name, 
+        const std::string& description);
 
     void markParentNodesPath(PerkNodeInfo*, const bool&);
     void unlockChildrenNodes(PerkNodeInfo*);
@@ -58,6 +61,8 @@ public:
 
     void construct() override;
     void construct(const PerkFamily& pf);
+
+    void reset() override;
 
     void tick(const float& deltaTime) override;
 
