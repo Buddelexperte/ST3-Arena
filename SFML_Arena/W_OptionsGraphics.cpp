@@ -175,12 +175,15 @@ void W_OptionsGraphics::toggleResolution()
 
 void W_OptionsGraphics::toggleMaxFPS()
 {
-	if (newSettings.maxFPS == 144)
-		newSettings.maxFPS = 60;
-	else if (newSettings.maxFPS == 60)
-		newSettings.maxFPS = 240;
+	selectedFps++;
+
+	if (selectedFps >= fpsAvailable.size())
+		selectedFps = 0;
+
+	if (fpsAvailable.empty())
+		newSettings.maxFPS = 30; // Default to reasonable value if none was available
 	else
-		newSettings.maxFPS = 144;
+		newSettings.maxFPS = fpsAvailable[selectedFps];
 
 	// Update the UI
 	updateSettingTexts(newSettings);
