@@ -31,6 +31,36 @@ void SoundManager::cleanUp()
         activeSounds_master.end());
 }
 
+void SoundManager::playMusic(const std::string& filePath)
+{
+    if (!backgroundMusic.openFromFile(filePath))
+    {
+        std::cerr << "Unable to load music: " << filePath << std::endl;
+        return;
+    }
+
+    backgroundMusic.setLoop(true);
+    backgroundMusic.setVolume(getActualVolume(ESoundEnv::MUSIC));
+    backgroundMusic.play();
+}
+
+void SoundManager::pauseMusic()
+{
+    if (backgroundMusic.getStatus() == sf::SoundSource::Playing)
+        backgroundMusic.pause();
+}
+
+void SoundManager::resumeMusic()
+{
+    if (backgroundMusic.getStatus() == sf::SoundSource::Paused)
+        backgroundMusic.play();
+}
+
+void SoundManager::stopMusic()
+{
+    backgroundMusic.stop();
+}
+
 float SoundManager::getMasterVolume() const
 {
     return volume_master;
@@ -132,11 +162,11 @@ float SoundManager::getActualVolume(ESoundEnv sound_env) const
     case ESoundEnv::GAMEPLAY:
         if (bMuted_gameplay)
             return 0.0f;
-        return bMuted_gameplay * volume_gameplay_f;
+        return !bMuted_gameplay * volume_gameplay_f;
     case ESoundEnv::MUSIC:
         if (bMuted_music)
             return 0.0f;
-        return bMuted_music * volume_music_f;
+        return !bMuted_music * volume_music_f;
     case ESoundEnv::MASTER:
     default:
         break;
@@ -151,6 +181,8 @@ void SoundManager::updateOnSoundSettings()
     {
         elem.sound->setVolume(getActualVolume(elem.environment));
     }
+
+    backgroundMusic.setVolume(getActualVolume(ESoundEnv::MUSIC));
 }
 
 const sf::SoundBuffer& SoundManager::getSound_Click()

@@ -271,11 +271,9 @@ bool GI_Arena::handleEvent(sf::Event* eventRef)
 
 void GI_Arena::correctWidget()
 {
-	// If GameState changed in earlier loop, construct new activeMenu;
 	static GameState oldGS = QUIT;
 
-	// On no change, don't call
-	if (gameState == oldGS) 
+	if (gameState == oldGS)
 		return;
 
 	switch (oldGS = gameState)
@@ -283,20 +281,33 @@ void GI_Arena::correctWidget()
 	case LOADING_SCREEN:
 		activeMenu = widgets[0];
 		break;
-	case MENU_SCREEN: // MAIN_MENU
+	case MENU_SCREEN:
 		activeMenu = widgets[1];
+		SoundManager::getInstance().playMusic("Content/Music/hell.ogg");
 		break;
-	case GAME_PAUSED: case GAME_OVER: case GAME_LAUNCHING: case IN_GAME: // GAMEPLAY
+	case GAME_PAUSED:
 		activeMenu = widgets[2];
+		SoundManager::getInstance().pauseMusic();
+		break; 
+	case GAME_OVER:
+		activeMenu = widgets[2];
+		SoundManager::getInstance().stopMusic();
+		break; 
+	case GAME_LAUNCHING:
+		activeMenu = widgets[2];
+		SoundManager::getInstance().playMusic("Content/Music/medusa.ogg");
 		break;
-	case QUIT: // QUIT GAME
+	case IN_GAME:
+		activeMenu = widgets[2];
+		SoundManager::getInstance().resumeMusic();
+		break;
+	case QUIT:
 		activeMenu = nullptr;
 		break;
-	default: // KEEP
+	default:
 		break;
 	}
 
-	// If new widget not valid, close game / end loop
 	if (activeMenu == nullptr)
 	{
 		window->close();
@@ -305,6 +316,7 @@ void GI_Arena::correctWidget()
 
 	activeMenu->construct();
 }
+
 
 void GI_Arena::launchGame()
 {
