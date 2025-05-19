@@ -54,6 +54,7 @@ private:
     LoadedSound sound_click;
     LoadedSound sound_returnClick;
 
+    sf::Music backgroundMusic;
 
 public:
     static SoundManager& getInstance()
@@ -67,6 +68,11 @@ public:
 
     void play(const sf::SoundBuffer& buffer, const ESoundEnv);
     void cleanUp();
+
+    void playMusic(const std::string& filePath);
+    void pauseMusic();
+    void resumeMusic();
+    void stopMusic();
 
     float getMasterVolume() const;
     void setMasterVolume(const float);
