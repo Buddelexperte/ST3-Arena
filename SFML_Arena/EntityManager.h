@@ -95,7 +95,7 @@ public:
 		if (type == EntityType::Enemy)
 			numEnemies++;
 
-		// Add to Renderer
+		// Add to Render Layers
 		switch (type)
 		{
 		case EntityType::Enemy: case EntityType::Pickup:
