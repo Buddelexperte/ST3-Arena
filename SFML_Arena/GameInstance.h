@@ -55,6 +55,8 @@ private:
 	sf::Vector2f prevCamPos;
 	float zoomFactor = 1.0f;
 	sf::Vector2f widgetOffset;
+	sf::Vector2f gameplayMouseOffset;
+	sf::Vector2f menuWholeOffset;
 	
 	void preTick(); // Logic before Player input (Checks for Inventory etc.)
 	void tick_view(const float&);
@@ -99,6 +101,17 @@ public:
 	void setIsPaused(const bool& bNewIsPaused)
 	{
 		bIsGameplayPaused = bNewIsPaused;
+
+		SoundManager& sm = SoundManager::getInstance();
+
+		if (bIsGameplayPaused)
+		{
+			sm.pauseGameplaySound();
+		}
+		else
+		{
+			sm.resumeGameplaySound();
+		}
 	}
 	bool getIsPaused() const { return bIsGameplayPaused; }
 	// Update Zoom (WIP)
@@ -118,7 +131,7 @@ public:
 	}
 
 	void resetWindowName();
-	void modWindowName(const std::string& suffix);
+	void addToDefaultWindowName(const std::string& suffix);
 
 	void applySettings(const UserSettings_Struct settings);
 

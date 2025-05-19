@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <iostream>
 
 #include "GameInstance.h"
@@ -285,13 +285,8 @@ void GI_Arena::correctWidget()
 		activeMenu = widgets[1];
 		SoundManager::getInstance().playMusic("Content/Music/hell.ogg");
 		break;
-	case GAME_PAUSED:
+	case GAME_PAUSED: case GAME_OVER:
 		activeMenu = widgets[2];
-		SoundManager::getInstance().pauseMusic();
-		break; 
-	case GAME_OVER:
-		activeMenu = widgets[2];
-		SoundManager::getInstance().stopMusic();
 		break; 
 	case GAME_LAUNCHING:
 		activeMenu = widgets[2];
@@ -393,6 +388,8 @@ void GI_Arena::tick_view(const float& deltaTime)
 		}
 	}
 
+	gameplayMouseOffset = mouseOffset;
+
 	// Determine the new target position: player's position plus the clamped mouse offset
 	sf::Vector2f targetPos = playerPos + mouseOffset;
 
@@ -424,58 +421,40 @@ void GI_Arena::tick_view(const float& deltaTime)
 // New separate method for widget offset calculation
 void GI_Arena::updateWidgetOffset(const sf::Vector2f& gameplayMouseOffset, const float& deltaTime)
 {
-	constexpr float WIDGET_LERP_ALPHA = 0.1f;       // Standard gameplay lerp speed
-	constexpr float MENU_LERP_ALPHA = 0.02f;        // Slower for menus (smoother)
+	constexpr float WIDGET_LERP_ALPHA = 10.0f;       // Old widgetOffset to new
 	constexpr float MENU_MAX_OFFSET = 650.0f;		// Max menu parallax distance
 	constexpr float MENU_DEADZONE = 350.0f;         // Center area with reduced movement
 	constexpr float PARALLAX_SCALE = 0.1f;          // Scale factor for parallax effect
 
 	const sf::Vector2f viewCenter = view->getCenter();
-	const bool isGameplayActive = getGameState() > MENU_SCREEN;
 
 	if (usedSettings.bWidgetParallax)
 	{
-		if (isGameplayActive)
+		// Menu mode: calculate offset based on mouse position relative to screen center
+		sf::Vector2f mousePos = getMousePos();
+		sf::Vector2f menuOffset = mousePos - viewCenter;
+		menuWholeOffset = menuOffset;
+
+		// Apply non-linear scaling to reduce sensitivity near center (deadzone)
+		float offsetLength = std::sqrt(menuOffset.x * menuOffset.x + menuOffset.y * menuOffset.y);
+
+		if (offsetLength > MENU_DEADZONE)
 		{
-			// Use gameplay offset calculation (player-relative)
-			const sf::Vector2f newCenter = viewCenter - (gameplayMouseOffset * PARALLAX_SCALE);
-			float factor = lerpFactor(deltaTime, WIDGET_LERP_ALPHA);
-			widgetOffset = lerp(widgetOffset, newCenter, factor);
+			float effectiveDistance = offsetLength - MENU_DEADZONE;
+			float smoothFactor = std::min(effectiveDistance / (MENU_MAX_OFFSET - MENU_DEADZONE), 1.0f);
+			smoothFactor = smoothFactor * smoothFactor * (3.0f - 2.0f * smoothFactor); // Smoothstep
+
+			menuOffset = (menuOffset / offsetLength) * MENU_MAX_OFFSET * smoothFactor * PARALLAX_SCALE;
 		}
 		else
 		{
-			// Menu mode: calculate offset based on mouse position relative to screen center
-			sf::Vector2f mousePos = getMousePos();
-			sf::Vector2f menuOffset = mousePos - viewCenter;
-
-			// Apply non-linear scaling to reduce sensitivity near center (deadzone)
-			float offsetLength = std::sqrt(menuOffset.x * menuOffset.x + menuOffset.y * menuOffset.y);
-
-			if (offsetLength > 0.0f)
-			{
-				// Apply deadzone and smooth acceleration curve
-				float effectiveDistance = std::max(0.0f, offsetLength - MENU_DEADZONE);
-				float smoothFactor = std::min(effectiveDistance / (MENU_MAX_OFFSET - MENU_DEADZONE), 1.0f);
-
-				// Apply easing curve to make movement more natural
-				smoothFactor = smoothFactor * smoothFactor * (3.0f - 2.0f * smoothFactor); // Smoothstep
-
-				// Scale direction vector by the smooth factor and max distance
-				if (offsetLength > MENU_DEADZONE)
-				{
-					menuOffset = (menuOffset / offsetLength) * MENU_MAX_OFFSET * smoothFactor * PARALLAX_SCALE;
-				}
-				else
-				{
-					menuOffset = sf::Vector2f(0.0f, 0.0f);
-				}
-			}
-
-			// Apply inverse offset to create parallax effect (objects move opposite to mouse)
-			const sf::Vector2f newCenter = viewCenter - menuOffset;
-			float factor = lerpFactor(deltaTime, MENU_LERP_ALPHA);
-			widgetOffset = lerp(widgetOffset, newCenter, factor);
+			menuOffset = sf::Vector2f(0.0f, 0.0f);
 		}
+
+		// Apply inverse offset to create parallax effect (objects should move opposite to mouse)
+		const sf::Vector2f newCenter = viewCenter - menuOffset;
+		float factor = lerpFactor(deltaTime, WIDGET_LERP_ALPHA);
+		widgetOffset = lerp(widgetOffset, newCenter, factor);
 	}
 	else
 	{
@@ -490,6 +469,7 @@ void GI_Arena::updateScreen()
 	// Draw all Drawables from shapes vector
 	if (activeMenu != nullptr) window->draw(*activeMenu);
 	window->draw(T_DebugMode);
+	// INSERT DEBUG SHAPES HERE vvv
 	// Display Draw changes
 	window->display();
 }
@@ -520,7 +500,7 @@ void GI_Arena::resetWindowName()
 	window->setTitle(WINDOW_NAME);
 }
 
-void GI_Arena::modWindowName(const std::string& suffix)
+void GI_Arena::addToDefaultWindowName(const std::string& suffix)
 {
 	const std::string windowTitle = WINDOW_NAME + suffix;
 	window->setTitle(windowTitle);

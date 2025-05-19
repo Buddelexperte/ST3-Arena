@@ -99,6 +99,11 @@ void W_LevelUp::tick(const float& deltaTime)
 
 	bg.tick(deltaTime);
 	familySelect.tick(deltaTime);
+	// Family trees
+	for (PerkFamily_Tree* tree : familyTrees)
+	{
+		tree->tick(deltaTime);
+	}
 }
 
 InputWidget* W_LevelUp::setWidgetIndex(const int& toIndex)

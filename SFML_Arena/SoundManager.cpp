@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "SoundManager.h"
+#include "GameInstance.h"
 
 SoundManager::SoundManager()
 {
@@ -61,6 +62,36 @@ void SoundManager::stopMusic()
     backgroundMusic.stop();
 }
 
+void SoundManager::pauseGameplaySound()
+{
+    gameplaySoundsPaused = true;
+
+    for (auto& elem : activeSounds_master)
+    {
+        if (elem.environment != ESoundEnv::GAMEPLAY)
+            continue;
+
+        elem.sound->pause();
+    }
+
+    updateOnSoundSettings();
+}
+
+void SoundManager::resumeGameplaySound()
+{
+    gameplaySoundsPaused = false;
+
+    for (auto& elem : activeSounds_master)
+    {
+        if (elem.environment != ESoundEnv::GAMEPLAY)
+            continue;
+
+        elem.sound->play();
+    }
+
+    updateOnSoundSettings();
+}
+
 float SoundManager::getMasterVolume() const
 {
     return volume_master;
@@ -69,6 +100,8 @@ float SoundManager::getMasterVolume() const
 void SoundManager::setMasterVolume(const float newVolume)
 {
     volume_master = newVolume;
+
+    updateOnSoundSettings();
 }
 
 float SoundManager::getVolumeFactor(const ESoundEnv sound_env) const
@@ -101,12 +134,15 @@ void SoundManager::setVolumeFactor(const float f, const ESoundEnv sound_env)
         break;
     case ESoundEnv::MUSIC:
         volume_music_f = f;
+        volume_music_f_paused = volume_music_f * 0.7f;
         break;
     case ESoundEnv::MASTER:
     default:
         volume_master = f * 100.0f;
         break;
     }
+
+    updateOnSoundSettings();
 }
 
 bool SoundManager::getIsMuted(const ESoundEnv sound_env) const
@@ -146,10 +182,13 @@ void SoundManager::setIsMuted(const bool newMuted, const ESoundEnv sound_env)
         break;
     }
 
+    updateOnSoundSettings();
 }
 
 float SoundManager::getActualVolume(ESoundEnv sound_env) const
 {
+    static constexpr float MUSIC_MULTIPLIER = 10.0f; // Music is too quiet and doesn't fit 0-1 scale
+
     if (bMuted_master)
         return 0.0f;
 
@@ -166,7 +205,7 @@ float SoundManager::getActualVolume(ESoundEnv sound_env) const
     case ESoundEnv::MUSIC:
         if (bMuted_music)
             return 0.0f;
-        return !bMuted_music * volume_music_f;
+        return !bMuted_music * (gameplaySoundsPaused ? volume_music_f_paused : volume_music_f) * MUSIC_MULTIPLIER;
     case ESoundEnv::MASTER:
     default:
         break;

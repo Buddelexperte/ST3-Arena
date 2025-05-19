@@ -36,20 +36,20 @@ void W_LoadingScreen::updateStatus(const unsigned int stage = 0)
 	switch (stage % 4)
 	{
 	case 0:
-		gameInstance().modWindowName("...");
+		gameInstance().addToDefaultWindowName("...");
 		newMessage = "LOADING...";
 		break;
 	case 1:
-		gameInstance().modWindowName("..");
+		gameInstance().addToDefaultWindowName("..");
 		newMessage = ".LOADING..";
 		break;
 	case 2:
-		gameInstance().modWindowName(".");
+		gameInstance().addToDefaultWindowName(".");
 		newMessage = "..LOADING.";
 		break;
 	case 3:
 	default:
-		gameInstance().modWindowName("");
+		gameInstance().addToDefaultWindowName("");
 		newMessage = "...LOADING";
 		break;
 	}
@@ -76,7 +76,7 @@ void W_LoadingScreen::tick_openAnim(const float& deltaTime)
 void W_LoadingScreen::start_idleAnim()
 {
 	textState = -1;
-	gameInstance().modWindowName("...");
+	gameInstance().addToDefaultWindowName("...");
 	textChangeTimer.setMaxValue(TEXT_CHANGE_DELAY);
 	textChangeTimer.fill_to_max();
 }

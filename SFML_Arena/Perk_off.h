@@ -47,7 +47,7 @@ private:
 	static constexpr float dotValue = 0.2f; // damage
 	ValueBar dotTimer;
 
-	std::vector<IHasHealth*> bloodyEntities;
+	std::unordered_set<IHasHealth*> bloodyEntities;
 
 	void onEnemyGotHit(PerkTriggerInfo& triggerInfo) override
 	{
@@ -56,7 +56,7 @@ private:
 			IHasHealth* healthEntity = dynamic_cast<IHasHealth*>(triggerInfo.actor);
 			if (healthEntity != nullptr)
 			{
-				bloodyEntities.push_back(healthEntity);
+				bloodyEntities.insert(healthEntity);
 			}
 		}
 	}
@@ -69,20 +69,27 @@ private:
 		{
 			dotTimer.fill_to_max();
 
-			for (size_t i = 0; i < bloodyEntities.size();)
+			for (auto it = bloodyEntities.begin(); it != bloodyEntities.end();)
 			{
-				IHasHealth* entity = bloodyEntities[i];
+				IHasHealth* entity = *it;
+
+				if (!entity) {
+					it = bloodyEntities.erase(it);
+					continue;
+				}
+
 				entity->hurt(dotValue);
 
 				if (entity->isDead())
 				{
-					bloodyEntities.erase(bloodyEntities.begin() + i); // erase and do NOT increment
+					it = bloodyEntities.erase(it);
 				}
 				else
 				{
-					++i; // only increment if not erased
+					++it;
 				}
 			}
+
 		}
 	}
 
@@ -93,10 +100,10 @@ public:
 class POff_DOT_Upgrade : public Perk
 {
 private:
-	static const inline ItemInfo INFO = ItemInfo("DOT Upgrade Perk", "Deal additional 20hp damage to already hit targets every 0.5 seconds");
+	static const inline ItemInfo INFO = ItemInfo("DOT Upgrade Perk", "Deal additional 20hp damage to already hit targets every 0.5 seconds (stackable)");
 	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {PerkTrigger::OnEnemyGotHit, PerkTrigger::OnInterval};
 
-	static constexpr float dotInterval = 0.5f; // 0.5 seconds
+	static constexpr float dotInterval = 0.3f; // 0.5 seconds
 	static constexpr float dotValue = 0.2f; // damage
 	ValueBar dotTimer;
 

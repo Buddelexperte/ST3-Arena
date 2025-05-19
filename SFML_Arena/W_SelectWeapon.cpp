@@ -63,7 +63,7 @@ void W_SelectWeapon::construct()
 {
 	InputWidget::construct();
 
-	gameInstance().modWindowName(" - Selecting Weapon...");
+	gameInstance().addToDefaultWindowName(" - Selecting Weapon...");
 	setWidgetIndex(0);
 
 	T_Title.construct();

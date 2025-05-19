@@ -28,9 +28,7 @@ void WidgetElement::construct()
 void WidgetElement::tick(const float& deltaTime)
 {
 	if (tickPosCorrection != getTickCorrection())
-	{
 		tickPosCorrection = getTickCorrection();
-	}
 
 	tick_pos(tickPosCorrection);
 	tick_anim(deltaTime);

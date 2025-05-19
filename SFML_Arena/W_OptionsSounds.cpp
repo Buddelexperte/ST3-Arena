@@ -61,12 +61,14 @@ bool W_OptionsSounds::isMouseOver(const bool& checkForClick = false)
 
 void W_OptionsSounds::delegateEvents()
 {
-	B_Return.onClick = [this]() {
-		onKeyEscape();
+	B_Return.onClick = [this]()
+		{
+			onKeyEscape();
 		};
 
-	B_ToggleSound.onClick = [this]() {
-		toggleMuteSound();
+	B_ToggleSound.onClick = [this]()
+		{
+			toggleMuteSound();
 		};
 }
 
@@ -86,8 +88,7 @@ void W_OptionsSounds::toggleMuteSound()
 {
 	SoundManager& sm = SoundManager::getInstance();
 
-	bool isMuted = sm.getIsMuted();
-	bool shouldMute = (!isMuted);
+	bool shouldMute = (!sm.getIsMuted());
 	call_muteSound(shouldMute);
 
 	updateText();

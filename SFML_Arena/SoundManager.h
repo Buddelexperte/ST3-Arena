@@ -43,6 +43,7 @@ private:
     float volume_ui_f = 1.0f; 
     float volume_gameplay_f = 1.0f;
     float volume_music_f = 1.0f; 
+    float volume_music_f_paused = volume_music_f * 0.7f;
 
     struct LoadedSound
     {
@@ -50,6 +51,7 @@ private:
         bool bLoaded = false;
     };
 
+    bool gameplaySoundsPaused = false;
 
     LoadedSound sound_click;
     LoadedSound sound_returnClick;
@@ -73,6 +75,9 @@ public:
     void pauseMusic();
     void resumeMusic();
     void stopMusic();
+
+    void pauseGameplaySound();
+    void resumeGameplaySound();
 
     float getMasterVolume() const;
     void setMasterVolume(const float);

@@ -23,7 +23,7 @@ void W_Inventory::construct()
 {
 	InputWidget::construct();
 
-	gameInstance().modWindowName(" - Viewing inventory");
+	gameInstance().addToDefaultWindowName(" - Viewing inventory");
 	gameInstance().setGameState(GAME_PAUSED);
 
 	setWidgetIndex(0);
