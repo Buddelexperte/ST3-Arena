@@ -138,7 +138,7 @@ private:
 	static const inline ItemInfo INFO = ItemInfo("Advanced Revive Perk", "Increase your hp to double the original value!");
 	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {PerkTrigger::OnPlayerDamaged};
 
-	static constexpr float THORNS_DAMAGE = 0.2;
+	static constexpr float THORNS_DAMAGE = 0.2f;
 
 	void onPlayerDamaged(PerkTriggerInfo& triggerInfo) override
 	{
