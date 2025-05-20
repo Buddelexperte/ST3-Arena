@@ -121,6 +121,7 @@ void Flashlight::tick_shader(const float& deltaTime)
         coneShader.setUniform("angle", degreesToRadians(30.0f)); // 60° cone (30° half-angle)
         coneShader.setUniform("u_viewSize", sf::Glsl::Vec2(viewSize));
         coneShader.setUniform("viewportHeight", view->getSize().y);
+        coneShader.setUniform("useSecondCone", bSecondCone);
         break;
     default:
         break;
@@ -160,6 +161,11 @@ void Flashlight::setMaskMode(const Flashlight::Type& type)
 {
     flashlightShape = type;
     bUseCone = (type == Type::CONE);
+}
+
+void Flashlight::setSecondCone(const bool& useSecond)
+{
+    bSecondCone = useSecond;
 }
 
 void Flashlight::toggleMaskMode()

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "WidgetBase.h"
 #include "ValueBar.h"
@@ -58,57 +58,66 @@ private:
 )";
 
     static const inline std::string coneShader_Code = R"(
-    uniform vec2 lightPos; // Light "Source" = Center of Mask
-    uniform vec2 direction; // Direction of the cone from the center (normalized)
-    uniform float radius; // Cone Radius
-    uniform float angle; // Half-angle of the cone in radians
-    uniform float viewportHeight; // Height of the viewport
-    uniform vec2 u_viewSize; // Size of the view
+    uniform vec2 lightPos;         // Light "Source" = Center of Mask
+    uniform vec2 direction;        // Direction of the first cone (normalized)
+    uniform float radius;          // Cone Radius
+    uniform float angle;           // Half-angle of each cone in radians
+    uniform bool useSecondCone;    // Toggle for second cone
+    uniform float viewportHeight;  // Height of the viewport
+    uniform vec2 u_viewSize;       // Size of the view
 
     void main() {
         // Convert gl_FragCoord to normalized coordinates (0 to 1)
         vec2 normalizedCoords = gl_FragCoord.xy / u_viewSize;
 
-        // Scale normalized coordinates back to world space
+        // Scale back to world space & flip Y
         vec2 worldCoords = normalizedCoords * u_viewSize;
-
-        // Flip Y coordinate (SFML's Y axis is flipped for textures)
         worldCoords.y = viewportHeight - worldCoords.y;
 
-        // Calculate the vector to the fragment and its distance
+        // Vector & distance from light to pixel
         vec2 toPixel = worldCoords - lightPos;
         float dist = length(toPixel);
 
-        // Start with a fully black color (opaque)
+        // Default: fully black (opaque mask)
         vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
 
-        // Check if within radius
         if (dist < radius)
         {
-            vec2 fragDir = normalize(toPixel); // Normalize the direction to this pixel
-            float dotProduct = dot(fragDir, direction);
+            vec2 fragDir = normalize(toPixel);
+            float cosA = cos(angle);
 
-            // Check if within the cone angle
-            if (dotProduct > cos(angle))
+            // FIRST CONE TEST
+            float dp1 = dot(fragDir, direction);
+            bool inFirst  = (dp1 > cosA);
+
+            // SECOND CONE TEST (opposite direction)
+            bool inSecond = false;
+            float dp2 = 0.0;
+            if (useSecondCone)
             {
-                // Smooth transition for distance from lightPos
-                float distanceFactor = smoothstep(radius, radius * 0.5, dist);
-
-                // Smooth transition for the cone's angle (sideways blending)
-                float angleFactor = smoothstep(cos(angle), 0.999, dotProduct);
-
-                // Combine both factors multiplicatively
-                float alpha = distanceFactor * angleFactor;
-
-                // Output color with appropriate alpha blending
-                color = vec4(0.0, 0.0, 0.0, 1.0 - alpha);
+                dp2 = dot(fragDir, -direction);
+                inSecond = (dp2 > cosA);
             }
 
+            // If pixel is in either cone, compute smooth alpha
+            if (inFirst || inSecond)
+            {
+                // Distance fade
+                float distanceFactor = smoothstep(radius, radius * 0.5, dist);
+
+                // Angle fade: pick the larger dot-product for tighter smoothing
+                float bestDp = inFirst ? dp1 : dp2;
+                float angleFactor = smoothstep(cosA, 0.999, bestDp);
+
+                float alpha = distanceFactor * angleFactor;
+                color = vec4(0.0, 0.0, 0.0, 1.0 - alpha);
+            }
         }
 
-        gl_FragColor = color; // Output final color for the fragment
+        gl_FragColor = color;
     }
-)";
+    )";
+
 
     static const inline std::string testShader_Code = R"(
     uniform vec2 lightPos; // Light "Source" = Center of Mask
@@ -130,6 +139,7 @@ private:
 
     sf::Shader* currShader = nullptr;
     bool bUseCone = false;
+    bool bSecondCone = false;
 
     sf::RenderTexture sceneRenderTexture;
     sf::Sprite sceneSprite;
@@ -159,6 +169,7 @@ public:
     void tick(const float& deltaTime) override;
 
     void setMaskMode(const Flashlight::Type& = Flashlight::Type::CIRCLE);
+    void setSecondCone(const bool& useSecond);
 
     void toggleMaskMode();
 

@@ -206,6 +206,8 @@ void Inventory::reset()
     setHurtFreq(DEFAULT_HURT_FREQ);
 
     owner->getFlashlight().resetRadius();
+    owner->getFlashlight().setSecondCone(false);
+    owner->breakShield();
 
     numLevelUpsQueued   = 0;
 }

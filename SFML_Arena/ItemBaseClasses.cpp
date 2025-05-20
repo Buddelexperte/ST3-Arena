@@ -154,6 +154,7 @@ std::unique_ptr<Perk> makePerk(const std::string& tag)
         {"util_root", [] { return std::make_unique<PUtil_Root>(); }},
         {"util_speed", [] { return std::make_unique<PUtil_Speed>(); }},
         {"util_further_light", [] { return std::make_unique<PUtil_FurtherLight>(); }},
+        {"util_double_cone", [] { return std::make_unique<PUtil_DoubleCone>(); }},
         {"util_magnet", [] { return std::make_unique<PUtil_Magnet>(); }},
         {"util_magnet2", [] { return std::make_unique<PUtil_Magnet2>(); }},
         {"util_scan", [] { return std::make_unique<PUtil_Scan>(); }},

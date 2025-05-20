@@ -55,6 +55,24 @@ public:
 	PUtil_FurtherLight() : Perk(INFO, TRIGGERS) {}
 };
 
+class PUtil_DoubleCone : public Perk
+{
+private:
+	static const inline ItemInfo INFO = ItemInfo("Reload Perk");
+	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {};
+
+	static constexpr bool USE_DOUBLE_CONE = true;
+
+	void onEquip() override
+	{
+		Flashlight& flashlight = gameInstance().getFlashlight();
+		flashlight.setSecondCone(USE_DOUBLE_CONE);
+	}
+
+public:
+	PUtil_DoubleCone() : Perk(INFO, TRIGGERS) {}
+};
+
 class PUtil_Magnet : public Perk
 {
 private:

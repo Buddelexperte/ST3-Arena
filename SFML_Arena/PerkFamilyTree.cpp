@@ -167,18 +167,20 @@ PerkTree PerkFamily_Tree::getUtilityTree()
     PerkNodeInfo* root = createPerkNodeInfo(++perkID, "util_root", "Utility Root", "Master versatility and control.");
 
     PerkNodeInfo* speedNode = createPerkNodeInfo(++perkID, "util_speed", "Quick Feet", "Move 10% faster.");
-    PerkNodeInfo* reloadNode = createPerkNodeInfo(++perkID, "util_further_light", "Fast Hands", "Reload speed increased by 20%.");
+    PerkNodeInfo* doubleConeNode = createPerkNodeInfo(++perkID, "util_double_cone", "Fast Hands", "Reload speed increased by 20%.");
     PerkNodeInfo* magnetNode = createPerkNodeInfo(++perkID, "util_magnet", "Enemy Scanner", "Reveals enemy health bars and weaknesses.");
 
+    PerkNodeInfo* furtherLightNode = createPerkNodeInfo(++perkID, "util_further_light", "Fast Hands", "Reload speed increased by 20%.");
     PerkNodeInfo* magnet2Node = createPerkNodeInfo(++perkID, "util_magnet2", "Enemy Scanner", "Reveals enemy health bars and weaknesses.");
     PerkNodeInfo* scanUpgradeNode = createPerkNodeInfo(++perkID, "util_scan", "Auto-Target", "Highlights weak spots for bonus damage.");
 
     // Add children
+    doubleConeNode->children.push_back(furtherLightNode);
     magnetNode->children.push_back(scanUpgradeNode);
     magnetNode->children.push_back(magnet2Node);
 
+    root->children.push_back(doubleConeNode);
     root->children.push_back(speedNode);
-    root->children.push_back(reloadNode);
     root->children.push_back(magnetNode);
 
     return root;
