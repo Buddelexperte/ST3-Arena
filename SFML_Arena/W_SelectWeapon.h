@@ -15,7 +15,7 @@ private:
 	void delegateEvents() override;
 
 	static constexpr unsigned int NUM_WEAPONS = 4; // Anzahl Weaffen Buttons
-	float WEAPON_SPACING_X;
+	float WEAPON_SPACING_X = 330.0f;
 
 	static const inline sf::Color WEAPON_SELECT_COLOR = sf::Color(100, 100, 100, 255);
 

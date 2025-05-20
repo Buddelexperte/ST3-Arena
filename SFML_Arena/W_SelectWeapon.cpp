@@ -5,7 +5,6 @@
 
 W_SelectWeapon::W_SelectWeapon(InputWidget* parent) 
 	: InputWidget(parent),
-	WEAPON_SPACING_X(viewHalfSize.x / NUM_WEAPONS),
 	T_Title(this), 
 	B_Pistol(this), B_Rifle(this), B_Rifle_Burst(this), B_Shotgun(this), 
 	T_Pistol(this), T_Rifle(this), T_Rifle_Burst(this), T_Shotgun(this),
