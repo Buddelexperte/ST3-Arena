@@ -9,7 +9,7 @@ W_Gameplay::W_Gameplay(InputWidget* parent)
 	: InputWidget(parent),
 	startDelay(START_DELAY), levelLoadingScreen(this),
 	pauseMenu(this), gameOverScreen(this), inventoryScreen(this), levelUpScreen(this), background(this), fadeScreen(this),
-	hud(gameInstance().getHud())
+	hud(gameInstance().getHud()), gameplayTimer(1.0f)
 {
 	// Done out
 	std::cout << "- Constructed GameplayWidget" << std::endl;
@@ -111,11 +111,8 @@ void W_Gameplay::lose()
 {
 	// Add GameOver Screen to shapes list
 	setWidgetIndex(2)->construct();
-	// Only save if higher than stored highscore
-	if (SaveGame::currentData.score > SaveGame::storedData.score)
-	{
-		SaveGame::saveData();
-	}
+	// Save ón every lose, highscores get calculated internally
+	SaveGame::saveData();
 }
 
 void W_Gameplay::loadLevel()
@@ -145,6 +142,14 @@ void W_Gameplay::tick(const float& deltaTime)
 	// If Gameplay is UnPaused
 	if (!gameInstance().getIsPaused())
 	{
+		// Count seconds for highscore and unlock purposes
+		gameplayTimer.addValue(-deltaTime);
+		if (gameplayTimer.isEmpty())
+		{
+			SaveGame::currentData.secondsPlayed++;
+			gameplayTimer.fill_to_max();
+		}
+
 		EntityManager::getInstance().tick(deltaTime); // Update all entities
 		CollisionManager::getInstance().tick(deltaTime); // Update all collisions
 		if (player->isDead()) 

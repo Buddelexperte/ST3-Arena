@@ -30,7 +30,6 @@ GI_Arena::GI_Arena()
 	createViewport();
 	
 	std::cout << "Initiated viewport\n" << std::endl;
-
 }
 
 void GI_Arena::createViewport()

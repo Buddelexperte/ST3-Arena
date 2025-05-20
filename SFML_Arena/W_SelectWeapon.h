@@ -5,16 +5,29 @@
 class W_SelectWeapon : public InputWidget // Inventory Widget ------------------------------------------
 {
 private:
+	struct WeaponUnlockInfo {
+		Button* button;
+		Text* label;
+		std::string lockedText;
+		int requiredScore;
+	};
+
 	void delegateEvents() override;
 
 	static constexpr unsigned int NUM_WEAPONS = 4; // Anzahl Weaffen Buttons
 	float WEAPON_SPACING_X;
 
+	static const inline sf::Color WEAPON_SELECT_COLOR = sf::Color(100, 100, 100, 255);
+
 	Text T_Title;
-	Button B_item1;
-	Button B_item2;
-	Button B_item3;
-	Button B_item4;
+	Button B_Pistol;
+	Text T_Pistol;
+	Button B_Rifle;
+	Text T_Rifle;
+	Button B_Rifle_Burst;
+	Text T_Rifle_Burst;
+	Button B_Shotgun;
+	Text T_Shotgun;
 	Button B_Return;
 	
 	// Keeping all weaponButtons in one place
@@ -22,6 +35,8 @@ private:
 
 	std::string selectedWeaponName = "";
 	void tryStartGame();
+
+	void checkForWeaponUnlock();
 
 public:
 	void tick(const float& deltaTime) override;

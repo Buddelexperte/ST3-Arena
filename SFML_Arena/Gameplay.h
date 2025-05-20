@@ -22,6 +22,8 @@ private:
 
 	FadeScreen fadeScreen;
 
+	ValueBar gameplayTimer;
+
 	std::vector<sf::Drawable*> flashlightAffectedDrawables;
 
 	void start_openAnim() override;

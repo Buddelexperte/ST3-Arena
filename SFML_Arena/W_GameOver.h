@@ -11,6 +11,8 @@ private:
 	Text T_Title;
 	Text T_Score;
 	Text T_Kills;
+	Text T_Weapon;
+	Text T_Seconds;
 	Button B_Quit;
 
 	sf::Vector2f getTickCorrection() const override;

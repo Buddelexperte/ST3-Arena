@@ -207,6 +207,7 @@ void Inventory::reset()
 
     owner->getFlashlight().resetRadius();
     owner->getFlashlight().setSecondCone(false);
+    owner->resetHealth(START_MAX_HEALTH);
     owner->breakShield();
 
     numLevelUpsQueued   = 0;

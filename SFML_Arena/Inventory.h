@@ -43,6 +43,7 @@ private:
     float speedMulti = DEFAULT_SPEED_MULTI;
 
     // Health
+    static constexpr float START_MAX_HEALTH = 1.0f;
     static constexpr float DEFAULT_HURT_BIAS = 0.0f;
     float hurtBias = DEFAULT_HURT_BIAS;
     static constexpr float DEFAULT_HURT_MULTIPLIER = 1.0f;

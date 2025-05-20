@@ -58,6 +58,7 @@ Player::Player()
 
 void Player::spawn()
 {
+
 	const sf::Vector2f spawnPos = sf::Vector2( 0.0f, 0.0f );
 	setPosition(spawnPos);
 	setVelocity(sf::Vector2f(0.0f, 0.0f));

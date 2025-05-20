@@ -59,7 +59,7 @@ void W_TitleScreen::construct()
 	InputWidget::construct();
 
 	gameInstance().resetWindowName();
-	T_Highscore.setText("Highscore: " + std::to_string(SaveGame::storedData.score));
+	T_Highscore.setText("Highscore: " + std::to_string(SaveGame::getCurrHighscore().highscore));
 
 	T_Title.construct();
 	T_Highscore.construct();
