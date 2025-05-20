@@ -381,6 +381,13 @@ void Player::activateShield()
 	std::cout << "SHIELD ACTIVATED!" << std::endl;
 }
 
+void Player::deactivateShield()
+{
+	inventory.setInvincible(false);
+	inventory.fillHurtFreq(); // Give player normal invincibility as if they have been hit (wouldn't do anything if not done)
+	setColor(sf::Color::White);
+}
+
 void Player::breakShield()
 {
 	inventory.setInvincible(false);

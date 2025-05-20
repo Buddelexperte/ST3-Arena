@@ -14,6 +14,10 @@ private:
 	// Overlay fadeScreen
 	FadeScreen fadeScreen;
 
+	size_t textAnimPhase = -1;
+	void start_textAnim();
+	void tick_textAnim(const float& deltaTime);
+
 	void start_openAnim() override;
 	void tick_openAnim(const float&) override;
 	void start_closeAnim() override;

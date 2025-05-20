@@ -34,23 +34,61 @@ void W_LevelLoad::tick(const float& deltaTime)
 {
 	InputWidget::tick(deltaTime);
 
+	tick_textAnim(deltaTime);
+
 	bg.tick(deltaTime);
 	T_Title.tick(deltaTime);
 	fadeScreen.tick(deltaTime);
 }
 
+void W_LevelLoad::start_textAnim()
+{
+	static constexpr float DURATION = 3.0f;
+
+	sf::Color t_color;
+
+	switch (textAnimPhase)
+	{
+	case 0:
+		t_color = textFade.reset(ColorColor(sf::Color::Transparent, sf::Color::Red), DURATION / 3.0f, easing::expo::out);
+		T_Title.setTextColor(t_color);
+		break;
+	case 1:
+		t_color = textFade.reset(ColorColor(sf::Color::Red, sf::Color::White), DURATION / 3.0f, easing::expo::out);
+		T_Title.setTextColor(t_color);
+		break;
+	case 2:
+		t_color = textFade.reset(ColorColor(sf::Color::White, sf::Color::Red), DURATION / 3.0f, easing::smoothstep);
+		T_Title.setTextColor(t_color);
+		break;
+	default:
+		break;
+	}
+}
+
+void W_LevelLoad::tick_textAnim(const float& deltaTime)
+{
+	T_Title.setTextColor(textFade.fade(deltaTime));
+
+	if (textFade.inProgress())
+		return;
+	
+	textAnimPhase++;
+	start_textAnim();
+}
+
 void W_LevelLoad::start_openAnim()
 {
+	textAnimPhase = 0;
+	start_textAnim();
+
 	static constexpr float DURATION = 1.0f;
 	
-	sf::Color t_color = textFade.reset(ColorColor(sf::Color::Transparent, sf::Color::White), DURATION / 3.0f, easing::quad::in);
-	T_Title.setTextColor(t_color);
 	fadeScreen.reset(ColorColor(sf::Color::Transparent, sf::Color::Transparent), DURATION, easing::expo::in);
 }
 
 void W_LevelLoad::tick_openAnim(const float& deltaTime)
 {
-	T_Title.setTextColor(textFade.fade(deltaTime));
 	fadeScreen.fade(deltaTime);
 
 	if (fadeScreen.isFading())
@@ -64,14 +102,11 @@ void W_LevelLoad::start_closeAnim()
 {
 	static constexpr float DURATION = 2.0f;
 
-	sf::Color t_color = textFade.reset(ColorColor(sf::Color::White, sf::Color::Transparent), DURATION, easing::smoothstep);
-	T_Title.setTextColor(t_color);
 	fadeScreen.reset(ColorColor(sf::Color::Transparent, sf::Color::Black), DURATION, easing::smootherstep);
 }
 
 void W_LevelLoad::tick_closeAnim(const float& deltaTime)
 {
-	T_Title.setTextColor(textFade.fade(deltaTime));
 	fadeScreen.fade(deltaTime);
 
 	if (fadeScreen.isFading())

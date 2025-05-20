@@ -89,6 +89,7 @@ public:
 	void collideWithProjectile(Projectile& projectile) override;
 
 	void activateShield();
+	void deactivateShield();
 	void breakShield();
 
 	// Health
