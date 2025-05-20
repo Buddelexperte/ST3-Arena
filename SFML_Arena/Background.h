@@ -7,7 +7,8 @@ enum class EBackgroundTexture {
     DEBUG = -1,
     DEFAULT = 0,
     STONE,
-    DIRT
+    DIRT,
+    WOOD
 };
 
 class BackgroundElement : public WidgetElement
@@ -37,7 +38,7 @@ private:
     int ATLAS_ROWS = 1;        // Number of tiles vertically in the atlas
 
     // Member variables
-    static constexpr unsigned int NUM_ATLAS_TO_LOAD = 3;
+    static constexpr unsigned int NUM_ATLAS_TO_LOAD = 4;
     std::vector<sf::Texture> loadedTextures;
     sf::Texture* usedAtlas = nullptr;
     sf::VertexArray background;

@@ -139,6 +139,12 @@ void BackgroundElement::setBackgroundTexture(const EBackgroundTexture& newBackgr
 
 		usedAtlas = &(loadedTextures[2]);
 		break;
+	case EBackgroundTexture::WOOD:
+		ATLAS_COLUMNS = 4;
+		ATLAS_ROWS = 1;
+
+		usedAtlas = &(loadedTextures[3]);
+		break;
 	default:
 		break;
 	}

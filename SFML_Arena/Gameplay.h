@@ -31,6 +31,9 @@ private:
 
 	void lose();
 
+	void loadLevel();
+	void loadLevel(const unsigned int& levelID);
+
 	bool onKeyEscape() override;
 	bool onKeyTab() override;
 	bool onLostFocus() override;

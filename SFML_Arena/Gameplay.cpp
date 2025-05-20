@@ -22,7 +22,7 @@ void W_Gameplay::construct()
 	{
 		// Reset values to game start values
 		setWidgetIndex(-1)->construct();
-
+		loadLevel(); // Loading correct level background
 		levelUpScreen.reset(); // Resetting the Perk Trees on Game Launch
 	}
 
@@ -116,6 +116,18 @@ void W_Gameplay::lose()
 	{
 		SaveGame::saveData();
 	}
+}
+
+void W_Gameplay::loadLevel()
+{
+	unsigned int levelID = gameInstance().getSelectedLevel();
+	loadLevel(levelID);
+}
+
+void W_Gameplay::loadLevel(const unsigned int& levelID)
+{
+	EBackgroundTexture levelBg = static_cast<EBackgroundTexture>(levelID);
+	background.setBackgroundTexture(levelBg);
 }
 
 void W_Gameplay::tick(const float& deltaTime)

@@ -97,6 +97,7 @@ bool W_LevelMenu::isMouseOver(const bool& checkForClick = false)
 
 void W_LevelMenu::selectLevel(const unsigned int level)
 {
-	// TODO: Add different level select to have consequences
+	gameInstance().setSelectedLevel(level);
+
 	parent->setWidgetIndex(parent->getWidgetIndex() + 1)->construct();
 }

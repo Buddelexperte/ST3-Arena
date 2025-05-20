@@ -51,6 +51,8 @@ private:
 	Player* getValidPlayer();
 	std::unique_ptr<Player> player = nullptr;
 
+	unsigned int selectedLevel = 0;
+
 	// View related
 	sf::Vector2f prevCamPos;
 	float zoomFactor = 1.0f;
@@ -132,6 +134,9 @@ public:
 	{
 		return getValidPlayer()->getHud();
 	}
+
+	void setSelectedLevel(const unsigned int& newLevel);
+	unsigned int getSelectedLevel() const;
 
 	void resetWindowName();
 	void addToDefaultWindowName(const std::string& suffix);

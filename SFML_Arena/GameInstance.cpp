@@ -500,6 +500,16 @@ void GI_Arena::setGameState(const GameState& newGS)
 	}
 }
 
+void GI_Arena::setSelectedLevel(const unsigned int& newLevel)
+{
+	selectedLevel = newLevel;
+}
+
+unsigned int GI_Arena::getSelectedLevel() const
+{
+	return selectedLevel;
+}
+
 void GI_Arena::resetWindowName()
 {
 	window->setTitle(WINDOW_NAME);
