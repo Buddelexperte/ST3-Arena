@@ -8,11 +8,11 @@ W_GameOver::W_GameOver(InputWidget* parent)
 	T_Title(this), T_Score(this), T_Kills(this), T_Weapon(this), T_Seconds(this), B_Quit(this)
 {
 	const std::vector <RawText> TEXT_CONSTR = {
-		{sf::Vector2f( 0.0f, -300.0f ), sf::Color::White, 100, "GAME OVER"			},
-		{sf::Vector2f( 0.0f, -200.0f ), sf::Color::White, 16, "Score: "				+ std::to_string(0)	},
-		{sf::Vector2f( 0.0f, -180.0f ), sf::Color::White, 16, "Kills: "				+ std::to_string(0)	},
-		{sf::Vector2f( 0.0f, -180.0f ), sf::Color::White, 16, "Weapon played: "		+ std::to_string(0)	},
-		{sf::Vector2f( 0.0f, -180.0f ), sf::Color::White, 16, "Seconds Survived: "	+ std::to_string(0)	}
+		{sf::Vector2f( 0.0f, -300.0f ), sf::Color::White, 100, "GAME OVER"},
+		{sf::Vector2f( 0.0f, -200.0f ), sf::Color::White, 16, "Score: "},
+		{sf::Vector2f( 0.0f, -180.0f ), sf::Color::White, 16, "Kills: "},
+		{sf::Vector2f( 0.0f, -160.0f ), sf::Color::White, 16, "Weapon played: "},
+		{sf::Vector2f( 0.0f, -140.0f ), sf::Color::White, 16, "Seconds Survived: "}
 	};
 
 	const RawButton BUTTON_CONSTR = {

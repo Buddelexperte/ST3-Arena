@@ -14,8 +14,9 @@ private:
 
 	void delegateEvents() override;
 
-	static constexpr unsigned int NUM_WEAPONS = 4; // Anzahl Weaffen Buttons
-	float WEAPON_SPACING_X;
+	static constexpr int NUM_WEAPONS = 4;
+	static constexpr float SIZE_CAROUSEL = 1500.0f;
+	static constexpr float WEAPON_DIST = SIZE_CAROUSEL / NUM_WEAPONS;
 
 	static const inline sf::Color WEAPON_SELECT_COLOR = sf::Color(100, 100, 100, 255);
 
@@ -35,7 +36,6 @@ private:
 
 	std::string selectedWeaponName = "";
 	void tryStartGame();
-
 	void checkForWeaponUnlock();
 
 public:

@@ -12,6 +12,10 @@ private:
 		int requiredSeconds;
 	};
 
+	static constexpr int NUM_LEVEL = 3;
+	static constexpr float SIZE_CAROUSEL = 1500.0f;
+	static constexpr float LEVEL_DIST = SIZE_CAROUSEL / NUM_LEVEL;
+
 	void delegateEvents() override;
 	
 	Text T_Title;

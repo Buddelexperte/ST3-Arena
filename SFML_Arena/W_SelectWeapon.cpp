@@ -5,7 +5,6 @@
 
 W_SelectWeapon::W_SelectWeapon(InputWidget* parent) 
 	: InputWidget(parent),
-	WEAPON_SPACING_X(viewHalfSize.x / NUM_WEAPONS),
 	T_Title(this), 
 	B_Pistol(this), B_Rifle(this), B_Rifle_Burst(this), B_Shotgun(this), 
 	T_Pistol(this), T_Rifle(this), T_Rifle_Burst(this), T_Shotgun(this),
@@ -13,18 +12,18 @@ W_SelectWeapon::W_SelectWeapon(InputWidget* parent)
 {
 	const std::vector<RawText> TITLE_CONSTR = {
 		{sf::Vector2f(0.0f						, -300.0f)					* unitNorm, sf::Color::White,		100,	"SELECT WEAPON"},
-		{sf::Vector2f(-1.5f * WEAPON_SPACING_X	, 25.0f + padding * 2.0f)	* unitNorm, sf::Color::White,		24,		"DEFAULT WEAPON"},
-		{sf::Vector2f(-0.5f * WEAPON_SPACING_X	, 25.0f + padding * 2.0f)	* unitNorm, sf::Color::White,		24,		""},
-		{sf::Vector2f(0.5f * WEAPON_SPACING_X	, 25.0f + padding * 2.0f)	* unitNorm, sf::Color::White,		24,		""},
-		{sf::Vector2f(1.5f * WEAPON_SPACING_X	, 25.0f + padding * 2.0f)	* unitNorm, sf::Color::White,		24,		""},
+		{sf::Vector2f(-1.5f * WEAPON_DIST	, 25.0f + padding * 2.0f)	* unitNorm, sf::Color::White,		24,		"DEFAULT WEAPON"},
+		{sf::Vector2f(-0.5f * WEAPON_DIST	, 25.0f + padding * 2.0f)	* unitNorm, sf::Color::White,		24,		""},
+		{sf::Vector2f(0.5f * WEAPON_DIST	, 25.0f + padding * 2.0f)	* unitNorm, sf::Color::White,		24,		""},
+		{sf::Vector2f(1.5f * WEAPON_DIST	, 25.0f + padding * 2.0f)	* unitNorm, sf::Color::White,		24,		""},
 	};
 
 	const std::vector<RawButton> INVENTORY_MENU_CONSTR = {
-		{sf::Vector2f(-1.5f * WEAPON_SPACING_X, -75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	WEAPON_SELECT_COLOR,	24,		"PISTOL",		sf::Color::White},
-		{sf::Vector2f(-0.5f * WEAPON_SPACING_X,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	WEAPON_SELECT_COLOR,	24,		"BURST RIFLE",	sf::Color::White},
-		{sf::Vector2f(0.5f * WEAPON_SPACING_X,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	WEAPON_SELECT_COLOR,	24,		"RIFLE",		sf::Color::White},
-		{sf::Vector2f(1.5f * WEAPON_SPACING_X, -75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	WEAPON_SELECT_COLOR,	24,		"SHOTGUN",		sf::Color::White},
-		{sf::Vector2f(0.0f,						150.0f) * unitNorm,		buttonSize,									sf::Color::White,		24,		"RETURN",		sf::Color::Black}
+		{sf::Vector2f(-1.5f * WEAPON_DIST, -75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	WEAPON_SELECT_COLOR,	24,		"PISTOL",		sf::Color::White},
+		{sf::Vector2f(-0.5f * WEAPON_DIST,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	WEAPON_SELECT_COLOR,	24,		"BURST RIFLE",	sf::Color::White},
+		{sf::Vector2f(0.5f	* WEAPON_DIST,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	WEAPON_SELECT_COLOR,	24,		"RIFLE",		sf::Color::White},
+		{sf::Vector2f(1.5f	* WEAPON_DIST, -75.0f)	* unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	WEAPON_SELECT_COLOR,	24,		"SHOTGUN",		sf::Color::White},
+		{sf::Vector2f(0.0f	,					150.0f) * unitNorm,		buttonSize,									sf::Color::White,		24,		"RETURN",		sf::Color::Black}
 	};
 
 	static constexpr bool lockedWeapon = true;

@@ -12,16 +12,16 @@ W_LevelMenu::W_LevelMenu(InputWidget* parent)
 {
 	const std::vector<RawText> TITLE_CONSTR = {
 		{sf::Vector2f(0.0f, -300.0f) * unitNorm, sf::Color::White, 100, "LEVEL SELECT"},
-		{sf::Vector2f(-500.0f	, 25.0f + padding * 2.0f) * unitNorm, sf::Color::White,	24,	"DEFAULT LEVEL"},
-		{sf::Vector2f(0.0f		, 25.0f + padding * 2.0f) * unitNorm, sf::Color::White,	24,	""},
-		{sf::Vector2f(500.0f	, 25.0f + padding * 2.0f) * unitNorm, sf::Color::White,	24,	""}
+		{sf::Vector2f(-1.0f * LEVEL_DIST, 25.0f + padding * 2.0f) * unitNorm, sf::Color::White,	24,	"DEFAULT LEVEL"},
+		{sf::Vector2f(0.0f * LEVEL_DIST	, 25.0f + padding * 2.0f) * unitNorm, sf::Color::White,	24,	""},
+		{sf::Vector2f(1.0f * LEVEL_DIST	, 25.0f + padding * 2.0f) * unitNorm, sf::Color::White,	24,	""}
 	};
 
 	const std::vector<RawButton> LEVEL_MENU_CONSTR = {
-		{sf::Vector2f(-500.0f,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	sf::Color(100, 100, 100),	24,		"LEVEL 1",		sf::Color::White},
-		{sf::Vector2f(0.0f,		-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	sf::Color(100, 100, 100),	24,		"LEVEL 2",		sf::Color::White},
-		{sf::Vector2f(500.0f,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	sf::Color(100, 100, 100),	24,		"LEVEL 3",		sf::Color::White},
-		{sf::Vector2f(0.0f,		150.0f) * unitNorm,		buttonSize,									sf::Color::White,			24,		"RETURN",		sf::Color::Black}
+		{sf::Vector2f(-1.0f * LEVEL_DIST,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	sf::Color(100, 100, 100),	24,		"LEVEL 1",		sf::Color::White},
+		{sf::Vector2f(0.0f * LEVEL_DIST,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	sf::Color(100, 100, 100),	24,		"LEVEL 2",		sf::Color::White},
+		{sf::Vector2f(1.0f * LEVEL_DIST,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	sf::Color(100, 100, 100),	24,		"LEVEL 3",		sf::Color::White},
+		{sf::Vector2f(0.0f,		150.0f)				* unitNorm,		buttonSize,									sf::Color::White,			24,		"RETURN",		sf::Color::Black}
 	};
 
 	T_Title.construct(TITLE_CONSTR[0]);
