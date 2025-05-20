@@ -7,7 +7,7 @@ class Rifle : public Weapon
 {
 private:
 	// For constructing derived classes
-	static constexpr float BASE_DAMAGE = 1.0f;
+	static constexpr float BASE_DAMAGE = 0.2f;
 	static constexpr float BASE_COOLDOWN = 0.2f;
 
 public:

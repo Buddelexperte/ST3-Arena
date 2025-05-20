@@ -111,10 +111,11 @@ private:
 
 	void onEnemyGotHit(PerkTriggerInfo& triggerInfo) override
 	{
-		if (triggerInfo.actor != nullptr)
+		Entity* actor = triggerInfo.actor;
+		if (actor)
 		{
-			IHasHealth* healthEntity = dynamic_cast<IHasHealth*>(triggerInfo.actor);
-			if (healthEntity != nullptr)
+			IHasHealth* healthEntity = dynamic_cast<IHasHealth*>(actor);
+			if (healthEntity)
 			{
 				bloodyEntities.push_back(healthEntity);
 			}

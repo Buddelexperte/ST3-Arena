@@ -148,8 +148,14 @@ PerkTree PerkFamily_Tree::getDefensiveTree()
     
     PerkNodeInfo* parryNode = createPerkNodeInfo(++perkID, "def_parry", "Defense Parry Perk", "Fortify your resilience.");
     PerkNodeInfo* shieldNode = createPerkNodeInfo(++perkID, "def_shield", "Quick Revive", "Revive allies 50% faster.");
+    PerkNodeInfo* thornsNode = createPerkNodeInfo(++perkID, "def_thorns", "Lifeline", "Grants temporary invincibility on revive.");
 
+    PerkNodeInfo* turtleNode = createPerkNodeInfo(++perkID, "def_turtle", "Lifeline", "Grants temporary invincibility on revive.");
+    
     // Add children to nodes
+    thornsNode->children.push_back(turtleNode);
+
+    root->children.push_back(thornsNode);
     root->children.push_back(parryNode);
     root->children.push_back(shieldNode);
 
@@ -162,16 +168,18 @@ PerkTree PerkFamily_Tree::getUtilityTree()
 
     PerkNodeInfo* speedNode = createPerkNodeInfo(++perkID, "util_speed", "Quick Feet", "Move 10% faster.");
     PerkNodeInfo* reloadNode = createPerkNodeInfo(++perkID, "util_reload", "Fast Hands", "Reload speed increased by 20%.");
-    PerkNodeInfo* scanNode = createPerkNodeInfo(++perkID, "util_scan", "Enemy Scanner", "Reveals enemy health bars and weaknesses.");
+    PerkNodeInfo* magnetNode = createPerkNodeInfo(++perkID, "util_magnet", "Enemy Scanner", "Reveals enemy health bars and weaknesses.");
 
-    PerkNodeInfo* scanUpgradeNode = createPerkNodeInfo(++perkID, "util_scan2", "Auto-Target", "Highlights weak spots for bonus damage.");
+    PerkNodeInfo* magnet2Node = createPerkNodeInfo(++perkID, "util_magnet2", "Enemy Scanner", "Reveals enemy health bars and weaknesses.");
+    PerkNodeInfo* scanUpgradeNode = createPerkNodeInfo(++perkID, "util_scan", "Auto-Target", "Highlights weak spots for bonus damage.");
 
     // Add children
-    scanNode->children.push_back(scanUpgradeNode);
+    magnetNode->children.push_back(scanUpgradeNode);
+    magnetNode->children.push_back(magnet2Node);
 
     root->children.push_back(speedNode);
     root->children.push_back(reloadNode);
-    root->children.push_back(scanNode);
+    root->children.push_back(magnetNode);
 
     return root;
 }

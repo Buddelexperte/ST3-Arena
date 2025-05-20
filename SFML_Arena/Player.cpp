@@ -120,12 +120,14 @@ void Player::tick_move(const float& deltaTime)
 {
 	// Movement
 	static constexpr float WALKING_SPEED = 350.0f;
-	static constexpr float ROT_LERP_MULTIPLIER = 2.0f;
 
 	float x = 0.0f, y = 0.0f, multiplier = 1.0f;
 
+	const float inventory_speed_multi = inventory.getSpeedMultiplier();
+	multiplier *= inventory_speed_multi;
+
 	if (sf::Keyboard::isKeyPressed(KEY_LSHIFT))
-		multiplier *= 1.7f;
+		multiplier += 0.7f;
 
 	if (sf::Keyboard::isKeyPressed(KEY_W)) y -= WALKING_SPEED;
 	if (sf::Keyboard::isKeyPressed(KEY_A)) x -= WALKING_SPEED;
@@ -359,6 +361,7 @@ void Player::collideWithEnemy(Enemy& enemy)
 
 	if (!inventory.getIsInvincible())
 	{
+		lastHurtingActor = &enemy;
 		hurt(enemy.getDamage());
 	}
 }
@@ -399,8 +402,12 @@ void Player::hurt(const float& delta)
 		playerFade.reset(ColorColor(sf::Color::Red, sf::Color::White), SCREEN_FADE_DURATION, easing::smootherstep);
 
 		// Trigger related Perks
-		PerkTriggerInfo triggerInfo(PerkTrigger::OnPlayerDamaged, getPosition());
+		PerkTriggerInfo triggerInfo(PerkTrigger::OnPlayerDamaged, getPosition(), lastHurtingActor);
 		inventory.triggerPerks(triggerInfo);
+	}
+	else
+	{
+		lastHurtingActor = nullptr;
 	}
 }
 

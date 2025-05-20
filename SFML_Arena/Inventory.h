@@ -38,6 +38,10 @@ private:
     static constexpr float DEFAULT_COOLDOWN_SUBTRACTOR = 0.0f;
     float cooldownSubtractor = DEFAULT_COOLDOWN_SUBTRACTOR;
 
+    // Speed manipulation
+    static constexpr float DEFAULT_SPEED_MULTI = 1.0f;
+    float speedMulti = DEFAULT_SPEED_MULTI;
+
     // Health
     static constexpr float DEFAULT_HURT_BIAS = 0.0f;
     float hurtBias = DEFAULT_HURT_BIAS;
@@ -92,6 +96,11 @@ public:
     void setCooldownSubtractor(const float& newSub);
     float getCooldownSubtractor() const;
 
+    // Speed Multiplier
+    void setSpeedMultiplier(const float& newVal);
+    void applySpeedMultiplier(const float& newVal);
+    float getSpeedMultiplier() const;
+
     // Set Damage values
     void setHurtBias(const float&);
     void applyHurtBias(const float&);
@@ -107,6 +116,7 @@ public:
 
     // Magnetic Range
     void setMagneticRange(const float& newRange);
+    void addMagneticRange(const float& delta);
     float getMagneticRange() const;
 
     // Start Weapon

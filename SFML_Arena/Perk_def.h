@@ -9,7 +9,7 @@ private:
 	static const inline ItemInfo INFO = ItemInfo("Defense Root Perk");
 	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {};
 
-	static constexpr float newDamageMulti = 0.75f;
+	static constexpr float newDamageMulti = 0.8f;
 
 	void onEquip() override
 	{
@@ -130,4 +130,48 @@ private:
 
 public:
 	PDef_Shield() : Perk(INFO, TRIGGERS), shieldTimer(shieldRegenTime) {}
+};
+
+class PDef_Thorns : public Perk
+{
+private:
+	static const inline ItemInfo INFO = ItemInfo("Advanced Revive Perk", "Increase your hp to double the original value!");
+	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {PerkTrigger::OnPlayerDamaged};
+
+	static constexpr float THORNS_DAMAGE = 0.2;
+
+	void onPlayerDamaged(PerkTriggerInfo& triggerInfo) override
+	{
+		Entity* actor = triggerInfo.actor;
+		if (actor)
+		{
+			IHasHealth* healthEntity = dynamic_cast<IHasHealth*>(actor);
+			if (healthEntity != nullptr)
+			{
+				healthEntity->hurt(THORNS_DAMAGE);
+			}
+		}
+	}
+
+public:
+	PDef_Thorns() : Perk(INFO, TRIGGERS) {}
+};
+
+class PDef_Turtle : public Perk
+{
+private:
+	static const inline ItemInfo INFO = ItemInfo("Advanced Revive Perk", "Increase your hp to double the original value!");
+	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {};
+
+	static constexpr float newDamageMulti = 0.5f;
+	static constexpr float speedFactor = 0.5f;
+
+	void onEquip() override
+	{
+		gameInstance().getInventory().setHurtMultiplier(newDamageMulti);
+		gameInstance().getInventory().applySpeedMultiplier(speedFactor);
+	}
+
+public:
+	PDef_Turtle() : Perk(INFO, TRIGGERS) {}
 };

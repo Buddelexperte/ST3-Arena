@@ -148,12 +148,15 @@ std::unique_ptr<Perk> makePerk(const std::string& tag)
         {"def_root", [] { return std::make_unique<PDef_Root>(); }},
         {"def_parry", [] { return std::make_unique<PDef_Parry>(); }},
         {"def_shield", [] { return std::make_unique<PDef_Shield>(); }},
+        {"def_thorns", [] { return std::make_unique<PDef_Thorns>(); }},
+        {"def_turtle", [] { return std::make_unique<PDef_Turtle>(); }},
         // Utility
         {"util_root", [] { return std::make_unique<PUtil_Root>(); }},
         {"util_speed", [] { return std::make_unique<PUtil_Speed>(); }},
         {"util_reload", [] { return std::make_unique<PUtil_Reload>(); }},
+        {"util_magnet", [] { return std::make_unique<PUtil_Magnet>(); }},
+        {"util_magnet2", [] { return std::make_unique<PUtil_Magnet2>(); }},
         {"util_scan", [] { return std::make_unique<PUtil_Scan>(); }},
-        {"util_scan2", [] { return std::make_unique<PUtil_Scan2>(); }},
         // Support
         {"sup_root", [] { return std::make_unique<PSup_Root>(); }},
         {"sup_heal_aura", [] { return std::make_unique<PSup_HealAura>(); }},

@@ -5,12 +5,12 @@
 
 class Rifle_Burst : public Weapon {
 private:
-    static constexpr float BASE_DAMAGE = 1.0f;
+    static constexpr float BASE_DAMAGE = 0.2f;
     static constexpr float BASE_COOLDOWN = 0.8f;
 
     static constexpr float BURST_INTERVAL = 0.1f;
     static constexpr int BURST_SIZE = 3;
-    int burstLeft = 0;
+    int burstLeft = 0; // Counter per burst to count bullets left to in burst
     
     ValueBar burstCooldown = ValueBar(BURST_INTERVAL);
 

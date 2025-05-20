@@ -202,6 +202,7 @@ void Inventory::reset()
     hurtBias            = DEFAULT_HURT_BIAS;
     hurtMultiplier      = DEFAULT_HURT_MULTIPLIER;
     magneticDistance    = DEFAULT_MAGNETIC_DISTANCE;
+    speedMulti          = DEFAULT_SPEED_MULTI;
     setHurtFreq(DEFAULT_HURT_FREQ);
 
     numLevelUpsQueued   = 0;
@@ -317,6 +318,21 @@ float Inventory::getCooldownSubtractor() const
     return cooldownSubtractor;
 }
 
+void Inventory::setSpeedMultiplier(const float& newVal)
+{
+    speedMulti = newVal;
+}
+
+void Inventory::applySpeedMultiplier(const float& newVal)
+{
+    speedMulti *= newVal;
+}
+
+float Inventory::getSpeedMultiplier() const
+{
+    return speedMulti;
+}
+
 void Inventory::setHurtBias(const float& val)
 {
     hurtBias = val;
@@ -376,6 +392,11 @@ void Inventory::applyCrit(float& damage)
 void Inventory::setMagneticRange(const float& newRange)
 {
     magneticDistance = newRange;
+}
+
+void Inventory::addMagneticRange(const float& delta)
+{
+    magneticDistance += delta;
 }
 
 float Inventory::getMagneticRange() const

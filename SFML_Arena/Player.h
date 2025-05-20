@@ -44,6 +44,8 @@ private:
 	void tick_animation(const float&);
 	void tick_color(const float&);
 
+	Enemy* lastHurtingActor = nullptr;
+
 	ColorFade playerFade;
 	static const inline sf::Color SHIELD_COLOR = sf::Color(100, 112, 255);
 

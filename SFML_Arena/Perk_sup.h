@@ -26,8 +26,8 @@ private:
 	static const inline ItemInfo INFO = ItemInfo("Heal Aura Perk");
 	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {PerkTrigger::OnInterval};
 
-	static constexpr float healAmount = 0.05f; // 5 hp
-	static constexpr float healDelay = 1.0f; // 1 second
+	static constexpr float healAmount = 0.1f; // 10 hp
+	static constexpr float healDelay = 2.0f; // 2 seconds
 	ValueBar healTimer;
 
 	void onInterval(const float& deltaTime) override
@@ -75,12 +75,12 @@ private:
 	static const inline ItemInfo INFO = ItemInfo("Advanced Revive Perk", "Increase your hp to double the original value!");
 	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {};
 
-	static constexpr float newMaxHp = 2.0f;
+	static constexpr float NEW_MAX_HP = 2.0f; // 200 hp
 
 	void onEquip() override
 	{
 		Player* player = gameInstance().getPlayer();
-		player->resetHealth(newMaxHp);
+		player->resetHealth(NEW_MAX_HP);
 	}
 
 public: 
