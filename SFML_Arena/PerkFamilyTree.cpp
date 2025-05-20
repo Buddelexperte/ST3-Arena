@@ -93,12 +93,14 @@ void PerkFamily_Tree::delegateEvents()
         node->onHover = [this, button = node.get()]()
             {
                 PerkNodeInfo* info = button->getNodeInfo();
+                // Show marking of path leading to hovered node
                 markParentNodesPath(info, true);
             };
 
         node->onUnhover = [this, button = node.get()]()
             {
                 PerkNodeInfo* info = button->getNodeInfo();
+                // Remove marking of path leading to hovered node
                 markParentNodesPath(info, false);
             };
 
@@ -114,6 +116,7 @@ void PerkFamily_Tree::delegateEvents()
                 // Unlock children if selected
                 unlockChildrenNodes(info);
 
+                // Remove marking of path before hovered node, as node is no longer hovered (already clicked nodes = disabled)
                 markParentNodesPath(info, false);
 
                 // Add the clicked perk (only not already selected ones are clickable, so no worries)
@@ -142,6 +145,11 @@ PerkTree PerkFamily_Tree::getOffensiveTree()
 PerkTree PerkFamily_Tree::getDefensiveTree()
 {
     PerkNodeInfo* root = createPerkNodeInfo(++perkID, "def_root", "Defense Root", "Fortify your resilience.");
+    
+    PerkNodeInfo* parryNode = createPerkNodeInfo(++perkID, "def_parry", "Defense Parry Perk", "Fortify your resilience.");
+
+    // Add children to nodes
+    root->children.push_back(parryNode);
 
     return root;
 }

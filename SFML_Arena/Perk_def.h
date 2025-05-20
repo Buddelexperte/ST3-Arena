@@ -22,3 +22,70 @@ public:
 	}
 
 };
+
+class PDef_Parry : public Perk
+{
+private:
+	static const inline ItemInfo INFO = ItemInfo("Defense Parry Perk", "50% chance to block hits for 3s after receiving damage");
+	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {PerkTrigger::OnEnemyContact, PerkTrigger::OnInterval};
+
+	// CONFIGURATION
+	static constexpr float parryChance = 0.5f;
+	static constexpr float parryCooldownTime = 2.0f;
+
+	// STATE
+	ValueBar parryCooldown;
+	bool bParryAvailable = true;
+
+	// CONTACT: When enemy tries to deal contact damage
+	void onEnemyContact(PerkTriggerInfo& triggerInfo) override
+	{
+		if (!bParryAvailable)
+			return;
+
+		if (!RNG::chance(parryChance))
+		{
+			startParryCooldown(); // Reset parry cooldown
+			std::cout << "No parry this time" << std::endl;
+			return;
+		}
+
+		startParryWindow();
+	}
+
+	// TICK: Called every frame
+	void onInterval(const float& deltaTime) override
+	{
+		if (!bParryAvailable)
+		{
+			parryCooldown.addValue(-deltaTime);
+
+			if (parryCooldown.isEmpty())
+			{
+				bParryAvailable = true;
+				std::cout << "Parry ready again." << std::endl;
+			}
+		}
+	}
+
+	// Parry helper functions
+
+	void startParryCooldown()
+	{
+		bParryAvailable = false;
+		parryCooldown.fill_to_max(); // Reset parry cooldown
+	}
+
+	void startParryWindow()
+	{
+		startParryCooldown();
+		gameInstance().getInventory().fillHurtFreq(); // Apply invuln as if been hit
+		std::cout << "PARRY! (for " << gameInstance().getInventory().getHurtFreq() << " seconds)" << std::endl;
+	}
+
+public:
+	PDef_Parry()
+		: Perk(INFO, TRIGGERS), parryCooldown(parryCooldownTime)
+	{ }
+
+};

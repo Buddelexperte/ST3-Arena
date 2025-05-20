@@ -146,6 +146,7 @@ std::unique_ptr<Perk> makePerk(const std::string& tag)
         {"off_dot_upgrade", [] { return std::make_unique<POff_DOT_Upgrade>(); }},
         // Defense
         {"def_root", [] { return std::make_unique<PDef_Root>(); }},
+        {"def_parry", [] { return std::make_unique<PDef_Parry>(); }},
         // Utility
         {"util_root", [] { return std::make_unique<PUtil_Root>(); }},
         {"util_speed", [] { return std::make_unique<PUtil_Speed>(); }},

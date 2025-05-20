@@ -353,14 +353,14 @@ void Player::onCollision(IHasCollision* other)
 
 void Player::collideWithEnemy(Enemy& enemy)
 {
+	// Trigger perks (before damage applied)
+	PerkTriggerInfo triggerInfo(PerkTrigger::OnEnemyContact, getPosition(), &enemy);
+	inventory.triggerPerks(triggerInfo);
+
 	if (!inventory.getIsInvincible())
 	{
 		hurt(enemy.getDamage());
 	}
-	
-	// Trigger perks (after damage applied)
-	PerkTriggerInfo triggerInfo(PerkTrigger::OnEnemyContact, getPosition(), &enemy);
-	inventory.triggerPerks(triggerInfo);
 }
 
 void Player::collideWithProjectile(Projectile& projectile)

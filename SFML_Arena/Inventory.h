@@ -81,6 +81,7 @@ public:
     void setHurtFreq(const float& newVal);
     void fillHurtFreq();
     void setTimedInvincibility(const float& delay);
+    void removeTimedInvincibility();
     float getHurtFreq() const;
     bool canBeHurt() const;
 

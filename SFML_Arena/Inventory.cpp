@@ -282,6 +282,11 @@ void Inventory::setTimedInvincibility(const float& delay)
     hurtTimer.setValue(delay);
 }
 
+void Inventory::removeTimedInvincibility()
+{
+    hurtTimer.zero_value();
+}
+
 float Inventory::getHurtFreq() const
 {
     return hurtTimer.getMaxValue();
