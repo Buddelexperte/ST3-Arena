@@ -261,6 +261,11 @@ Inventory& GI_Arena::getInventory()
 	return getPlayer()->getInventory();
 }
 
+Flashlight& GI_Arena::getFlashlight()
+{
+	return getPlayer()->getFlashlight();
+}
+
 bool GI_Arena::handleEvent(sf::Event* eventRef)
 {
 	if (activeMenu)

@@ -36,14 +36,23 @@ public:
 	PUtil_Speed() : Perk(INFO, TRIGGERS) {}
 };
 
-class PUtil_Reload : public Perk
+class PUtil_FurtherLight : public Perk
 {
 private:
 	static const inline ItemInfo INFO = ItemInfo("Reload Perk");
 	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {};
 
+	static constexpr float ADDED_FLASHLIGHT_RADIUS = 200.0f;
+
+	void onEquip() override
+	{
+		Flashlight& flashlight = gameInstance().getFlashlight();
+		float currRadius = flashlight.getRadius();
+		flashlight.setRadius(currRadius + ADDED_FLASHLIGHT_RADIUS);
+	}
+
 public: 
-	PUtil_Reload() : Perk(INFO, TRIGGERS) {}
+	PUtil_FurtherLight() : Perk(INFO, TRIGGERS) {}
 };
 
 class PUtil_Magnet : public Perk

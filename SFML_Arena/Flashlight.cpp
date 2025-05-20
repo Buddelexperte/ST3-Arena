@@ -107,14 +107,14 @@ void Flashlight::tick_shader(const float& deltaTime)
     switch (flashlightShape)
     {
     case Flashlight::Type::CIRCLE:
-        flashlightSprite.setScale(SPRITE_SCALE);
+        flashlightSprite.setScale(usedScale);
         circleShader.setUniform("lightPos", lightPos);
         circleShader.setUniform("radius", radius);
         circleShader.setUniform("u_viewSize", sf::Glsl::Vec2(viewSize));
         circleShader.setUniform("viewportHeight", view->getSize().y);
         break;
     case Flashlight::Type::CONE:
-        flashlightSprite.setScale(SPRITE_SCALE * 2.0f);
+        flashlightSprite.setScale(usedScale * 2.0f);
         coneShader.setUniform("lightPos", lightPos);
         coneShader.setUniform("radius", radius * 2.0f);
         coneShader.setUniform("direction", coneDir);
@@ -208,12 +208,16 @@ void Flashlight::drawOtherScene(sf::Drawable& drawable)
     sceneRenderTexture.display(); // Update the render texture
 }
 
+float Flashlight::getRadius() const
+{
+    return radius;
+}
+
 void Flashlight::setRadius(const float& newRadius)
 {
     radius = newRadius;
     float radiusRatio = (newRadius / SHADER_RADIUS);
-    sf::Vector2f newScale = { (SPRITE_SCALE * radiusRatio) };
-    flashlightSprite.setScale(newScale);
+    usedScale = (SPRITE_SCALE * radiusRatio);
 }
 
 void Flashlight::setPosition(const sf::Vector2f& newPos)

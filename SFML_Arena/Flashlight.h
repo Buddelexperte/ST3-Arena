@@ -138,6 +138,7 @@ private:
     static constexpr float SHADER_RADIUS = 480;
     float radius = SHADER_RADIUS;
     static const inline sf::Vector2f SPRITE_SCALE = { 2.1f, 2.1f };
+    sf::Vector2f usedScale = SPRITE_SCALE;
     static const inline sf::Vector2f SHADER_SPRITE_RATIO { 2.1f / SHADER_RADIUS, 2.1f / SHADER_RADIUS };
 
     std::vector<sf::Texture> textures = {};
@@ -170,8 +171,8 @@ public:
     void drawOtherScene(sf::Drawable& drawable);
 
     void setRadius(const float& newRadius);
-
     void resetRadius() { setRadius(SHADER_RADIUS); }
+    float getRadius() const;
 
     void setPosition(const sf::Vector2f& newPos) override;
     void setRotation(const float& newRot) override;

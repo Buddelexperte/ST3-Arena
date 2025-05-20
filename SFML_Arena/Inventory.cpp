@@ -205,6 +205,8 @@ void Inventory::reset()
     speedMulti          = DEFAULT_SPEED_MULTI;
     setHurtFreq(DEFAULT_HURT_FREQ);
 
+    owner->getFlashlight().resetRadius();
+
     numLevelUpsQueued   = 0;
 }
 

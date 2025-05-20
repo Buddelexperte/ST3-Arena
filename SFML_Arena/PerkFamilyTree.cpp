@@ -167,7 +167,7 @@ PerkTree PerkFamily_Tree::getUtilityTree()
     PerkNodeInfo* root = createPerkNodeInfo(++perkID, "util_root", "Utility Root", "Master versatility and control.");
 
     PerkNodeInfo* speedNode = createPerkNodeInfo(++perkID, "util_speed", "Quick Feet", "Move 10% faster.");
-    PerkNodeInfo* reloadNode = createPerkNodeInfo(++perkID, "util_reload", "Fast Hands", "Reload speed increased by 20%.");
+    PerkNodeInfo* reloadNode = createPerkNodeInfo(++perkID, "util_further_light", "Fast Hands", "Reload speed increased by 20%.");
     PerkNodeInfo* magnetNode = createPerkNodeInfo(++perkID, "util_magnet", "Enemy Scanner", "Reveals enemy health bars and weaknesses.");
 
     PerkNodeInfo* magnet2Node = createPerkNodeInfo(++perkID, "util_magnet2", "Enemy Scanner", "Reveals enemy health bars and weaknesses.");
