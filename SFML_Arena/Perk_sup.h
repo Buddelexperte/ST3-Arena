@@ -26,8 +26,8 @@ private:
 	static const inline ItemInfo INFO = ItemInfo("Heal Aura Perk");
 	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {PerkTrigger::OnInterval};
 
-	static constexpr float healAmount = 0.1f; // 10 hp
-	static constexpr float healDelay = 2.0f; // 2 seconds
+	static constexpr float healAmount = 0.02f; // 2 hp
+	static constexpr float healDelay = 1.0f; // 1 second
 	ValueBar healTimer;
 
 	void onInterval(const float& deltaTime) override

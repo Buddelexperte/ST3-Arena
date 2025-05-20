@@ -159,6 +159,7 @@ bool W_SelectWeapon::onKeyEscape()
 void W_SelectWeapon::tryStartGame()
 {
 	gameInstance().getPlayer()->getInventory().setStartWeapon(selectedWeaponName);
+	SaveGame::currentData.weaponName = selectedWeaponName;
 	gameInstance().resetWindowName();
 	parent->playAnim(CLOSE_ANIM);
 }
