@@ -147,9 +147,11 @@ PerkTree PerkFamily_Tree::getDefensiveTree()
     PerkNodeInfo* root = createPerkNodeInfo(++perkID, "def_root", "Defense Root", "Fortify your resilience.");
     
     PerkNodeInfo* parryNode = createPerkNodeInfo(++perkID, "def_parry", "Defense Parry Perk", "Fortify your resilience.");
+    PerkNodeInfo* shieldNode = createPerkNodeInfo(++perkID, "def_shield", "Quick Revive", "Revive allies 50% faster.");
 
     // Add children to nodes
     root->children.push_back(parryNode);
+    root->children.push_back(shieldNode);
 
     return root;
 }
@@ -179,17 +181,15 @@ PerkTree PerkFamily_Tree::getSupportTree()
     PerkNodeInfo* root = createPerkNodeInfo(++perkID, "sup_root", "Support Root", "Empower allies and enhance the battlefield.");
 
     PerkNodeInfo* healAuraNode = createPerkNodeInfo(++perkID, "sup_heal_aura", "Healing Aura", "Nearby allies regenerate 2% HP per second.");
-    PerkNodeInfo* ammoNode = createPerkNodeInfo(++perkID, "sup_vampire", "Ammo Dispenser", "Allies gain extra ammo on wave start.");
-    PerkNodeInfo* reviveNode = createPerkNodeInfo(++perkID, "sup_shield", "Quick Revive", "Revive allies 50% faster.");
+    PerkNodeInfo* vampNode = createPerkNodeInfo(++perkID, "sup_vampire", "Ammo Dispenser", "Allies gain extra ammo on wave start.");
 
-    PerkNodeInfo* reviveUpgradeNode = createPerkNodeInfo(++perkID, "sup_double_life", "Lifeline", "Grants temporary invincibility on revive.");
+    PerkNodeInfo* doubleLifeNode = createPerkNodeInfo(++perkID, "sup_double_life", "Lifeline", "Grants temporary invincibility on revive.");
 
     // Add children
-    reviveNode->children.push_back(reviveUpgradeNode);
+    vampNode->children.push_back(doubleLifeNode);
 
     root->children.push_back(healAuraNode);
-    root->children.push_back(ammoNode);
-    root->children.push_back(reviveNode);
+    root->children.push_back(vampNode);
 
     return root;
 }

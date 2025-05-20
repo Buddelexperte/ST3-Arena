@@ -69,49 +69,6 @@ public:
 	PSup_Vampire() : Perk(INFO, TRIGGERS) {}
 };
 
-class PSup_Shield : public Perk
-{
-private:
-	static const inline ItemInfo INFO = ItemInfo("Passive Shield Perk");
-	static const inline std::unordered_set<PerkTrigger> TRIGGERS = {PerkTrigger::OnInterval, PerkTrigger::OnEnemyContact};
-
-	static constexpr float shieldRegenTime = 5.0f;
-	ValueBar shieldTimer;
-	bool bShieldActive = false;
-
-	void onInterval(const float& deltaTime) override
-	{
-		if (bShieldActive)
-			return;
-
-		shieldTimer.addValue(-deltaTime);
-
-		if (shieldTimer.isEmpty())
-		{
-			shieldTimer.fill_to_max();
-
-			bShieldActive = true;
-			gameInstance().getPlayer()->activateShield();
-		}
-	}
-
-	void onEnemyContact(PerkTriggerInfo& triggerInfo) override
-	{
-		// Break shield if it was active to allow damage to come in again
-		if (bShieldActive)
-		{
-			bShieldActive = false;
-			gameInstance().getPlayer()->breakShield();
-		}
-
-		// If shield was not already active, reset timer for activation 
-		shieldTimer.fill_to_max();
-	}
-
-public: 
-	PSup_Shield() : Perk(INFO, TRIGGERS), shieldTimer(shieldRegenTime) {}
-};
-
 class PSup_DoubleLife : public Perk
 {
 private:

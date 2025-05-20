@@ -147,6 +147,7 @@ std::unique_ptr<Perk> makePerk(const std::string& tag)
         // Defense
         {"def_root", [] { return std::make_unique<PDef_Root>(); }},
         {"def_parry", [] { return std::make_unique<PDef_Parry>(); }},
+        {"def_shield", [] { return std::make_unique<PDef_Shield>(); }},
         // Utility
         {"util_root", [] { return std::make_unique<PUtil_Root>(); }},
         {"util_speed", [] { return std::make_unique<PUtil_Speed>(); }},
@@ -157,7 +158,6 @@ std::unique_ptr<Perk> makePerk(const std::string& tag)
         {"sup_root", [] { return std::make_unique<PSup_Root>(); }},
         {"sup_heal_aura", [] { return std::make_unique<PSup_HealAura>(); }},
         {"sup_vampire", [] { return std::make_unique<PSup_Vampire>(); }},
-        {"sup_shield", [] { return std::make_unique<PSup_Shield>(); }},
         {"sup_double_life", [] { return std::make_unique<PSup_DoubleLife>(); }}
     };
 
