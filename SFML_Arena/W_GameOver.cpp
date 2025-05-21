@@ -9,10 +9,10 @@ W_GameOver::W_GameOver(InputWidget* parent)
 {
 	const std::vector <RawText> TEXT_CONSTR = {
 		{sf::Vector2f( 0.0f, -300.0f ), sf::Color::White, 100, "GAME OVER"},
-		{sf::Vector2f( 0.0f, -200.0f ), sf::Color::White, 16, "Score: "},
-		{sf::Vector2f( 0.0f, -180.0f ), sf::Color::White, 16, "Kills: "},
-		{sf::Vector2f( 0.0f, -160.0f ), sf::Color::White, 16, "Weapon played: "},
-		{sf::Vector2f( 0.0f, -140.0f ), sf::Color::White, 16, "Seconds Survived: "}
+		{sf::Vector2f( 0.0f, -200.0f ), sf::Color::White, 24, "Score: "},
+		{sf::Vector2f( 0.0f, -180.0f ), sf::Color::White, 24, "Kills: "},
+		{sf::Vector2f( 0.0f, -160.0f ), sf::Color::White, 24, "Weapon played: "},
+		{sf::Vector2f( 0.0f, -140.0f ), sf::Color::White, 24, "Seconds Survived: "}
 	};
 
 	const RawButton BUTTON_CONSTR = {
