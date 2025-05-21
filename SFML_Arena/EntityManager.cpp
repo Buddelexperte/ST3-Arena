@@ -29,6 +29,11 @@ EntityManager::EntityManager()
 
 }
 
+bool EntityManager::entityExists(const size_t id) const
+{
+    return activeEntities.contains(id);
+}
+
 void EntityManager::tick(const float& deltaTime)
 {
     // Kill all pendingKill enemies

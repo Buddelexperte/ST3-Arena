@@ -2,6 +2,7 @@
 
 #include "ItemBaseClasses.h"
 #include "GameInstance.h"
+#include "EntityManager.h"
 
 class POff_Root : public Perk
 {
@@ -48,16 +49,18 @@ private:
 	ValueBar dotTimer;
 
 	// TODO: Make effect component class for Entities instead of pointer handling
-	std::unordered_set<IHasHealth*> bloodyEntities;
+	std::unordered_map<size_t, IHasHealth*> bloodyEntities;
 
 	void onEnemyGotHit(PerkTriggerInfo& triggerInfo) override
 	{
-		if (triggerInfo.actor != nullptr)
+		Entity* actor = triggerInfo.actor;
+		if (actor)
 		{
-			IHasHealth* healthEntity = dynamic_cast<IHasHealth*>(triggerInfo.actor);
-			if (healthEntity != nullptr)
+			size_t id = actor->getID();
+			IHasHealth* healthEntity = dynamic_cast<IHasHealth*>(actor);
+			if (healthEntity)
 			{
-				bloodyEntities.insert(healthEntity);
+				bloodyEntities[id] = healthEntity;
 			}
 		}
 	}
@@ -70,26 +73,30 @@ private:
 		{
 			dotTimer.fill_to_max();
 
-			for (auto it = bloodyEntities.begin(); it != bloodyEntities.end();)
+			for (auto it = bloodyEntities.begin(); it != bloodyEntities.end(); )
 			{
-				IHasHealth* entity = *it;
+				size_t id = it->first;
+				IHasHealth* entity = it->second;
+				bool keyStillValid = EntityManager::getInstance().entityExists(id);
+
+				if (!keyStillValid)
+					entity = nullptr;
 
 				if (!entity) {
-					it = bloodyEntities.erase(it);
+					it = bloodyEntities.erase(it); // invalid or null entity
 					continue;
 				}
 
 				entity->hurt(dotValue);
 
-				if (entity->isDead())
-				{
-					it = bloodyEntities.erase(it);
+				if (entity->isDead()) {
+					it = bloodyEntities.erase(it); // remove dead ones
 				}
-				else
-				{
-					++it;
+				else {
+					++it; // advance normally
 				}
 			}
+
 
 		}
 	}
@@ -108,17 +115,19 @@ private:
 	static constexpr float dotValue = 0.2f; // damage
 	ValueBar dotTimer;
 
-	std::vector<IHasHealth*> bloodyEntities;
+	// TODO: Make effect component class for Entities instead of pointer handling
+	std::unordered_map<size_t, IHasHealth*> bloodyEntities;
 
 	void onEnemyGotHit(PerkTriggerInfo& triggerInfo) override
 	{
 		Entity* actor = triggerInfo.actor;
 		if (actor)
 		{
+			size_t id = actor->getID();
 			IHasHealth* healthEntity = dynamic_cast<IHasHealth*>(actor);
 			if (healthEntity)
 			{
-				bloodyEntities.push_back(healthEntity);
+				bloodyEntities[id] = healthEntity;
 			}
 		}
 	}
@@ -131,22 +140,34 @@ private:
 		{
 			dotTimer.fill_to_max();
 
-			for (size_t i = 0; i < bloodyEntities.size();)
+			for (auto it = bloodyEntities.begin(); it != bloodyEntities.end(); )
 			{
-				IHasHealth* entity = bloodyEntities[i];
+				size_t id = it->first;
+				IHasHealth* entity = it->second;
+				bool keyStillValid = EntityManager::getInstance().entityExists(id);
+
+				if (!keyStillValid)
+					entity = nullptr;
+
+				if (!entity) {
+					it = bloodyEntities.erase(it); // invalid or null entity
+					continue;
+				}
+
 				entity->hurt(dotValue);
 
-				if (entity->isDead())
-				{
-					bloodyEntities.erase(bloodyEntities.begin() + i); // erase and do NOT increment
+				if (entity->isDead()) {
+					it = bloodyEntities.erase(it); // remove dead ones
 				}
-				else
-				{
-					++i; // only increment if not erased
+				else {
+					++it; // advance normally
 				}
 			}
+
+
 		}
 	}
+
 public: 
 	POff_DOT_Upgrade() : Perk(INFO, TRIGGERS) {}
 };

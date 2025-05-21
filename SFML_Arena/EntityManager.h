@@ -65,6 +65,8 @@ public:
 	unsigned int getNumEnemies() const 
 		{ return numEnemies; }
 
+	bool entityExists(const size_t id) const;
+
 	void tick(const float& deltaTime);
 
 	void callDelete(const size_t&);
