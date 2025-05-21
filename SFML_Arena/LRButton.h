@@ -19,15 +19,13 @@ public:
 	{
 		shapes.push_back(&left);
 		shapes.push_back(&right);
+
+		delegateEvents();
 	}
 
 	void construct() override;
 	void construct(const RawButton& CONSTR) override;
-	void construct(const RawButton& CONSTR, const bool startDisabled) override
-	{
-		constructLR(CONSTR, startDisabled);
-		Button::construct(CONSTR, startDisabled);	
-	}
+	void construct(const RawButton& CONSTR, const bool startDisabled) override;
 
 	void tick(const float& deltaTime) override;
 

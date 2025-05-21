@@ -48,12 +48,7 @@ protected:
 	sf::Text T_Text;
 	ColorFade textFade;
 	
-	virtual const sf::Color getHoverDelta() const
-	{
-		static const sf::Color HOVER_COLOR_DELTA = sf::Color(50, 50, 50, 0);
-		
-		return HOVER_COLOR_DELTA;
-	}
+	virtual const sf::Color getHoverDelta() const;
 
 	virtual const sf::Color getHoverColor() const
 	{
@@ -65,9 +60,6 @@ protected:
 		return buttonData.color;
 	}
 
-	virtual void hover();
-	virtual void unhover();
-	virtual void click();
 
 public:
 	// Constructors
@@ -118,9 +110,12 @@ public:
 	
 	bool getIsHovered() const;
 
+	virtual void hover();
+	virtual void unhover();
+	virtual void click();
+
 	// Callback functions
 	std::function<void()> onClick = nullptr; 
 	std::function<void()> onHover = nullptr;
 	std::function<void()> onUnhover = nullptr;
-
 };

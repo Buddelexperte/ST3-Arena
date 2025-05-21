@@ -537,6 +537,20 @@ void Button::tick_onClickAnim(const float&)
     // Nothing yet
 }
 
+const sf::Color Button::getHoverDelta() const
+{
+    static const sf::Color HOVER_COLOR_DELTA = sf::Color(50, 50, 50, 0);
+
+    sf::Color hoverDelta = sf::Color(
+        buttonData.color.r / 5.0f,
+        buttonData.color.g / 5.0f,
+        buttonData.color.b / 5.0f,
+        0
+    );
+
+    return hoverDelta;
+}
+
 void Button::hover()
 {
     if (bHovered) return;

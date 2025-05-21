@@ -311,6 +311,24 @@ inline sf::Vector2f dirFromRot(const float angle)
 	return sf::Vector2f(static_cast<float>(std::cos(rad)), static_cast<float>(std::sin(rad))); // Normalized direction
 }
 
+// COLOR
+// Dividing colors by floats
+inline sf::Color operator/(const sf::Color& color, float scalar)
+{
+	if (scalar == 0.0f) scalar = 1.0f;
+
+	auto divide = [scalar](sf::Uint8 c) -> sf::Uint8 {
+		return static_cast<sf::Uint8>(std::clamp(c / scalar, 0.0f, 255.0f));
+		};
+
+	return sf::Color(
+		divide(color.r),
+		divide(color.g),
+		divide(color.b),
+		divide(color.a)
+	);
+}
+
 // ROTATION ---------------------------------------------------------------------------------------
 constexpr float degreesToRadians(float degrees) {
 	return degrees * static_cast<float>(pi) / 180.0f;

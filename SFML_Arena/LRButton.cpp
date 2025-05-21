@@ -4,27 +4,27 @@ void LRButton::constructLR(const RawButton& CONSTR, const bool startDisabled)
 {
 	RawButton leftConstr = {
 		.pos = CONSTR.pos - sf::Vector2f(
-			CONSTR.size.x / 6.0f,
+			CONSTR.size.x / 2.0f,
 			0.0f),
-		.size = CONSTR.size * sf::Vector2f(1.0f/3.0f, 1.0f),
+		.size = CONSTR.size * sf::Vector2f(1.0f/4.0f, 1.0f),
 		.color = sf::Color::Transparent,
 		.textSize = 24,
 		.text = l_lable,
-		.textColor = sf::Color::White,
-		.alignment = EAlignment::RIGHT,
+		.textColor = CONSTR.textColor,
+		.alignment = EAlignment::LEFT,
 		.textAlignment = EAlignment::CENTER,
 	};
 
 	RawButton rightConstr = {
 		.pos = CONSTR.pos + sf::Vector2f(
-			CONSTR.size.x / 6.0f,
+			CONSTR.size.x / 2.0f,
 			0.0f),
-		.size = CONSTR.size * sf::Vector2f(1.0f/3.0f, 1.0f),
+		.size = CONSTR.size * sf::Vector2f(1.0f/4.0f, 1.0f),
 		.color = sf::Color::Transparent,
 		.textSize = 24,
 		.text = r_lable,
-		.textColor = sf::Color::White,
-		.alignment = EAlignment::LEFT,
+		.textColor = CONSTR.textColor,
+		.alignment = EAlignment::RIGHT,
 		.textAlignment = EAlignment::CENTER
 	};
 
@@ -34,16 +34,46 @@ void LRButton::constructLR(const RawButton& CONSTR, const bool startDisabled)
 
 void LRButton::delegateEvents()
 {
+	// Left
+
 	left.onClick = [this]()
 		{
 			if (onLeftClick)
 				onLeftClick();
 		};
 
+	left.onUnhover = [this]()
+		{
+			const unsigned int currTextSize = getButtonData().textSize;
+			left.setTextSize(currTextSize);
+		};
+
+	left.onHover = [this]()
+		{
+			std::cout << "l hovered" << std::endl;
+			const unsigned int currTextSize = getButtonData().textSize;
+			left.setTextSize(currTextSize + 20);
+		};
+
+	// Right
+
 	right.onClick = [this]()
 		{
 			if (onRightClick)
 				onRightClick();
+		};
+
+	right.onUnhover = [this]()
+		{
+			const unsigned int currTextSize = getButtonData().textSize;
+			right.setTextSize(currTextSize);
+		};
+
+	right.onHover = [this]()
+		{
+			std::cout << "r hovered" << std::endl;
+			const unsigned int currTextSize = getButtonData().textSize;
+			right.setTextSize(currTextSize + 20);
 		};
 }
 
@@ -57,6 +87,17 @@ void LRButton::construct(const RawButton& CONSTR)
 	construct(CONSTR, getEnabled());
 }
 
+void LRButton::construct(const RawButton& CONSTR, const bool startDisabled)
+{
+	// RLButton doesn't support alignment yet, defaults to CENTER
+	RawButton actualConstr = CONSTR;
+	actualConstr.alignment = EAlignment::CENTER;
+
+	constructLR(actualConstr, startDisabled);
+
+	Button::construct(actualConstr, startDisabled);
+}
+
 void LRButton::tick(const float& deltaTime)
 {
 	left.tick(deltaTime);
@@ -66,18 +107,14 @@ void LRButton::tick(const float& deltaTime)
 
 bool LRButton::isMouseOver(const bool& bCheckForClick)
 {
+	bool middleOver = Button::isMouseOver(bCheckForClick);
+
 	if (left.isMouseOver(bCheckForClick))
-	{
-		hover();
 		return true;
-	}
 
 	if (right.isMouseOver(bCheckForClick))
-	{
-		hover();
 		return true;
-	}
 
 
-	return Button::isMouseOver(bCheckForClick);
+	return middleOver;
 }
