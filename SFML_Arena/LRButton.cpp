@@ -1,5 +1,5 @@
 #include "LRButton.h"
-
+//cool
 void LRButton::constructLR(const RawButton& CONSTR, const bool startDisabled)
 {
 	RawButton leftConstr = {
