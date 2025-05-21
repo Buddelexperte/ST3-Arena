@@ -300,6 +300,9 @@
     <CopyFileToFolders Include="SaveGame.txt">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </CopyFileToFolders>
+	<CopyFileToFolders Include="HsGame.txt">
+		<ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+	</CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico" />

@@ -8,6 +8,8 @@ class PerkFamily_Element : public WidgetElement
 private:
 	PerkFamily displayedFamily = PerkFamily::None;
 
+	sf::Texture familyIcon;
+
 	// Background
 	Border border;
 	// Perk Family Name
@@ -16,6 +18,8 @@ private:
 	Button T_desc;
 	// Perk Family Icon
 	Button I_Icon;
+
+	void setFamilyTexture(const PerkFamily& pf);
 
 public:
 	PerkFamily_Element(InputWidget* parent);
@@ -27,6 +31,7 @@ public:
 	{
 		displayedFamily = pf;
 
+		setFamilyTexture(pf);
 		setPosition(startPos);
 
 		PerkFamilyInfo fInfo = getPerkFInfo(displayedFamily);
