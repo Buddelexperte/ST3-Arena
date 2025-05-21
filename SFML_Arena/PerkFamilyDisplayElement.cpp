@@ -47,7 +47,7 @@ PerkFamily_Element::PerkFamily_Element(InputWidget* parent)
 		// Icon																				 
 		{(sf::Vector2f{ 0.0f, -230.0f } * viewSizeNorm),	sf::Vector2f{ 160.0f, 160.0f } * viewSizeNorm,		sf::Color::Red,					0,	"",										sf::Color::Black,	EAlignment::CENTER_TOP,	EAlignment::CENTER},
 		// Description																		 
-		{(sf::Vector2f{ 0.0f, 0.0f } *viewSizeNorm),		sf::Vector2f{ 300.0 - (2 * padding), 330.0f } *viewSizeNorm,		sf::Color::Transparent,			16,	"Family Description\n- Stats\n- Lore",	sf::Color::Black,	EAlignment::CENTER_TOP,	EAlignment::LEFT_TOP}
+		{(sf::Vector2f{ 0.0f, 0.0f } * viewSizeNorm),		sf::Vector2f{ 300.0 - (2 * padding), 350.0f - padding } *viewSizeNorm,		sf::Color::Transparent,			16,	"Family Description\n- Stats\n- Lore",	sf::Color::Black,	EAlignment::CENTER_TOP,	EAlignment::LEFT_TOP}
 	
 	};
 	
