@@ -47,29 +47,8 @@ private:
 	static constexpr float dotValue = 0.2f; // damage
 	ValueBar dotTimer;
 
+	// TODO: Make effect component class for Entities instead of pointer handling
 	std::unordered_set<IHasHealth*> bloodyEntities;
-
-	void removeDeadTargets()
-	{
-		for (auto it = bloodyEntities.begin(); it != bloodyEntities.end();)
-		{
-			IHasHealth* entity = *it;
-
-			if (!entity) {
-				it = bloodyEntities.erase(it);
-				continue;
-			}
-
-			if (entity->isDead())
-			{
-				it = bloodyEntities.erase(it);
-			}
-			else
-			{
-				++it;
-			}
-		}
-	}
 
 	void onEnemyGotHit(PerkTriggerInfo& triggerInfo) override
 	{
@@ -85,9 +64,6 @@ private:
 
 	void onInterval(const float& deltaTime) override
 	{
-		// Stop blood-ticking dead enemies to avoid false flagging as bloody on new spawns due to pointer recycling
-		removeDeadTargets();
-
 		dotTimer.addValue(-deltaTime);
 
 		if (dotTimer.isEmpty())
