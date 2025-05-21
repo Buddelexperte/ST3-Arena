@@ -8,18 +8,18 @@
 
 struct UserSettings_Struct
 {
+	size_t resID			= 0;
 	unsigned int maxFPS		= 144;
 	bool bUseVSync			= true;
 	bool bFullscreen		= true;
-	size_t resID			= 0;
 	bool bWidgetParallax	= false;
 
 	void clear()
 	{
+		resID				= 0;
 		maxFPS				= 144;
 		bUseVSync			= true;
 		bFullscreen			= true;
-		resID				= 0;
 		bWidgetParallax		= false;
 	}
 

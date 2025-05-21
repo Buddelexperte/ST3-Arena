@@ -63,10 +63,10 @@ UserSettings_Struct UserSettings::loadSettings(const std::string& path)
 {
 	std::ifstream inFile(path);  // Open file in input mode and write the highscore to it
 	if (inFile.is_open()) {
+		settings.resID = 0; // Set to native on load
 		inFile >> settings.maxFPS;
 		inFile >> settings.bUseVSync;
 		inFile >> settings.bFullscreen;
-		settings.resID = 0; // Set to native on load
 		inFile >> settings.bWidgetParallax;
 		inFile.close();
 		std::cout << "Settings loaded!\n";
@@ -84,10 +84,10 @@ void UserSettings::saveSettings(UserSettings_Struct settingsToSave)
 	std::ofstream outFile(SETTINGS_FILE); // Open file in output mode and write the highscore to it
 	if (outFile.is_open())
 	{
+		outFile << settings.resID << '\n';
 		outFile << settings.maxFPS << '\n';
 		outFile << settings.bUseVSync << '\n';
 		outFile << settings.bFullscreen << '\n';
-		outFile << settings.resID << '\n';
 		outFile << settings.bWidgetParallax << '\n';
 		outFile.close();
 		std::cout << "Settings saved!\n";
