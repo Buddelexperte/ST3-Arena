@@ -68,6 +68,7 @@ void W_GameOver::tick(const float& deltaTime)
 
 void W_GameOver::updateStats(const SaveGame_Struct& currData)
 {
+	SaveGame::currentData.weaponName = gameInstance().getInventory().getActiveWeapon()->getItemInfo().name;
 	T_Score.setText("Score: " + std::to_string(currData.score));
 	T_Kills.setText("Kills: " + std::to_string(currData.enemiesKilled));
 	T_Weapon.setText("Weapon played: " + currData.weaponName);

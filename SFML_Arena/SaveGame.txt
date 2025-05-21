@@ -1,4 +1,4 @@
-9
-17
-Keine Waffe
-26
+2
+6
+Shotgun
+10
