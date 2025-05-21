@@ -163,6 +163,8 @@
     <ClCompile Include="ItemBaseClasses.cpp" />
     <ClCompile Include="LevelSystem.cpp" />
     <ClCompile Include="LoadingScreen.cpp" />
+    <ClCompile Include="LRButton.cpp" />
+    <ClCompile Include="LRButton.h" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="Particle.cpp" />
@@ -300,9 +302,9 @@
     <CopyFileToFolders Include="SaveGame.txt">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </CopyFileToFolders>
-	<CopyFileToFolders Include="HsGame.txt">
-		<ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-	</CopyFileToFolders>
+    <CopyFileToFolders Include="HsGame.txt">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico" />

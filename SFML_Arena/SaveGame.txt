@@ -1,4 +1,4 @@
-9
-18
-Shotgun
-22
+1
+1
+Pistol
+20

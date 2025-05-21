@@ -10,6 +10,7 @@
 #include "Border.h"
 #include "Text.h"
 #include "Button.h"
+#include "LRButton.h"
 
 // Helper Elements
 #include "FadeScreen.h"

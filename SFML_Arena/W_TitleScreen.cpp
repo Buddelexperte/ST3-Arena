@@ -26,7 +26,7 @@ W_TitleScreen::W_TitleScreen(InputWidget* parent)
 
 	delegateEvents();
 
-	shapes = { &T_Title, &T_Highscore, &B_Start, &B_OptionsMenu, &B_Quit };
+	shapes = { &T_Title, &T_Highscore, &B_Start, &B_OptionsMenu, &B_Quit, &test };
 }
 
 void W_TitleScreen::delegateEvents()

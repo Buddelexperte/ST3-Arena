@@ -39,9 +39,6 @@ private:
 	virtual void start_onClickAnim() override; // On Click
 	virtual void tick_onClickAnim(const float&) override;
 
-	virtual void hover();
-	virtual void unhover();
-	virtual void click();
 
 protected:
 
@@ -68,13 +65,17 @@ protected:
 		return buttonData.color;
 	}
 
+	virtual void hover();
+	virtual void unhover();
+	virtual void click();
+
 public:
 	// Constructors
 	Button(InputWidget* parent);
 
-	void construct();
-	void construct(const RawButton&);
-	void construct(const RawButton&, const bool);
+	virtual void construct();
+	virtual void construct(const RawButton&);
+	virtual void construct(const RawButton&, const bool);
 
 	// Text
 	void setText(const std::string&); // Set the texts content
