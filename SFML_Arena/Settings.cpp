@@ -66,7 +66,7 @@ UserSettings_Struct UserSettings::loadSettings(const std::string& path)
 		inFile >> settings.maxFPS;
 		inFile >> settings.bUseVSync;
 		inFile >> settings.bFullscreen;
-		inFile >> settings.resID;
+		settings.resID = 0; // Set to native on load
 		inFile >> settings.bWidgetParallax;
 		inFile.close();
 		std::cout << "Settings loaded!\n";

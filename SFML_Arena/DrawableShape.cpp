@@ -39,6 +39,7 @@ void IDrawableShapes::updateValues()
 
 	// Decide wether to use this for scalability, needs different device testing
 	viewSizeNorm = sf::Vector2f( viewSize.x / 2560.0f, viewSize.y / 1440.0f);
+	unitNorm = viewSizeNorm;
 	unitNorm = sf::Vector2f(1.0f, 1.0f);
 	buttonSize = buttonRatio * unitNorm;
 }
