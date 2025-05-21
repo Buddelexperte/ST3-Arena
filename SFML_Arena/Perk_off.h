@@ -49,6 +49,28 @@ private:
 
 	std::unordered_set<IHasHealth*> bloodyEntities;
 
+	void removeDeadTargets()
+	{
+		for (auto it = bloodyEntities.begin(); it != bloodyEntities.end();)
+		{
+			IHasHealth* entity = *it;
+
+			if (!entity) {
+				it = bloodyEntities.erase(it);
+				continue;
+			}
+
+			if (entity->isDead())
+			{
+				it = bloodyEntities.erase(it);
+			}
+			else
+			{
+				++it;
+			}
+		}
+	}
+
 	void onEnemyGotHit(PerkTriggerInfo& triggerInfo) override
 	{
 		if (triggerInfo.actor != nullptr)
@@ -63,6 +85,9 @@ private:
 
 	void onInterval(const float& deltaTime) override
 	{
+		// Stop blood-ticking dead enemies to avoid false flagging as bloody on new spawns due to pointer recycling
+		removeDeadTargets();
+
 		dotTimer.addValue(-deltaTime);
 
 		if (dotTimer.isEmpty())
