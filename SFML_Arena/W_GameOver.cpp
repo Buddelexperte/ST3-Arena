@@ -71,7 +71,7 @@ void W_GameOver::updateStats(const SaveGame_Struct& currData)
 	T_Score.setText("Score: " + std::to_string(currData.score));
 	T_Kills.setText("Kills: " + std::to_string(currData.enemiesKilled));
 	T_Weapon.setText("Weapon played: " + currData.weaponName);
-	T_Kills.setText("Seconds Survived: " + std::to_string(currData.secondsPlayed));
+	T_Seconds.setText("Seconds Survived: " + std::to_string(currData.secondsPlayed));
 }
 
 bool W_GameOver::isMouseOver(const bool& checkForClick = false)
