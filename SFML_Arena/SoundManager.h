@@ -55,6 +55,9 @@ private:
 
     LoadedSound sound_click;
     LoadedSound sound_returnClick;
+    LoadedSound sound_LevelUp;
+    LoadedSound sound_flashl_toggle1;
+    LoadedSound sound_flashl_toggle2;
 
     sf::Music backgroundMusic;
 
@@ -67,6 +70,9 @@ public:
 
     const sf::SoundBuffer& getSound_Click();
     const sf::SoundBuffer& getSound_ReturnClick();
+    const sf::SoundBuffer& getSound_LevelUp();
+    const sf::SoundBuffer& getSound_FlashlightToggle1();
+    const sf::SoundBuffer& getSound_FlashlightToggle2();
 
     void play(const sf::SoundBuffer& buffer, const ESoundEnv);
     void cleanUp();

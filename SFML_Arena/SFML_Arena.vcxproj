@@ -187,6 +187,7 @@
     <ClCompile Include="SW_Stage1.h" />
     <ClCompile Include="DebugIndicator.cpp" />
     <ClCompile Include="Text.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="WidgetBase.cpp" />
     <ClCompile Include="SaveGame.cpp" />
     <ClCompile Include="Slider.cpp" />
@@ -251,6 +252,7 @@
     <ClInclude Include="SW_Stage2.h" />
     <ClInclude Include="DebugIndicator.h" />
     <ClInclude Include="Text.h" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="WidgetBase.h" />
     <ClInclude Include="BaseTypes.h" />
     <ClInclude Include="Button.h" />
@@ -302,6 +304,9 @@
     <CopyFileToFolders Include="SaveGame.txt">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </CopyFileToFolders>
+	<CopyFileToFolders Include="Settings.txt">
+		<ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+	</CopyFileToFolders>
     <CopyFileToFolders Include="HsGame.txt">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </CopyFileToFolders>

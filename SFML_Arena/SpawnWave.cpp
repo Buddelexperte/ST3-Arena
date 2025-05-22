@@ -7,7 +7,7 @@
 
 sf::Vector2f EnemySpawnWave::getNewSpawnPos()
 {
-    constexpr float MIN_DISTANCE = 400.0f; // 800
+    constexpr float MIN_DISTANCE = 600.0f; // 600
     constexpr float MAX_DISTANCE = 1200.0f; // 1200
 
     // Getting values for generating a position
@@ -45,16 +45,24 @@ IMovable::RenderInfo EnemySpawnWave::makeSpawnRenderInfo()
 
 SpawnInformation EnemySpawnWave::makeSpawnInfo()
 {
-    // TODO: Temporary values, replace with spawning logic
-    static constexpr float ENEMY_HEALTH = 1.0f;
-    static constexpr float ENEMY_DAMAGE = 0.1f;
+    return SpawnInformation(makeSpawnRenderInfo(), getEnemHealth(), getEnemyDamage());
+}
 
-    return SpawnInformation(makeSpawnRenderInfo(), ENEMY_HEALTH, ENEMY_DAMAGE);
+float EnemySpawnWave::getEnemHealth() const
+{
+    static constexpr float ENEMY_HEALTH = 1.0f;
+    return ENEMY_HEALTH;
+}
+
+float EnemySpawnWave::getEnemyDamage() const
+{
+    static constexpr float ENEMY_DAMAGE = 0.1f;
+    return ENEMY_DAMAGE;
 }
 
 void EnemySpawnWave::spawnEnemy()
 {
-    SpawnInformation spawnInfo = makeSpawnInfo();
+    const SpawnInformation spawnInfo = makeSpawnInfo();
     EntityManager::getInstance().spawnEntity<Enemy>(spawnInfo);
 }
 

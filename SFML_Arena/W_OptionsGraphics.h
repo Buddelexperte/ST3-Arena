@@ -15,6 +15,8 @@ private:
     void updateSettingTexts(const UserSettings_Struct& s);
     void checkForDifferences();
 
+    size_t fpsToMaxFpsIndex(const unsigned int& maxFps);
+
     // Settings state
     UserSettings_Struct newSettings;    // Settings with pending changes
 

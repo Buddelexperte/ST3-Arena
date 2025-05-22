@@ -19,6 +19,9 @@ private:
 	virtual IMovable::RenderInfo makeSpawnRenderInfo();
 	virtual SpawnInformation makeSpawnInfo();
 
+	virtual float getEnemHealth() const;
+	virtual float getEnemyDamage() const;
+
 	virtual void spawnEnemy();
 	virtual void spawnInterval();
 public:

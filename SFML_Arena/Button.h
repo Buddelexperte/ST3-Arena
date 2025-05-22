@@ -39,9 +39,7 @@ private:
 	virtual void start_onClickAnim() override; // On Click
 	virtual void tick_onClickAnim(const float&) override;
 
-
 protected:
-
 	sf::RectangleShape B_Box;
 	ColorFade boxFade;
 
@@ -85,7 +83,7 @@ public:
 	unsigned int getTextSize() const;
 
 	// Texture
-	void setTexture(const sf::Texture&, const bool);
+	void setTexture(const sf::Texture*, const bool = true);
 	void clearTexture() { return B_Box.setTexture(nullptr); };
 	sf::Texture getTexture() const { return *B_Box.getTexture(); }
 

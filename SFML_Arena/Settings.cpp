@@ -22,7 +22,7 @@ size_t UserSettings::getNumResolutions()
 
 sf::VideoMode UserSettings::getResolution(const size_t id)
 {
-	if (id == 0)
+	if (id <= 0)
 		return sf::VideoMode::getDesktopMode();
 
 	if (id < getNumResolutions())
@@ -59,10 +59,39 @@ size_t UserSettings::getResolutionIndex(const sf::Vector2u& targetRes)
 	return static_cast<size_t>(0); // Return first index, smalles resolution, should be possible anywhere
 }
 
+size_t UserSettings::getNumFramerates()
+{
+	return maxFramerates.size();
+}
+
+size_t UserSettings::getFramerateIndex(const unsigned int& maxFps)
+{
+	auto it = std::find(maxFramerates.begin(), maxFramerates.end(), maxFps);
+
+	size_t index = 0;
+
+	if (it != maxFramerates.end())
+		index = static_cast<unsigned int>(std::distance(maxFramerates.begin(), it));
+	
+	return index; // fallback if current maxFPS not in list
+}
+
+unsigned UserSettings::getFramerate(const size_t& index)
+{
+	if (maxFramerates.empty() || index < 0)
+		return 60;
+
+	if (index < maxFramerates.size())
+		return maxFramerates[index];
+
+	return 60;
+}
+
 UserSettings_Struct UserSettings::loadSettings(const std::string& path)
 {
 	std::ifstream inFile(path);  // Open file in input mode and write the highscore to it
 	if (inFile.is_open()) {
+		inFile >> settings.resID;
 		settings.resID = 0; // Set to native on load
 		inFile >> settings.maxFPS;
 		inFile >> settings.bUseVSync;

@@ -175,6 +175,11 @@ void Flashlight::toggleMaskMode()
 
 }
 
+bool Flashlight::isCone() const
+{
+    return bUseCone;
+}
+
 sf::Shader* Flashlight::getActiveShader()
 {
     switch (flashlightShape)

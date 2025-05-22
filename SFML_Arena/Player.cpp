@@ -262,6 +262,12 @@ void Player::onMouseDownL()
 bool Player::onMouseClickR(sf::Event* eventRef)
 {
 	flashlight.toggleMaskMode();
+
+	const bool bIsFlashlightCone = flashlight.isCone();
+
+	SoundManager& sm = SoundManager::getInstance();
+	sm.play(bIsFlashlightCone ? sm.getSound_FlashlightToggle2() : sm.getSound_FlashlightToggle1(), ESoundEnv::GAMEPLAY);
+
 	return true;
 }
 

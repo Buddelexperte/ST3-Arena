@@ -187,7 +187,9 @@ void SoundManager::setIsMuted(const bool newMuted, const ESoundEnv sound_env)
 
 float SoundManager::getActualVolume(ESoundEnv sound_env) const
 {
-    static constexpr float MUSIC_MULTIPLIER = 10.0f; // Music is too quiet and doesn't fit 0-1 scale
+    static constexpr float UI_MULTIPLIER = 0.4f; // Music is too quiet and doesn't fit 0-1 scale
+    static constexpr float MUSIC_MULTIPLIER = 4.0f; // Music is too quiet and doesn't fit 0-1 scale
+    static constexpr float GAMEPLAY_MULTIPLIER = 5.0f; // Music is too quiet and doesn't fit 0-1 scale
 
     if (bMuted_master)
         return 0.0f;
@@ -197,11 +199,11 @@ float SoundManager::getActualVolume(ESoundEnv sound_env) const
     case ESoundEnv::UI:
         if (bMuted_ui)
             return 0.0f;
-        return volume_master * volume_ui_f;
+        return volume_master * volume_ui_f * UI_MULTIPLIER;
     case ESoundEnv::GAMEPLAY:
         if (bMuted_gameplay)
             return 0.0f;
-        return !bMuted_gameplay * volume_gameplay_f;
+        return !bMuted_gameplay * volume_gameplay_f * GAMEPLAY_MULTIPLIER;
     case ESoundEnv::MUSIC:
         if (bMuted_music)
             return 0.0f;
@@ -226,11 +228,13 @@ void SoundManager::updateOnSoundSettings()
 
 const sf::SoundBuffer& SoundManager::getSound_Click()
 {
+    static const std::string path = "Content/Sounds/Menu_Click.wav"; // Old click sound: "Content/Sounds/Glitch.wav"
+
     if (!sound_click.bLoaded)
     {
-        if (!sound_click.sound.loadFromFile("Content/Sounds/Glitch.wav"))
+        if (!sound_click.sound.loadFromFile(path))
         {
-            std::cerr << "Unable to load click sound!" << std::endl;
+            std::cerr << "Unable to load sound from path: " << path << std::endl;
         }
         sound_click.bLoaded = true;
     }
@@ -239,13 +243,63 @@ const sf::SoundBuffer& SoundManager::getSound_Click()
 
 const sf::SoundBuffer& SoundManager::getSound_ReturnClick()
 {
+    static const std::string path = "Content/Sounds/Menu_Close.wav"; // Old click sound: "Content/Sounds/Glitch2.wav"
+ 
     if (!sound_returnClick.bLoaded)
     {
-        if (!sound_returnClick.sound.loadFromFile("Content/Sounds/Glitch2.wav"))
+        if (!sound_returnClick.sound.loadFromFile(path))
         {
-            std::cerr << "Unable to load click return sound!" << std::endl;
+            std::cerr << "Unable to load sound from path: " << path << std::endl;
         }
         sound_returnClick.bLoaded = true;
     }
     return sound_returnClick.sound;
+}
+
+const sf::SoundBuffer& SoundManager::getSound_LevelUp()
+{
+    static const std::string path = "Content/Sounds/Level_Up.wav";
+
+    if (!sound_LevelUp.bLoaded)
+    {
+        if (!sound_LevelUp.sound.loadFromFile(path))
+        {
+            std::cerr << "Unable to load sound from path: " << path << std::endl;
+        }
+        sound_LevelUp.bLoaded = true;
+    }
+
+    return sound_LevelUp.sound;
+}
+
+const sf::SoundBuffer& SoundManager::getSound_FlashlightToggle1()
+{
+    static const std::string path = "Content/Sounds/Flashlight_Toggle1.wav";
+    
+    if (!sound_flashl_toggle1.bLoaded)
+    {
+        if (!sound_flashl_toggle1.sound.loadFromFile(path))
+        {
+            std::cerr << "Unable to load sound from path: " << path << std::endl;
+        }
+        sound_flashl_toggle1.bLoaded = true;
+    }
+
+    return sound_flashl_toggle1.sound;
+}
+
+const sf::SoundBuffer& SoundManager::getSound_FlashlightToggle2()
+{
+    static const std::string path = "Content/Sounds/Flashlight_Toggle2.wav";
+    
+    if (!sound_flashl_toggle2.bLoaded)
+    {
+        if (!sound_flashl_toggle2.sound.loadFromFile(path))
+        {
+            std::cerr << "Unable to load sound from path: " << path << std::endl;
+        }
+        sound_flashl_toggle2.bLoaded = true;
+    }
+
+    return sound_flashl_toggle2.sound;
 }

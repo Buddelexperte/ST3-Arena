@@ -10,21 +10,24 @@ W_GameOver::W_GameOver(InputWidget* parent)
 	const std::vector <RawText> TEXT_CONSTR = {
 		{sf::Vector2f( 0.0f, -300.0f ), sf::Color::White, 100, "GAME OVER"},
 		{sf::Vector2f( 0.0f, -200.0f ), sf::Color::White, 24, "Score: "},
-		{sf::Vector2f( 0.0f, -180.0f ), sf::Color::White, 24, "Kills: "},
-		{sf::Vector2f( 0.0f, -160.0f ), sf::Color::White, 24, "Weapon played: "},
-		{sf::Vector2f( 0.0f, -140.0f ), sf::Color::White, 24, "Seconds Survived: "}
+		{sf::Vector2f( 0.0f, -160.0f ), sf::Color::White, 24, "Kills: "},
+		{sf::Vector2f( 0.0f, -120.0f ), sf::Color::White, 24, "Weapon played: "},
+		{sf::Vector2f( 0.0f, -80.0f ), sf::Color::White, 24, "Seconds Survived: "}
 	};
 
 	const RawButton BUTTON_CONSTR = {
-		sf::Vector2f{ 0.0f, 0.0f },	buttonSize,	sf::Color::White, 24, "QUIT", sf::Color::Black
+		sf::Vector2f{ 0.0f, 10.0f },	buttonSize,	darkerButtonColor, 24, "QUIT", normalTextColor
 	};
 
 	T_Title.construct(TEXT_CONSTR[0]);
+
 	T_Score.construct(TEXT_CONSTR[1]);
 	T_Kills.construct(TEXT_CONSTR[2]);
 	T_Weapon.construct(TEXT_CONSTR[3]);
 	T_Seconds.construct(TEXT_CONSTR[4]);
+
 	B_Quit.construct(BUTTON_CONSTR);
+	B_Quit.setTexture(buttonTexture);
 
 	delegateEvents();
 
@@ -52,6 +55,13 @@ void W_GameOver::construct()
 	gameInstance().setGameState(GAME_OVER);
 
 	updateStats(SaveGame::currentData);
+
+	T_Title.construct();
+	T_Score.construct();
+	T_Kills.construct();
+	T_Weapon.construct();
+	T_Seconds.construct();
+	B_Quit.construct();
 }
 
 void W_GameOver::tick(const float& deltaTime)

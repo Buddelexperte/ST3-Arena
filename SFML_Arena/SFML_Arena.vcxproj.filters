@@ -266,6 +266,13 @@
     <ClCompile Include="PerkFamilyTree.cpp">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks\PerkSelection</Filter>
     </ClCompile>
+    <ClCompile Include="LRButton.h" />
+    <ClCompile Include="LRButton.cpp">
+      <Filter>Source\VisualInterfaces\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Source\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionManager.h">
@@ -521,6 +528,9 @@
     <ClInclude Include="Perk_sup.h">
       <Filter>Source\Actors\Inventory\Items\Perks</Filter>
     </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Source\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\openal32.dll">
@@ -529,6 +539,8 @@
     <CopyFileToFolders Include="SaveGame.txt">
       <Filter>Ressources</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="HsGame.txt" />
+    <CopyFileToFolders Include="Settings.txt" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SFML_Arena.rc">

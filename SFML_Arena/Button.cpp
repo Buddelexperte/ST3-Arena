@@ -5,6 +5,7 @@
 #include "GameInstance.h"
 #include "SoundManager.h"
 #include "FontManager.h"
+#include "TextureManager.h"
 
 void Button::playButtonSound() const
 {
@@ -39,7 +40,7 @@ void Button::construct(const RawButton& constr, const bool startDisabled)
 	buttonData = constr;
 
 	// Setup button box
-	B_Box.setSize(constr.size);
+    B_Box.setSize(constr.size);
 	B_Box.setFillColor(constr.color);
 
 	// Setup text
@@ -59,6 +60,7 @@ void Button::construct(const RawButton& constr, const bool startDisabled)
     tick_pos(getTickCorrection());
 
 	bHovered = startDisabled; // Reset hover state to false, except if disabled to stop hovering logic
+    unhover();
     isMouseOver(false); // Check for initial onHover events
 }
 
@@ -448,10 +450,10 @@ unsigned int Button::getTextSize() const
     return buttonData.textSize;
 }
 
-void Button::setTexture(const sf::Texture& newTexture, const bool resetTint)
+void Button::setTexture(const sf::Texture* newTexture, const bool resetTint)
 {
-	B_Box.setTexture(&newTexture);
-	if (resetTint) B_Box.setFillColor(sf::Color::White);
+    B_Box.setTexture(newTexture);
+    if (resetTint) B_Box.setFillColor(sf::Color::White);
 }
 
 // Mouse Interaction ------------------------------------------------------------------------------

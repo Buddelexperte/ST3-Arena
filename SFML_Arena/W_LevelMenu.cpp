@@ -18,10 +18,10 @@ W_LevelMenu::W_LevelMenu(InputWidget* parent)
 	};
 
 	const std::vector<RawButton> LEVEL_MENU_CONSTR = {
-		{sf::Vector2f(-1.0f * LEVEL_DIST,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	sf::Color(100, 100, 100),	24,		"LEVEL 1",		sf::Color::White},
-		{sf::Vector2f(0.0f * LEVEL_DIST,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	sf::Color(100, 100, 100),	24,		"LEVEL 2",		sf::Color::White},
-		{sf::Vector2f(1.0f * LEVEL_DIST,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	sf::Color(100, 100, 100),	24,		"LEVEL 3",		sf::Color::White},
-		{sf::Vector2f(0.0f,		150.0f)				* unitNorm,		buttonSize,									sf::Color::White,			24,		"RETURN",		sf::Color::Black}
+		{sf::Vector2f(-1.0f * LEVEL_DIST,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	darkerButtonColor,	24,		"LEVEL 1",		normalTextColor},
+		{sf::Vector2f(0.0f * LEVEL_DIST,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	darkerButtonColor,	24,		"LEVEL 2",		normalTextColor},
+		{sf::Vector2f(1.0f * LEVEL_DIST,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	darkerButtonColor,	24,		"LEVEL 3",		normalTextColor},
+		{sf::Vector2f(0.0f,		150.0f)				* unitNorm,		buttonSize,									darkerButtonColor,	24,		"RETURN",		normalTextColor}
 	};
 
 	T_Title.construct(TITLE_CONSTR[0]);
@@ -30,11 +30,17 @@ W_LevelMenu::W_LevelMenu(InputWidget* parent)
 	T_Level2.construct(TITLE_CONSTR[2]);
 	T_Level3.construct(TITLE_CONSTR[3]);
 
+	TextureManager& tm = TextureManager::getInstance();
+
 	B_Level1.construct(LEVEL_MENU_CONSTR[0]);
+	B_Level1.setTexture(tm.getTexturePtr(ETexture::BUTTON_SQR));
 	B_Level2.construct(LEVEL_MENU_CONSTR[1]);
+	B_Level2.setTexture(tm.getTexturePtr(ETexture::BUTTON_SQR));
 	B_Level3.construct(LEVEL_MENU_CONSTR[2]);
+	B_Level3.setTexture(tm.getTexturePtr(ETexture::BUTTON_SQR));
 	
 	B_Return.construct(LEVEL_MENU_CONSTR[3]);
+	B_Return.setTexture(buttonTexture);
 
 	delegateEvents();
 
@@ -134,7 +140,7 @@ void W_LevelMenu::selectLevel(const unsigned int level)
 
 void W_LevelMenu::checkForWeaponUnlock()
 {
-	static const sf::Color LOCKED_COLOR = grayedOutButtonColor;
+	static const sf::Color LOCKED_COLOR = disabledButtonColor;
 	static const sf::Color UNLOCKED_COLOR = sf::Color::White;
 	static const std::string UNLOCKED_STR = "UNLOCKED";
 

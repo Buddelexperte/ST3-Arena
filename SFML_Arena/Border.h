@@ -27,7 +27,7 @@ public:
 	void construct(const RawBorder&);
 
 	// Texture
-	void setTexture(const sf::Texture&, const bool);
+	void setTexture(const sf::Texture*, const bool = true);
 	void clearTexture() { return B_Box.setTexture(nullptr); };
 	sf::Texture getTexture() const { return *B_Box.getTexture(); }
 
