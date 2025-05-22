@@ -228,7 +228,8 @@ void SoundManager::updateOnSoundSettings()
 
 const sf::SoundBuffer& SoundManager::getSound_Click()
 {
-    static const std::string path = "Content/Sounds/Menu_Click.wav"; // Old click sound: "Content/Sounds/Glitch.wav"
+    static const std::string fileName = "Menu_Click.wav"; // Old click sound: "Content/Sounds/Glitch.wav"
+    static const std::string& path = SOUND_DIR + fileName;
 
     if (!sound_click.bLoaded)
     {
@@ -243,8 +244,9 @@ const sf::SoundBuffer& SoundManager::getSound_Click()
 
 const sf::SoundBuffer& SoundManager::getSound_ReturnClick()
 {
-    static const std::string path = "Content/Sounds/Menu_Close.wav"; // Old click sound: "Content/Sounds/Glitch2.wav"
- 
+    static const std::string fileName = "Menu_Close.wav"; // Old click sound: "Content/Sounds/Glitch2.wav"
+    static const std::string& path = SOUND_DIR + fileName;
+
     if (!sound_returnClick.bLoaded)
     {
         if (!sound_returnClick.sound.loadFromFile(path))
@@ -258,7 +260,8 @@ const sf::SoundBuffer& SoundManager::getSound_ReturnClick()
 
 const sf::SoundBuffer& SoundManager::getSound_LevelUp()
 {
-    static const std::string path = "Content/Sounds/Level_Up.wav";
+    static const std::string fileName = "Level_Up.wav";
+    static const std::string& path = SOUND_DIR + fileName;
 
     if (!sound_LevelUp.bLoaded)
     {
@@ -274,8 +277,9 @@ const sf::SoundBuffer& SoundManager::getSound_LevelUp()
 
 const sf::SoundBuffer& SoundManager::getSound_FlashlightToggle1()
 {
-    static const std::string path = "Content/Sounds/Flashlight_Toggle1.wav";
-    
+    static const std::string fileName = "Flashlight_Toggle1.wav";
+    static const std::string& path = SOUND_DIR + fileName;
+
     if (!sound_flashl_toggle1.bLoaded)
     {
         if (!sound_flashl_toggle1.sound.loadFromFile(path))
@@ -290,8 +294,9 @@ const sf::SoundBuffer& SoundManager::getSound_FlashlightToggle1()
 
 const sf::SoundBuffer& SoundManager::getSound_FlashlightToggle2()
 {
-    static const std::string path = "Content/Sounds/Flashlight_Toggle2.wav";
-    
+    static const std::string fileName = "Flashlight_Toggle2.wav";
+    static const std::string& path = SOUND_DIR + fileName;
+
     if (!sound_flashl_toggle2.bLoaded)
     {
         if (!sound_flashl_toggle2.sound.loadFromFile(path))
