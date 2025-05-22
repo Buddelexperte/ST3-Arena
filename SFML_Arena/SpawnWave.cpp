@@ -45,10 +45,10 @@ IMovable::RenderInfo EnemySpawnWave::makeSpawnRenderInfo()
 
 SpawnInformation EnemySpawnWave::makeSpawnInfo()
 {
-    return SpawnInformation(makeSpawnRenderInfo(), getEnemHealth(), getEnemyDamage());
+    return SpawnInformation(makeSpawnRenderInfo(), getEnemyHealth(), getEnemyDamage());
 }
 
-float EnemySpawnWave::getEnemHealth() const
+float EnemySpawnWave::getEnemyHealth() const
 {
     static constexpr float ENEMY_HEALTH = 1.0f;
     return ENEMY_HEALTH;

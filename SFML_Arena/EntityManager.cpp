@@ -166,7 +166,7 @@ void EntityManager::tick_spawning(const float& deltaTime)
         return;
 
     // Check if spawnWave can even spawn right now, if yes, tick it's timer
-    if (!spawnWave->canSpawn())
+    if (!spawnWave->isNotEnoughEnemies())
         return;
 
     // Decrease spawnTimer (Countdown)

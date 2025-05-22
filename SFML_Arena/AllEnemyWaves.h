@@ -5,3 +5,4 @@
 #include "SW_Default.h"
 #include "SW_Stage1.h"
 #include "SW_Stage2.h"
+#include "SW_Stage3.h"

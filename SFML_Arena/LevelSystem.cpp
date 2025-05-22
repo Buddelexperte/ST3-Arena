@@ -48,6 +48,9 @@ void LevelSystem::setStage(const unsigned int newStage)
 	case 2:
 		manager.setSpawnWave<SW_Stage2>();
 		break;
+	case 3:
+		manager.setSpawnWave<SW_Stage3>();
+		break;
 	default:
 		break;
 	}
