@@ -103,7 +103,7 @@ void PerkFamily_Tree::delegateEvents()
                 // Remove marking of path leading to hovered node
                 markParentNodesPath(info, false);
             };
-
+        
         node->onClick = [this, button = node.get()]()
             {
                 PerkNodeInfo* info = button->getNodeInfo();
@@ -121,6 +121,13 @@ void PerkFamily_Tree::delegateEvents()
 
                 // Add the clicked perk (only not already selected ones are clickable, so no worries)
                 gameInstance().getInventory().addPerk_byTag(info->tag);
+
+                if (gameInstance().getIsDebugMode())
+                    return;
+
+                // Closing the menu on perk Select
+                parent->onKeyEscape();
+                parent->onKeyEscape();
             };
     }
 }
