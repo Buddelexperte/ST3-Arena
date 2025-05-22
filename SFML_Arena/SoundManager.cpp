@@ -187,9 +187,9 @@ void SoundManager::setIsMuted(const bool newMuted, const ESoundEnv sound_env)
 
 float SoundManager::getActualVolume(ESoundEnv sound_env) const
 {
-    static constexpr float UI_MULTIPLIER = 0.4f; // Music is too quiet and doesn't fit 0-1 scale
+    static constexpr float UI_MULTIPLIER = 0.4f; // UI is too loud and doesn't fit 0-1 scale
     static constexpr float MUSIC_MULTIPLIER = 4.0f; // Music is too quiet and doesn't fit 0-1 scale
-    static constexpr float GAMEPLAY_MULTIPLIER = 5.0f; // Music is too quiet and doesn't fit 0-1 scale
+    static constexpr float GAMEPLAY_MULTIPLIER = 5.0f; // Gameplay is too quiet and doesn't fit 0-1 scale
 
     if (bMuted_master)
         return 0.0f;
