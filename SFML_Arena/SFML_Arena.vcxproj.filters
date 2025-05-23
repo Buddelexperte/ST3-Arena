@@ -272,6 +272,9 @@
     <ClCompile Include="LRButton.h">
       <Filter>Source\VisualInterfaces\Components</Filter>
     </ClCompile>
+    <ClCompile Include="PerkNode.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks\PerkSelection</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionManager.h">

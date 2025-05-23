@@ -124,8 +124,6 @@ inline sf::Color lerp(const sf::Color& currColor, const sf::Color& targetColor, 
 {
 	clamp(factor, 0.0f, 1.0f);
 
-	sf::Color colorDiff = targetColor - currColor;
-
 	sf::Color newColor = {
 		static_cast<sf::Uint8>(lerp(currColor.r, targetColor.r, factor)),
 		static_cast<sf::Uint8>(lerp(currColor.g, targetColor.g, factor)),
@@ -326,6 +324,21 @@ inline sf::Color operator/(const sf::Color& color, float scalar)
 		divide(color.g),
 		divide(color.b),
 		divide(color.a)
+	);
+}
+
+// Multiplying colors by floats
+inline sf::Color operator*(const sf::Color& color, float scalar)
+{
+	auto multiply = [scalar](sf::Uint8 c) -> sf::Uint8 {
+		return static_cast<sf::Uint8>(std::clamp(c * scalar, 0.0f, 255.0f));
+		};
+
+	return sf::Color(
+		multiply(color.r),
+		multiply(color.g),
+		multiply(color.b),
+		multiply(color.a)
 	);
 }
 

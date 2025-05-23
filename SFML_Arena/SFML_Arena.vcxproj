@@ -171,6 +171,7 @@
     <ClCompile Include="PerkFamilyDisplayElement.cpp" />
     <ClCompile Include="PerkFamilyMenu.cpp" />
     <ClCompile Include="PerkFamilyTree.cpp" />
+    <ClCompile Include="PerkNode.cpp" />
     <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="PU_ExperienceOrb.cpp" />
     <ClCompile Include="P_Sparkle.cpp" />

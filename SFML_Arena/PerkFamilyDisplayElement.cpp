@@ -28,13 +28,11 @@ void PerkFamily_Element::setFamilyTexture(const PerkFamily& pf)
 
 void PerkFamily_Element::setFamilyColor(const PerkFamily& pf)
 {
-	static const sf::Color colorDiff = sf::Color(20, 20, 20, 0);
-
 	static const std::unordered_map<PerkFamily, sf::Color> familyPaths = {
-		{PerkFamily::Offensive, sf::Color::Red - colorDiff		},
-		{PerkFamily::Defensive, sf::Color::Blue + sf::Color(100, 100, 0)},
-		{PerkFamily::Utility,   sf::Color::White - colorDiff	},
-		{PerkFamily::Support,   sf::Color::Green - colorDiff	}
+		{PerkFamily::Offensive, sf::Color::Red},
+		{PerkFamily::Defensive, sf::Color::Blue},
+		{PerkFamily::Utility,   sf::Color::White},
+		{PerkFamily::Support,   sf::Color::Green}
 	};
 
 	const auto it = familyPaths.find(pf);
@@ -44,16 +42,23 @@ void PerkFamily_Element::setFamilyColor(const PerkFamily& pf)
 		return;
 	}
 
-	B_bg.setColor(it->second);
+	const sf::Color whiteDiff = (sf::Color::White - it->second);
+
+	sf::Color bgColor = it->second - (it->second * 0.4f) + (whiteDiff * 0.2f);
+	bgColor.a = 200;
+	B_bg.setColor(bgColor);
+
+	sf::Color nameBoxColor = (whiteDiff * 0.65f) + it->second;
+	nameBoxColor.a = 150;
+	B_name.setColor(nameBoxColor);
 }
 
 PerkFamily_Element::PerkFamily_Element(InputWidget* parent)
 	: WidgetElement(parent),
-	B_bg(parent), T_name(parent), I_Icon(parent), T_desc(parent)
+	B_bg(parent), B_name(parent), I_Icon(parent), T_desc(parent)
 {
 	const std::vector<RawText> TEXT_CONTRS = {
-		{(sf::Vector2f{ 0.0f, -330.0f } *viewSizeNorm),	sf::Color::Black,	16,	"Family Name",							EAlignment::CENTER_TOP},
-		{(sf::Vector2f{ 0.0f, 0.0f } *viewSizeNorm),	sf::Color::Black,	16,	"Family Description\n- Stats\n- Lore",	EAlignment::CENTER_TOP}
+		{(sf::Vector2f{ 0.0f, 200.0f } * viewSizeNorm),	sf::Color::Black,	16,	"Family Description\n- Stats\n- Lore",	EAlignment::CENTER_TOP}
 	};
 
 	const std::vector<RawBorder> ICON_CONSTR = {
@@ -61,19 +66,21 @@ PerkFamily_Element::PerkFamily_Element(InputWidget* parent)
 	};
 
 	const std::vector<RawButton> BUTTON_CONSTR = {
-		{(sf::Vector2f{ 0.0f, 0.0f } * viewSizeNorm),		sf::Vector2f{ 300.0f, 700.0f } * viewSizeNorm, backgroundInterfaceColor, EAlignment::CENTER }
+		{(sf::Vector2f{ 0.0f, 0.0f } * viewSizeNorm),	sf::Vector2f{ 300.0f, 700.0f } * viewSizeNorm,	backgroundInterfaceColor, EAlignment::CENTER },
+		{(sf::Vector2f{ 0.0f, 0.0f } * viewSizeNorm),	buttonSize * 0.8f,								backgroundInterfaceColor,	24,	"Family Name", normalTextColor, EAlignment::CENTER_TOP}
 	};
 	
 	TextureManager& tm = TextureManager::getInstance();
 
 	B_bg.construct(BUTTON_CONSTR[0]);
 	B_bg.setTexture(tm.getTexturePtr(ETexture::PERK_FAMILY_BORDER));
-	T_name.construct(TEXT_CONTRS[0]);
-	T_desc.construct(TEXT_CONTRS[1]);
+	B_name.construct(BUTTON_CONSTR[1]);
+	B_name.setTexture(buttonTexture);
+	T_desc.construct(TEXT_CONTRS[0]);
 	I_Icon.construct(ICON_CONSTR[0]);
 
 
-	shapes = { &B_bg, &T_name, &I_Icon, &T_desc };
+	shapes = { &B_bg, &B_name, &I_Icon, &T_desc };
 }
 
 void PerkFamily_Element::construct()
@@ -93,7 +100,7 @@ void PerkFamily_Element::construct(const sf::Vector2f& startPos, const PerkFamil
 	setPosition(startPos);
 
 	PerkFamilyInfo fInfo = getPerkFInfo(displayedFamily);
-	T_name.setText(fInfo.name);
+	B_name.setText(fInfo.name);
 	T_desc.setText(fInfo.description);
 }
 

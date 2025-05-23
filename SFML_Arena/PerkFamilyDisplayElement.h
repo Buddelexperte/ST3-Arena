@@ -11,7 +11,7 @@ private:
 	// Background
 	Button B_bg;
 	// Perk Family Name
-	Text T_name;
+	Button B_name;
 	// Perk Family Description
 	Text T_desc;
 	// Perk Family Icon
@@ -42,7 +42,7 @@ public:
 		WidgetElement::addPosition(delta, bTickBased);
 
 		B_bg.addPosition(delta, bTickBased);
-		T_name.addPosition(delta, bTickBased);
+		B_name.addPosition(delta, bTickBased);
 		T_desc.addPosition(delta, bTickBased);
 		I_Icon.addPosition(delta, bTickBased);
 	}
