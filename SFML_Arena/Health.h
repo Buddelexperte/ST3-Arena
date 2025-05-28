@@ -20,23 +20,42 @@ public:
 
 	virtual void hurt(const float& delta)
 	{
-		getHealthBar().addValue(-delta);
+		if (delta < 0.0f) return;
+
+		if (getHealth() - delta < 0.0f)
+		{
+			setHealth(0.0f);
+		}
+		else
+		{
+			getHealthBar().addValue(-delta);
+		}
+
 		onHealthChanged();
 	}
 
 	virtual void heal(const float& delta)
 	{
+		if (delta < 0.0f) return;
+
 		if (getHealth() + delta > getMaxHealth())
+		{
 			setHealth(getMaxHealth());
-		else 
+		}
+		else
+		{
 			getHealthBar().addValue(delta);
+		}
 
 		onHealthChanged();
 	}
 
-	virtual void setHealth(const float& newVal)
+	virtual void setHealth(float newVal)
 	{
-		return getHealthBar().setValue(newVal);
+		if (newVal < 0.0f)
+			newVal = 0.0f;
+
+		getHealthBar().setValue(newVal);
 		onHealthChanged();
 	}
 
