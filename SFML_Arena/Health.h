@@ -20,7 +20,9 @@ public:
 
 	virtual void hurt(const float& delta)
 	{
-		if (getHealth() - delta < SMALLEST_PRECISION)
+		if (delta < 0.0f) return;
+
+		if (getHealth() - delta < 0.0f)
 		{
 			setHealth(0.0f);
 		}
@@ -34,6 +36,8 @@ public:
 
 	virtual void heal(const float& delta)
 	{
+		if (delta < 0.0f) return;
+
 		if (getHealth() + delta > getMaxHealth())
 		{
 			setHealth(getMaxHealth());
@@ -46,8 +50,11 @@ public:
 		onHealthChanged();
 	}
 
-	virtual void setHealth(const float& newVal)
+	virtual void setHealth(float newVal)
 	{
+		if (newVal < 0.0f)
+			newVal = 0.0f;
+
 		getHealthBar().setValue(newVal);
 		onHealthChanged();
 	}
