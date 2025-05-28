@@ -82,7 +82,7 @@ void PerkFamilyMenu::delegateEvents()
 	{
 		familyDisplay->onSelect = [this, familyDisplay]()
 			{
-				if (onSelectFamily)
+				if (onSelectFamily != nullptr)
 					onSelectFamily(familyDisplay->getDisplayedFamily());
 			};
 	}
