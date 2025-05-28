@@ -40,6 +40,9 @@ private:
 	bool onKeyTab() override;
 	bool onLostFocus() override;
 	bool onMouseClickR(sf::Event*) override;
+
+	void tick_countSeconds(const float& deltaTime);
+	void menu_levelUp();
 public:
 	W_Gameplay(InputWidget*);
 

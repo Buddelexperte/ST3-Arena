@@ -7,9 +7,12 @@ PerkFamilyMenu::PerkFamilyMenu(InputWidget* parent)
 	B_Skip(this),
 	pf_display_1(this), pf_display_2(this), pf_display_3(this), pf_display_4(this)
 {
-	const RawButton CONSTR_SKIP = { (sf::Vector2f{ 0, 480.0f } *viewSizeNorm), buttonSize, sf::Color(255, 255, 255, 255),	24,	" S K I P",	sf::Color::Black, EAlignment::CENTER_BOTTOM, EAlignment::CENTER };
+	const RawButton CONSTR_SKIP = { 
+		(sf::Vector2f( 0, 480.0f ) * viewSizeNorm), buttonSize, darkerButtonColor,	24,	" S K I P",	normalTextColor, EAlignment::CENTER_BOTTOM, EAlignment::CENTER 
+	};
 
 	B_Skip.construct(CONSTR_SKIP);
+	B_Skip.setTexture(buttonTexture);
 
 	const std::vector<sf::Vector2f> FAMILY_POS = {
 		(sf::Vector2f{ -690.0f, -50.0f } *viewSizeNorm),
@@ -41,6 +44,7 @@ void PerkFamilyMenu::tick(const float& deltaTime)
 void PerkFamilyMenu::construct()
 {
 	InputWidget::construct();
+
 	setWidgetIndex(0);
 
 	B_Skip.construct();

@@ -14,13 +14,17 @@ private:
 	unsigned int enemiesSpawned = 0; // Number of enemies spawned in the current interval
 	unsigned int maxEnemiesPerInterval = 20; // Safe guard to be overridden
 
-
-	virtual sf::Vector2f getNewSpawnPos();
-	virtual IMovable::RenderInfo makeSpawnRenderInfo();
-	virtual SpawnInformation makeSpawnInfo();
-
 	virtual void spawnEnemy();
 	virtual void spawnInterval();
+	virtual SpawnInformation makeSpawnInfo();
+
+protected:
+	virtual sf::Vector2f getNewSpawnPos();
+	virtual IMovable::RenderInfo makeSpawnRenderInfo();
+
+	virtual float getEnemyHealth() const;
+	virtual float getEnemyDamage() const;
+
 public:
 	EnemySpawnWave(float sInterval, unsigned int enemiesPerInterval, unsigned int maxIntervals, unsigned int maxEnemiesPerInterval);
 	EnemySpawnWave(float sInterval, unsigned int enemiesPerInterval, unsigned int maxIntervals);
@@ -31,7 +35,7 @@ public:
 		intervalTimer.addValue(-deltaTime);
 	}
 
-	void resetEnemiesSpawned()
+	void forgetNumEnemiesSpawned()
 	{
 		enemiesSpawned = 0;
 	}
@@ -46,14 +50,16 @@ public:
 		return enemiesSpawned;
 	}
 
-	virtual bool canSpawn() const
+	virtual bool isNotEnoughEnemies() const
 	{
-		if (enemiesSpawned >= maxEnemiesPerInterval)
+		bool enoughEnemies = (enemiesSpawned >= maxEnemiesPerInterval);
+
+		bool limitedIntervals = (maxIntervals > 0);
+		bool enoughIntervals = (nInterval >= maxIntervals && limitedIntervals);
+
+		if (enoughEnemies || enoughIntervals)
 			return false;
 
-		if (nInterval >= maxIntervals && maxIntervals > 0)
-			return false;
-	
 		return true;
 	}
 
@@ -65,7 +71,7 @@ public:
 			nInterval++;
 			// Reset the timer for the next interval
 			intervalTimer.fill_to_max();
-			resetEnemiesSpawned();
+			forgetNumEnemiesSpawned();
 		}
 	}
 };

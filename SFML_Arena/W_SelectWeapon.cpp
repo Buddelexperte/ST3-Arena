@@ -19,11 +19,11 @@ W_SelectWeapon::W_SelectWeapon(InputWidget* parent)
 	};
 
 	const std::vector<RawButton> INVENTORY_MENU_CONSTR = {
-		{sf::Vector2f(-1.5f * WEAPON_DIST, -75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	WEAPON_SELECT_COLOR,	24,		"PISTOL",		sf::Color::White},
-		{sf::Vector2f(-0.5f * WEAPON_DIST,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	WEAPON_SELECT_COLOR,	24,		"BURST RIFLE",	sf::Color::White},
-		{sf::Vector2f(0.5f	* WEAPON_DIST,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	WEAPON_SELECT_COLOR,	24,		"RIFLE",		sf::Color::White},
-		{sf::Vector2f(1.5f	* WEAPON_DIST, -75.0f)	* unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	WEAPON_SELECT_COLOR,	24,		"SHOTGUN",		sf::Color::White},
-		{sf::Vector2f(0.0f	,					150.0f) * unitNorm,		buttonSize,									sf::Color::White,		24,		"RETURN",		sf::Color::Black}
+		{sf::Vector2f(-1.5f * WEAPON_DIST, -75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	darkerButtonColor,		24,		"PISTOL",		normalTextColor},
+		{sf::Vector2f(-0.5f * WEAPON_DIST,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	darkerButtonColor,		24,		"BURST RIFLE",	normalTextColor},
+		{sf::Vector2f(0.5f	* WEAPON_DIST,	-75.0f) * unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	darkerButtonColor,		24,		"RIFLE",		normalTextColor},
+		{sf::Vector2f(1.5f	* WEAPON_DIST, -75.0f)	* unitNorm,		sf::Vector2f(200.0f, 200.0f) * unitNorm,	darkerButtonColor,		24,		"SHOTGUN",		normalTextColor},
+		{sf::Vector2f(0.0f	,				150.0f) * unitNorm,		buttonSize,									darkerButtonColor,		24,		"RETURN",		normalTextColor}
 	};
 
 	static constexpr bool lockedWeapon = true;
@@ -35,11 +35,17 @@ W_SelectWeapon::W_SelectWeapon(InputWidget* parent)
 	T_Rifle.construct(TITLE_CONSTR[3]);
 	T_Shotgun.construct(TITLE_CONSTR[4]);
 
+	TextureManager& tm = TextureManager::getInstance();
 	B_Pistol.construct(INVENTORY_MENU_CONSTR[0]);
+	B_Pistol.setTexture(tm.getTexturePtr(ETexture::BUTTON_SQR));
 	B_Rifle_Burst.construct(INVENTORY_MENU_CONSTR[1], lockedWeapon);
+	B_Rifle_Burst.setTexture(tm.getTexturePtr(ETexture::BUTTON_SQR));
 	B_Rifle.construct(INVENTORY_MENU_CONSTR[2], lockedWeapon);
+	B_Rifle.setTexture(tm.getTexturePtr(ETexture::BUTTON_SQR));
 	B_Shotgun.construct(INVENTORY_MENU_CONSTR[3], lockedWeapon);
+	B_Shotgun.setTexture(tm.getTexturePtr(ETexture::BUTTON_SQR));
 	B_Return.construct(INVENTORY_MENU_CONSTR[4]);
+	B_Return.setTexture(buttonTexture);
 
 	weaponButtons = {
 		&B_Pistol, &B_Rifle, &B_Rifle_Burst, &B_Shotgun,
@@ -165,7 +171,7 @@ void W_SelectWeapon::tryStartGame()
 
 void W_SelectWeapon::checkForWeaponUnlock()
 {
-	static const sf::Color LOCKED_COLOR = grayedOutButtonColor;
+	static const sf::Color LOCKED_COLOR = disabledButtonColor;
 	static const sf::Color UNLOCKED_COLOR = sf::Color::White;
 	static const std::string UNLOCKED_STR = "UNLOCKED";
 

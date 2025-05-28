@@ -69,17 +69,26 @@ private:
 	{sf::Vector2u(7680, 4320), "(8K UHD) 7680x4320"}		// 8K UHD
 	};
 
+	// --- MAX FPS ---
+	static inline std::vector<unsigned int> maxFramerates = {
+		30, 60, 144, 165, 240
+	};
+
 	static const inline std::string SETTINGS_FILE = "Settings.txt";
 	static std::vector<ResolutionDesc>& getResolutionsVec();
 	static UserSettings_Struct settings;
 
 public:
 	static UserSettings_Struct getSettings();
+	// Resolution calc
 	static size_t getNumResolutions();
 	static sf::VideoMode getResolution(const size_t);
 	static std::string getResolutionDesc(const size_t);
-
 	static size_t getResolutionIndex(const sf::Vector2u& targetRes);
+	// Max FPS calc
+	static size_t getNumFramerates();
+	static size_t getFramerateIndex(const unsigned int& maxFps);
+	static unsigned getFramerate(const size_t& index);
 
 	static UserSettings_Struct loadSettings(const std::string & = SETTINGS_FILE);
 	static void saveSettings(UserSettings_Struct settingsToSave);

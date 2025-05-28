@@ -13,16 +13,19 @@ W_Options::W_Options(InputWidget* parent)
 		sf::Vector2f{ 0, -300 }, sf::Color::White, 100, "OPTIONS", EAlignment::CENTER
 	};
 
-	const std::vector<RawButton> MAIN_MENU_CONSTR = {
-		{sf::Vector2f{ 0, 0 },											buttonSize,	sf::Color::White,			24,		"SOUNDS",		sf::Color::Black},
-		{sf::Vector2f{ 0, 150 },										buttonSize,	sf::Color::White,			24,		"GRAPHICS",		sf::Color::Black},
-		{sf::Vector2f{ 0, 300 },										buttonSize,	sf::Color::White,			24,		"RETURN",		sf::Color::Black}
+	const std::vector<RawButton> BUTTON_CONSTR = {
+		{sf::Vector2f{ 0, 0 },		buttonSize,	darkerButtonColor,			24,		"SOUNDS",		normalTextColor},
+		{sf::Vector2f{ 0, 150 },	buttonSize,	darkerButtonColor,			24,		"GRAPHICS",		normalTextColor},
+		{sf::Vector2f{ 0, 300 },	buttonSize,	darkerButtonColor,			24,		"RETURN",		normalTextColor}
 	};
 
 	T_Title.construct(TITLE_CONSTR);
-	B_Graphics.construct(MAIN_MENU_CONSTR[0]);
-	B_Sounds.construct(MAIN_MENU_CONSTR[1]);
-	B_Return.construct(MAIN_MENU_CONSTR[2]);
+	B_Graphics.construct(BUTTON_CONSTR[0]);
+	B_Graphics.setTexture(buttonTexture);
+	B_Sounds.construct(BUTTON_CONSTR[1]);
+	B_Sounds.setTexture(buttonTexture);
+	B_Return.construct(BUTTON_CONSTR[2]);
+	B_Return.setTexture(buttonTexture);
 
 	delegateEvents();
 }

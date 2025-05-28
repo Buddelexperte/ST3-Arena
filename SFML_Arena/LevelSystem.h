@@ -11,8 +11,8 @@ private:
 	static constexpr unsigned int START_STAGE = 0; // Starting stage
 	static constexpr unsigned int STARTING_POINTS = 0; // Points needed to level up
 
-	unsigned int collectedPoints = 0; // Current score
-	unsigned int stage = START_STAGE; // Current stage (1 by default) (level of the player essentially)
+	unsigned int collectedPoints = STARTING_POINTS; // Current score
+	unsigned int stage = START_STAGE; // Current stage (level of the player essentially)
 
 	void onUpdateScore(); // Update score function
 	void tryLevelUp(); // Check if the player leveled up

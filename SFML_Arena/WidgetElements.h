@@ -2,6 +2,8 @@
 
 #include "WidgetBase.h"
 
+#include "TextureManager.h"
+
 // Helpers
 #include "ValueBar.h"
 #include "C_ColorFade.h"

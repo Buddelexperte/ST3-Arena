@@ -21,6 +21,7 @@ protected:
 	static sf::Vector2f viewSizeNorm;
 
 	static sf::Vector2f buttonSize;
+	static sf::Texture* buttonTexture;
 
 	std::vector<sf::Drawable*> shapes;
 

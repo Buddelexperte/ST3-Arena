@@ -14,13 +14,15 @@ W_OptionsSounds::W_OptionsSounds(InputWidget* parent)
 	};
 
 	const std::vector<RawButton> MAIN_MENU_CONSTR = {
-		{sf::Vector2f{ 0, 300 },	sf::Vector2f{ 300, 100 },	sf::Color::White,			24,		"RETURN",		sf::Color::Black},
-		{sf::Vector2f{ 0, 0 },		sf::Vector2f{ 300, 100 },	sf::Color::White,			24,		"SOUND VALUE",	sf::Color::Black}
+		{sf::Vector2f{ 0, 0 },		buttonSize,	darkerButtonColor,			24,		"SOUND VALUE",	normalTextColor},
+		{sf::Vector2f{ 0, 300 },	buttonSize,	darkerButtonColor,			24,		"RETURN",		normalTextColor}
 	};
 
 	T_Title.construct(TITLE_CONSTR);
-	B_Return.construct(MAIN_MENU_CONSTR[0]);
-	B_ToggleSound.construct(MAIN_MENU_CONSTR[1]);
+	B_ToggleSound.construct(MAIN_MENU_CONSTR[0]);
+	B_ToggleSound.setTexture(buttonTexture);
+	B_Return.construct(MAIN_MENU_CONSTR[1]);
+	B_Return.setTexture(buttonTexture);
 
 	delegateEvents();
 

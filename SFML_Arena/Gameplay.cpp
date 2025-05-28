@@ -9,7 +9,7 @@ W_Gameplay::W_Gameplay(InputWidget* parent)
 	: InputWidget(parent),
 	startDelay(START_DELAY), levelLoadingScreen(this),
 	pauseMenu(this), gameOverScreen(this), inventoryScreen(this), levelUpScreen(this), background(this), fadeScreen(this),
-	hud(gameInstance().getHud()), gameplayTimer(1.0f)
+	hud(gameInstance().getHud()), gameplayTimer(2.0f) // Have 2 seconds max so ms get accounted for
 {
 	// Done out
 	std::cout << "- Constructed GameplayWidget" << std::endl;
@@ -136,31 +136,28 @@ void W_Gameplay::tick(const float& deltaTime)
 	fadeScreen.tick(deltaTime);
 
 	Player* player = gameInstance().getPlayer();
-
 	player->tick(deltaTime);
 	
 	// If Gameplay is UnPaused
 	if (!gameInstance().getIsPaused())
 	{
-		// Count seconds for highscore and unlock purposes
-		gameplayTimer.addValue(-deltaTime);
-		if (gameplayTimer.isEmpty())
-		{
-			SaveGame::currentData.secondsPlayed++;
-			gameplayTimer.fill_to_max();
-		}
-
 		EntityManager::getInstance().tick(deltaTime); // Update all entities
 		CollisionManager::getInstance().tick(deltaTime); // Update all collisions
-		if (player->isDead()) 
+
+		if (player->isDead())
+		{
 			lose(); // Check if player is dead and call lose if so
+		}
 
 		Inventory& inv = player->getInventory();
 		if (inv.getNumQueuedLevelUps() > 0)
 		{
-			setWidgetIndex(3)->construct(); // Open level up screen
+			menu_levelUp();
 			inv.removeQueuedLevelUp(); // Reset level up flag
 		}
+		
+		// Count seconds for highscore and unlock purposes
+		tick_countSeconds(deltaTime);
 	}
 
 	// Make sure flashlight draws shader onto environment
@@ -214,6 +211,24 @@ bool W_Gameplay::onMouseClickR(sf::Event* eventRef)
 		return false;
 
 	return true;
+}
+
+void W_Gameplay::tick_countSeconds(const float& deltaTime)
+{
+	gameplayTimer.addValue(-deltaTime);
+	if (gameplayTimer.getValue() <= 1.0f)
+	{
+		SaveGame::currentData.secondsPlayed++;
+		gameplayTimer.addValue(1.0f);
+	}
+}
+
+void W_Gameplay::menu_levelUp()
+{
+	setWidgetIndex(3)->construct(); // Open level up screen
+	// Player level Up sound
+	SoundManager& soundManager = SoundManager::getInstance();
+	soundManager.play(soundManager.getSound_LevelUp(), ESoundEnv::UI);
 }
 
 bool W_Gameplay::isMouseOver(const bool& checkForClick = false)

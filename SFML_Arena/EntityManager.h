@@ -127,7 +127,7 @@ public:
 		spawnWave = std::make_unique<S>();
 	}
 
-	EnemySpawnWave* getSpawnWave()
+	const EnemySpawnWave* getSpawnWave()
 	{
 		return spawnWave.get();
 	}

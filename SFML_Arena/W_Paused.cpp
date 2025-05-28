@@ -12,15 +12,19 @@ W_Paused::W_Paused(InputWidget* parent)
 	};
 
 	const std::vector<RawButton> PAUSED_CONSTR = {
-		{sf::Vector2f{ 0.0f, 0.0f },       sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "RESUME",		sf::Color::Black},
-		{sf::Vector2f{ 0.0f, 150.0f },     sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "OPTIONS",	sf::Color::Black},
-		{sf::Vector2f{ 0.0f, 300.0f },     sf::Vector2f{ 300.0f, 100.0f }, sf::Color::White,         24, "QUIT",		sf::Color::Black}
+		{sf::Vector2f{ 0.0f, 0.0f },       buttonSize, darkerButtonColor,         24, "RESUME",		normalTextColor},
+		{sf::Vector2f{ 0.0f, 150.0f },     buttonSize, darkerButtonColor,         24, "OPTIONS",		normalTextColor},
+		{sf::Vector2f{ 0.0f, 300.0f },     buttonSize, darkerButtonColor,         24, "QUIT",		normalTextColor}
 	};
 
 	T_Title.construct(TITLE_CONSTR);
+
 	B_Resume.construct(PAUSED_CONSTR[0]);
+	B_Resume.setTexture(buttonTexture);
 	B_OpenOptions.construct(PAUSED_CONSTR[1]);
+	B_OpenOptions.setTexture(buttonTexture);
 	B_Quit.construct(PAUSED_CONSTR[2]);
+	B_Quit.setTexture(buttonTexture);
 
 	delegateEvents();
 }

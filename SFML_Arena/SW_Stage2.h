@@ -4,9 +4,23 @@
 
 class SW_Stage2 : public EnemySpawnWave
 {
+private:
+	virtual float getEnemyHealth() const override
+	{
+		static constexpr float ENEMY_HEALTH = 1.45f;
+		return ENEMY_HEALTH;
+	}
+
+	virtual IMovable::RenderInfo makeSpawnRenderInfo() override
+	{
+		IMovable::RenderInfo renderInfo = EnemySpawnWave::makeSpawnRenderInfo();
+		renderInfo.size *= 1.2f;
+		return renderInfo;
+	}
+
 public:
 	SW_Stage2()
-		: EnemySpawnWave(0.5f, 3, 0) // 0.5s per interval, 3 enemy per interval, inf intervals
+		: EnemySpawnWave(2.0f, 3, 0) // 2s per interval, 4 enemy per interval, inf intervals
 	{
 
 	}

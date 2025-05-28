@@ -33,10 +33,10 @@ inline PerkFamilyInfo getPerkFInfo(const PerkFamily& family)
 {
 	static const std::unordered_map<PerkFamily, PerkFamilyInfo> perkFamilyInfo = {
 		{ PerkFamily::None,			{ "None",		"No perks selected." } },
-		{ PerkFamily::Offensive,	{ "Offensive",	"Increases damage output." } },
-		{ PerkFamily::Defensive,	{ "Defensive",	"Reduces damage taken." } },
-		{ PerkFamily::Utility,		{ "Utility",	"Provides various utility effects." } },
-		{ PerkFamily::Support,		{ "Support",	"Enhances team performance." } },
+		{ PerkFamily::Offensive,	{ "OFFENSIVE",	"Increases damage output." } },
+		{ PerkFamily::Defensive,	{ "DEFENSIVE",	"Reduces damage taken." } },
+		{ PerkFamily::Utility,		{ "UTILITY",	"Provides various utility effects." } },
+		{ PerkFamily::Support,		{ "SUPPORT",	"Enhances team performance." } },
 		{ PerkFamily::Count,		{ "FamilyName",	"Invalid perk family." } }
 	};
 

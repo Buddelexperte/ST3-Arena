@@ -172,6 +172,7 @@ public:
     void setSecondCone(const bool& useSecond);
 
     void toggleMaskMode();
+    bool isCone() const;
 
     sf::Vector2f getPosition() const
         { return flashlightSprite.getPosition(); }

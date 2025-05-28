@@ -2,6 +2,7 @@
 
 #include "DrawableShape.h"
 #include "GameInstance.h"
+#include "TextureManager.h"
 
 sf::RenderWindow* IDrawableShapes::window = nullptr;
 sf::Vector2u IDrawableShapes::windowSize = { 0, 0 };
@@ -12,7 +13,8 @@ sf::Vector2f IDrawableShapes::viewHalfSize = { 0.0f, 0.0f };
 sf::Vector2f IDrawableShapes::viewTL = { 0.0f, 0.0f };
 sf::Vector2f IDrawableShapes::viewCenter = { 0.0f, 0.0f };
 sf::Vector2f IDrawableShapes::widgetOffset = { 0.0f, 0.0f };
-sf::Vector2f IDrawableShapes::buttonSize = { 300.0f, 100.0f };
+sf::Vector2f IDrawableShapes::buttonSize = buttonRatio;
+sf::Texture* WidgetElement::buttonTexture = nullptr;
 sf::Vector2f IDrawableShapes::unitNorm = { 1.0f, 1.0f };
 sf::Vector2f IDrawableShapes::viewSizeNorm = { 1.0f, 1.0f };
 
@@ -24,6 +26,9 @@ void IDrawableShapes::initValues()
 	windowCenter = sf::Vector2f{ windowSize.x / 2.0f, windowSize.y / 2.0f };
 	// Everything sf::View related
 	view = gameInstance().getView();
+
+	TextureManager& tm = TextureManager::getInstance();
+	buttonTexture = tm.getTexturePtr(ETexture::BUTTON);
 
 	updateValues();
 }

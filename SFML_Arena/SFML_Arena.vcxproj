@@ -171,6 +171,7 @@
     <ClCompile Include="PerkFamilyDisplayElement.cpp" />
     <ClCompile Include="PerkFamilyMenu.cpp" />
     <ClCompile Include="PerkFamilyTree.cpp" />
+    <ClCompile Include="PerkNode.cpp" />
     <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="PU_ExperienceOrb.cpp" />
     <ClCompile Include="P_Sparkle.cpp" />
@@ -187,6 +188,7 @@
     <ClCompile Include="SW_Stage1.h" />
     <ClCompile Include="DebugIndicator.cpp" />
     <ClCompile Include="Text.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="WidgetBase.cpp" />
     <ClCompile Include="SaveGame.cpp" />
     <ClCompile Include="Slider.cpp" />
@@ -249,8 +251,10 @@
     <ClInclude Include="SpawnWave.h" />
     <ClInclude Include="SW_Default.h" />
     <ClInclude Include="SW_Stage2.h" />
+    <ClInclude Include="SW_Stage3.h" />
     <ClInclude Include="DebugIndicator.h" />
     <ClInclude Include="Text.h" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="WidgetBase.h" />
     <ClInclude Include="BaseTypes.h" />
     <ClInclude Include="Button.h" />
@@ -300,6 +304,9 @@
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="SaveGame.txt">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Settings.txt">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </CopyFileToFolders>
     <CopyFileToFolders Include="HsGame.txt">

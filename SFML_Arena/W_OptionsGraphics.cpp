@@ -16,28 +16,28 @@ W_OptionsGraphics::W_OptionsGraphics(InputWidget* parent)
 
 	const std::vector<RawButton> CONSTR = {
 		// Resolution
-		{sf::Vector2f{ 0.0f, -150 },						buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "RESOLUTION",			sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
-		{sf::Vector2f{ 0.0f, -150 },						buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "(Custom)",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
+		{sf::Vector2f{ 0.0f, -150.0f },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "RESOLUTION",			sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
+		{sf::Vector2f{ 0.0f, -150.0f },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "(Custom)",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
 		// FPS
-		{sf::Vector2f{ 0.0f, -50 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "FPS LIMIT",			sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
-		{sf::Vector2f{ 0.0f, -50 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "Max FPS",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
+		{sf::Vector2f{ 0.0f, -50.0f },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "FPS LIMIT",			sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
+		{sf::Vector2f{ 0.0f, -50.0f },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "Max FPS",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
 		// VSync
-		{sf::Vector2f{ 0.0f, 50 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "VSYNC",				sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
-		{sf::Vector2f{ 0.0f, 50 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "Status",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
+		{sf::Vector2f{ 0.0f, 50.0f },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "VSYNC",				sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
+		{sf::Vector2f{ 0.0f, 50.0f },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "Status",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
 		// Fullscreen
-		{sf::Vector2f{ 0.0f, 150 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "FULLSCREEN",			sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
-		{sf::Vector2f{ 0.0f, 150 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "Status",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
-		// Menu parallax
-		{sf::Vector2f{ 0.0f, 250 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "MENU PARALLAX",		sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
-		{sf::Vector2f{ 0.0f, 250 },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "Status",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
+		{sf::Vector2f{ 0.0f, 150.0f },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "FULLSCREEN",			sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
+		{sf::Vector2f{ 0.0f, 150.0f },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "Status",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
+		// Menu parallax		
+		{sf::Vector2f{ 0.0f, 250.0f },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "MENU PARALLAX",		sf::Color::White,		EAlignment::RIGHT, EAlignment::LEFT},
+		{sf::Vector2f{ 0.0f, 250.0f },							buttonSize * sf::Vector2f(2.0f, 1.0f),													sf::Color::Transparent,	40, "Status",				sf::Color::White,		EAlignment::LEFT, EAlignment::RIGHT},
 		// Apply & Cancel
-		{sf::Vector2f{ padding / 2.0f, 350 + padding},		buttonSize,																				grayedOutButtonColor,	24, "APPLY",				sf::Color::Black,		EAlignment::LEFT},
-		{sf::Vector2f{ -padding / 2.0f, 350 + padding},		buttonSize,																				sf::Color::White,		24, "RETURN",				sf::Color::Black,		EAlignment::RIGHT},
+		{sf::Vector2f{ padding / 2.0f, 350.0f + padding},		buttonSize,																				disabledButtonColor,	24, "APPLY",				normalTextColor,		EAlignment::LEFT},
+		{sf::Vector2f{ -padding / 2.0f, 350.0f + padding},		buttonSize,																				darkerButtonColor,		24, "RETURN",				normalTextColor,		EAlignment::RIGHT},
 	};
 
 	// Background
 	const RawBorder BORDER_CONSTR = {
-		sf::Vector2f{ 0, 50 },	buttonSize * sf::Vector2f(4.0f, 5.0f) + sf::Vector2f(2 * padding, padding / 2.0f),		backgroundInterfaceColor
+		sf::Vector2f{ 0, 50 },	buttonSize * sf::Vector2f(4.0f, 5.0f) + sf::Vector2f(2 * padding, padding / 2.0f),	backgroundInterfaceColor
 
 	};
 
@@ -60,9 +60,13 @@ W_OptionsGraphics::W_OptionsGraphics(InputWidget* parent)
 	T_WParallax_Val.construct(CONSTR[9]);
 	// Apply & Cancel
 	B_Apply.construct(CONSTR[10]);
+	B_Apply.setTexture(buttonTexture);
 	B_Return.construct(CONSTR[11]);
+	B_Return.setTexture(buttonTexture);
 	// Background
 	bg.construct(BORDER_CONSTR);
+	TextureManager& tm = TextureManager::getInstance();
+	bg.setTexture(tm.getTexturePtr(ETexture::OPTIONS_GRAPHICS_BORDER));
 
 	delegateEvents();
 
@@ -113,6 +117,7 @@ void W_OptionsGraphics::reset()
 	// Read back what was actually applied
 	newSettings = UserSettings::getSettings();
 	selectedRes = newSettings.resID;
+	selectedFps = UserSettings::getFramerateIndex(newSettings.maxFPS);
 
 	// Update the UI
 	updateSettingTexts(newSettings);
@@ -175,19 +180,12 @@ void W_OptionsGraphics::toggleResolution()
 
 void W_OptionsGraphics::toggleMaxFPS()
 {
-	static const std::vector<unsigned int> fpsAvailable = {
-		30, 60, 144, 165, 240
-	};
-
 	selectedFps++;
 
-	if (selectedFps >= fpsAvailable.size())
+	if (selectedFps >= UserSettings::getNumFramerates())
 		selectedFps = 0;
 
-	if (fpsAvailable.empty())
-		newSettings.maxFPS = 30; // Default to reasonable value if none was available
-	else
-		newSettings.maxFPS = fpsAvailable[selectedFps];
+	newSettings.maxFPS = UserSettings::getFramerate(selectedFps);
 
 	// Update the UI
 	updateSettingTexts(newSettings);
@@ -265,12 +263,17 @@ void W_OptionsGraphics::checkForDifferences()
 	if (bChangedSome)
 	{
 		B_Return.setText("CANCEL");
-		B_Apply.setColor(normalButtonColor);
+		B_Apply.setColor(darkerButtonColor);
 		return;
 	}
 
 	B_Return.setText("RETURN");
-	B_Apply.setColor(grayedOutButtonColor);
+	B_Apply.setColor(disabledButtonColor);
+}
+
+size_t W_OptionsGraphics::fpsToMaxFpsIndex(const unsigned int& maxFps)
+{
+	return size_t();
 }
 
 void W_OptionsGraphics::tick(const float& deltaTime)

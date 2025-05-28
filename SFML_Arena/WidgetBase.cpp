@@ -17,7 +17,11 @@ sf::Vector2f WidgetElement::getTickCorrection() const
 WidgetElement::WidgetElement(InputWidget* parentWidget)
 	: parent(parentWidget)
 {
-
+	if (!buttonTexture)
+	{
+		TextureManager& tm = TextureManager::getInstance();
+		buttonTexture = tm.getTexturePtr(ETexture::BUTTON);
+	}
 }
 
 void WidgetElement::construct()

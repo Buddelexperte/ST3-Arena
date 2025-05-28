@@ -5,9 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="zDeprecated">
-      <UniqueIdentifier>{c66aa173-4673-49a6-af36-9bbb5e0cdd79}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Managers">
       <UniqueIdentifier>{5c33fe16-38ee-4bb2-be71-cafc997e4cba}</UniqueIdentifier>
     </Filter>
@@ -266,6 +263,18 @@
     <ClCompile Include="PerkFamilyTree.cpp">
       <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks\PerkSelection</Filter>
     </ClCompile>
+    <ClCompile Include="LRButton.cpp">
+      <Filter>Source\VisualInterfaces\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Source\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="LRButton.h">
+      <Filter>Source\VisualInterfaces\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PerkNode.cpp">
+      <Filter>Source\VisualInterfaces\Widgets\Gameplay\LevelUp / Perks\PerkSelection</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionManager.h">
@@ -400,7 +409,7 @@
     <ClInclude Include="SW_Default.h">
       <Filter>Source\Managers\EnemySpawner\SpawnWaves</Filter>
     </ClInclude>
-    <ClInclude Include="SW_Stage2.h">
+    <ClInclude Include="SW_Stage3.h">
       <Filter>Source\Managers\EnemySpawner\SpawnWaves</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
@@ -521,12 +530,24 @@
     <ClInclude Include="Perk_sup.h">
       <Filter>Source\Actors\Inventory\Items\Perks</Filter>
     </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Source\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="SW_Stage2.h">
+      <Filter>Source\Managers\EnemySpawner\SpawnWaves</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\openal32.dll">
       <Filter>Ressources</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="SaveGame.txt">
+      <Filter>Ressources</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="HsGame.txt">
+      <Filter>Ressources</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Settings.txt">
       <Filter>Ressources</Filter>
     </CopyFileToFolders>
   </ItemGroup>

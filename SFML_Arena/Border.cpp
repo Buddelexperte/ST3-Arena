@@ -31,9 +31,9 @@ void Border::construct(const RawBorder& constr)
 	tick_pos(getTickCorrection());
 }
 
-void Border::setTexture(const sf::Texture& newTexture, const bool resetTint)
+void Border::setTexture(const sf::Texture* newTexture, const bool resetTint)
 {
-    B_Box.setTexture(&newTexture);
+    B_Box.setTexture(newTexture);
     if (resetTint) B_Box.setFillColor(sf::Color::White);
 }
 

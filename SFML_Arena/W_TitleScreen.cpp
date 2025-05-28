@@ -5,7 +5,6 @@
 #include "SaveGame.h"
 
 
-
 W_TitleScreen::W_TitleScreen(InputWidget* parent)
 	: InputWidget(parent),
 	T_Title(this), T_Highscore(this), B_Start(this), B_OptionsMenu(this), B_Quit(this)
@@ -13,16 +12,21 @@ W_TitleScreen::W_TitleScreen(InputWidget* parent)
 	const std::vector<RawButton> MAIN_MENU_CONSTR = {
 		{(sf::Vector2f{ 0.0f, -300.0f }	* unitNorm),    sf::Vector2f{ 350, 120 } * unitNorm,	sf::Color::Transparent,		100,"ARENA",							sf::Color::White},
 		{(sf::Vector2f{ 0.0f, -150.0f }	* unitNorm),    sf::Vector2f{ 100, 100 } * unitNorm,	sf::Color::Transparent,		16,	"Higscore: " + std::to_string(0),	sf::Color::White},
-		{(sf::Vector2f{ 0.0f, 0.0f }	* unitNorm),    buttonSize,								normalButtonColor,			24,	"START",							sf::Color::Black},
-		{(sf::Vector2f{ 0.0f, 150.0f }	* unitNorm),    buttonSize,								normalButtonColor,			24,	"OPTIONS",							sf::Color::Black},
-		{(sf::Vector2f{ 0.0f, 300.0f }	* unitNorm),    buttonSize,								normalButtonColor,			24,	"QUIT",								sf::Color::Black}
+		{(sf::Vector2f{ 0.0f, 0.0f }	* unitNorm),    buttonSize,								darkerButtonColor,			24,	"START",							normalTextColor},
+		{(sf::Vector2f{ 0.0f, 150.0f }	* unitNorm),    buttonSize,								darkerButtonColor,			24,	"OPTIONS",							normalTextColor},
+		{(sf::Vector2f{ 0.0f, 300.0f }	* unitNorm),    buttonSize,								darkerButtonColor,			24,	"QUIT",								normalTextColor}
 	};
+
+	TextureManager& tm = TextureManager::getInstance();
 
 	T_Title.construct(MAIN_MENU_CONSTR[0]);
 	T_Highscore.construct(MAIN_MENU_CONSTR[1]);
 	B_Start.construct(MAIN_MENU_CONSTR[2]);
+	B_Start.setTexture(buttonTexture);
 	B_OptionsMenu.construct(MAIN_MENU_CONSTR[3]);
+	B_OptionsMenu.setTexture(buttonTexture);
 	B_Quit.construct(MAIN_MENU_CONSTR[4]);
+	B_Quit.setTexture(buttonTexture);
 
 	delegateEvents();
 
