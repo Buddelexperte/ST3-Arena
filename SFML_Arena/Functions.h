@@ -3,16 +3,16 @@
 #include <SFML/Graphics.hpp>
 
 // SFML abbreviations
-static const inline sf::Keyboard::Key KEY_W = sf::Keyboard::W;
-static const inline sf::Keyboard::Key KEY_A = sf::Keyboard::A;
-static const inline sf::Keyboard::Key KEY_S = sf::Keyboard::S;
-static const inline sf::Keyboard::Key KEY_D = sf::Keyboard::D;
-static const inline sf::Keyboard::Key KEY_LSHIFT = sf::Keyboard::LShift;
-static const inline sf::Keyboard::Key KEY_ESC = sf::Keyboard::Escape;
-static const inline sf::Keyboard::Key KEY_TAB = sf::Keyboard::Tab;
+static const inline sf::Keyboard::Key KEY_W			= sf::Keyboard::W;
+static const inline sf::Keyboard::Key KEY_A			= sf::Keyboard::A;
+static const inline sf::Keyboard::Key KEY_S			= sf::Keyboard::S;
+static const inline sf::Keyboard::Key KEY_D			= sf::Keyboard::D;
+static const inline sf::Keyboard::Key KEY_LSHIFT	= sf::Keyboard::LShift;
+static const inline sf::Keyboard::Key KEY_ESC		= sf::Keyboard::Escape;
+static const inline sf::Keyboard::Key KEY_TAB		= sf::Keyboard::Tab;
 
 // Constants
-static const inline double pi = 4.0f * std::atan(1.0); // Calculation of Pi
+static const inline double pi = 4.0 * std::atan(1.0); // Calculation of Pi
 static constexpr inline float SMALLEST_PRECISION = 1e-3f; // Smallest precision for most floating point comparisons used
 
 // WEAK POINTER -------------------------------------------------------------------------------------------

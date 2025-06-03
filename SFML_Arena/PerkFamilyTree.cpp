@@ -24,12 +24,14 @@ PerkNodeInfo* PerkFamily_Tree::createPerkNodeInfo(
     newNode->id = id;
 
     // Copy strings with size checks to prevent potential issues
-    try {
+    try 
+    {
         newNode->tag = tag;
         newNode->name = name;
         newNode->description = description;
     }
-    catch (const std::length_error& e) {
+    catch (const std::length_error& e) 
+    {
         std::cerr << "String too long error in createPerkNodeInfo: " << e.what() << std::endl;
         // Handle error - maybe truncate strings or use defaults
         if (newNode->tag.empty()) newNode->tag = "default_tag";
