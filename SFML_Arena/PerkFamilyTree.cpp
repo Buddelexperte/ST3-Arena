@@ -8,6 +8,20 @@
 
 unsigned int PerkFamily_Tree::perkID = 0;
 
+PerkFamily_Tree::PerkFamily_Tree(InputWidget* parent)
+    : InputWidget(parent), 
+    B_Back(this)
+{
+    const std::vector<RawButton> BTN_CONSTR = {
+        {(sf::Vector2f(0, 480.0f) * viewSizeNorm), buttonSize, darkerButtonColor,	24,	"B A C K",	normalTextColor, EAlignment::CENTER_BOTTOM, EAlignment::CENTER}
+    };
+
+    B_Back.construct(BTN_CONSTR[0]);
+    B_Back.setTexture(buttonTexture);
+
+    shapes = { &B_Back };
+}
+
 PerkFamily_Tree::~PerkFamily_Tree()
 {
     reset();
@@ -86,6 +100,11 @@ void PerkFamily_Tree::blockSiblingNodes(PerkNodeInfo* node)
 
 void PerkFamily_Tree::delegateEvents()
 {
+    B_Back.onClick = [this]()
+        {
+            onKeyEscape();
+        };
+
     // ONLY CALL AFTER BUILDING THE TREE
 
     // Setting all delegates dynamically for each node
@@ -367,17 +386,13 @@ sf::Vector2u PerkFamily_Tree::buildTreeLayout(PerkNodeInfo* rootNode)
     return treeSize;
 }
 
-PerkFamily_Tree::PerkFamily_Tree(InputWidget* parent)
-    : InputWidget(parent)
-{
-
-}
-
 void PerkFamily_Tree::construct()
 {
-    // Only build if not already built
-    if (!perkButtons.empty())
-        return;
+    B_Back.construct();
+    for (std::unique_ptr<PerkNode>& node : perkButtons)
+    {
+        node->construct();
+    }
 
     // Stop if rootNode nullptr as it is needed for build
     if (!rootNode)
@@ -385,9 +400,6 @@ void PerkFamily_Tree::construct()
         std::cerr << "Error: rootNode is null in construct()" << std::endl;
         return;
     }
-
-    treeSize = buildTreeLayout(rootNode);
-    delegateEvents();
 }
 
 void PerkFamily_Tree::construct(const PerkFamily& pf)
@@ -411,6 +423,11 @@ void PerkFamily_Tree::construct(const PerkFamily& pf)
     }
 
     rootNode->bUnlocked = true; // Set root node as unlocked
+
+    treeSize = buildTreeLayout(rootNode);
+    delegateEvents();
+
+    construct();
 }
 
 void PerkFamily_Tree::reset()
@@ -422,7 +439,7 @@ void PerkFamily_Tree::reset()
         elem.release();
     }
     perkButtons.clear();
-    shapes.clear();
+    shapes = { &B_Back };
 
     for (std::unique_ptr<PerkNodeInfo>& info : nodeInfos)
     {
@@ -439,6 +456,8 @@ void PerkFamily_Tree::tick(const float& deltaTime)
 {
     InputWidget::tick(deltaTime);
 
+    B_Back.tick(deltaTime);
+
     // Ticking all perk nodes
     for (std::unique_ptr<PerkNode>& node : perkButtons)
     {
@@ -449,11 +468,14 @@ void PerkFamily_Tree::tick(const float& deltaTime)
 bool PerkFamily_Tree::isMouseOver(const bool& checkForClick)
 {
     // Check each button (tree node)
-    for (std::unique_ptr<PerkNode>& button : perkButtons)
+    for (std::unique_ptr<PerkNode>& node : perkButtons)
     {
-        if (button && button->isMouseOver(checkForClick))
+        if (node && node->isMouseOver(checkForClick))
             return true;
     }
+
+    if (B_Back.isMouseOver(checkForClick))
+        return true;
 
     return false;
 }
@@ -517,4 +539,7 @@ void PerkFamily_Tree::draw(sf::RenderTarget& target, sf::RenderStates states) co
         if (node)
             target.draw(*node, states);
     }
+
+    // Draw constant shapes by default
+    InputWidget::draw(target, states);
 }
