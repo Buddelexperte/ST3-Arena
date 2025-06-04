@@ -62,12 +62,12 @@ PerkFamily_Element::PerkFamily_Element(InputWidget* parent)
 	};
 
 	const std::vector<RawBorder> ICON_CONSTR = {
-		{(sf::Vector2f{ 0.0f, -230.0f } * viewSizeNorm),	sf::Vector2f{ 160.0f, 160.0f } * unitNorm, sf::Color::Red, EAlignment::CENTER_TOP}
+		{(sf::Vector2f{ 0.0f, -230.0f } * viewSizeNorm),	sf::Vector2f{ 160.0f, 160.0f } * viewSizeNorm, sf::Color::Red, EAlignment::CENTER_TOP}
 	};
 
 	const std::vector<RawButton> BUTTON_CONSTR = {
-		{(sf::Vector2f{ 0.0f, 0.0f } * viewSizeNorm),	sf::Vector2f{ 300.0f, 700.0f } * unitNorm,	backgroundInterfaceColor, EAlignment::CENTER },
-		{(sf::Vector2f{ 0.0f, 0.0f } * viewSizeNorm),	buttonSize * 0.8f,								backgroundInterfaceColor,	24,	"Family Name", normalTextColor, EAlignment::CENTER_TOP}
+		{(sf::Vector2f{ 0.0f, 0.0f } * viewSizeNorm),	sf::Vector2f{ 300.0f, 700.0f } * viewSizeNorm,	backgroundInterfaceColor, EAlignment::CENTER },
+		{(sf::Vector2f{ 0.0f, 0.0f } * viewSizeNorm),	buttonRatio * viewSizeNorm * 0.8f,								backgroundInterfaceColor,	24,	"Family Name", normalTextColor, EAlignment::CENTER_TOP}
 	};
 	
 	TextureManager& tm = TextureManager::getInstance();

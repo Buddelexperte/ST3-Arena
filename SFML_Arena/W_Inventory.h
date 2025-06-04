@@ -7,6 +7,9 @@ class W_Inventory : public InputWidget
 private:
 	void delegateEvents() override;
 
+	Border bg;
+	Text T_Title;
+
 public:
 	W_Inventory(InputWidget*);
 	void tick(const float& deltaTime) override;

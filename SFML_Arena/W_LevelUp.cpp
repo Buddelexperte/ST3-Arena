@@ -11,7 +11,7 @@ W_LevelUp::W_LevelUp(InputWidget* parent)
 	familyTree_off(this), familyTree_def(this), familyTree_util(this), familyTree_sup(this)
 {
 	const RawBorder CONSTR_BG = {
-		sf::Vector2f{ 0.0f, 0.0f } * viewSizeNorm, sf::Vector2f{ 2000.0f, 1000.0f } * viewSizeNorm, backgroundInterfaceColor, EAlignment::CENTER
+		sf::Vector2f{ 0.0f, 0.0f } * unitNorm, sf::Vector2f{ viewSize.x, 1000.0f * viewSizeNorm.y }, backgroundInterfaceColor, EAlignment::CENTER
 	};
 
 	TextureManager& tm = TextureManager::getInstance();

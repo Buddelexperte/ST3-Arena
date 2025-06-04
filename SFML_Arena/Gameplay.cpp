@@ -52,7 +52,7 @@ InputWidget* W_Gameplay::getWidgetAtIndex(const int& atIndex)
 		return &levelUpScreen;
 		break;
 	case 4: // INVENTORY
-		return &levelUpScreen;
+		return &inventoryScreen;
 		break;
 	default:
 		break;
@@ -92,7 +92,7 @@ InputWidget* W_Gameplay::setWidgetIndex(const int& toIndex)
 		shapes.push_back(&levelUpScreen);
 		break;
 	case 4: // INVENTORY
-		shapes.push_back(&levelUpScreen);
+		shapes.push_back(&inventoryScreen);
 		break;
 	case -1:
 	default:

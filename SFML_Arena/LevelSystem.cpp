@@ -29,7 +29,7 @@ void LevelSystem::onLevelUp()
 
 	owningInv->addQueuedLevelUp(); // Set the level up flag in the inventory
 
-	unsigned int nextStage = getStage() + 1;
+	const unsigned int nextStage = getStage() + 1;
 	setStage(nextStage);  // Increment the stage / level
 
 	std::cout << "Level Up! Current Stage: " << stage << std::endl;
@@ -58,7 +58,7 @@ void LevelSystem::setStage(const unsigned int newStage)
 
 unsigned int LevelSystem::calculatePointsNeeded(const unsigned int stage) const
 {
-	return (10 + stage * 100);
+	return (2 * stage + 10);
 }
 
 LevelSystem::LevelSystem(Inventory* owningInv)
