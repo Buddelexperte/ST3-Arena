@@ -16,9 +16,13 @@ class Enemy :
 private:
 	CollisionBox collisionBox;
 
-	const float WALK_SPEED = RNG::floatInRange(80.0f, 100.0f);
+	const float MIN_WALK_SPEED = 80.0f;
+	const float MAX_WALK_SPEED = 100.0f;
+	const float WALK_SPEED = RNG::floatInRange(MIN_WALK_SPEED, MAX_WALK_SPEED);
 
-	const float experienceValue = RNG::floatInRange(1.0f, 5.0f);
+	const float MIN_EXP = 1.0f;
+	const float MAX_EXP = 5.0f;
+	const float experienceValue = RNG::floatInRange(MIN_EXP, MAX_EXP);
 
 	using IMovable::setVelocity; // Make this function private for safety reasons
 

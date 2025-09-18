@@ -8,9 +8,11 @@ private:
 	const float maxScoreBarWidth = viewSize.x / 3.0f ;
 	Button scoreBar;
 	Button scoreBar_bg;
+	Button points;
+	int displayedPoints = 0;
 
 	Button levelDisplay;
-	unsigned int displayedLevel = 0;
+	int displayedLevel = 0;
 
 	void tick_bar(const float& deltaTime);
 

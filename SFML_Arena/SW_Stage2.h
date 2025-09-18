@@ -7,7 +7,7 @@ class SW_Stage2 : public EnemySpawnWave
 private:
 	virtual float getEnemyHealth() const override
 	{
-		static constexpr float ENEMY_HEALTH = 1.45f;
+		static constexpr float ENEMY_HEALTH = 2.0f;
 		return ENEMY_HEALTH;
 	}
 
@@ -20,7 +20,7 @@ private:
 
 public:
 	SW_Stage2()
-		: EnemySpawnWave(2.0f, 3, 0) // 2s per interval, 4 enemy per interval, inf intervals
+		: EnemySpawnWave(2.0f, 2, 0) // 2s per interval, 2 enemy per interval, inf intervals
 	{
 
 	}

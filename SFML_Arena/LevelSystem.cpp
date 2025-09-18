@@ -7,17 +7,16 @@
 #include "AllEnemyWaves.h"
 #include "SaveGame.h"
 
-void LevelSystem::onUpdateScore()
+void LevelSystem::saveScoreData()
 {
 	SaveGame::currentData.score = collectedPoints;
-	tryLevelUp();
 }
 
 void LevelSystem::tryLevelUp()
 {
 	// Check if the player has enough points to level up
-	unsigned int points_thisStage = collectedPoints - getLastPointsNeeded();
-	if (points_thisStage >= getPointsNeeded()) // Example condition for leveling up
+	const int needed = getPointsNeeded();
+	if (collectedPoints_thisStage >= needed)
 	{
 		onLevelUp();
 	}
@@ -25,6 +24,8 @@ void LevelSystem::tryLevelUp()
 
 void LevelSystem::onLevelUp()
 {
+	collectedPoints_thisStage -= getPointsNeeded(); // Subtract the lastneeded points from the current points of last stage to catch overflow points
+
 	owningInv->getOwner()->resetHealth(); // Reset health after leveling up
 
 	owningInv->addQueuedLevelUp(); // Set the level up flag in the inventory
@@ -56,11 +57,6 @@ void LevelSystem::setStage(const unsigned int newStage)
 	}
 }
 
-unsigned int LevelSystem::calculatePointsNeeded(const unsigned int stage) const
-{
-	return (2 * stage + 10);
-}
-
 LevelSystem::LevelSystem(Inventory* owningInv)
 	: owningInv(owningInv)
 {
@@ -73,25 +69,40 @@ void LevelSystem::reset()
 	setStage(START_STAGE);
 }
 
-void LevelSystem::addPoint()
-{
-	// Increment the score by 1
-	collectedPoints++;
-	onUpdateScore();
-}
-
 void LevelSystem::addPoints(unsigned int points)
 {
 	// Increment the score by the specified number of points
 	collectedPoints += points;
-	onUpdateScore();
+	collectedPoints_thisStage += points;
+
+	saveScoreData();
+	tryLevelUp();
 }
 
 void LevelSystem::setPoints(unsigned int points)
 {
 	// Set the score to the specified number of points
 	collectedPoints = points;
-	onUpdateScore();
+	collectedPoints_thisStage = points;
+
+	saveScoreData();
+	tryLevelUp();
+}
+
+int LevelSystem::getPointsNeeded() const
+{
+	return getPointsNeeded(stage); // Call the overloaded function with the current stage
+}
+
+int LevelSystem::getPointsNeeded(const int forStage) const
+{
+	// Formula for points needed to level up
+	return (5 * forStage + 10);
+}
+
+int LevelSystem::getStage() const
+{
+	return stage;
 }
 
 int LevelSystem::getPoints() const
@@ -100,30 +111,8 @@ int LevelSystem::getPoints() const
 	return collectedPoints;
 }
 
-unsigned int LevelSystem::getPointsNeeded() const
+int LevelSystem::getPoints_thisStage() const
 {
-	return getPointsNeeded(stage); // Call the overloaded function with the current stage
-}
-
-unsigned int LevelSystem::getLastPointsNeeded() const
-{
-	return getLastPointsNeeded(stage); // Call the overloaded function with the current stage
-}
-
-unsigned int LevelSystem::getPointsNeeded(const unsigned int forStage) const
-{
-	return calculatePointsNeeded(forStage);
-}
-
-unsigned int LevelSystem::getLastPointsNeeded(const unsigned int fromStage) const
-{
-	if (fromStage == 0)
-		return 0;
-
-	return getPointsNeeded(fromStage - 1); // Call the overloaded function with the previous stage
-}
-
-unsigned int LevelSystem::getStage() const
-{
-	return stage;
+	// Return the points collected in the current stage
+	return collectedPoints_thisStage;
 }

@@ -11,10 +11,20 @@ void ScoreBar::tick_bar(const float& deltaTime)
 	// Get players health
 	Player* playerRef = gameInstance().getPlayer();
 	LevelSystem& ls = playerRef->getInventory().getLevelSystem();
-	unsigned int playerScore = ls.getPoints();
-	unsigned int pointsLastNeeded = ls.getLastPointsNeeded();
-	unsigned int playerScoreNeeded = ls.getPointsNeeded();
-	unsigned int playerLevel = ls.getStage();
+	const int playerScoreNeeded = ls.getPointsNeeded();
+	const int playerLevel = ls.getStage();
+
+	const int playerScore = ls.getPoints();
+	const int points_thisStage = ls.getPoints_thisStage();
+
+	// Update string displayed only if displayed points or stage (needed points) is different from actual info
+	if (displayedPoints != points_thisStage || playerLevel != displayedLevel)
+	{
+		displayedPoints = points_thisStage;
+
+		const std::string scoreText = std::to_string(points_thisStage) + " / " + std::to_string(playerScoreNeeded);
+		points.setText(scoreText);
+	}
 
 	// Update string displayed only if displayed stage is different from actual stage
 	if (playerLevel != displayedLevel)
@@ -27,7 +37,7 @@ void ScoreBar::tick_bar(const float& deltaTime)
 
 	// Get needed width for score bar
 	const sf::Vector2f scoreBarSize = scoreBar.getSize();
-	float pointPercentageReached = static_cast<float>(playerScore - pointsLastNeeded) / static_cast<float>(playerScoreNeeded);
+	float pointPercentageReached = static_cast<float>(points_thisStage) / static_cast<float>(playerScoreNeeded);
 	pointPercentageReached = std::clamp(pointPercentageReached, 0.0f, 1.0f); // Clamp to [0, 1]
 	float newScoreBarWidth = maxScoreBarWidth * pointPercentageReached;
 
@@ -51,21 +61,24 @@ void ScoreBar::tick_bar(const float& deltaTime)
 
 ScoreBar::ScoreBar(InputWidget* parent)
 	: WidgetElement(parent),
-	scoreBar(parent), scoreBar_bg(parent), levelDisplay(parent)
+	scoreBar(parent), scoreBar_bg(parent), levelDisplay(parent), points(parent)
 {
 	const std::vector<RawButton> HUD_CONSTR = {
 		// Score Bar
-		{(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }),								sf::Vector2f{0.0f, 5.0f * unitNorm.y},	sf::Color(255, 255, 255, 255),	0,	"",		sf::Color::Transparent,		EAlignment::CENTER_BOTTOM,	EAlignment::LEFT},
-		{(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }),								sf::Vector2f{0.0f, 5.0f * unitNorm.y},	sf::Color(255, 255, 255, 100),	0,	"",		sf::Color::Transparent,		EAlignment::CENTER_BOTTOM,	EAlignment::RIGHT},
+		{(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }),							sf::Vector2f{0.0f, 5.0f * unitNorm.y},	sf::Color::White,				0,	"",		sf::Color::Transparent,		EAlignment::CENTER_BOTTOM,	EAlignment::LEFT},
+		{(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y }),							sf::Vector2f{0.0f, 5.0f * unitNorm.y},	sf::Color(255, 255, 255, 100),	0,	"",		sf::Color::Transparent,		EAlignment::CENTER_BOTTOM,	EAlignment::RIGHT},
 		// Level Display
-		{(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y - (20.0f * unitNorm.y) }),	sf::Vector2f{50.0f, 50.0f} * unitNorm,	sf::Color::Transparent,			30,	"",		sf::Color::White,			EAlignment::CENTER_BOTTOM,	EAlignment::CENTER_BOTTOM}
+		{(sf::Vector2f{ viewSize.x / 2.0f, viewSize.y - (padding * unitNorm.y) }),	sf::Vector2f{0.0f, 0.0f} * unitNorm,	sf::Color::Transparent,			30,	"",		sf::Color::White,			EAlignment::CENTER_BOTTOM,	EAlignment::CENTER_BOTTOM},
+		// Score Display
+		{ (sf::Vector2f{ (viewSize.x / 2.0f), viewSize.y}),							sf::Vector2f{0.0f, 0.0f} * unitNorm,	sf::Color::Transparent,			12, "0",	sf::Color::White,			EAlignment::CENTER_BOTTOM,	EAlignment::CENTER_BOTTOM}
 	};
 
 	scoreBar.construct(HUD_CONSTR[0]);
 	scoreBar_bg.construct(HUD_CONSTR[1]);
 	levelDisplay.construct(HUD_CONSTR[2]);
+	points.construct(HUD_CONSTR[3]);
 
-	shapes = { &scoreBar_bg, &scoreBar, &levelDisplay };
+	shapes = { &points, &scoreBar_bg, &scoreBar, &levelDisplay };
 }
 
 void ScoreBar::tick(const float& deltaTime)
@@ -75,6 +88,7 @@ void ScoreBar::tick(const float& deltaTime)
 	scoreBar.tick(deltaTime);
 	scoreBar_bg.tick(deltaTime);
 	levelDisplay.tick(deltaTime);
+	points.tick(deltaTime);
 
 	tick_bar(deltaTime);
 }
