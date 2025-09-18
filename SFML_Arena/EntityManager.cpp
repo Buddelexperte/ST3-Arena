@@ -178,24 +178,30 @@ void EntityManager::tick_entities(const float& deltaTime)
 {
     for (const auto& pair : activeEntities)
     {
-        if (!pair.second)
+        // Only check valid pointers
+        const std::unique_ptr<Entity>& ptr = pair.second;
+        if (!ptr)
         {
             continue;
         }
         
-        pair.second->tick(deltaTime);
+        // Actually call tick() for each entity
+        ptr->tick(deltaTime);
 
+        // Get correct RenderLayer
         const size_t key = pair.first;
         EntityRenderer* usedRenderLayer = &getRenderLayerByEnemyKey(key)->renderer;
 
+        // Check if RenderLayer is valid
         if (usedRenderLayer == nullptr)
         {
             std::cerr << "Ticking Renderer invalid" << std::endl;
             continue;
         }
 
-        usedRenderLayer->setVelocity(pair.first, pair.second->getVelocity());
-        usedRenderLayer->setRotation(pair.first, pair.second->getRotation());
+        // Update crucial values inside RenderLayer
+        usedRenderLayer->setVelocity(key, ptr->getVelocity());
+        usedRenderLayer->setRotation(key, ptr->getRotation());
     }
 }
 
